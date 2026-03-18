@@ -94,56 +94,6 @@
       gap: 18px;
     }
 
-
-    .mobile-topbar {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      min-height: 68px;
-    }
-
-    .mobile-back-btn,
-    .mobile-home-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 44px;
-      min-height: 44px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.03);
-      color: #fff;
-      font-size: 0.95rem;
-      font-weight: 700;
-    }
-
-    .mobile-topbar-center {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      min-width: 0;
-      flex: 1;
-    }
-
-    .mobile-topbar .brand-logo,
-    .mobile-topbar .brand-logo-fallback {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-    }
-
-    .mobile-topbar-title {
-      font-size: 1rem;
-      font-weight: 800;
-      color: #fff;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 180px;
-    }
-
     .brand {
       display: flex;
       align-items: center;
@@ -322,47 +272,6 @@
       height: 180px;
       background: radial-gradient(circle, rgba(212,175,55,0.08), transparent 70%);
       pointer-events: none;
-    }
-
-    .gallery-track {
-      display: flex;
-      width: 100%;
-      transition: transform 0.55s ease;
-      touch-action: pan-y;
-      will-change: transform;
-    }
-
-    .gallery-slide {
-      min-width: 100%;
-      flex: 0 0 100%;
-    }
-
-    .gallery-slide .main-product-image {
-      border-radius: 18px;
-    }
-
-    .gallery-dots {
-      display: none;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      padding-top: 14px;
-    }
-
-    .gallery-dot {
-      width: 9px;
-      height: 9px;
-      border: none;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.20);
-      transition: 0.3s ease;
-      padding: 0;
-      cursor: pointer;
-    }
-
-    .gallery-dot.active {
-      background: var(--gold-2);
-      transform: scale(1.15);
     }
 
     .main-product-image {
@@ -941,148 +850,14 @@
     }
 
     @media (max-width: 560px) {
-      body {
-        background: #0b0b0b;
-      }
-
-      .header {
-        background: rgba(7, 7, 7, 0.96);
-      }
-
-      .header-inner {
-        display: none;
-      }
-
-      .mobile-topbar {
-        display: flex;
-      }
-
-      .breadcrumb-wrap {
-        display: none;
-      }
-
-      .container {
-        padding: 0 14px;
-      }
-
-      .product-section {
-        padding: 0 0 34px;
-      }
-
-      .product-layout {
-        gap: 14px;
-      }
-
       .gallery-card,
       .info-card {
-        padding: 0;
-        border-radius: 24px;
-        background: transparent;
-        border: none;
-        box-shadow: none;
-      }
-
-      .gallery-grid {
-        display: block;
-      }
-
-      .thumbs-column {
-        display: none;
-      }
-
-      .main-image-wrap {
-        padding: 0;
-        border-radius: 26px;
-        overflow: hidden;
-        background: #111;
-      }
-
-      .main-image-wrap::after {
-        display: none;
-      }
-
-      .gallery-slide .main-product-image,
-      .main-product-image {
-        aspect-ratio: 0.92 / 1;
-        border-radius: 0;
-      }
-
-      .gallery-dots {
-        display: flex;
-      }
-
-      .info-card {
-        padding: 2px 2px 0;
-        display: grid;
-        gap: 14px;
-      }
-
-      .category-badge,
-      .product-description,
-      .purchase-info,
-      .size-guide-tip {
-        display: none;
-      }
-
-      .product-title {
-        font-size: 1.7rem;
-        line-height: 1.15;
-      }
-
-      .price-row {
-        margin-top: -2px;
-      }
-
-      .product-price {
-        font-size: 1.9rem;
-      }
-
-      .block-title {
-        font-size: 0.95rem;
-        margin-bottom: 10px;
-      }
-
-      .sizes-box {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 10px;
-      }
-
-      .size-btn {
-        min-height: 58px;
-        border-radius: 14px;
-        font-size: 1rem;
-        padding: 10px 8px;
-      }
-
-      .size-message {
-        min-height: 18px;
-      }
-
-      .size-selected-banner {
-        margin-top: 2px;
-        padding: 12px 14px;
-        border-radius: 14px;
-        align-items: center;
-        flex-direction: row;
-      }
-
-      .purchase-card {
-        padding: 0;
-        background: transparent;
-        border: none;
-        border-radius: 0;
-        gap: 12px;
+        padding: 18px;
+        border-radius: 22px;
       }
 
       .action-buttons {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-
-      .btn {
-        min-height: 54px;
-        border-radius: 16px;
+        flex-direction: column;
       }
 
       .btn-whatsapp,
@@ -1090,18 +865,17 @@
         min-width: 100%;
       }
 
-      .btn-whatsapp {
-        font-size: 0.98rem;
+      .size-picker-top {
+        align-items: stretch;
       }
 
-      .btn-secondary {
-        display: none;
+      .size-guide-link {
+        width: 100%;
       }
 
-      .related-section {
-        margin-top: 20px;
-        padding: 20px 16px;
-        border-radius: 20px;
+      .size-selected-banner {
+        align-items: flex-start;
+        flex-direction: column;
       }
 
       .nav a {
@@ -1109,22 +883,34 @@
         font-size: 0.9rem;
       }
     }
+
+
+    .mobile-gallery-dots {
+      display: none;
+      justify-content: center;
+      gap: 8px;
+      padding-top: 14px;
+    }
+
+    .mobile-gallery-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.22);
+      transition: 0.35s ease;
+      border: none;
+      padding: 0;
+    }
+
+    .mobile-gallery-dot.active {
+      width: 22px;
+      background: var(--gold);
+    }
+
   </style>
 </head>
 <body>
   <header class="header">
-    <div class="container mobile-topbar">
-      <a href="index.html#catalogo" class="mobile-back-btn">←</a>
-
-      <div class="mobile-topbar-center">
-        <img id="mobileLogoImage" class="brand-logo" style="display:none;" alt="Logo Camisa 10 Store" />
-        <div id="mobileLogoFallback" class="brand-logo-fallback">10</div>
-        <span class="mobile-topbar-title" id="mobileBrandTitle">Camisa 10 Store</span>
-      </div>
-
-      <a href="index.html" class="mobile-home-btn">⌂</a>
-    </div>
-
     <div class="container header-inner">
       <a href="index.html" class="brand">
         <img id="logoImage" class="brand-logo" style="display:none;" alt="Logo Camisa 10 Store" />
@@ -1182,21 +968,17 @@
             <div class="gallery-grid">
               <div id="thumbs-column" class="thumbs-column"></div>
 
-              <div class="main-image-wrap">
-                <div id="gallery-track" class="gallery-track">
-                  <div class="gallery-slide">
-                    <img
-                      id="main-product-image"
-                      class="main-product-image"
-                      src="https://via.placeholder.com/900x900?text=Sem+Imagem"
-                      alt="Imagem principal do produto"
-                    />
-                  </div>
-                </div>
+              <div class="main-image-wrap" id="main-image-wrap">
+                <img
+                  id="main-product-image"
+                  class="main-product-image"
+                  src="https://via.placeholder.com/900x900?text=Sem+Imagem"
+                  alt="Imagem principal do produto"
+                />
               </div>
-            </div>
 
-            <div id="gallery-dots" class="gallery-dots"></div>
+              <div id="mobile-gallery-dots" class="mobile-gallery-dots"></div>
+            </div>
           </div>
 
           <div class="info-card">
@@ -1316,6 +1098,8 @@
     let selectedSize = null;
     let whatsappNumber = "5597981098445";
     let siteSettings = null;
+    let galleryImagesList = [];
+    let currentGalleryIndex = 0;
 
     function formatPrice(value) {
       return Number(value || 0).toLocaleString("pt-BR", {
@@ -1365,128 +1149,139 @@
       }
     }
 
-    let galleryImagesList = [];
-    let currentGalleryIndex = 0;
+    function setMainImage(url) {
+      document.getElementById("main-product-image").src =
+        url || "https://via.placeholder.com/900x900?text=Sem+Imagem";
+    }
 
-    function updateGalleryPosition() {
-      const track = document.getElementById("gallery-track");
-      if (!track) return;
+    function renderMobileDots() {
+      const dots = document.getElementById("mobile-gallery-dots");
+      if (!dots) return;
 
-      track.style.transform = `translateX(-${currentGalleryIndex * 100}%)`;
+      if (!galleryImagesList.length || galleryImagesList.length === 1) {
+        dots.innerHTML = "";
+        return;
+      }
 
+      dots.innerHTML = galleryImagesList.map((_, index) => `
+        <button
+          class="mobile-gallery-dot ${index === currentGalleryIndex ? "active" : ""}"
+          type="button"
+          aria-label="Ir para imagem ${index + 1}"
+          onclick="goToGalleryImage(${index})"
+        ></button>
+      `).join("");
+    }
+
+    function updateActiveThumb() {
       document.querySelectorAll(".thumb-btn").forEach((btn, index) => {
         btn.classList.toggle("active", index === currentGalleryIndex);
       });
-
-      document.querySelectorAll(".gallery-dot").forEach((dot, index) => {
-        dot.classList.toggle("active", index === currentGalleryIndex);
-      });
     }
 
-    function setMainImageByIndex(index) {
+    function goToGalleryImage(index) {
       if (!galleryImagesList.length) return;
-      currentGalleryIndex = Math.max(0, Math.min(index, galleryImagesList.length - 1));
-      updateGalleryPosition();
+
+      const total = galleryImagesList.length;
+      currentGalleryIndex = ((index % total) + total) % total;
+      setMainImage(galleryImagesList[currentGalleryIndex]);
+      updateActiveThumb();
+      renderMobileDots();
     }
 
-    function changeMainImage(url, buttonEl) {
-      const nextIndex = galleryImagesList.findIndex(item => item === url);
-      if (nextIndex >= 0) {
-        setMainImageByIndex(nextIndex);
-      }
+    function nextGalleryImage() {
+      goToGalleryImage(currentGalleryIndex + 1);
+    }
 
-      document.querySelectorAll(".thumb-btn").forEach(btn => {
-        btn.classList.remove("active");
-      });
-
-      if (buttonEl) {
-        buttonEl.classList.add("active");
-      }
+    function prevGalleryImage() {
+      goToGalleryImage(currentGalleryIndex - 1);
     }
 
     function setupGallerySwipe() {
-      const track = document.getElementById("gallery-track");
-      if (!track) return;
+      const image = document.getElementById("main-product-image");
+      if (!image) return;
 
       let startX = 0;
       let currentX = 0;
+      let startY = 0;
       let isDragging = false;
+      let lockedDirection = null;
 
-      track.addEventListener("touchstart", (event) => {
+      image.addEventListener("touchstart", (event) => {
+        if (galleryImagesList.length <= 1) return;
         startX = event.touches[0].clientX;
         currentX = startX;
+        startY = event.touches[0].clientY;
         isDragging = true;
+        lockedDirection = null;
       }, { passive: true });
 
-      track.addEventListener("touchmove", (event) => {
+      image.addEventListener("touchmove", (event) => {
         if (!isDragging) return;
         currentX = event.touches[0].clientX;
+        const currentY = event.touches[0].clientY;
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+
+        if (!lockedDirection) {
+          lockedDirection = Math.abs(deltaX) > Math.abs(deltaY) ? "x" : "y";
+        }
       }, { passive: true });
 
-      track.addEventListener("touchend", () => {
+      image.addEventListener("touchend", () => {
         if (!isDragging) return;
         isDragging = false;
+
+        if (lockedDirection !== "x") return;
 
         const deltaX = currentX - startX;
         if (Math.abs(deltaX) < 45) return;
 
-        if (deltaX < 0 && currentGalleryIndex < galleryImagesList.length - 1) {
-          currentGalleryIndex += 1;
-        } else if (deltaX > 0 && currentGalleryIndex > 0) {
-          currentGalleryIndex -= 1;
+        if (deltaX < 0) {
+          nextGalleryImage();
+        } else {
+          prevGalleryImage();
         }
-
-        updateGalleryPosition();
       }, { passive: true });
     }
 
     function renderGallery(mainImageUrl, extraImages) {
       const thumbsColumn = document.getElementById("thumbs-column");
-      const track = document.getElementById("gallery-track");
-      const dots = document.getElementById("gallery-dots");
       thumbsColumn.innerHTML = "";
 
-      const imageList = [];
+      galleryImagesList = [];
 
       if (mainImageUrl) {
-        imageList.push(mainImageUrl);
+        galleryImagesList.push(mainImageUrl);
       }
 
       (extraImages || []).forEach(item => {
-        if (item.image_url && !imageList.includes(item.image_url)) {
-          imageList.push(item.image_url);
+        if (item.image_url && !galleryImagesList.includes(item.image_url)) {
+          galleryImagesList.push(item.image_url);
         }
       });
 
-      if (!imageList.length) {
-        galleryImagesList = ["https://via.placeholder.com/900x900?text=Sem+Imagem"];
-      } else {
-        galleryImagesList = imageList;
+      if (!galleryImagesList.length) {
+        setMainImage("");
+        renderMobileDots();
+        return;
       }
 
       currentGalleryIndex = 0;
-
-      track.innerHTML = galleryImagesList.map((url) => `
-        <div class="gallery-slide">
-          <img class="main-product-image" src="${url}" alt="Imagem do produto" />
-        </div>
-      `).join("");
+      setMainImage(galleryImagesList[0]);
 
       thumbsColumn.innerHTML = galleryImagesList.map((url, index) => `
-        <button class="thumb-btn ${index === 0 ? "active" : ""}" onclick="changeMainImage('${url}', this)">
+        <button class="thumb-btn ${index === 0 ? "active" : ""}" onclick="goToGalleryImage(${index})">
           <img src="${url}" alt="Imagem do produto" />
         </button>
       `).join("");
 
-      dots.innerHTML = galleryImagesList.map((_, index) => `
-        <button class="gallery-dot ${index === 0 ? "active" : ""}" type="button" aria-label="Ir para imagem ${index + 1}" onclick="setMainImageByIndex(${index})"></button>
-      `).join("");
-
-      updateGalleryPosition();
+      renderMobileDots();
       setupGallerySwipe();
     }
 
     function clearSizeMessage() {
+
       document.getElementById("size-message").textContent = "";
     }
 
@@ -1579,9 +1374,8 @@ ${window.location.href}`;
     function applySiteSettings() {
       if (!siteSettings) return;
 
-      const brandLabel = siteSettings.logo_text || siteSettings.hero_title || "Camisa 10 Store";
-      document.getElementById("brandTitle").textContent = brandLabel;
-      document.getElementById("mobileBrandTitle").textContent = brandLabel;
+      document.getElementById("brandTitle").textContent =
+        siteSettings.logo_text || siteSettings.hero_title || "Camisa 10 Store";
 
       document.getElementById("footerBrandTitle").textContent =
         siteSettings.hero_title || "Camisa 10 Store";
@@ -1595,21 +1389,24 @@ ${window.location.href}`;
       const logoImage = document.getElementById("logoImage");
       const logoFallback = document.getElementById("logoFallback");
 
-      const mobileLogoImage = document.getElementById("mobileLogoImage");
-      const mobileLogoFallback = document.getElementById("mobileLogoFallback");
+      const logoUrl = siteSettings.logo_url || "logo.jpg";
 
-      if (siteSettings.logo_url) {
-        logoImage.src = siteSettings.logo_url;
+      if (logoUrl) {
+        logoImage.onerror = () => {
+          if (logoImage.src.includes("logo.jpg")) {
+            logoImage.style.display = "none";
+            logoFallback.style.display = "flex";
+            return;
+          }
+
+          logoImage.src = "logo.jpg";
+        };
+        logoImage.src = logoUrl;
         logoImage.style.display = "block";
         logoFallback.style.display = "none";
-        mobileLogoImage.src = siteSettings.logo_url;
-        mobileLogoImage.style.display = "block";
-        mobileLogoFallback.style.display = "none";
       } else {
         logoImage.style.display = "none";
         logoFallback.style.display = "flex";
-        mobileLogoImage.style.display = "none";
-        mobileLogoFallback.style.display = "flex";
       }
 
       const instagramUrl = siteSettings.instagram_url?.trim() || "#";
@@ -1806,6 +1603,18 @@ ${window.location.href}`;
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
+      const logoImage = document.getElementById("logoImage");
+      const logoFallback = document.getElementById("logoFallback");
+      if (logoImage) {
+        logoImage.onerror = () => {
+          logoImage.style.display = "none";
+          if (logoFallback) logoFallback.style.display = "flex";
+        };
+        logoImage.src = "logo.jpg";
+        logoImage.style.display = "block";
+        if (logoFallback) logoFallback.style.display = "none";
+      }
+
       await loadSiteSettings();
       await loadProduct();
     });
