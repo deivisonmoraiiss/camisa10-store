@@ -273,7 +273,7 @@
       inset: 0;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.45s ease;
+      transition: opacity 0.7s ease;
     }
 
     .hero-slide.active {
@@ -389,7 +389,7 @@
       background: rgba(255,255,255,0.34);
       border: none;
       cursor: pointer;
-      transition: 0.2s ease;
+      transition: 0.35s ease;
     }
 
     .hero-dot.active {
@@ -399,6 +399,16 @@
 
     .hero-search-wrap {
       margin-top: 18px;
+    }
+
+    .mobile-catalog-cta-wrap {
+      display: flex;
+      justify-content: center;
+    }
+
+    .mobile-catalog-cta {
+      width: 100%;
+      max-width: 360px;
     }
 
     .hero-search-card {
@@ -939,7 +949,22 @@
       }
 
       .hero-search-wrap {
-        margin-top: 14px;
+        margin-top: 12px;
+      }
+
+      .mobile-catalog-cta-wrap {
+        padding: 0 2px;
+      }
+
+      .mobile-catalog-cta {
+        min-height: 52px;
+        border-radius: 16px;
+        font-size: 0.96rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #e0bd49, #f4d76d);
+        color: #111;
+        border: none;
+        box-shadow: 0 12px 26px rgba(212,175,55,0.20);
       }
 
       .hero-search-card {
@@ -1027,6 +1052,16 @@
       .hero-dot {
         width: 8px;
         height: 8px;
+      }
+
+      .hero-search-wrap {
+        margin-top: 10px;
+      }
+
+      .mobile-catalog-cta {
+        min-height: 50px;
+        border-radius: 15px;
+        font-size: 0.92rem;
       }
 
       .hero-search-card {
@@ -1238,28 +1273,8 @@
           </div>
         </div>
 
-        <div class="hero-search-wrap">
-          <div class="hero-search-card">
-            <div class="hero-search-top">
-              <div class="hero-search-copy">
-                <strong>Encontre sua camisa</strong>
-                <span>Pesquise pelo time, modelo ou categoria. No celular, é só tocar no campo e digitar ali mesmo.</span>
-              </div>
-
-              <a href="#catalogo" class="btn btn-secondary">Ver catálogo</a>
-            </div>
-
-            <input
-              type="text"
-              id="heroSearchInput"
-              class="search-input"
-              placeholder="Digite o nome da camisa..."
-              autocomplete="off"
-              inputmode="search"
-            />
-
-            <div class="category-chip-row" id="heroCategoryButtons"></div>
-          </div>
+        <div class="hero-search-wrap mobile-catalog-cta-wrap">
+          <a href="#catalogo" class="btn btn-secondary mobile-catalog-cta">Ver catálogo</a>
         </div>
       </div>
     </section>
@@ -1770,17 +1785,39 @@
       const slider = document.getElementById("heroSlider");
       if (!slider) return;
 
+      let startX = 0;
+      let currentX = 0;
+      let isDragging = false;
+      let isHorizontalSwipe = false;
+
       slider.addEventListener("touchstart", (event) => {
-        heroTouchStartX = event.changedTouches[0].screenX;
+        startX = event.touches[0].clientX;
+        currentX = startX;
+        isDragging = true;
+        isHorizontalSwipe = false;
       }, { passive: true });
 
-      slider.addEventListener("touchend", (event) => {
-        heroTouchEndX = event.changedTouches[0].screenX;
-        const delta = heroTouchEndX - heroTouchStartX;
+      slider.addEventListener("touchmove", (event) => {
+        if (!isDragging) return;
 
-        if (Math.abs(delta) < 40) return;
+        currentX = event.touches[0].clientX;
+        const deltaX = currentX - startX;
 
-        if (delta < 0) {
+        if (Math.abs(deltaX) > 8) {
+          isHorizontalSwipe = true;
+        }
+      }, { passive: true });
+
+      slider.addEventListener("touchend", () => {
+        if (!isDragging) return;
+
+        const deltaX = currentX - startX;
+        isDragging = false;
+
+        if (!isHorizontalSwipe) return;
+        if (Math.abs(deltaX) < 55) return;
+
+        if (deltaX < 0) {
           nextHeroSlide();
         } else {
           prevHeroSlide();
