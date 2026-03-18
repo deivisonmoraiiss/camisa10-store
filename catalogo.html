@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogo | Camisa 10 Store</title>
+  <meta name="description" content="Confira o catálogo completo da Camisa 10 Store com camisas nacionais, internacionais e seleções." />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --bg-soft: #111111;
+      --card: #151515;
+      --card-2: #1b1b1b;
+      --border: rgba(212, 175, 55, 0.18);
+      --gold: #d4af37;
+      --gold-dark: #b89322;
+      --text: #ffffff;
+      --muted: #bdbdbd;
+      --green: #25d366;
+      --container: 1240px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #040404 0%, #0b0b0b 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(var(--container), 92%);
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar-inner {
+      width: min(var(--container), 92%);
+      margin: 0 auto;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      color: var(--gold);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      white-space: nowrap;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      color: #f4f4f4;
+      font-size: 14px;
+      transition: 0.2s ease;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      color: var(--gold);
+    }
+
+    .page-hero {
+      padding: 42px 0 24px;
+    }
+
+    .page-hero-card {
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,0.14), transparent 35%),
+        linear-gradient(180deg, #131313 0%, #0c0c0c 100%);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 30px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+    }
+
+    .page-hero h1 {
+      font-size: 40px;
+      line-height: 1.08;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .page-hero p {
+      color: #dddddd;
+      font-size: 16px;
+      line-height: 1.65;
+      max-width: 760px;
+    }
+
+    .filters-section {
+      padding: 10px 0 18px;
+    }
+
+    .filters-card {
+      background: linear-gradient(180deg, #151515 0%, #101010 100%);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.16);
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr 0.45fr;
+      gap: 14px;
+      align-items: end;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field label {
+      color: #f4f4f4;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 14px 14px;
+      border-radius: 14px;
+      border: 1px solid #2d2d2d;
+      background: #101010;
+      color: #fff;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.15);
+    }
+
+    .btn {
+      border: none;
+      cursor: pointer;
+      border-radius: 14px;
+      padding: 15px 18px;
+      font-size: 15px;
+      font-weight: bold;
+      transition: 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: #111;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-dark);
+      transform: translateY(-1px);
+    }
+
+    .catalog-section {
+      padding: 10px 0 34px;
+    }
+
+    .catalog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .catalog-header h2 {
+      font-size: 30px;
+      color: var(--gold);
+    }
+
+    .catalog-header p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .product-count {
+      color: #e2e2e2;
+      font-size: 14px;
+      background: rgba(212, 175, 55, 0.08);
+      border: 1px solid rgba(212, 175, 55, 0.16);
+      padding: 10px 14px;
+      border-radius: 999px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .product-card {
+      background: linear-gradient(180deg, #151515 0%, #101010 100%);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: 0.22s ease;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.18);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(212, 175, 55, 0.34);
+    }
+
+    .product-card-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      background: #0d0d0d;
+    }
+
+    .product-card-content {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .product-category-badge {
+      display: inline-block;
+      width: fit-content;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      color: #f0db93;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .product-card-content h3 {
+      font-size: 18px;
+      color: #fff;
+      line-height: 1.35;
+      min-height: 48px;
+    }
+
+    .product-price {
+      color: var(--gold);
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .product-btn {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      text-align: center;
+      background: var(--gold);
+      color: #111;
+      text-decoration: none;
+      padding: 13px 14px;
+      border-radius: 12px;
+      font-weight: bold;
+      transition: 0.2s ease;
+    }
+
+    .product-btn:hover {
+      background: var(--gold-dark);
+    }
+
+    .loading-box,
+    .empty-box {
+      background: #121212;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .footer {
+      margin-top: 24px;
+      border-top: 1px solid var(--border);
+      padding: 34px 0 40px;
+      background: rgba(0,0,0,0.12);
+    }
+
+    .footer-grid {
+      width: min(var(--container), 92%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr 0.8fr;
+      gap: 20px;
+    }
+
+    .footer h3 {
+      color: var(--gold);
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .footer p,
+    .footer a {
+      color: #d3d3d3;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .footer-links {
+      display: grid;
+      gap: 8px;
+    }
+
+    .footer-bottom {
+      width: min(var(--container), 92%);
+      margin: 24px auto 0;
+      padding-top: 18px;
+      border-top: 1px solid rgba(212,175,55,0.12);
+      color: #9f9f9f;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .whatsapp-float {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+      z-index: 60;
+      transition: 0.2s ease;
+    }
+
+    .whatsapp-float:hover {
+      transform: translateY(-2px) scale(1.03);
+    }
+
+    @media (max-width: 1100px) {
+      .product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .topbar-inner {
+        padding: 14px 0;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav {
+        justify-content: flex-start;
+      }
+
+      .filters-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .page-hero h1 {
+        font-size: 32px;
+      }
+
+      .catalog-header h2 {
+        font-size: 27px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .brand {
+        font-size: 24px;
+      }
+
+      .page-hero {
+        padding-top: 28px;
+      }
+
+      .page-hero-card {
+        padding: 24px 20px;
+      }
+
+      .page-hero h1 {
+        font-size: 27px;
+      }
+
+      .page-hero p {
+        font-size: 15px;
+      }
+
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html" class="brand">Camisa 10 Store</a>
+
+      <nav class="nav">
+        <a href="index.html">Início</a>
+        <a href="catalogo.html" class="active">Catálogo</a>
+        <a href="guia-tamanhos.html">Guia de Tamanhos</a>
+        <a href="porque-comprar.html">Por que comprar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <div class="page-hero-card">
+          <h1>Catálogo completo da Camisa 10 Store</h1>
+          <p>
+            Explore todas as camisas cadastradas na loja, filtre por categoria e encontre
+            mais rápido o modelo ideal para você.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="filters-section">
+      <div class="container">
+        <div class="filters-card">
+          <div class="filters-grid">
+            <div class="field">
+              <label for="search-input">Buscar produto</label>
+              <input
+                type="text"
+                id="search-input"
+                placeholder="Digite o nome da camisa..."
+              />
+            </div>
+
+            <div class="field">
+              <label for="category-filter">Filtrar por categoria</label>
+              <select id="category-filter">
+                <option value="">Todas as categorias</option>
+              </select>
+            </div>
+
+            <button class="btn btn-primary" id="clear-filters-btn" type="button">
+              Limpar filtros
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="catalog-section">
+      <div class="container">
+        <div class="catalog-header">
+          <div>
+            <h2>Produtos disponíveis</h2>
+            <p>Todos os produtos cadastrados aparecem aqui automaticamente.</p>
+          </div>
+
+          <div id="product-count" class="product-count">
+            Carregando produtos...
+          </div>
+        </div>
+
+        <div id="catalog-grid" class="product-grid">
+          <div class="loading-box" style="grid-column: 1 / -1;">Carregando catálogo...</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <h3>Camisa 10 Store</h3>
+        <p>
+          Loja especializada em camisas de time, com catálogo dinâmico,
+          páginas individuais de produto e atendimento direto pelo WhatsApp.
+        </p>
+      </div>
+
+      <div>
+        <h3>Navegação</h3>
+        <div class="footer-links">
+          <a href="index.html">Início</a>
+          <a href="catalogo.html">Catálogo</a>
+          <a href="guia-tamanhos.html">Guia de Tamanhos</a>
+          <a href="porque-comprar.html">Por que comprar</a>
+        </div>
+      </div>
+
+      <div>
+        <h3>Atendimento</h3>
+        <div class="footer-links">
+          <a href="https://wa.me/5597981098445" target="_blank">WhatsApp</a>
+          <a href="gestao-camisa10.html">Área administrativa</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2026 Camisa 10 Store. Todos os direitos reservados.
+    </div>
+  </footer>
+
+  <a
+    class="whatsapp-float"
+    href="https://wa.me/5597981098445"
+    target="_blank"
+    aria-label="Falar no WhatsApp"
+    title="Falar no WhatsApp"
+  >
+    ☎
+  </a>
+
+  <script>
+    const SUPABASE_URL = "https://mgxyupekvuihjbzvzfmf.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_fSGhfKrj2NK5UHNYRGk8nw_fl4mCJ_n";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let allProducts = [];
+    let allCategories = [];
+
+    function formatPrice(value) {
+      return Number(value || 0).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
+    }
+
+    function createProductCard(product) {
+      return `
+        <div class="product-card">
+          <img
+            src="${product.image_url || 'https://via.placeholder.com/600x600?text=Sem+Imagem'}"
+            alt="${product.name || 'Produto'}"
+            class="product-card-image"
+            onerror="this.src='https://via.placeholder.com/600x600?text=Imagem';"
+          />
+
+          <div class="product-card-content">
+            <span class="product-category-badge">
+              ${product.categories?.name || "Sem categoria"}
+            </span>
+
+            <h3>${product.name || "Produto sem nome"}</h3>
+
+            <p class="product-price">${formatPrice(product.price)}</p>
+
+            <a href="produto.html?id=${product.id}" class="product-btn">
+              Ver produto
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateProductCount(total) {
+      const countEl = document.getElementById("product-count");
+
+      if (total === 1) {
+        countEl.textContent = "1 produto encontrado";
+        return;
+      }
+
+      countEl.textContent = `${total} produtos encontrados`;
+    }
+
+    function renderProducts(products) {
+      const grid = document.getElementById("catalog-grid");
+
+      if (!products || !products.length) {
+        grid.innerHTML = `
+          <div class="empty-box" style="grid-column: 1 / -1;">
+            Nenhum produto encontrado com os filtros atuais.
+          </div>
+        `;
+        updateProductCount(0);
+        return;
+      }
+
+      grid.innerHTML = products.map(createProductCard).join("");
+      updateProductCount(products.length);
+    }
+
+    function applyFilters() {
+      const searchTerm = document.getElementById("search-input").value.trim().toLowerCase();
+      const selectedCategory = document.getElementById("category-filter").value;
+
+      const filtered = allProducts.filter(product => {
+        const matchesName = (product.name || "").toLowerCase().includes(searchTerm);
+        const matchesCategory = !selectedCategory || String(product.category_id) === String(selectedCategory);
+
+        return matchesName && matchesCategory;
+      });
+
+      renderProducts(filtered);
+    }
+
+    function populateCategoryFilter(categories) {
+      const select = document.getElementById("category-filter");
+      select.innerHTML = `<option value="">Todas as categorias</option>`;
+
+      categories.forEach(category => {
+        const option = document.createElement("option");
+        option.value = category.id;
+        option.textContent = category.name;
+        select.appendChild(option);
+      });
+    }
+
+    async function loadCategories() {
+      const { data, error } = await supabaseClient
+        .from("categories")
+        .select("id, name")
+        .order("name", { ascending: true });
+
+      if (error) {
+        console.error("Erro ao carregar categorias:", error);
+        return;
+      }
+
+      allCategories = data || [];
+      populateCategoryFilter(allCategories);
+    }
+
+    async function loadProducts() {
+      const grid = document.getElementById("catalog-grid");
+      grid.innerHTML = `<div class="loading-box" style="grid-column: 1 / -1;">Carregando catálogo...</div>`;
+
+      const { data, error } = await supabaseClient
+        .from("products")
+        .select(`
+          id,
+          name,
+          price,
+          image_url,
+          category_id,
+          created_at,
+          categories (
+            id,
+            name
+          )
+        `)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Erro ao carregar produtos:", error);
+        grid.innerHTML = `
+          <div class="empty-box" style="grid-column: 1 / -1;">
+            Não foi possível carregar os produtos.
+          </div>
+        `;
+        updateProductCount(0);
+        return;
+      }
+
+      allProducts = data || [];
+      renderProducts(allProducts);
+    }
+
+    function setupEvents() {
+      document.getElementById("search-input").addEventListener("input", applyFilters);
+      document.getElementById("category-filter").addEventListener("change", applyFilters);
+
+      document.getElementById("clear-filters-btn").addEventListener("click", () => {
+        document.getElementById("search-input").value = "";
+        document.getElementById("category-filter").value = "";
+        applyFilters();
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      setupEvents();
+      await loadCategories();
+      await loadProducts();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Por que comprar | Camisa 10 Store</title>
+  <meta
+    name="description"
+    content="Conheça os diferenciais da Camisa 10 Store e entenda por que comprar sua camisa com uma experiência mais profissional."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #070707;
+      --bg-soft: #101010;
+      --card: #121212;
+      --card-2: #171717;
+      --text: #f5f5f5;
+      --muted: #b3b3b3;
+      --line: rgba(255,255,255,0.08);
+      --gold: #d4af37;
+      --gold-2: #f0cf63;
+      --green: #25d366;
+      --shadow: 0 12px 30px rgba(0,0,0,0.28);
+      --container: 1180px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(212,175,55,0.08), transparent 28%),
+        linear-gradient(180deg, #060606 0%, #0b0b0b 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 18px;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      background: rgba(7, 7, 7, 0.88);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-inner {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 1px solid rgba(212,175,55,0.35);
+      background: #111;
+    }
+
+    .brand-logo-fallback {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--gold), #9a7a18);
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-subtitle {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      color: #eaeaea;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: 0.2s ease;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+    }
+
+    .nav-cta {
+      background: var(--gold);
+      color: #121212 !important;
+      font-weight: 700 !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--gold-2) !important;
+    }
+
+    .hero {
+      padding: 30px 0 22px;
+    }
+
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 30px;
+      border: 1px solid rgba(212,175,55,0.18);
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,0.15), transparent 28%),
+        linear-gradient(180deg, #151515 0%, #0d0d0d 100%);
+      box-shadow: var(--shadow);
+      padding: 36px;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      right: -90px;
+      bottom: -90px;
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(212,175,55,0.10), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(212,175,55,0.12);
+      border: 1px solid rgba(212,175,55,0.20);
+      color: #f3d77d;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 4.5vw, 3.4rem);
+      line-height: 1.05;
+      margin-bottom: 12px;
+      max-width: 820px;
+      font-weight: 800;
+    }
+
+    .hero p {
+      color: #dddddd;
+      font-size: 1rem;
+      line-height: 1.8;
+      max-width: 780px;
+    }
+
+    .section {
+      padding: 28px 0;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 18px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .section-header h2 {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      color: var(--gold);
+      line-height: 1.05;
+      font-weight: 800;
+    }
+
+    .section-header p {
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 740px;
+      font-size: 15px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, #151515 0%, #101010 100%);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 26px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+    }
+
+    .card h3 {
+      color: var(--gold);
+      font-size: 1.45rem;
+      margin-bottom: 12px;
+      line-height: 1.15;
+      font-weight: 800;
+    }
+
+    .card p {
+      color: #dfdfdf;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
+    .feature-card {
+      background: linear-gradient(180deg, #151515 0%, #101010 100%);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.16);
+    }
+
+    .feature-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(212,175,55,0.12);
+      border: 1px solid rgba(212,175,55,0.22);
+      color: #f3d77d;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .feature-card h3 {
+      color: var(--gold);
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      font-weight: 800;
+    }
+
+    .feature-card p {
+      color: #dadada;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .list-box {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .list-item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 18px;
+      padding: 15px 16px;
+      color: #ececec;
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .difference-banner {
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,0.14), transparent 32%),
+        linear-gradient(180deg, #151515 0%, #0d0d0d 100%);
+      border: 1px solid rgba(212,175,55,0.18);
+      border-radius: 30px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .difference-banner h2 {
+      color: var(--gold);
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      margin-bottom: 12px;
+      line-height: 1.06;
+      font-weight: 800;
+    }
+
+    .difference-banner p {
+      color: #dfdfdf;
+      line-height: 1.75;
+      font-size: 15px;
+    }
+
+    .difference-points {
+      display: grid;
+      gap: 12px;
+    }
+
+    .difference-point {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 18px;
+      padding: 16px;
+      color: #ececec;
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .cta-card {
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,0.14), transparent 32%),
+        linear-gradient(180deg, #151515 0%, #0d0d0d 100%);
+      border: 1px solid rgba(212,175,55,0.18);
+      border-radius: 28px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .cta-card h2 {
+      color: var(--gold);
+      font-size: clamp(1.7rem, 2.8vw, 2.3rem);
+      margin-bottom: 10px;
+      font-weight: 800;
+    }
+
+    .cta-card p {
+      color: #dddddd;
+      line-height: 1.75;
+      max-width: 760px;
+      font-size: 15px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 16px;
+      padding: 15px 20px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 15px;
+      transition: 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: #111;
+    }
+
+    .btn-primary:hover {
+      background: #b89322;
+      transform: translateY(-1px);
+    }
+
+    .btn-whatsapp {
+      background: var(--green);
+      color: #081b0f;
+    }
+
+    .btn-whatsapp:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    .footer {
+      margin-top: 18px;
+      border-top: 1px solid var(--line);
+      background: rgba(0,0,0,0.16);
+    }
+
+    .footer-grid {
+      padding: 34px 0;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 28px;
+    }
+
+    .footer-brand-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .footer-text {
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 420px;
+      font-size: 14px;
+    }
+
+    .footer-col h4 {
+      font-size: 0.96rem;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      transition: 0.2s ease;
+      font-size: 14px;
+    }
+
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--line);
+      padding: 18px 0 28px;
+      color: #8f8f8f;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 980px) {
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .difference-banner,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 14px 0;
+      }
+
+      .nav {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .hero-card,
+      .card,
+      .difference-banner,
+      .cta-card,
+      .feature-card {
+        padding: 22px 18px;
+      }
+
+      .nav a {
+        padding: 9px 12px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand">
+        <img id="logoImage" class="brand-logo" style="display:none;" alt="Logo Camisa 10 Store" />
+        <div id="logoFallback" class="brand-logo-fallback">10</div>
+
+        <div class="brand-text">
+          <span class="brand-title" id="brandTitle">Camisa 10 Store</span>
+          <span class="brand-subtitle">Camisas de time com estilo e atitude</span>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a href="index.html">Início</a>
+        <a href="index.html#catalogo">Catálogo</a>
+        <a href="guia-tamanhos.html">Guia de tamanhos</a>
+        <a href="porque-comprar.html" class="active">Por que comprar</a>
+        <a id="instagramLink" href="#" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a id="headerWhatsApp" class="nav-cta" href="#" target="_blank" rel="noopener noreferrer">Pedir no WhatsApp</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <span class="hero-kicker">Experiência de compra mais profissional</span>
+          <h1>Por que comprar com a Camisa 10 Store</h1>
+          <p>
+            A Camisa 10 Store foi pensada para unir visual forte, catálogo organizado,
+            páginas de produto mais profissionais e atendimento direto, criando uma experiência
+            mais moderna para quem compra camisas de time.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>O que faz a diferença</h2>
+            <p>
+              Mais do que vender camisas, a ideia é oferecer uma apresentação mais sólida,
+              com sensação de marca, organização e praticidade no processo de compra.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-4">
+          <div class="feature-card">
+            <div class="feature-icon">1</div>
+            <h3>Visual premium</h3>
+            <p>
+              A loja tem uma estética mais forte, inspirada em vitrines esportivas modernas,
+              gerando mais valor percebido.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">2</div>
+            <h3>Catálogo organizado</h3>
+            <p>
+              Os produtos são exibidos por categorias e com páginas individuais,
+              facilitando a navegação do cliente.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">3</div>
+            <h3>Atendimento direto</h3>
+            <p>
+              O cliente escolhe o produto e já entra em contato pelo WhatsApp com uma mensagem mais objetiva.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">4</div>
+            <h3>Estrutura para crescer</h3>
+            <p>
+              O sistema foi preparado para receber mais produtos, mais categorias e uma gestão mais profissional.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container grid-2">
+        <div class="card">
+          <h3>Mais confiança visual</h3>
+          <p>
+            Quando o cliente entra em uma loja bem apresentada, com páginas organizadas
+            e identidade visual consistente, a percepção de confiança aumenta bastante.
+          </p>
+          <p style="margin-top:12px;">
+            Isso ajuda a transformar a loja em algo mais sério e memorável, em vez de parecer
+            apenas uma página improvisada de vendas.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Mais praticidade para comprar</h3>
+          <p>
+            O cliente encontra a camisa, vê os detalhes, escolhe o tamanho e segue para o atendimento
+            com muito menos atrito no caminho.
+          </p>
+
+          <div class="list-box">
+            <div class="list-item">Página individual para cada produto</div>
+            <div class="list-item">Galeria de fotos mais organizada</div>
+            <div class="list-item">Seleção de tamanho clara</div>
+            <div class="list-item">Compra finalizada pelo WhatsApp</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="difference-banner">
+          <div>
+            <h2>Uma loja com mais cara de marca esportiva</h2>
+            <p>
+              A proposta da Camisa 10 Store é transmitir mais identidade, mais valor visual
+              e uma experiência que lembre lojas esportivas de maior nível, mesmo com atendimento direto.
+            </p>
+          </div>
+
+          <div class="difference-points">
+            <div class="difference-point">
+              Vitrine inicial mais forte e com melhor hierarquia visual.
+            </div>
+            <div class="difference-point">
+              Catálogo completo com filtros e navegação mais clara.
+            </div>
+            <div class="difference-point">
+              Páginas de produto com galeria, preço, descrição e CTA forte.
+            </div>
+            <div class="difference-point">
+              Estrutura profissional para crescimento da loja.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>Benefícios para o cliente</h2>
+            <p>
+              O cliente percebe mais clareza na compra e se sente mais seguro ao navegar pela loja.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3>Mais organização</h3>
+            <p>
+              Cada produto é apresentado com mais informações, imagens e estrutura visual,
+              evitando sensação de bagunça.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Mais clareza</h3>
+            <p>
+              O cliente entende melhor o que está vendo, quais tamanhos existem e como seguir para o atendimento.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Mais facilidade</h3>
+            <p>
+              A jornada fica simples: encontrar o produto, conferir os detalhes e chamar no WhatsApp.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="cta-card">
+          <div>
+            <h2>Quer escolher sua próxima camisa?</h2>
+            <p>
+              Acesse o catálogo completo ou fale diretamente no WhatsApp para receber atendimento da loja.
+            </p>
+          </div>
+
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <a href="index.html#catalogo" class="btn btn-primary">Abrir catálogo</a>
+            <a id="ctaWhatsApp" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+              Falar no WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="footer-brand-title" id="footerBrandTitle">Camisa 10 Store</div>
+        <p class="footer-text" id="footerMainText">
+          Camisas de futebol com atendimento rápido, catálogo organizado e pedido direto pelo WhatsApp.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <div class="footer-links">
+          <a href="index.html">Início</a>
+          <a href="index.html#catalogo">Catálogo</a>
+          <a href="guia-tamanhos.html">Guia de tamanhos</a>
+          <a href="porque-comprar.html">Por que comprar</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <div class="footer-links">
+          <a id="footerInstagram" href="#" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a id="footerWhatsApp" href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <span id="footerText">© Camisa 10 Store</span>
+      <span>Feito para vender mais no WhatsApp</span>
+    </div>
+  </footer>
+
+  <script>
+    const SUPABASE_URL = "https://mgxyupekvuihjbzvzfmf.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_fSGhfKrj2NK5UHNYRGk8nw_fl4mCJ_n";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let siteSettings = null;
+    let whatsappNumber = "5597981098445";
+
+    function sanitizePhone(phone) {
+      return String(phone || "").replace(/\D/g, "");
+    }
+
+    function applySiteSettings() {
+      if (!siteSettings) return;
+
+      document.getElementById("brandTitle").textContent =
+        siteSettings.logo_text || siteSettings.hero_title || "Camisa 10 Store";
+
+      document.getElementById("footerBrandTitle").textContent =
+        siteSettings.hero_title || "Camisa 10 Store";
+
+      document.getElementById("footerMainText").textContent =
+        `${siteSettings.delivery_text || "Entrega rápida em Humaitá e região"}. Atendimento direto pelo WhatsApp para pedidos e dúvidas.`;
+
+      document.getElementById("footerText").textContent =
+        siteSettings.footer_text || "© Camisa 10 Store";
+
+      const logoImage = document.getElementById("logoImage");
+      const logoFallback = document.getElementById("logoFallback");
+
+      if (siteSettings.logo_url) {
+        logoImage.src = siteSettings.logo_url;
+        logoImage.style.display = "block";
+        logoFallback.style.display = "none";
+      } else {
+        logoImage.style.display = "none";
+        logoFallback.style.display = "flex";
+      }
+
+      const instagramUrl = siteSettings.instagram_url?.trim() || "#";
+      document.getElementById("instagramLink").href = instagramUrl;
+      document.getElementById("footerInstagram").href = instagramUrl;
+
+      if (siteSettings.whatsapp_number) {
+        whatsappNumber = siteSettings.whatsapp_number;
+      }
+
+      const whatsappLink = `https://wa.me/${sanitizePhone(whatsappNumber)}?text=${encodeURIComponent("Olá! Vim pelo site da Camisa 10 Store e quero atendimento.")}`;
+
+      document.getElementById("headerWhatsApp").href = whatsappLink;
+      document.getElementById("footerWhatsApp").href = `https://wa.me/${sanitizePhone(whatsappNumber)}`;
+      document.getElementById("ctaWhatsApp").href = whatsappLink;
+    }
+
+    async function loadSiteSettings() {
+      const { data, error } = await supabaseClient
+        .from("site_settings")
+        .select(`
+          hero_title,
+          delivery_text,
+          footer_text,
+          logo_url,
+          instagram_url,
+          whatsapp_number
+        `)
+        .limit(1)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Erro ao carregar site_settings:", error);
+        return;
+      }
+
+      if (data) {
+        siteSettings = data;
+        applySiteSettings();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      await loadSiteSettings();
+    });
+  </script>
+</body>
+</html>
