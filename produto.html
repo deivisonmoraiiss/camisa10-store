@@ -175,6 +175,60 @@
       background: var(--gold-2) !important;
     }
 
+
+
+    .mobile-topbar {
+      display: none;
+    }
+
+    .mobile-topbar-inner {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .mobile-back-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: #fff;
+      font-size: 1.5rem;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .mobile-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .mobile-brand-title {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mobile-brand-subtitle {
+      font-size: 0.78rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     .breadcrumb-wrap {
       padding: 24px 0 10px;
     }
@@ -830,8 +884,12 @@
         border-bottom: 1px solid var(--line);
       }
 
-      .product-section {
-        padding-top: 12px;
+      .gallery-card {
+        padding: 14px;
+      }
+
+      .nav {
+        justify-content: flex-start;
       }
 
       .gallery-grid {
@@ -859,32 +917,72 @@
     }
 
     @media (max-width: 560px) {
+      .product-section {
+        padding-top: 12px;
+      }
+
+      .product-layout {
+        gap: 16px;
+      }
+
       .gallery-card,
       .info-card {
-        padding: 18px;
+        padding: 16px;
         border-radius: 22px;
       }
 
       .gallery-card {
-        padding: 0 0 16px;
-        overflow: hidden;
+        border-radius: 24px;
+      }
+
+      .gallery-grid {
+        gap: 12px;
+      }
+
+      .thumbs-column {
+        gap: 10px;
+        padding-bottom: 2px;
+      }
+
+      .thumb-btn {
+        min-width: 74px;
+        width: 74px;
+        border-radius: 16px;
+        padding: 5px;
       }
 
       .main-image-wrap {
-        border-radius: 0;
-        min-height: auto;
+        padding: 10px;
+        border-radius: 22px;
       }
 
       .main-product-image {
-        border-radius: 0;
-        aspect-ratio: 1 / 1;
+        border-radius: 16px;
       }
 
-      .purchase-info,
-      .size-selected-banner,
-      .size-guide-tip,
+      .product-title {
+        font-size: 2.2rem;
+        line-height: 1.06;
+      }
+
       .product-description {
+        font-size: 14px;
+        padding: 14px 0;
+      }
+
+      .size-guide-tip {
+        margin-top: 10px;
+      }
+
+      .purchase-info {
         display: none;
+      }
+
+      .purchase-card {
+        padding: 0;
+        background: transparent;
+        border: none;
+        gap: 0;
       }
 
       .action-buttons {
@@ -896,104 +994,27 @@
         min-width: 100%;
       }
 
-      .btn-whatsapp {
-        min-height: 54px;
+      .size-picker-top {
+        align-items: stretch;
       }
 
-      .info-card {
-        gap: 0;
+      .size-guide-link {
+        width: 100%;
+      }
+
+      .size-selected-banner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav a {
+        padding: 9px 12px;
+        font-size: 0.9rem;
       }
     }
-
-
-    .mobile-gallery-dots {
-      display: none;
-      justify-content: center;
-      gap: 8px;
-      padding-top: 14px;
-    }
-
-    .mobile-gallery-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.22);
-      transition: 0.35s ease;
-      border: none;
-      padding: 0;
-    }
-
-    .mobile-gallery-dot.active {
-      width: 22px;
-      background: var(--gold);
-    }
-
-
-
-    .mobile-topbar {
-      display: none;
-    }
-
-    .mobile-topbar-inner {
-      min-height: 74px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .mobile-menu-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.03);
-      color: #fff;
-      font-size: 1.2rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .mobile-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-      flex: 1;
-    }
-
-    .mobile-brand-title {
-      font-size: 0.98rem;
-      font-weight: 800;
-      color: #fff;
-      line-height: 1.2;
-    }
-
-    .mobile-brand-subtitle {
-      font-size: 0.78rem;
-      color: var(--muted);
-      line-height: 1.2;
-    }
-
   </style>
 </head>
 <body>
-  <section class="mobile-topbar">
-    <div class="container mobile-topbar-inner">
-      <a class="mobile-menu-btn" href="index.html#catalogo" aria-label="Voltar ao catálogo">←</a>
-
-      <a href="index.html" class="mobile-brand">
-        <img id="mobileLogoImage" class="brand-logo" style="display:none;" alt="Logo Camisa 10 Store" />
-        <div id="mobileLogoFallback" class="brand-logo-fallback">10</div>
-        <div>
-          <div class="mobile-brand-title" id="mobileBrandTitle">Camisa 10 Store</div>
-          <div class="mobile-brand-subtitle">Protagonismo começa no Manto</div>
-        </div>
-      </a>
-    </div>
-  </section>
   <header class="header">
     <div class="container header-inner">
       <a href="index.html" class="brand">
@@ -1016,6 +1037,21 @@
       </nav>
     </div>
   </header>
+
+  <section class="mobile-topbar">
+    <div class="container mobile-topbar-inner">
+      <a href="index.html" class="mobile-back-btn" aria-label="Voltar para a Home">←</a>
+
+      <a href="index.html" class="mobile-brand">
+        <img id="mobileLogoImage" class="brand-logo" style="display:none;" alt="Logo Camisa 10 Store" />
+        <div id="mobileLogoFallback" class="brand-logo-fallback">10</div>
+        <div class="brand-text">
+          <div class="mobile-brand-title" id="mobileBrandTitle">Camisa 10 Store</div>
+          <div class="mobile-brand-subtitle">Protagonismo começa no Manto</div>
+        </div>
+      </a>
+    </div>
+  </section>
 
   <div class="breadcrumb-wrap">
     <div class="container">
@@ -1052,7 +1088,7 @@
             <div class="gallery-grid">
               <div id="thumbs-column" class="thumbs-column"></div>
 
-              <div class="main-image-wrap" id="main-image-wrap">
+              <div class="main-image-wrap">
                 <img
                   id="main-product-image"
                   class="main-product-image"
@@ -1060,8 +1096,6 @@
                   alt="Imagem principal do produto"
                 />
               </div>
-
-              <div id="mobile-gallery-dots" class="mobile-gallery-dots"></div>
             </div>
           </div>
 
@@ -1182,8 +1216,6 @@
     let selectedSize = null;
     let whatsappNumber = "5597981098445";
     let siteSettings = null;
-    let galleryImagesList = [];
-    let currentGalleryIndex = 0;
 
     function formatPrice(value) {
       return Number(value || 0).toLocaleString("pt-BR", {
@@ -1238,134 +1270,49 @@
         url || "https://via.placeholder.com/900x900?text=Sem+Imagem";
     }
 
-    function renderMobileDots() {
-      const dots = document.getElementById("mobile-gallery-dots");
-      if (!dots) return;
+    function changeMainImage(url, buttonEl) {
+      setMainImage(url);
 
-      if (!galleryImagesList.length || galleryImagesList.length === 1) {
-        dots.innerHTML = "";
-        return;
-      }
-
-      dots.innerHTML = galleryImagesList.map((_, index) => `
-        <button
-          class="mobile-gallery-dot ${index === currentGalleryIndex ? "active" : ""}"
-          type="button"
-          aria-label="Ir para imagem ${index + 1}"
-          onclick="goToGalleryImage(${index})"
-        ></button>
-      `).join("");
-    }
-
-    function updateActiveThumb() {
-      document.querySelectorAll(".thumb-btn").forEach((btn, index) => {
-        btn.classList.toggle("active", index === currentGalleryIndex);
+      document.querySelectorAll(".thumb-btn").forEach(btn => {
+        btn.classList.remove("active");
       });
-    }
 
-    function goToGalleryImage(index) {
-      if (!galleryImagesList.length) return;
-
-      const total = galleryImagesList.length;
-      currentGalleryIndex = ((index % total) + total) % total;
-      setMainImage(galleryImagesList[currentGalleryIndex]);
-      updateActiveThumb();
-      renderMobileDots();
-    }
-
-    function nextGalleryImage() {
-      goToGalleryImage(currentGalleryIndex + 1);
-    }
-
-    function prevGalleryImage() {
-      goToGalleryImage(currentGalleryIndex - 1);
-    }
-
-    function setupGallerySwipe() {
-      const image = document.getElementById("main-product-image");
-      if (!image) return;
-
-      let startX = 0;
-      let currentX = 0;
-      let startY = 0;
-      let isDragging = false;
-      let lockedDirection = null;
-
-      image.addEventListener("touchstart", (event) => {
-        if (galleryImagesList.length <= 1) return;
-        startX = event.touches[0].clientX;
-        currentX = startX;
-        startY = event.touches[0].clientY;
-        isDragging = true;
-        lockedDirection = null;
-      }, { passive: true });
-
-      image.addEventListener("touchmove", (event) => {
-        if (!isDragging) return;
-        currentX = event.touches[0].clientX;
-        const currentY = event.touches[0].clientY;
-        const deltaX = currentX - startX;
-        const deltaY = currentY - startY;
-
-        if (!lockedDirection) {
-          lockedDirection = Math.abs(deltaX) > Math.abs(deltaY) ? "x" : "y";
-        }
-      }, { passive: true });
-
-      image.addEventListener("touchend", () => {
-        if (!isDragging) return;
-        isDragging = false;
-
-        if (lockedDirection !== "x") return;
-
-        const deltaX = currentX - startX;
-        if (Math.abs(deltaX) < 45) return;
-
-        if (deltaX < 0) {
-          nextGalleryImage();
-        } else {
-          prevGalleryImage();
-        }
-      }, { passive: true });
+      if (buttonEl) {
+        buttonEl.classList.add("active");
+      }
     }
 
     function renderGallery(mainImageUrl, extraImages) {
       const thumbsColumn = document.getElementById("thumbs-column");
       thumbsColumn.innerHTML = "";
 
-      galleryImagesList = [];
+      const imageList = [];
 
       if (mainImageUrl) {
-        galleryImagesList.push(mainImageUrl);
+        imageList.push(mainImageUrl);
       }
 
       (extraImages || []).forEach(item => {
-        if (item.image_url && !galleryImagesList.includes(item.image_url)) {
-          galleryImagesList.push(item.image_url);
+        if (item.image_url && !imageList.includes(item.image_url)) {
+          imageList.push(item.image_url);
         }
       });
 
-      if (!galleryImagesList.length) {
+      if (!imageList.length) {
         setMainImage("");
-        renderMobileDots();
         return;
       }
 
-      currentGalleryIndex = 0;
-      setMainImage(galleryImagesList[0]);
+      setMainImage(imageList[0]);
 
-      thumbsColumn.innerHTML = galleryImagesList.map((url, index) => `
-        <button class="thumb-btn ${index === 0 ? "active" : ""}" onclick="goToGalleryImage(${index})">
+      thumbsColumn.innerHTML = imageList.map((url, index) => `
+        <button class="thumb-btn ${index === 0 ? "active" : ""}" onclick="changeMainImage('${url}', this)">
           <img src="${url}" alt="Imagem do produto" />
         </button>
       `).join("");
-
-      renderMobileDots();
-      setupGallerySwipe();
     }
 
     function clearSizeMessage() {
-
       document.getElementById("size-message").textContent = "";
     }
 
@@ -1470,53 +1417,26 @@ ${window.location.href}`;
       document.getElementById("footerText").textContent =
         siteSettings.footer_text || "© Camisa 10 Store";
 
-      const logoImage = document.getElementById("logoImage");
-      const logoFallback = document.getElementById("logoFallback");
-
-      const logoUrl = siteSettings.logo_url || "logo.jpg";
-
-      if (logoUrl) {
-        logoImage.onerror = () => {
-          if (logoImage.src.includes("logo.jpg")) {
-            logoImage.style.display = "none";
-            logoFallback.style.display = "flex";
-            syncMobileLogos();
-            return;
-          }
-
-          logoImage.src = "logo.jpg";
-        };
-        logoImage.src = logoUrl;
-        logoImage.style.display = "block";
-        logoFallback.style.display = "none";
-      } else {
-        logoImage.style.display = "none";
-        logoFallback.style.display = "flex";
-      }
-
-      syncMobileLogos();
       document.getElementById("mobileBrandTitle").textContent =
         siteSettings.logo_text || siteSettings.hero_title || "Camisa 10 Store";
 
-    function syncMobileLogos() {
-      const sourceLogo = document.getElementById("logoImage");
-      const useFallback = !sourceLogo || sourceLogo.style.display === "none";
+      const logoImage = document.getElementById("logoImage");
+      const logoFallback = document.getElementById("logoFallback");
       const mobileLogoImage = document.getElementById("mobileLogoImage");
       const mobileLogoFallback = document.getElementById("mobileLogoFallback");
+      const resolvedLogo = (siteSettings.logo_url && siteSettings.logo_url.trim()) || "logo.jpg";
 
-      if (mobileLogoImage) {
-        if (!useFallback && sourceLogo.src) {
-          mobileLogoImage.src = sourceLogo.src;
-          mobileLogoImage.style.display = "block";
-        } else {
-          mobileLogoImage.style.display = "none";
-        }
-      }
+      [logoImage, mobileLogoImage].forEach((img) => {
+        img.src = resolvedLogo;
+        img.onerror = () => {
+          img.style.display = "none";
+        };
+        img.style.display = "block";
+      });
 
-      if (mobileLogoFallback) {
-        mobileLogoFallback.style.display = useFallback ? "flex" : "none";
-      }
-    }
+      [logoFallback, mobileLogoFallback].forEach((fallback) => {
+        fallback.style.display = "none";
+      });
 
       const instagramUrl = siteSettings.instagram_url?.trim() || "#";
       document.getElementById("instagramLink").href = instagramUrl;
@@ -1530,6 +1450,26 @@ ${window.location.href}`;
 
       document.getElementById("headerWhatsApp").href = whatsappLink;
       document.getElementById("footerWhatsApp").href = `https://wa.me/${sanitizePhone(whatsappNumber)}`;
+    }
+
+
+    function applyDefaultBranding() {
+      const logoImage = document.getElementById("logoImage");
+      const mobileLogoImage = document.getElementById("mobileLogoImage");
+      const logoFallback = document.getElementById("logoFallback");
+      const mobileLogoFallback = document.getElementById("mobileLogoFallback");
+
+      [logoImage, mobileLogoImage].forEach((img) => {
+        img.src = "logo.jpg";
+        img.onerror = () => {
+          img.style.display = "none";
+        };
+        img.style.display = "block";
+      });
+
+      [logoFallback, mobileLogoFallback].forEach((fallback) => {
+        fallback.style.display = "none";
+      });
     }
 
     async function loadSiteSettings() {
@@ -1712,18 +1652,7 @@ ${window.location.href}`;
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-      const logoImage = document.getElementById("logoImage");
-      const logoFallback = document.getElementById("logoFallback");
-      if (logoImage) {
-        logoImage.onerror = () => {
-          logoImage.style.display = "none";
-          if (logoFallback) logoFallback.style.display = "flex";
-        };
-        logoImage.src = "logo.jpg";
-        logoImage.style.display = "block";
-        if (logoFallback) logoFallback.style.display = "none";
-      }
-
+      applyDefaultBranding();
       await loadSiteSettings();
       await loadProduct();
     });
