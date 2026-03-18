@@ -1216,6 +1216,8 @@
     let selectedSize = null;
     let whatsappNumber = "5597981098445";
     let siteSettings = null;
+    let galleryImagesList = [];
+    let currentGalleryIndex = 0;
 
     function formatPrice(value) {
       return Number(value || 0).toLocaleString("pt-BR", {
@@ -1265,21 +1267,80 @@
       }
     }
 
+    function updateActiveThumb() {
+      document.querySelectorAll(".thumb-btn").forEach((btn, index) => {
+        btn.classList.toggle("active", index === currentGalleryIndex);
+      });
+    }
+
     function setMainImage(url) {
       document.getElementById("main-product-image").src =
         url || "https://via.placeholder.com/900x900?text=Sem+Imagem";
     }
 
-    function changeMainImage(url, buttonEl) {
-      setMainImage(url);
+    function goToGalleryImage(index) {
+      if (!galleryImagesList.length) {
+        setMainImage("");
+        return;
+      }
 
-      document.querySelectorAll(".thumb-btn").forEach(btn => {
-        btn.classList.remove("active");
-      });
+      currentGalleryIndex = ((index % galleryImagesList.length) + galleryImagesList.length) % galleryImagesList.length;
+      setMainImage(galleryImagesList[currentGalleryIndex]);
+      updateActiveThumb();
+    }
+
+    function nextGalleryImage() {
+      goToGalleryImage(currentGalleryIndex + 1);
+    }
+
+    function previousGalleryImage() {
+      goToGalleryImage(currentGalleryIndex - 1);
+    }
+
+    function changeMainImage(url, buttonEl) {
+      const foundIndex = galleryImagesList.indexOf(url);
+
+      if (foundIndex >= 0) {
+        goToGalleryImage(foundIndex);
+      } else {
+        setMainImage(url);
+        document.querySelectorAll(".thumb-btn").forEach(btn => {
+          btn.classList.remove("active");
+        });
+      }
 
       if (buttonEl) {
         buttonEl.classList.add("active");
       }
+    }
+
+    function setupGallerySwipe() {
+      const imageWrap = document.querySelector(".main-image-wrap");
+      if (!imageWrap) return;
+
+      let touchStartX = 0;
+      let touchEndX = 0;
+      const minSwipeDistance = 40;
+
+      imageWrap.addEventListener("touchstart", (event) => {
+        if (!event.touches || !event.touches.length) return;
+        touchStartX = event.touches[0].clientX;
+      }, { passive: true });
+
+      imageWrap.addEventListener("touchend", (event) => {
+        if (!event.changedTouches || !event.changedTouches.length || galleryImagesList.length <= 1) return;
+
+        touchEndX = event.changedTouches[0].clientX;
+        const distance = touchEndX - touchStartX;
+
+        if (Math.abs(distance) < minSwipeDistance) return;
+
+        if (distance < 0) {
+          nextGalleryImage();
+        } else {
+          previousGalleryImage();
+        }
+      }, { passive: true });
     }
 
     function renderGallery(mainImageUrl, extraImages) {
@@ -1298,18 +1359,23 @@
         }
       });
 
-      if (!imageList.length) {
+      galleryImagesList = imageList;
+      currentGalleryIndex = 0;
+
+      if (!galleryImagesList.length) {
         setMainImage("");
         return;
       }
 
-      setMainImage(imageList[0]);
+      goToGalleryImage(0);
 
-      thumbsColumn.innerHTML = imageList.map((url, index) => `
+      thumbsColumn.innerHTML = galleryImagesList.map((url, index) => `
         <button class="thumb-btn ${index === 0 ? "active" : ""}" onclick="changeMainImage('${url}', this)">
           <img src="${url}" alt="Imagem do produto" />
         </button>
       `).join("");
+
+      updateActiveThumb();
     }
 
     function clearSizeMessage() {
@@ -1402,6 +1468,47 @@ ${window.location.href}`;
       };
     }
 
+    function applyLogoSource(primaryLogoUrl) {
+      const logoImage = document.getElementById("logoImage");
+      const logoFallback = document.getElementById("logoFallback");
+      const mobileLogoImage = document.getElementById("mobileLogoImage");
+      const mobileLogoFallback = document.getElementById("mobileLogoFallback");
+      const logoCandidates = [];
+
+      if (primaryLogoUrl && primaryLogoUrl.trim()) {
+        logoCandidates.push(primaryLogoUrl.trim());
+      }
+
+      if (!logoCandidates.includes("logo.jpg")) {
+        logoCandidates.push("logo.jpg");
+      }
+
+      [
+        { img: logoImage, fallback: logoFallback },
+        { img: mobileLogoImage, fallback: mobileLogoFallback }
+      ].forEach(({ img, fallback }) => {
+        let candidateIndex = 0;
+
+        const tryNextLogo = () => {
+          if (candidateIndex >= logoCandidates.length) {
+            img.style.display = "none";
+            fallback.style.display = "flex";
+            return;
+          }
+
+          const nextSrc = logoCandidates[candidateIndex++];
+          img.onload = () => {
+            img.style.display = "block";
+            fallback.style.display = "none";
+          };
+          img.onerror = tryNextLogo;
+          img.src = nextSrc;
+        };
+
+        tryNextLogo();
+      });
+    }
+
     function applySiteSettings() {
       if (!siteSettings) return;
 
@@ -1420,23 +1527,7 @@ ${window.location.href}`;
       document.getElementById("mobileBrandTitle").textContent =
         siteSettings.logo_text || siteSettings.hero_title || "Camisa 10 Store";
 
-      const logoImage = document.getElementById("logoImage");
-      const logoFallback = document.getElementById("logoFallback");
-      const mobileLogoImage = document.getElementById("mobileLogoImage");
-      const mobileLogoFallback = document.getElementById("mobileLogoFallback");
-      const resolvedLogo = (siteSettings.logo_url && siteSettings.logo_url.trim()) || "logo.jpg";
-
-      [logoImage, mobileLogoImage].forEach((img) => {
-        img.src = resolvedLogo;
-        img.onerror = () => {
-          img.style.display = "none";
-        };
-        img.style.display = "block";
-      });
-
-      [logoFallback, mobileLogoFallback].forEach((fallback) => {
-        fallback.style.display = "none";
-      });
+      applyLogoSource(siteSettings.logo_url);
 
       const instagramUrl = siteSettings.instagram_url?.trim() || "#";
       document.getElementById("instagramLink").href = instagramUrl;
@@ -1454,22 +1545,7 @@ ${window.location.href}`;
 
 
     function applyDefaultBranding() {
-      const logoImage = document.getElementById("logoImage");
-      const mobileLogoImage = document.getElementById("mobileLogoImage");
-      const logoFallback = document.getElementById("logoFallback");
-      const mobileLogoFallback = document.getElementById("mobileLogoFallback");
-
-      [logoImage, mobileLogoImage].forEach((img) => {
-        img.src = "logo.jpg";
-        img.onerror = () => {
-          img.style.display = "none";
-        };
-        img.style.display = "block";
-      });
-
-      [logoFallback, mobileLogoFallback].forEach((fallback) => {
-        fallback.style.display = "none";
-      });
+      applyLogoSource("logo.jpg");
     }
 
     async function loadSiteSettings() {
@@ -1653,6 +1729,7 @@ ${window.location.href}`;
 
     document.addEventListener("DOMContentLoaded", async () => {
       applyDefaultBranding();
+      setupGallerySwipe();
       await loadSiteSettings();
       await loadProduct();
     });
