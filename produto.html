@@ -815,14 +815,23 @@
     }
 
     @media (max-width: 860px) {
-      .header-inner {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 14px 0;
+      .header,
+      .breadcrumb-wrap {
+        display: none;
       }
 
-      .nav {
-        justify-content: flex-start;
+      .mobile-topbar {
+        display: block;
+        position: sticky;
+        top: 0;
+        z-index: 150;
+        background: rgba(7,7,7,0.94);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .product-section {
+        padding-top: 12px;
       }
 
       .gallery-grid {
@@ -856,6 +865,28 @@
         border-radius: 22px;
       }
 
+      .gallery-card {
+        padding: 0 0 16px;
+        overflow: hidden;
+      }
+
+      .main-image-wrap {
+        border-radius: 0;
+        min-height: auto;
+      }
+
+      .main-product-image {
+        border-radius: 0;
+        aspect-ratio: 1 / 1;
+      }
+
+      .purchase-info,
+      .size-selected-banner,
+      .size-guide-tip,
+      .product-description {
+        display: none;
+      }
+
       .action-buttons {
         flex-direction: column;
       }
@@ -865,22 +896,12 @@
         min-width: 100%;
       }
 
-      .size-picker-top {
-        align-items: stretch;
+      .btn-whatsapp {
+        min-height: 54px;
       }
 
-      .size-guide-link {
-        width: 100%;
-      }
-
-      .size-selected-banner {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .nav a {
-        padding: 9px 12px;
-        font-size: 0.9rem;
+      .info-card {
+        gap: 0;
       }
     }
 
@@ -907,9 +928,72 @@
       background: var(--gold);
     }
 
+
+
+    .mobile-topbar {
+      display: none;
+    }
+
+    .mobile-topbar-inner {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .mobile-menu-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: #fff;
+      font-size: 1.2rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .mobile-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .mobile-brand-title {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .mobile-brand-subtitle {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.2;
+    }
+
   </style>
 </head>
 <body>
+  <section class="mobile-topbar">
+    <div class="container mobile-topbar-inner">
+      <a class="mobile-menu-btn" href="index.html#catalogo" aria-label="Voltar ao catálogo">←</a>
+
+      <a href="index.html" class="mobile-brand">
+        <img id="mobileLogoImage" class="brand-logo" style="display:none;" alt="Logo Camisa 10 Store" />
+        <div id="mobileLogoFallback" class="brand-logo-fallback">10</div>
+        <div>
+          <div class="mobile-brand-title" id="mobileBrandTitle">Camisa 10 Store</div>
+          <div class="mobile-brand-subtitle">Protagonismo começa no Manto</div>
+        </div>
+      </a>
+    </div>
+  </section>
   <header class="header">
     <div class="container header-inner">
       <a href="index.html" class="brand">
@@ -1396,6 +1480,7 @@ ${window.location.href}`;
           if (logoImage.src.includes("logo.jpg")) {
             logoImage.style.display = "none";
             logoFallback.style.display = "flex";
+            syncMobileLogos();
             return;
           }
 
@@ -1408,6 +1493,30 @@ ${window.location.href}`;
         logoImage.style.display = "none";
         logoFallback.style.display = "flex";
       }
+
+      syncMobileLogos();
+      document.getElementById("mobileBrandTitle").textContent =
+        siteSettings.logo_text || siteSettings.hero_title || "Camisa 10 Store";
+
+    function syncMobileLogos() {
+      const sourceLogo = document.getElementById("logoImage");
+      const useFallback = !sourceLogo || sourceLogo.style.display === "none";
+      const mobileLogoImage = document.getElementById("mobileLogoImage");
+      const mobileLogoFallback = document.getElementById("mobileLogoFallback");
+
+      if (mobileLogoImage) {
+        if (!useFallback && sourceLogo.src) {
+          mobileLogoImage.src = sourceLogo.src;
+          mobileLogoImage.style.display = "block";
+        } else {
+          mobileLogoImage.style.display = "none";
+        }
+      }
+
+      if (mobileLogoFallback) {
+        mobileLogoFallback.style.display = useFallback ? "flex" : "none";
+      }
+    }
 
       const instagramUrl = siteSettings.instagram_url?.trim() || "#";
       document.getElementById("instagramLink").href = instagramUrl;
