@@ -1012,6 +1012,25 @@
         font-size: 0.9rem;
       }
     }
+    @media (max-width: 768px) {
+  .container.footer-grid,
+  .container.footer-bottom {
+    width: calc(100% - 32px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .container.footer-grid {
+    gap: 22px;
+  }
+
+  .footer-text,
+  .footer-links a,
+  .footer-col h4,
+  .footer-brand-title {
+    word-break: break-word;
+  }
+}
   </style>
 </head>
 <body>
