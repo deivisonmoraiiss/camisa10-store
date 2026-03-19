@@ -1101,3 +1101,8 @@ a{
     line-height: 1.6;
   }
 }
+@media (max-width: 768px) {
+  footer {
+    text-align: center;
+  }
+}
