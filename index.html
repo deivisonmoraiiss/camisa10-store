@@ -1656,7 +1656,7 @@
 
     function renderFeaturedProducts() {
       const grid = document.getElementById("featuredProductsGrid");
-      const featured = allProducts.filter(product => product.featured === true);
+      const featured = allProducts.filter(product => product.featured === true || product.is_featured === true);
 
       if (!featured.length) {
         grid.innerHTML = `<div class="state-box">Nenhum destaque disponível no momento.</div>`;
@@ -1954,10 +1954,20 @@
       const { data, error } = await supabaseClient
         .from("products")
         .select(`
-          *,
+          id,
+          name,
+          slug,
+          price,
+          image_url,
+          description,
+          featured,
           badge_type,
-          featured_order,
-          categories(name)
+          category_id,
+          created_at,
+          categories (
+            id,
+            name
+          )
         `)
         .order("created_at", { ascending: false });
 
@@ -1969,7 +1979,7 @@
 
       allProducts = (data || []).map(product => ({
         ...product,
-        category_name: product.categories?.name || product.category || product.category_name || "Sem categoria"
+        category_name: product.categories?.name || product.category_name || product.category || "Sem categoria"
       }));
     }
 
