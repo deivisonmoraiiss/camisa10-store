@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <title>Camisa 10 Store - Camisas de Futebol em Humaitá</title>
+
+<meta name="description" content="Compre camisas de futebol em Humaitá. Brasileirão, seleções e times internacionais. Entrega rápida e pedido pelo WhatsApp.">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Camisa 10 Store - Camisas de Time em Humaitá</title>
   <meta
     name="description"
@@ -833,14 +837,13 @@
       color: #08140d;
       border-color: transparent;
       font-weight: 800;
-    }
-
-    .drawer-link.drawer-instagram {
-      background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);
-      color: #fff;
-      border: none;
-      font-weight: 800;
-      box-shadow: 0 12px 26px rgba(221, 42, 123, 0.22);
+      .drawer-instagram {
+  background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);
+  color: #fff;
+  border: none;
+  font-weight: 800;
+  box-shadow: 0 12px 26px rgba(221, 42, 123, 0.22);
+}
     }
 
     @media (max-width: 1100px) {
@@ -1206,6 +1209,99 @@
       text-align: center;
     }
   }
+  
+
+    .sale-type-sections {
+      display: grid;
+      gap: 22px;
+      margin-top: 18px;
+    }
+
+    .sale-type-block {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255,255,255,0.02);
+      padding: 22px;
+    }
+
+    .sale-type-block-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .sale-type-block-title {
+      margin: 0;
+      font-size: 1.24rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .sale-type-block-subtitle {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    .sale-type-count {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      color: #fff;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .product-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .sale-type-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .sale-type-pill.pronta-entrega {
+      background: rgba(47, 204, 113, 0.14);
+      color: #8ff0b1;
+      border-color: rgba(47, 204, 113, 0.28);
+    }
+
+    .sale-type-pill.sob-encomenda {
+      background: rgba(224, 189, 73, 0.14);
+      color: #f4d76d;
+      border-color: rgba(224, 189, 73, 0.28);
+    }
+
+    @media (max-width: 860px) {
+      .sale-type-block {
+        padding: 18px;
+        border-radius: 20px;
+      }
+
+      .sale-type-block-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1361,8 +1457,34 @@
 
           <div class="category-chip-row" id="catalogCategoryButtons"></div>
 
-          <div class="products-grid" id="productsGrid" style="margin-top:18px;">
-            <div class="state-box">Carregando produtos...</div>
+          <div class="sale-type-sections">
+            <div class="sale-type-block">
+              <div class="sale-type-block-header">
+                <div>
+                  <h3 class="sale-type-block-title">⚡ Pronta entrega</h3>
+                  <p class="sale-type-block-subtitle">Camisas que você já tem disponíveis para pedido imediato.</p>
+                </div>
+                <div class="sale-type-count" id="readyProductsCount">Carregando...</div>
+              </div>
+
+              <div class="products-grid" id="readyProductsGrid">
+                <div class="state-box">Carregando produtos à pronta entrega...</div>
+              </div>
+            </div>
+
+            <div class="sale-type-block">
+              <div class="sale-type-block-header">
+                <div>
+                  <h3 class="sale-type-block-title">🛒 Sob encomenda</h3>
+                  <p class="sale-type-block-subtitle">Modelos disponíveis por pedido, com escolha de tamanho e atendimento pelo WhatsApp.</p>
+                </div>
+                <div class="sale-type-count" id="orderProductsCount">Carregando...</div>
+              </div>
+
+              <div class="products-grid" id="orderProductsGrid">
+                <div class="state-box">Carregando produtos sob encomenda...</div>
+              </div>
+            </div>
           </div>
 
           <div class="contact-strip">
@@ -1553,6 +1675,33 @@
       return `produto.html?id=${encodeURIComponent(product.id)}`;
     }
 
+    function getVisibleFlag(product) {
+      if (typeof product?.is_visible === "boolean") return product.is_visible;
+      if (typeof product?.visible === "boolean") return product.visible;
+      return true;
+    }
+
+    function getFeaturedFlag(product) {
+      if (typeof product?.is_featured === "boolean") return product.is_featured;
+      if (typeof product?.featured === "boolean") return product.featured;
+      return false;
+    }
+
+    function getSaleType(product) {
+      const value = String(product?.sale_type || "pronta_entrega").trim().toLowerCase();
+      return value === "sob_encomenda" ? "sob_encomenda" : "pronta_entrega";
+    }
+
+    function getSaleTypeLabel(product) {
+      return getSaleType(product) === "sob_encomenda" ? "Sob encomenda" : "Pronta entrega";
+    }
+
+    function getSaleTypeDescription(type) {
+      return type === "sob_encomenda"
+        ? "Modelos disponíveis por pedido, com escolha de tamanho e atendimento pelo WhatsApp."
+        : "Camisas que você já tem disponíveis para pedido imediato.";
+    }
+
     function getCategoryButtonHTML(slug, name, kind = "chip") {
       const active = slug === activeCategory ? "active" : "";
       if (kind === "drawer") {
@@ -1594,6 +1743,8 @@
 
     function getFilteredProducts() {
       return allProducts.filter(product => {
+        if (!getVisibleFlag(product)) return false;
+
         const title = String(product.name || product.title || "").toLowerCase();
         const categoryName = normalizeCategoryName(product);
         const categorySlug = normalizeCategorySlug(categoryName);
@@ -1621,28 +1772,30 @@
     }
 
     function buildProductCard(product, isFeatured = false) {
-      const imagem = getProductImage(product) || "https://via.placeholder.com/300x300?text=Camisa";
+      const image = getProductImage(product) || "https://via.placeholder.com/300x300?text=Camisa";
       const categoryName = normalizeCategoryName(product);
       const title = product.name || product.title || "Camisa disponível";
       const price = formatPrice(product.price);
       const url = getProductUrl(product);
       const badge = getProductBadge(product, isFeatured);
+      const saleType = getSaleType(product);
+      const saleTypeLabel = getSaleTypeLabel(product);
+      const saleTypeClass = saleType === "sob_encomenda" ? "sob-encomenda" : "pronta-entrega";
 
       return `
         <article class="product-card">
           <a href="${url}" class="product-image-link">
             <div class="product-image-wrap">
               ${badge}
-              ${
-                imagem
-                  ? `<img class="product-image" src="${imagem}" alt="${title}" loading="lazy" />`
-                  : `<div class="product-image-placeholder">Camisa 10 Store</div>`
-              }
+              <img class="product-image" src="${image}" alt="${title}" loading="lazy" />
             </div>
           </a>
 
           <div class="product-body">
-            <span class="product-category">${categoryName}</span>
+            <div class="product-meta-row">
+              <span class="product-category">${categoryName}</span>
+              <span class="sale-type-pill ${saleTypeClass}">${saleTypeLabel}</span>
+            </div>
             <h3 class="product-title">${title}</h3>
             <div class="product-price">${price}</div>
             <a href="${url}" class="btn btn-primary">Ver produto</a>
@@ -1653,7 +1806,7 @@
 
     function renderFeaturedProducts() {
       const grid = document.getElementById("featuredProductsGrid");
-      const featured = allProducts.filter(product => product.featured === true || product.is_featured === true);
+      const featured = allProducts.filter(product => getFeaturedFlag(product));
 
       if (!featured.length) {
         grid.innerHTML = `<div class="state-box">Nenhum destaque disponível no momento.</div>`;
@@ -1669,16 +1822,39 @@
       grid.innerHTML = sortedFeatured.slice(0, 4).map(product => buildProductCard(product, true)).join("");
     }
 
-    function renderProducts() {
-      const grid = document.getElementById("productsGrid");
-      const filtered = getFilteredProducts();
+    function renderSaleTypeSection(gridId, countId, products, emptyMessage) {
+      const grid = document.getElementById(gridId);
+      const count = document.getElementById(countId);
+      if (!grid || !count) return;
 
-      if (!filtered.length) {
-        grid.innerHTML = `<div class="state-box">Nenhum produto encontrado com esse filtro.</div>`;
+      count.textContent = `${products.length} ${products.length === 1 ? "produto" : "produtos"}`;
+
+      if (!products.length) {
+        grid.innerHTML = `<div class="state-box">${emptyMessage}</div>`;
         return;
       }
 
-      grid.innerHTML = filtered.map(product => buildProductCard(product)).join("");
+      grid.innerHTML = products.map(product => buildProductCard(product)).join("");
+    }
+
+    function renderProducts() {
+      const filtered = getFilteredProducts();
+      const prontaEntrega = filtered.filter(product => getSaleType(product) === "pronta_entrega");
+      const sobEncomenda = filtered.filter(product => getSaleType(product) === "sob_encomenda");
+
+      renderSaleTypeSection(
+        "readyProductsGrid",
+        "readyProductsCount",
+        prontaEntrega,
+        "Nenhum produto à pronta entrega com esse filtro."
+      );
+
+      renderSaleTypeSection(
+        "orderProductsGrid",
+        "orderProductsCount",
+        sobEncomenda,
+        "Nenhum produto sob encomenda com esse filtro."
+      );
     }
 
     function syncSearchInputs(value) {
@@ -1956,28 +2132,44 @@
           slug,
           price,
           image_url,
-          description,
-          featured,
-          badge_type,
+          photo_url,
+          cover_url,
+          category,
+          category_name,
           category_id,
+          badge_type,
+          featured,
+          is_featured,
+          visible,
+          is_visible,
+          sale_type,
           created_at,
-          categories (
-            id,
-            name
+          categories(name),
+          product_images (
+            image_url,
+            sort_order
           )
         `)
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Erro real do Supabase:", error);
+        console.error("Erro ao carregar products:", error);
         allProducts = [];
         return;
       }
 
-      allProducts = (data || []).map(product => ({
-        ...product,
-        category_name: product.categories?.name || product.category_name || product.category || "Sem categoria"
-      }));
+      allProducts = (data || []).map(product => {
+        const orderedImages = Array.isArray(product.product_images)
+          ? [...product.product_images].sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
+          : [];
+
+        return {
+          ...product,
+          product_images: orderedImages,
+          category_name: product.categories?.name || product.category || product.category_name || "Sem categoria",
+          sale_type: getSaleType(product)
+        };
+      });
     }
 
     async function init() {
