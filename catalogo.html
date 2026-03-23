@@ -290,21 +290,19 @@
   align-items: center;
   gap: 6px;
   margin: 10px 0 0;
-  padding: 7px 12px;
+  padding: 8px 12px;
   border-radius: 999px;
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  background: rgba(212, 175, 55, 0.12);
-  border: 1px solid rgba(212, 175, 55, 0.25);
-  color: #f4d06f;
+  letter-spacing: 0.06em;
 }
 
 .sale-type-chip.sob-encomenda {
-  background: rgba(37, 211, 102, 0.12);
-  border-color: rgba(37, 211, 102, 0.25);
-  color: #73e7a1;
+  background: linear-gradient(135deg, #6d28d9, #a855f7);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #fff;
+  box-shadow: 0 12px 24px rgba(109, 40, 217, 0.28);
 }
 .product-card-content h3 {
       font-size: 18px;
@@ -639,6 +637,9 @@
   const saleType = product.sale_type || "pronta_entrega";
   const saleTypeLabel = getSaleTypeLabel(saleType);
   const productUrl = getProductUrl(product);
+  const saleTypeChip = saleType === "sob_encomenda"
+    ? `<div class="sale-type-chip sob-encomenda">🛒 ${saleTypeLabel}</div>`
+    : "";
 
   return `
     <div class="product-card">
@@ -654,9 +655,7 @@
           ${product.categories?.name || "Sem categoria"}
         </span>
 
-        <div class="sale-type-chip ${saleType === "sob_encomenda" ? "sob-encomenda" : ""}">
-          ${saleTypeLabel}
-        </div>
+        ${saleTypeChip}
 
         <h3>${product.name || "Produto sem nome"}</h3>
 
