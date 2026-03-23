@@ -203,11 +203,19 @@
                 </select>
               </div>
               <div class="field">
-                <label style="display:flex; align-items:center; gap:10px; cursor:pointer; margin-top:29px;">
-                  <input type="checkbox" id="product-featured" style="width:auto; accent-color:#d4af37;" />
-                  <span>Mostrar na seção Mais procuradas</span>
-                </label>
+                <label for="product-sale-type">Tipo de venda</label>
+                <select id="product-sale-type">
+                  <option value="pronta_entrega">Pronta entrega</option>
+                  <option value="sob_encomenda">Sob encomenda</option>
+                </select>
               </div>
+            </div>
+
+            <div class="field">
+              <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                <input type="checkbox" id="product-featured" style="width:auto; accent-color:#d4af37;" />
+                <span>Mostrar na seção Mais procuradas</span>
+              </label>
             </div>
 
             <div class="field">
@@ -277,9 +285,9 @@
             <div class="table-wrap">
               <table>
                 <thead>
-                  <tr><th>Imagem</th><th>Produto</th><th>Categoria</th><th>Preço</th><th>Tamanhos</th><th>Ações</th></tr>
+                  <tr><th>Imagem</th><th>Produto</th><th>Categoria</th><th>Tipo</th><th>Preço</th><th>Tamanhos</th><th>Ações</th></tr>
                 </thead>
-                <tbody id="products-table-body"><tr><td colspan="6" class="empty-state">Carregando produtos...</td></tr></tbody>
+                <tbody id="products-table-body"><tr><td colspan="7" class="empty-state">Carregando produtos...</td></tr></tbody>
               </table>
             </div>
             <div id="list-message" class="message"></div>
@@ -558,6 +566,7 @@
       document.getElementById("product-description").value = "";
       document.getElementById("product-featured").checked = false;
       document.getElementById("product-badge-type").value = "";
+      document.getElementById("product-sale-type").value = "pronta_entrega";
       setSelectedSizes([]);
       resetMainPreview();
       resetMultiPreview();
@@ -979,6 +988,7 @@
           description,
           featured,
           badge_type,
+          sale_type,
           category_id,
           created_at,
           categories (
@@ -995,7 +1005,7 @@
 
       if (error) {
         console.error("Erro ao carregar produtos:", error);
-        tbody.innerHTML = `<tr><td colspan="6" class="empty-state">Erro ao carregar produtos.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Erro ao carregar produtos.</td></tr>`;
         showMessage("list-message", "Erro ao buscar produtos no Supabase.", "error");
         return;
       }
@@ -1008,7 +1018,7 @@
       const tbody = document.getElementById("products-table-body");
 
       if (!products || products.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="empty-state">Nenhum produto cadastrado.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Nenhum produto cadastrado.</td></tr>`;
         return;
       }
 
@@ -1018,6 +1028,7 @@
           : [];
 
         const categoryName = product.categories?.name || "Sem categoria";
+        const saleType = product.sale_type === "sob_encomenda" ? "Sob encomenda" : "Pronta entrega";
 
         return `
           <tr>
@@ -1038,6 +1049,7 @@
               <div class="small-muted">Slug: ${product.slug || "-"}</div>
             </td>
             <td>${categoryName}</td>
+            <td><span class="badge">${saleType}</span></td>
             <td>${formatPrice(product.price)}</td>
             <td>
               ${
@@ -1136,6 +1148,7 @@
       const description = document.getElementById("product-description").value.trim();
       const featured = document.getElementById("product-featured").checked;
       const badge_type = document.getElementById("product-badge-type").value;
+      const sale_type = document.getElementById("product-sale-type").value || "pronta_entrega";
       const sizes = getSelectedSizes();
 
       if (!name || !price || !image_url || !category_id) {
@@ -1150,7 +1163,8 @@
         category_id,
         description,
         featured,
-        badge_type: badge_type || null
+        badge_type: badge_type || null,
+        sale_type
       };
 
       let response;
@@ -1230,6 +1244,7 @@
         .from("products")
         .select(`
           *,
+          sale_type,
           product_sizes (
             id,
             size,
@@ -1253,6 +1268,7 @@
       document.getElementById("product-description").value = data.description || "";
       document.getElementById("product-featured").checked = !!data.featured;
       document.getElementById("product-badge-type").value = data.badge_type || "";
+      document.getElementById("product-sale-type").value = data.sale_type || "pronta_entrega";
 
       if (data.image_url) {
         document.getElementById("main-image-preview").src = data.image_url;
