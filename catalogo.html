@@ -660,7 +660,11 @@
 
         <h3>${product.name || "Produto sem nome"}</h3>
 
-        <p class="product-price">${formatPrice(product.price)}</p>
+        ${Number(product.old_price || 0) > Number(product.price || 0) ? `<div class="promo-chip">🔥 Promoção</div>` : ""}
+        <div class="price-stack">
+          ${Number(product.old_price || 0) > Number(product.price || 0) ? `<span class="product-old-price">${formatPrice(product.old_price)}</span>` : ""}
+          <p class="product-price">${formatPrice(product.price)}</p>
+        </div>
 
         <a href="${productUrl}" class="product-btn">
           Ver produto
@@ -752,6 +756,7 @@
           name,
           slug,
           price,
+          old_price,
           sale_type,
           image_url,
           photo_url,
