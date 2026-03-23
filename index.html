@@ -562,7 +562,19 @@
 
     .product-badge.destaque { background: var(--gold); color: #111; }
     .product-badge.mais-vendida { background: #ff4d4f; color: #fff; }
-    .product-badge.novo { background: #2ecc71; color: #08140d; }
+    .product-badge.novo { background: linear-gradient(135deg, #6d28d9, #a855f7); color: #fff; border: 1px solid rgba(255,255,255,.14); }
+    .product-badge.encomenda-premium {
+      background: linear-gradient(135deg, #6d28d9, #a855f7);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 14px 28px rgba(109, 40, 217, 0.32);
+      position: static;
+      width: fit-content;
+      padding: 8px 12px;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
 
     .product-body {
       padding: 18px;
@@ -1678,7 +1690,10 @@
       const hasPromo = Number(product.old_price || 0) > Number(product.price || 0);
       const url = getProductUrl(product);
       const badge = getProductBadge(product, isFeatured);
-      const saleTypeLabel = (product.sale_type || "pronta_entrega") === "sob_encomenda" ? "Sob encomenda" : "Pronta entrega";
+      const isSobEncomenda = (product.sale_type || "pronta_entrega") === "sob_encomenda";
+      const saleTypeBadge = isSobEncomenda
+        ? `<span class="product-badge encomenda-premium">🛒 Sob encomenda</span>`
+        : "";
 
       return `
         <article class="product-card">
@@ -1696,7 +1711,7 @@
           <div class="product-body">
             <span class="product-category">${categoryName}</span>
             <h3 class="product-title">${title}</h3>
-            <span class="product-badge ${saleTypeLabel === "Sob encomenda" ? "novo" : "destaque"}">${saleTypeLabel}</span>
+            ${saleTypeBadge}
             ${hasPromo ? `<span class="product-promo-badge">🔥 Promoção</span>` : ""}
             <div class="product-price-box">
               ${hasPromo ? `<span class="product-old-price">${oldPrice}</span>` : ""}
