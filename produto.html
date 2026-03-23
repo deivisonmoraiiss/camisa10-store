@@ -358,7 +358,36 @@
       letter-spacing: 0.04em;
     }
 
-    .product-title {
+    
+.sale-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  background: rgba(212, 175, 55, 0.1);
+  color: #f4d06f;
+}
+
+.sale-type-note {
+  margin-top: 10px;
+  color: #cfcfcf;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.sale-type-badge.sob-encomenda {
+  background: rgba(37, 211, 102, 0.12);
+  border-color: rgba(37, 211, 102, 0.28);
+  color: #7ef0ad;
+}
+.product-title {
       font-size: clamp(2rem, 4vw, 3rem);
       line-height: 1.08;
       color: #fff;
@@ -1120,6 +1149,8 @@
 
           <div class="info-card">
             <div id="product-category" class="category-badge">Categoria</div>
+            <div id="product-sale-type" class="sale-type-badge">Pronta entrega</div>
+            <div id="product-sale-note" class="sale-type-note">Produto disponível para envio rápido e retirada.</div>
 
             <h1 id="product-name" class="product-title">Produto</h1>
 
@@ -1250,6 +1281,17 @@
       return String(phone || "").replace(/\D/g, "");
     }
 
+
+function getSaleTypeLabel(saleType) {
+  return saleType === "sob_encomenda" ? "Sob encomenda" : "Pronta entrega";
+}
+
+function getSaleTypeNote(saleType) {
+  return saleType === "sob_encomenda"
+    ? "Produto disponível por pedido. Consulte prazo e detalhes no WhatsApp."
+    : "Produto disponível à pronta entrega. Confirme disponibilidade pelo WhatsApp.";
+}
+
     function getProductParamsFromUrl() {
       const params = new URLSearchParams(window.location.search);
       return {
@@ -1271,21 +1313,35 @@
     }
 
     function updatePurchaseSummary() {
-      document.getElementById("purchase-product-name").textContent = currentProduct?.name || "-";
-      document.getElementById("purchase-product-price").textContent = currentProduct ? formatPrice(currentProduct.price) : "-";
-      document.getElementById("selected-size-text").textContent = selectedSize || "Selecione um tamanho";
+  document.getElementById("purchase-product-name").textContent = currentProduct?.name || "-";
+  document.getElementById("purchase-product-price").textContent = currentProduct ? formatPrice(currentProduct.price) : "-";
+  document.getElementById("selected-size-text").textContent = selectedSize || "Selecione um tamanho";
 
-      const selectedBanner = document.getElementById("size-selected-banner");
-      const selectedBannerValue = document.getElementById("size-selected-banner-value");
+  const selectedBanner = document.getElementById("size-selected-banner");
+  const selectedBannerValue = document.getElementById("size-selected-banner-value");
+  const saleTypeBadge = document.getElementById("product-sale-type");
+  const saleTypeNote = document.getElementById("product-sale-note");
+  const buyButton = document.getElementById("buy-whatsapp-btn");
 
-      if (selectedSize) {
-        selectedBanner.classList.add("show");
-        selectedBannerValue.textContent = selectedSize;
-      } else {
-        selectedBanner.classList.remove("show");
-        selectedBannerValue.textContent = "-";
-      }
-    }
+  if (currentProduct) {
+    const saleType = currentProduct.sale_type || "pronta_entrega";
+    saleTypeBadge.textContent = getSaleTypeLabel(saleType);
+    saleTypeBadge.classList.toggle("sob-encomenda", saleType === "sob_encomenda");
+    saleTypeNote.textContent = getSaleTypeNote(saleType);
+    buyButton.textContent =
+      saleType === "sob_encomenda"
+        ? "Escolher tamanho e encomendar no WhatsApp"
+        : "Escolher tamanho e pedir no WhatsApp";
+  }
+
+  if (selectedSize) {
+    selectedBanner.classList.add("show");
+    selectedBannerValue.textContent = selectedSize;
+  } else {
+    selectedBanner.classList.remove("show");
+    selectedBannerValue.textContent = "-";
+  }
+}
 
     function updateActiveThumb() {
       document.querySelectorAll(".thumb-btn").forEach((btn, index) => {
@@ -1423,50 +1479,73 @@
     }
 
     function renderSizes(sizeRows) {
-      const box = document.getElementById("sizes-box");
+  const box = document.getElementById("sizes-box");
+  const defaultSizes = ["P", "M", "G", "EG"];
+  const saleType = currentProduct?.sale_type || "pronta_entrega";
 
-      const defaultSizes = ["P", "M", "G", "EG"];
-      const availableMap = {};
+  if (saleType === "sob_encomenda") {
+    box.innerHTML = defaultSizes.map(size => `
+      <button
+        class="size-btn"
+        onclick="selectSize('${size}', this)"
+        type="button"
+      >
+        ${size}
+      </button>
+    `).join("");
 
-      (sizeRows || []).forEach(item => {
-        if (item.size) {
-          availableMap[item.size] = getAvailableFlag(item);
-        }
-      });
+    clearSizeMessage();
+    return;
+  }
 
-      const hasAnyAvailable = Object.values(availableMap).some(Boolean);
+  const availableMap = {};
 
-      if (!sizeRows || !sizeRows.length) {
-        box.innerHTML = `<div style="color:#b8b8b8; font-size:14px;">Consulte os tamanhos disponíveis pelo WhatsApp.</div>`;
-        return;
-      }
-
-      box.innerHTML = defaultSizes.map(size => {
-        const isAvailable = availableMap[size] === true;
-        return `
-          <button
-            class="size-btn ${isAvailable ? "" : "disabled"}"
-            ${isAvailable ? `onclick="selectSize('${size}', this)"` : "type='button' disabled"}
-          >
-            ${size}
-          </button>
-        `;
-      }).join("");
-
-      if (!hasAnyAvailable) {
-        setSizeMessage("Nenhum tamanho disponível no momento.");
-      } else {
-        clearSizeMessage();
-      }
+  (sizeRows || []).forEach(item => {
+    if (item.size) {
+      availableMap[item.size] = getAvailableFlag(item);
     }
+  });
 
-    function buildWhatsAppMessage() {
+  const hasAnyAvailable = Object.values(availableMap).some(Boolean);
+
+  if (!sizeRows || !sizeRows.length) {
+    box.innerHTML = `<div style="color:#b8b8b8; font-size:14px;">Consulte os tamanhos disponíveis pelo WhatsApp.</div>`;
+    return;
+  }
+
+  box.innerHTML = defaultSizes.map(size => {
+    const isAvailable = availableMap[size] === true;
+    return `
+      <button
+        class="size-btn ${isAvailable ? "" : "disabled"}"
+        ${isAvailable ? `onclick="selectSize('${size}', this)"` : "type='button' disabled"}
+      >
+        ${size}
+      </button>
+    `;
+  }).join("");
+
+  if (!hasAnyAvailable) {
+    setSizeMessage("Nenhum tamanho disponível no momento.");
+  } else {
+    clearSizeMessage();
+  }
+}
+
+        function buildWhatsAppMessage() {
       if (!currentProduct) return "";
 
+      const saleType = currentProduct.sale_type || "pronta_entrega";
+      const intro =
+        saleType === "sob_encomenda"
+          ? "Olá! Tenho interesse em encomendar este produto da Camisa 10 Store:"
+          : "Olá! Tenho interesse neste produto à pronta entrega da Camisa 10 Store:";
+
       const message =
-`Olá! Tenho interesse neste produto da Camisa 10 Store:
+`${intro}
 
 Produto: ${currentProduct.name}
+Tipo de venda: ${getSaleTypeLabel(saleType)}
 Preço: ${formatPrice(currentProduct.price)}
 Tamanho: ${selectedSize}
 
@@ -1601,9 +1680,15 @@ ${window.location.href}`;
       return false;
     }
 
-    function getProductImage(product) {
-      return product?.image_url || "https://via.placeholder.com/700x700?text=Camisa";
-    }
+function getProductImage(product) {
+  return (
+    product?.image_url ||
+    product?.photo_url ||
+    product?.cover_url ||
+    (Array.isArray(product?.product_images) && product.product_images[0]?.image_url) ||
+    "https://via.placeholder.com/700x700?text=Camisa"
+  );
+}
 
     function renderRelatedProducts(products) {
       const section = document.getElementById("related-section");
@@ -1691,7 +1776,10 @@ ${window.location.href}`;
           slug,
           price,
           image_url,
+          photo_url,
+          cover_url,
           description,
+          sale_type,
           category_id,
           categories (
             id,
@@ -1740,7 +1828,7 @@ ${window.location.href}`;
       document.getElementById("product-description").textContent = product.description || "Sem descrição disponível.";
 
       renderSizes(Array.isArray(product.product_sizes) ? product.product_sizes : []);
-      renderGallery(product.image_url, galleryImages || []);
+      renderGallery(getProductImage(product), galleryImages || []);
       updatePurchaseSummary();
       setupBuyButton();
       await loadRelatedProducts(product);
