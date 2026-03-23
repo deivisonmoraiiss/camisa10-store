@@ -3,463 +3,1484 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gestão Camisa 10 Store</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    :root{
-      --bg:#070707;--bg-soft:#0f0f10;--panel:#121212;--panel-2:#171717;--line:rgba(255,255,255,.08);
-      --line-gold:rgba(212,175,55,.18);--gold:#d4af37;--gold-2:#f0cf63;--text:#f6f6f6;--muted:#b7b7b7;
-      --danger:#db5c58;--success:#2e8b57;--info:#1f6feb;--shadow:0 18px 50px rgba(0,0,0,.28);
-      --radius-xl:26px;--radius-lg:20px;--radius-md:14px;
-    }
-    body{
-      font-family:Inter,Arial,Helvetica,sans-serif;
-      background:radial-gradient(circle at top, rgba(212,175,55,.06), transparent 26%), linear-gradient(180deg,#040404 0%, #0b0b0b 100%);
-      color:var(--text);min-height:100vh;
-    }
-    a{text-decoration:none;color:inherit}
-    .hidden{display:none!important}
-    .topbar{
-      position:sticky;top:0;z-index:60;
-      background:rgba(7,7,7,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);
-    }
-    .topbar-inner{width:min(1440px,94%);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:78px}
-    .brand-block{display:flex;flex-direction:column;gap:4px}
-    .brand-title{font-size:1.5rem;font-weight:900;color:var(--gold);letter-spacing:.02em}
-    .brand-subtitle{font-size:.92rem;color:var(--muted)}
-    .topbar-actions{display:flex;gap:10px;flex-wrap:wrap}
-    .container{width:min(1440px,94%);margin:28px auto 42px}
-    .card{
-      background:linear-gradient(180deg,var(--panel) 0%, var(--panel-2) 100%);
-      border:1px solid var(--line-gold);border-radius:var(--radius-lg);padding:22px;box-shadow:var(--shadow)
-    }
-    .login-wrapper{max-width:430px;margin:72px auto}
-    .login-wrapper .card{padding:28px}
-    .login-title{text-align:center;color:var(--gold);font-size:1.7rem;font-weight:800;margin-bottom:10px}
-    .subtitle{text-align:center;color:var(--muted);font-size:.95rem;line-height:1.6;margin-bottom:18px}
-    .field{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-    .field label{font-size:.92rem;font-weight:700;color:#f2f2f2}
-    .field input,.field textarea,.field select{
-      width:100%;padding:14px 14px;border-radius:14px;border:1px solid #2d2d2d;background:#101010;color:#fff;outline:none;font-size:.96rem
-    }
-    .field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(212,175,55,.55);box-shadow:0 0 0 3px rgba(212,175,55,.12)}
-    .field textarea{min-height:110px;resize:vertical}
-    .btn{border:none;border-radius:14px;padding:13px 18px;cursor:pointer;font-weight:800;transition:.2s ease;font-size:.92rem}
-    .btn:hover{transform:translateY(-1px)}
-    .btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#111}
-    .btn-secondary{background:#232323;color:#fff;border:1px solid #343434}
-    .btn-danger{background:var(--danger);color:#fff}
-    .btn-success{background:var(--success);color:#fff}
-    .actions-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .admin-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px}
-    .admin-title{font-size:1.9rem;font-weight:900;color:#fff;margin-bottom:8px}
-    .admin-copy{color:var(--muted);max-width:780px;line-height:1.7}
-    .quick-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0 22px}
-    .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-    .stat-card{background:linear-gradient(180deg,#141414 0%, #101010 100%);border:1px solid var(--line);border-radius:18px;padding:18px}
-    .stat-card strong{display:block;color:var(--gold);font-size:1.45rem;margin-bottom:6px}
-    .stat-card span{color:var(--muted);font-size:.9rem}
-    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-    .tab-btn{border:none;background:#171717;color:#f1f1f1;border:1px solid var(--line);padding:11px 16px;border-radius:999px;font-weight:800;cursor:pointer;transition:.2s ease}
-    .tab-btn.active{background:var(--gold);color:#111;border-color:var(--gold)}
-    .tab-panel{display:none}
-    .tab-panel.active{display:block}
-    .grid-2{display:grid;grid-template-columns:minmax(380px, 560px) minmax(0,1fr);gap:20px;align-items:start}
-    .grid-2-equal{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
-    .section-title{color:var(--gold);font-size:1.2rem;font-weight:900;margin-bottom:16px}
-    .section-copy{color:var(--muted);line-height:1.65;font-size:.92rem;margin-bottom:16px}
-    .sizes-box{display:grid;grid-template-columns:repeat(4,minmax(70px,1fr));gap:10px;margin-top:8px}
-    .size-item{background:#1a1a1a;border:1px solid #2b2b2b;border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;cursor:pointer}
-    .size-item input{width:auto;accent-color:var(--gold)}
-    .products-toolbar,.categories-toolbar,.slides-toolbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-    .products-toolbar input,.categories-toolbar input,.slides-toolbar input{flex:1;min-width:220px;padding:12px 14px;border-radius:14px;border:1px solid #2d2d2d;background:#101010;color:#fff}
-    .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:18px;background:#101010}
-    table{width:100%;border-collapse:collapse;min-width:860px;background:#101010}
-    thead{background:#181818}
-    th,td{padding:14px 12px;border-bottom:1px solid #202020;text-align:left;vertical-align:middle;font-size:.9rem}
-    th{color:var(--gold);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
-    td{color:#f3f3f3}
-    .product-thumb{width:58px;height:58px;object-fit:cover;border-radius:12px;border:1px solid #2a2a2a;background:#0f0f0f}
-    .preview-box{margin-top:10px;padding:14px;border:1px solid #2a2a2a;background:#101010;border-radius:16px}
-    .main-preview{width:100%;max-width:220px;border-radius:14px;display:block;border:1px solid #2b2b2b;object-fit:cover}
-    .multi-preview-grid,.gallery-list{display:flex;flex-wrap:wrap;gap:10px}
-    .multi-preview-grid img,.gallery-item img{width:110px;height:110px;object-fit:cover;border-radius:12px;border:1px solid #2b2b2b;background:#0f0f0f}
-    .gallery-item{position:relative;width:110px}
-    .gallery-item button{width:100%;margin-top:6px;padding:8px 10px;font-size:12px;border-radius:10px}
-    .small-muted{color:var(--muted);font-size:.84rem}
-    .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(212,175,55,.12);color:#f0d98a;border:1px solid rgba(212,175,55,.2);font-size:12px;font-weight:800;margin:2px 4px 2px 0}
-    .badge-featured{background:var(--gold);color:#111;border:none;font-size:11px;padding:4px 8px;border-radius:7px;margin-left:6px;font-weight:900}
-    .table-actions{display:flex;gap:8px;flex-wrap:wrap}
-    .message{margin-top:12px;padding:12px 14px;border-radius:14px;font-size:.9rem;display:none}
-    .message.show{display:block}.message.success{background:rgba(46,139,87,.15);border:1px solid rgba(46,139,87,.3);color:#b9f0cf}.message.error{background:rgba(217,83,79,.15);border:1px solid rgba(217,83,79,.3);color:#ffd2d0}
-    .empty-state{padding:20px;color:var(--muted);text-align:center}
-    .helper-box{margin-top:10px;padding:13px 14px;border-radius:14px;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.16);color:#f5deb3;font-size:.84rem;line-height:1.55}
-    .shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-    .mini-card{background:#111;border:1px solid var(--line);border-radius:18px;padding:18px}
-    .mini-card h4{color:#fff;font-size:1rem;margin-bottom:12px}
-    .banner-preview{width:100%;height:180px;object-fit:cover;border-radius:14px;border:1px solid #2b2b2b;background:#0f0f0f;margin-top:10px}
-    .stack{display:grid;gap:18px}
-    .ghost{display:none!important}
+  <title>Camisa 10 Store - Camisas de Time em Humaitá</title>
+  <meta
+    name="description"
+    content="Camisas de futebol nacionais e internacionais com entrega rápida em Humaitá e região. Peça direto pelo WhatsApp na Camisa 10 Store."
+  />
 
-    .topbar-inner{min-height:72px}
-    .brand-title{font-size:1.35rem}
-    .brand-subtitle{font-size:.86rem}
-    .container{margin:20px auto 34px}
-    .card{padding:18px}
-    .tabs{position:sticky;top:84px;z-index:40;background:rgba(7,7,7,.92);padding:10px;border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(10px)}
-    .tab-btn{padding:10px 14px}
-    .mini-card{padding:16px}
-    .helper-box{display:none}
-    .preview-box{padding:12px}
-    .table-wrap{border-radius:16px}
-    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats{grid-template-columns:1fr}}
-    @media (max-width:700px){.container{width:min(94%,94%)}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}}
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --bg: #050505;
+      --bg-soft: #0c0c0c;
+      --card: #121212;
+      --card-2: #181818;
+      --text: #f5f5f5;
+      --muted: #b9b9b9;
+      --line: rgba(255,255,255,0.08);
+      --line-strong: rgba(212,175,55,0.18);
+      --gold: #d4af37;
+      --gold-2: #f0cf63;
+      --green: #25d366;
+      --shadow: 0 14px 34px rgba(0,0,0,0.28);
+      --shadow-strong: 0 22px 56px rgba(0,0,0,0.38);
+      --container: 1180px;
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Inter", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(212,175,55,0.07), transparent 26%),
+        linear-gradient(180deg, #050505 0%, #0b0b0b 100%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button, input { font-family: inherit; }
+
+    .container {
+      width: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 18px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 50px;
+      padding: 0 20px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.22s ease;
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #e0bd49, #f4d76d);
+      color: #101010;
+      box-shadow: 0 14px 30px rgba(212,175,55,0.24);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .btn-primary:hover,
+    .btn-secondary:hover,
+    .category-chip:hover,
+    .drawer-link:hover,
+    .drawer-category-btn:hover,
+    .product-card:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      border-color: rgba(255,255,255,0.10);
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(7,7,7,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-inner {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-logo,
+    .brand-logo-fallback {
+      width: 50px;
+      height: 50px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+
+    .brand-logo {
+      object-fit: cover;
+      border: 1px solid rgba(212,175,55,0.35);
+      background: #111;
+    }
+
+    .brand-logo-fallback {
+      background: linear-gradient(135deg, var(--gold), #9a7a18);
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-subtitle {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      color: #eaeaea;
+      font-size: 0.94rem;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: 0.2s ease;
+    }
+
+    .nav a:hover {
+      background: rgba(255,255,255,0.06);
+    }
+
+    .nav-cta {
+      background: linear-gradient(135deg, #e0bd49, #f4d76d);
+      color: #121212 !important;
+      font-weight: 800 !important;
+      box-shadow: 0 10px 24px rgba(212,175,55,0.20);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .category-rail {
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .category-rail-inner {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 10px 18px;
+    }
+
+    .category-rail-inner::-webkit-scrollbar,
+    .category-chip-row::-webkit-scrollbar,
+    .drawer-categories::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      color: #f3f3f3;
+      font-weight: 700;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .category-chip.active {
+      background: linear-gradient(135deg, #e0bd49, #f4d76d);
+      color: #121212;
+      border-color: transparent;
+      box-shadow: 0 10px 24px rgba(212,175,55,0.16);
+    }
+
+    .mobile-topbar,
+    .mobile-menu-backdrop,
+    .mobile-menu-drawer {
+      display: none;
+    }
+
+    .hero {
+      padding: 18px 0 14px;
+    }
+
+    .hero-shell {
+      position: relative;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line-strong);
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,0.11), transparent 30%),
+        linear-gradient(180deg, #121212 0%, #0a0a0a 100%);
+      box-shadow: var(--shadow-strong);
+      overflow: hidden;
+    }
+
+    .hero-slider {
+      position: relative;
+      min-height: 470px;
+    }
+
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.7s ease;
+    }
+
+    .hero-slide.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .hero-slide-bg {
+      position: absolute;
+      inset: 0;
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      transform: scale(1.02);
+    }
+
+    .hero-slide-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,0.86) 0%, rgba(0,0,0,0.68) 42%, rgba(0,0,0,0.40) 70%, rgba(0,0,0,0.26) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      min-height: 470px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 48px 44px 42px;
+      max-width: 720px;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(212,175,55,0.14);
+      border: 1px solid rgba(212,175,55,0.24);
+      color: var(--gold-2);
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      line-height: 0.92;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      text-transform: uppercase;
+      max-width: 580px;
+      margin-bottom: 16px;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.32);
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      color: #e3e3e3;
+      line-height: 1.8;
+      max-width: 560px;
+    }
+
+    .hero-nav {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .hero-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.34);
+      color: #fff;
+      font-size: 1.25rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: 0.2s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-arrow.prev { left: 14px; }
+    .hero-arrow.next { right: 14px; }
+
+    .hero-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 16px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 4;
+      pointer-events: auto;
+    }
+
+    .hero-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.34);
+      border: none;
+      cursor: pointer;
+      transition: 0.35s ease;
+    }
+
+    .hero-dot.active {
+      background: var(--gold);
+      transform: scale(1.08);
+    }
+
+    .hero-search-wrap {
+      margin-top: 18px;
+    }
+
+    .mobile-catalog-cta-wrap {
+      display: flex;
+      justify-content: center;
+    }
+
+    .mobile-catalog-cta {
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .hero-search-card {
+      background: linear-gradient(180deg, #141414 0%, #101010 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero-search-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .hero-search-copy strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .hero-search-copy span {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 54px;
+      padding: 0 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: #111;
+      color: #fff;
+      outline: none;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+    }
+
+    .search-input:focus {
+      border-color: rgba(212,175,55,0.45);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.08);
+    }
+
+    .category-chip-row {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+
+    .section {
+      padding: 42px 0;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 2.7vw, 2.3rem);
+      font-weight: 900;
+      line-height: 1.08;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 0.98rem;
+      max-width: 760px;
+      line-height: 1.7;
+    }
+
+    .featured-grid,
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .product-card {
+      background: linear-gradient(180deg, #141414 0%, #101010 100%);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: 0.22s ease;
+      position: relative;
+    }
+
+    .product-image-link { display: block; }
+
+    .product-image-wrap {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      background: #0f0f0f;
+      overflow: hidden;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.28s ease;
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.04);
+    }
+
+    .product-image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.42);
+      font-weight: 700;
+      background:
+        radial-gradient(circle at center, rgba(212,175,55,0.10), transparent 35%),
+        linear-gradient(180deg, #111, #0b0b0b);
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      box-shadow: var(--shadow);
+      z-index: 2;
+    }
+
+    .product-badge.destaque { background: var(--gold); color: #111; }
+    .product-badge.mais-vendida { background: #ff4d4f; color: #fff; }
+    .product-badge.novo { background: #2ecc71; color: #08140d; }
+
+    .product-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .product-category {
+      display: inline-flex;
+      width: fit-content;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(212,175,55,0.12);
+      border: 1px solid rgba(212,175,55,0.20);
+      color: #f3d77d;
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .product-title {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #fff;
+      min-height: 44px;
+    }
+
+    .product-price-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: auto;
+    }
+
+    .product-old-price {
+      font-size: .88rem;
+      color: rgba(255,255,255,.55);
+      text-decoration: line-through;
+      font-weight: 700;
+    }
+
+    .product-price {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--gold-2);
+    }
+
+    .product-promo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(46, 139, 87, .16);
+      border: 1px solid rgba(46, 139, 87, .28);
+      color: #bff3d2;
+      font-size: .74rem;
+      font-weight: 900;
+      width: fit-content;
+    }
+
+    .state-box {
+      grid-column: 1 / -1;
+      padding: 28px;
+      border-radius: 20px;
+      border: 1px dashed rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.02);
+      text-align: center;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .catalog-shell {
+      background: linear-gradient(180deg, #101010 0%, #0d0d0d 100%);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 28px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .catalog-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .catalog-search-box {
+      min-width: 280px;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .contact-strip {
+      margin-top: 18px;
+      border: 1px solid rgba(212,175,55,0.18);
+      background: linear-gradient(135deg, rgba(212,175,55,0.10), rgba(255,255,255,0.02));
+      border-radius: 24px;
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow);
+    }
+
+    .contact-strip h3 {
+      font-size: 1.26rem;
+      margin-bottom: 8px;
+    }
+
+    .contact-strip p {
+      color: var(--muted);
+      max-width: 700px;
+      line-height: 1.65;
+    }
+
+    .footer {
+      margin-top: 16px;
+      border-top: 1px solid var(--line);
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,0.08), transparent 28%),
+        rgba(0,0,0,0.18);
+    }
+
+    .footer-grid {
+      padding: 36px 0;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 28px;
+    }
+
+    .footer-brand-title {
+      font-size: 1.12rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .footer-text {
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 420px;
+      padding-right: 12px;
+    }
+
+    .footer-col h4 {
+      font-size: 0.96rem;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      transition: 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--line);
+      padding: 18px 0 28px;
+      color: #8f8f8f;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .mobile-menu-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.25s ease;
+      z-index: 210;
+    }
+
+    .mobile-menu-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: min(86vw, 360px);
+      height: 100vh;
+      background: linear-gradient(180deg, #111 0%, #0b0b0b 100%);
+      border-right: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.40);
+      transform: translateX(-100%);
+      transition: transform 0.26s ease;
+      z-index: 211;
+      padding: 20px 18px 28px;
+      overflow-y: auto;
+    }
+
+    .mobile-menu-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .drawer-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .drawer-brand-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .drawer-close {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .drawer-section-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gold-2);
+      font-weight: 800;
+      margin: 18px 0 12px;
+    }
+
+    .drawer-categories,
+    .drawer-links {
+      display: grid;
+      gap: 10px;
+    }
+
+    .drawer-category-btn,
+    .drawer-link {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-weight: 700;
+      font-size: 0.94rem;
+      cursor: pointer;
+      transition: 0.2s ease;
+      text-align: left;
+    }
+
+    .drawer-category-btn.active {
+      background: linear-gradient(135deg, #e0bd49, #f4d76d);
+      color: #111;
+      border-color: transparent;
+    }
+
+    .drawer-link.drawer-whatsapp {
+      background: linear-gradient(135deg, #1fb85a, #25d366);
+      color: #08140d;
+      border-color: transparent;
+      font-weight: 800;
+    }
+
+    .drawer-link.drawer-instagram {
+      background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);
+      color: #fff;
+      border: none;
+      font-weight: 800;
+      box-shadow: 0 12px 26px rgba(221, 42, 123, 0.22);
+    }
+
+    @media (max-width: 1100px) {
+      .featured-grid,
+      .products-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .hero-slider,
+      .hero-content {
+        min-height: 420px;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .header,
+      .category-rail {
+        display: none;
+      }
+
+      .mobile-topbar,
+      .mobile-menu-backdrop,
+      .mobile-menu-drawer {
+        display: block;
+      }
+
+      .mobile-topbar {
+        position: sticky;
+        top: 0;
+        z-index: 150;
+        background: rgba(7,7,7,0.94);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .mobile-topbar-inner {
+        min-height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .mobile-menu-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.03);
+        color: #fff;
+        font-size: 1.2rem;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      .mobile-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .mobile-brand-title {
+        font-size: 0.98rem;
+        font-weight: 800;
+        color: #fff;
+      }
+
+      .mobile-brand-subtitle {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      .hero {
+        padding-top: 12px;
+      }
+
+      .hero-slider,
+      .hero-content {
+        min-height: 350px;
+      }
+
+      .hero-content {
+        padding: 28px 22px 46px;
+        justify-content: flex-end;
+      }
+
+      .hero-title {
+        font-size: 2.1rem;
+        max-width: 320px;
+      }
+
+      .hero-subtitle {
+        font-size: 0.88rem;
+        line-height: 1.55;
+        max-width: 100%;
+      }
+
+      .hero-arrow {
+        top: auto;
+        bottom: 46px;
+        transform: none;
+        width: 38px;
+        height: 38px;
+      }
+
+      .hero-arrow.prev { left: 10px; }
+      .hero-arrow.next { right: 10px; }
+
+      .hero-dots {
+        bottom: 14px;
+      }
+
+      .hero-search-wrap {
+        margin-top: 12px;
+      }
+
+      .mobile-catalog-cta-wrap {
+        padding: 0 2px;
+      }
+
+      .mobile-catalog-cta {
+        min-height: 52px;
+        border-radius: 16px;
+        font-size: 0.96rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #e0bd49, #f4d76d);
+        color: #111;
+        border: none;
+        box-shadow: 0 12px 26px rgba(212,175,55,0.20);
+      }
+
+      .hero-search-card {
+        border-radius: 18px;
+        padding: 14px;
+      }
+
+      .hero-search-top {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .featured-grid,
+      .products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .catalog-shell {
+        padding: 18px;
+      }
+
+      .catalog-top {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .catalog-search-box {
+        min-width: 100%;
+        max-width: none;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+        padding: 28px 0;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .container {
+        padding: 0 16px;
+      }
+
+      .mobile-topbar-inner {
+        min-height: 70px;
+      }
+
+      .brand-logo,
+      .brand-logo-fallback {
+        width: 46px;
+        height: 46px;
+      }
+
+      .hero-shell {
+        border-radius: 22px;
+      }
+
+      .hero-slider,
+      .hero-content {
+        min-height: 270px;
+      }
+
+      .hero-content {
+        display: none;
+      }
+
+      .hero-slide-overlay {
+        display: none;
+      }
+
+      .hero-arrow {
+        bottom: 42px;
+      }
+
+      .hero-dots {
+        bottom: 10px;
+        gap: 8px;
+      }
+
+      .hero-dot {
+        width: 8px;
+        height: 8px;
+      }
+
+      .hero-search-wrap {
+        margin-top: 10px;
+      }
+
+      .mobile-catalog-cta {
+        min-height: 50px;
+        border-radius: 15px;
+        font-size: 0.92rem;
+      }
+
+      .hero-search-card {
+        padding: 12px;
+      }
+
+      .hero-search-copy strong {
+        font-size: 0.94rem;
+      }
+
+      .hero-search-copy span {
+        font-size: 0.85rem;
+      }
+
+      .search-input {
+        height: 50px;
+        border-radius: 14px;
+        font-size: 0.92rem;
+      }
+
+      .section {
+        padding: 32px 0;
+      }
+
+      .section-head {
+        margin-bottom: 16px;
+      }
+
+      .section-title {
+        font-size: 1.35rem;
+        margin-bottom: 6px;
+      }
+
+      .section-subtitle {
+        font-size: 0.88rem;
+        line-height: 1.55;
+      }
+
+      .featured-grid,
+      .products-grid {
+        gap: 12px;
+      }
+
+      .product-card {
+        border-radius: 18px;
+      }
+
+      .product-badge {
+        top: 8px;
+        left: 8px;
+        font-size: 0.64rem;
+        padding: 5px 8px;
+      }
+
+      .product-body {
+        padding: 12px;
+        gap: 8px;
+      }
+
+      .product-category {
+        font-size: 0.65rem;
+        padding: 5px 8px;
+      }
+
+      .product-title {
+        font-size: 0.9rem;
+        min-height: 40px;
+      }
+
+      .product-price {
+        font-size: 1rem;
+      }
+
+      .product-body .btn {
+        min-height: 42px;
+        padding: 0 10px;
+        font-size: 0.84rem;
+      }
+
+      .catalog-shell {
+        padding: 14px;
+        border-radius: 22px;
+      }
+
+      .contact-strip {
+        padding: 18px 16px;
+        border-radius: 18px;
+        gap: 12px;
+      }
+
+      .contact-strip h3 {
+        font-size: 1.02rem;
+        margin-bottom: 5px;
+      }
+
+      .contact-strip p {
+        font-size: 0.88rem;
+        line-height: 1.55;
+      }
+
+      .contact-strip .btn {
+        width: 100%;
+      }
+
+      .footer-grid {
+        padding: 24px 0;
+      }
+
+      .footer-text,
+      .footer-links a,
+      .footer-bottom {
+        font-size: 0.88rem;
+        line-height: 1.6;
+      }
+
+      .footer-col,
+      .footer-grid > div {
+        padding-left: 4px;
+        padding-right: 4px;
+      }
+    }
+     @media (max-width: 768px) {
+    .footer-bottom {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+    }
+
+    .footer-bottom span,
+    .footer-bottom a {
+      width: 100%;
+      text-align: center;
+    }
+  }
   </style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="topbar-inner">
-      <div class="brand-block">
-        <div class="brand-title">Gestão Camisa 10 Store</div>
-        <div class="brand-subtitle">Versão enxuta e organizada</div>
-      </div>
-      <div class="topbar-actions">
-        <button class="btn btn-secondary hidden" id="topLogoutBtn" onclick="logout()">Sair</button>
-      </div>
-    </div>
-  </div>
+  <div class="mobile-menu-backdrop" id="mobileMenuBackdrop"></div>
 
-  <div class="container">
-    <div id="login-screen" class="login-wrapper" style="display:block;">
-      <div class="card">
-        <h2 class="login-title">Entrar no painel</h2>
-        <p class="subtitle">Painel simplificado da loja</p>
-        <div class="field">
-          <label for="login-email">E-mail</label>
-          <input type="email" id="login-email" placeholder="Digite seu e-mail" />
-        </div>
-        <div class="field">
-          <label for="login-password">Senha</label>
-          <input type="password" id="login-password" placeholder="Digite sua senha" />
-        </div>
-        <button class="btn btn-primary" style="width:100%;" onclick="handleLogin()">Entrar</button>
-        <div id="login-message" class="message"></div>
+  <aside class="mobile-menu-drawer" id="mobileMenuDrawer">
+    <div class="drawer-top">
+      <div class="drawer-brand">
+        <img id="mobileDrawerLogo" class="brand-logo" style="display:none;" alt="Logo Camisa 10 Store" />
+        <div id="mobileDrawerLogoFallback" class="brand-logo-fallback">10</div>
+        <div class="drawer-brand-title" id="mobileDrawerBrandTitle">Camisa 10 Store</div>
       </div>
+
+      <button class="drawer-close" id="mobileDrawerClose" type="button" aria-label="Fechar menu">✕</button>
     </div>
 
-    <div id="admin-panel" class="hidden" style="display:none;">
-      <div class="admin-header">
+    <div class="drawer-section-title">Categorias</div>
+    <div class="drawer-categories" id="drawerCategories"></div>
+
+    <div class="drawer-section-title">Atalhos</div>
+    <div class="drawer-links">
+  <a href="#catalogo" class="drawer-link">Catálogo</a>
+
+  <a href="guia-tamanhos.html" class="drawer-link">
+    Guia de tamanhos
+  </a>
+
+  <a
+    href="https://www.instagram.com/usecamisa10hmt"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="drawer-link drawer-instagram"
+  >
+    Instagram
+  </a>
+
+  <a
+    id="mobileDrawerWhatsApp"
+    href="#"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="drawer-link drawer-whatsapp"
+  >
+    Pedir no WhatsApp
+  </a>
+</div>
+  </aside>
+
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand">
+        <img id="logoImage" class="brand-logo" style="display:none;" alt="Logo Camisa 10 Store" />
+        <div id="logoFallback" class="brand-logo-fallback">10</div>
+
+        <div class="brand-text">
+          <span class="brand-title" id="brandTitle">Camisa 10 Store</span>
+          <span class="brand-subtitle">Protagonismo começa no Manto</span>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a href="#catalogo">Catálogo</a>
+        <a href="#destaques">Mais procuradas</a>
+        <a href="guia-tamanhos.html">Guia de tamanhos</a>
+        <a id="headerWhatsApp" class="nav-cta" href="#" target="_blank" rel="noopener noreferrer">Pedir no WhatsApp</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="category-rail">
+    <div class="container category-rail-inner" id="desktopCategoryRail"></div>
+  </section>
+
+  <section class="mobile-topbar">
+    <div class="container mobile-topbar-inner">
+      <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Abrir menu">☰</button>
+
+      <a href="index.html" class="mobile-brand">
+        <img id="mobileLogoImage" class="brand-logo" style="display:none;" alt="Logo Camisa 10 Store" />
+        <div id="mobileLogoFallback" class="brand-logo-fallback">10</div>
         <div>
-          <div class="admin-title">Painel administrativo</div>
-          <div class="small-muted">Só o que você precisa para cadastrar, ajustar e vender.</div>
+          <div class="mobile-brand-title" id="mobileBrandTitle">Camisa 10 Store</div>
+          <div class="mobile-brand-subtitle">Protagonismo começa no Manto</div>
         </div>
-        <button class="btn btn-secondary" onclick="logout()">Sair</button>
-      </div>
-
-      <div class="grid-3" style="margin-bottom:16px;">
-        <div class="stat-card"><strong id="statProducts">--</strong><span>Produtos cadastrados</span></div>
-        <div class="stat-card"><strong id="statCategories">--</strong><span>Categorias ativas</span></div>
-        <div class="stat-card"><strong id="statSlides">--</strong><span>Slides do banner</span></div>
-      </div>
-
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="tab-products">Produtos</button>
-        <button class="tab-btn" data-tab="tab-categories">Categorias</button>
-        <button class="tab-btn" data-tab="tab-shop">Ajustes da loja</button>
-        <button class="tab-btn" data-tab="tab-slides">Slides do banner</button>
-      </div>
-
-      <section id="tab-products" class="tab-panel active">
-        <div class="grid-2">
-          <div class="card">
-            <h3 class="section-title" id="form-title">Cadastrar Produto</h3>
-<div class="field">
-              <label for="product-name">Nome do produto</label>
-              <input type="text" id="product-name" placeholder="Ex: Camisa Flamengo 2026" />
-            </div>
-
-            <div class="grid-2-equal">
-              <div class="field">
-                <label for="product-price">Preço atual</label>
-                <input type="number" id="product-price" step="0.01" placeholder="Ex: 129.90" />
-              </div>
-              <div class="field">
-                <label for="product-old-price">Preço antigo (opcional)</label>
-                <input type="number" id="product-old-price" step="0.01" placeholder="Ex: 179.90" />
-              </div>
-              <div class="field">
-                <label for="product-category">Categoria</label>
-                <select id="product-category">
-                  <option value="">Carregando categorias...</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="grid-2-equal">
-              <div class="field">
-                <label for="product-badge-type">Selo do produto</label>
-                <select id="product-badge-type">
-                  <option value="">Sem selo</option>
-                  <option value="destaque">⭐ Destaque</option>
-                  <option value="mais-vendida">🔥 Mais vendida</option>
-                  <option value="novo">🚀 Novo</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="product-sale-type">Tipo de venda</label>
-                <select id="product-sale-type">
-                  <option value="pronta_entrega">Pronta entrega</option>
-                  <option value="sob_encomenda">Sob encomenda</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="field">
-              <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
-                <input type="checkbox" id="product-featured" style="width:auto; accent-color:#d4af37;" />
-                <span>Mostrar na seção Mais procuradas</span>
-              </label>
-            </div>
-
-            <div class="field">
-              <label for="product-description">Descrição</label>
-              <textarea id="product-description" placeholder="Descrição do produto"></textarea>
-            </div>
-
-            <div class="field">
-              <label>Tamanhos disponíveis</label>
-              <div class="sizes-box">
-                <label class="size-item"><input type="checkbox" value="P" class="size-check"> P</label>
-                <label class="size-item"><input type="checkbox" value="M" class="size-check"> M</label>
-                <label class="size-item"><input type="checkbox" value="G" class="size-check"> G</label>
-                <label class="size-item"><input type="checkbox" value="EG" class="size-check"> EG</label>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="product-file">Imagem principal</label>
-              <input type="file" id="product-file" accept="image/*" onchange="previewSelectedMainImage(event)" />
-              <div class="actions-row">
-                <button type="button" class="btn btn-secondary" onclick="uploadMainImage()">Fazer upload da imagem principal</button>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="product-image">URL da imagem principal</label>
-              <input type="text" id="product-image" placeholder="A URL será preenchida após o upload" />
-            </div>
-
-            <div class="preview-box">
-              <div class="small-muted" style="margin-bottom:8px;">Pré-visualização da imagem principal</div>
-              <img id="main-image-preview" class="main-preview" src="https://via.placeholder.com/400x400?text=Sem+Imagem" alt="Preview principal">
-            </div>
-
-            <div class="field" style="margin-top:16px;">
-              <label for="product-files">Fotos adicionais</label>
-              <input type="file" id="product-files" accept="image/*" multiple onchange="previewSelectedImages(event)" />
-            </div>
-
-            <div class="preview-box">
-              <div class="small-muted" style="margin-bottom:8px;">Pré-visualização das fotos adicionais</div>
-              <div id="images-preview" class="multi-preview-grid"></div>
-            </div>
-
-            <div class="helper-box">A imagem principal fica como capa do produto. As fotos adicionais entram na galeria da página da camisa.</div>
-
-            <div class="actions-row">
-              <button class="btn btn-primary" id="save-product-btn" onclick="saveProduct()">Salvar produto</button>
-              <button class="btn btn-secondary hidden" id="cancel-edit-btn" onclick="cancelEdit()">Cancelar edição</button>
-            </div>
-
-            <div id="form-message" class="message"></div>
-
-            <div id="current-gallery-box" class="preview-box hidden" style="margin-top:16px;">
-              <div class="small-muted" style="margin-bottom:8px;">Galeria atual do produto</div>
-              <div id="current-gallery-list" class="gallery-list"></div>
-            </div>
-          </div>
-
-          <div class="card">
-            <h3 class="section-title">Produtos cadastrados</h3>
-<div class="products-toolbar">
-              <input type="text" id="search-input" placeholder="Buscar por nome do produto..." oninput="filterProducts()" />
-              <button class="btn btn-secondary" onclick="loadProducts()">Atualizar</button>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr><th>Imagem</th><th>Produto</th><th>Categoria</th><th>Tipo</th><th>Preço</th><th>Tamanhos</th><th>Ações</th></tr>
-                </thead>
-                <tbody id="products-table-body"><tr><td colspan="7" class="empty-state">Carregando produtos...</td></tr></tbody>
-              </table>
-            </div>
-            <div id="list-message" class="message"></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="tab-categories" class="tab-panel">
-        <div class="grid-2-equal">
-          <div class="card">
-            <h3 class="section-title" id="category-form-title">Cadastrar Categoria</h3>
-<div class="field">
-              <label for="category-name">Nome da categoria</label>
-              <input type="text" id="category-name" placeholder="Ex: Brasileirão" />
-            </div>
-            <div class="actions-row">
-              <button class="btn btn-primary" id="save-category-btn" onclick="saveCategory()">Salvar categoria</button>
-              <button class="btn btn-secondary hidden" id="cancel-category-edit-btn" onclick="cancelCategoryEdit()">Cancelar edição</button>
-            </div>
-            <div id="category-message" class="message"></div>
-          </div>
-
-          <div class="card">
-            <h3 class="section-title">Categorias cadastradas</h3>
-            <div class="categories-toolbar">
-              <input type="text" id="category-search-input" placeholder="Buscar categoria..." oninput="filterCategories()" />
-              <button class="btn btn-secondary" onclick="loadCategoriesList()">Atualizar</button>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Categoria</th><th>Ações</th></tr></thead>
-                <tbody id="categories-table-body"><tr><td colspan="2" class="empty-state">Carregando categorias...</td></tr></tbody>
-              </table>
-            </div>
-            <div id="category-list-message" class="message"></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="tab-shop" class="tab-panel">
-        <div class="stack">
-          <div class="card">
-            <h3 class="section-title">Ajustes principais da loja</h3>
-<div class="shop-grid">
-              <div class="mini-card">
-                <h4>Contato e redes</h4>
-                <div class="field"><label for="setting-instagram-url">Link do Instagram</label><input type="text" id="setting-instagram-url" placeholder="https://instagram.com/..." /></div>
-                <div class="field"><label for="setting-whatsapp-number">Número do WhatsApp</label><input type="text" id="setting-whatsapp-number" placeholder="5597981098445" /></div>
-                <div class="field"><label for="logo-file">Arquivo da logo</label><input type="file" id="logo-file" accept="image/*" onchange="previewBannerImage(event, 'logo-preview')" /></div>
-                <div class="field"><label for="setting-logo-url">URL da logo</label><input type="text" id="setting-logo-url" placeholder="A URL será preenchida após o upload" /></div>
-                <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadLogoImage()">Fazer upload da logo</button></div>
-                <img id="logo-preview" class="banner-preview" src="https://via.placeholder.com/400x200?text=Logo" alt="Preview logo" />
-              </div>
-              <div class="mini-card">
-                <h4>Textos do site</h4>
-                <div class="field"><label for="setting-delivery-text">Texto da faixa de entrega</label><input type="text" id="setting-delivery-text" placeholder="Ex: Entrega rápida em Humaitá e região" /></div>
-                <div class="field"><label for="setting-catalog-title">Título do catálogo</label><input type="text" id="setting-catalog-title" placeholder="Título da seção catálogo" /></div>
-                <div class="field"><label for="setting-catalog-subtitle">Subtítulo do catálogo</label><input type="text" id="setting-catalog-subtitle" placeholder="Subtítulo da seção catálogo" /></div>
-                <div class="field"><label for="setting-contact-text">Texto do bloco de contato</label><input type="text" id="setting-contact-text" placeholder="Texto de contato" /></div>
-                <div class="field"><label for="setting-footer-text">Texto do rodapé</label><input type="text" id="setting-footer-text" placeholder="Texto do rodapé" /></div>
-              </div>
-            </div>
-            <div class="actions-row"><button class="btn btn-primary" type="button" onclick="saveSiteSettings()">Salvar configurações</button></div>
-            <div id="settings-message" class="message"></div>
-          </div>
-
-          <div class="ghost" aria-hidden="true">
-            <input type="text" id="setting-hero-title" />
-            <textarea id="setting-hero-subtitle"></textarea>
-            <input type="text" id="setting-hero-image-url" />
-            <input type="text" id="setting-hero-left-image-url" />
-            <input type="file" id="hero-image-file" />
-            <input type="file" id="hero-left-image-file" />
-            <img id="hero-banner-preview" class="banner-preview" src="https://via.placeholder.com/1000x500?text=Banner+Principal" alt="Preview banner principal" />
-            <img id="hero-left-banner-preview" class="banner-preview" src="https://via.placeholder.com/1000x500?text=Imagem+Esquerda" alt="Preview imagem esquerda" />
-          </div>
-        </div>
-      </section>
-
-      <section id="tab-slides" class="tab-panel">
-        <div class="grid-2">
-          <div class="card">
-            <h3 class="section-title" id="hero-slide-form-title">Cadastrar Slide</h3>
-<div class="field"><label for="hero-slide-title">Título do slide</label><input type="text" id="hero-slide-title" placeholder="Ex: As camisas mais procuradas estão aqui" /></div>
-            <div class="field"><label for="hero-slide-subtitle">Subtítulo do slide</label><textarea id="hero-slide-subtitle" placeholder="Texto complementar do banner"></textarea></div>
-            <div class="field"><label for="hero-slide-file">Imagem do slide</label><input type="file" id="hero-slide-file" accept="image/*" onchange="previewBannerImage(event, 'hero-slide-preview')" /></div>
-            <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadHeroSlideImage()">Fazer upload da imagem do slide</button></div>
-            <div class="field"><label for="hero-slide-image-url">URL da imagem</label><input type="text" id="hero-slide-image-url" placeholder="A URL será preenchida após o upload" /></div>
-            <img id="hero-slide-preview" class="banner-preview" src="https://via.placeholder.com/1200x500?text=Preview+do+Slide" alt="Preview do slide" />
-
-            <div class="shop-grid" style="margin-top:18px;">
-              <div class="mini-card">
-                <h4>Botão principal</h4>
-                <div class="field"><label for="hero-slide-primary-text">Texto do botão principal</label><input type="text" id="hero-slide-primary-text" placeholder="Ex: Ver catálogo" /></div>
-                <div class="field"><label for="hero-slide-primary-link">Link do botão principal</label><input type="text" id="hero-slide-primary-link" placeholder="Ex: #catalogo" /></div>
-              </div>
-              <div class="mini-card">
-                <h4>Botão secundário</h4>
-                <div class="field"><label for="hero-slide-secondary-text">Texto do botão secundário</label><input type="text" id="hero-slide-secondary-text" placeholder="Ex: Pedir no WhatsApp" /></div>
-                <div class="field"><label for="hero-slide-secondary-link">Link do botão secundário</label><input type="text" id="hero-slide-secondary-link" placeholder="Ex: https://wa.me/5597..." /></div>
-              </div>
-            </div>
-
-            <div class="shop-grid" style="margin-top:18px;">
-              <div class="mini-card">
-                <h4>Ordem e status</h4>
-                <div class="field"><label for="hero-slide-sort-order">Ordem do slide</label><input type="number" id="hero-slide-sort-order" placeholder="Ex: 1" /></div>
-                <div class="field"><label style="display:flex; align-items:center; gap:10px; cursor:pointer;"><input type="checkbox" id="hero-slide-active" style="width:auto; accent-color:#d4af37;" checked /><span>Slide ativo</span></label></div>
-              </div>
-            </div>
-
-            <div class="actions-row">
-              <button class="btn btn-primary" type="button" id="save-hero-slide-btn" onclick="saveHeroSlide()">Salvar slide</button>
-              <button class="btn btn-secondary hidden" type="button" id="cancel-hero-slide-edit-btn" onclick="cancelHeroSlideEdit()">Cancelar edição</button>
-            </div>
-            <div id="hero-slide-message" class="message"></div>
-          </div>
-
-          <div class="card">
-            <h3 class="section-title">Slides cadastrados</h3>
-            <div class="slides-toolbar">
-              <input type="text" id="hero-slide-search-input" placeholder="Buscar slide por título..." oninput="filterHeroSlides()" />
-              <button class="btn btn-secondary" type="button" onclick="loadHeroSlidesAdmin()">Atualizar</button>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Imagem</th><th>Título</th><th>Botões</th><th>Ordem</th><th>Status</th><th>Ações</th></tr></thead>
-                <tbody id="hero-slides-table-body"><tr><td colspan="7" class="empty-state">Carregando slides...</td></tr></tbody>
-              </table>
-            </div>
-            <div id="hero-slides-list-message" class="message"></div>
-          </div>
-        </div>
-      </section>
+      </a>
     </div>
-  </div>
-<script>
+  </section>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-shell">
+          <div class="hero-slider" id="heroSlider">
+            <div class="hero-slide active">
+              <div class="hero-slide-bg"></div>
+              <div class="hero-slide-overlay"></div>
+              <div class="hero-content">
+                <div class="hero-kicker">⚽ A loja mais completa de camisas em Humaitá</div>
+                <h1 class="hero-title">CAMISA 10 STORE</h1>
+                <p class="hero-subtitle">Os mantos mais desejados do momento, com visual forte e entrega rápida em Humaitá.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-nav">
+            <button class="hero-arrow prev" id="heroPrevBtn" aria-label="Slide anterior">‹</button>
+            <button class="hero-arrow next" id="heroNextBtn" aria-label="Próximo slide">›</button>
+            <div class="hero-dots" id="heroDots"></div>
+          </div>
+        </div>
+
+        <div class="hero-search-wrap mobile-catalog-cta-wrap">
+          <a href="#catalogo" class="btn btn-secondary mobile-catalog-cta">Ver catálogo</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="destaques" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">🔥 Mais procuradas</h2>
+            <p class="section-subtitle">Os modelos que mais chamam atenção na Camisa 10 Store.</p>
+          </div>
+        </div>
+
+        <div class="featured-grid" id="featuredProductsGrid">
+          <div class="state-box">Carregando destaques...</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="catalogo" class="section">
+      <div class="container">
+        <div class="catalog-shell">
+          <div class="catalog-top">
+            <div>
+              <h2 class="section-title" id="catalogTitle">Catálogo completo</h2>
+              <p class="section-subtitle" id="catalogSubtitle">Escolha seu time e encontre sua próxima camisa com mais facilidade.</p>
+            </div>
+
+            <div class="catalog-search-box">
+              <input
+                type="text"
+                id="catalogSearchInput"
+                class="search-input"
+                placeholder="Buscar camisa no catálogo..."
+                autocomplete="off"
+                inputmode="search"
+              />
+            </div>
+          </div>
+
+          <div class="category-chip-row" id="catalogCategoryButtons"></div>
+
+          <div style="margin-top:18px;">
+            <div class="section-head" style="margin-bottom:12px;">
+              <div>
+                <h3 class="section-title" style="font-size:1.4rem;">🔥 Pronta entrega</h3>
+                <p class="section-subtitle">Camisas disponíveis para pedido imediato.</p>
+              </div>
+            </div>
+
+            <div class="products-grid" id="grid-pronta">
+              <div class="state-box">Carregando produtos...</div>
+            </div>
+          </div>
+
+          <div style="margin-top:26px;">
+            <div class="section-head" style="margin-bottom:12px;">
+              <div>
+                <h3 class="section-title" style="font-size:1.4rem;">🛒 Sob encomenda</h3>
+                <p class="section-subtitle">Modelos que você pode pedir pelo WhatsApp.</p>
+              </div>
+            </div>
+
+            <div class="products-grid" id="grid-encomenda">
+              <div class="state-box">Carregando produtos...</div>
+            </div>
+          </div>
+
+          <div class="contact-strip">
+            <div>
+              <h3>Achou sua camisa?</h3>
+              <p id="contactText">Fale com a Camisa 10 Store no WhatsApp e finalize seu pedido de forma rápida e simples.</p>
+            </div>
+
+            <a id="contactWhatsApp" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+              Fazer pedido agora
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="footer-brand-title" id="footerBrandTitle">Camisa 10 Store</div>
+        <p class="footer-text" id="footerMainText">
+          Camisas de futebol com atendimento rápido, catálogo organizado e pedido direto pelo WhatsApp.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <div class="footer-links">
+          <a href="#catalogo">Catálogo</a>
+          <a href="#destaques">Mais procuradas</a>
+          <a href="guia-tamanhos.html">Guia de tamanhos</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <div class="footer-links">
+          <a id="footerWhatsApp" href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a href="#catalogo">Ver produtos</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <span id="footerText">© Camisa 10 Store</span>
+    Desenvolvido por 
+<a href="https://www.instagram.com/deivisonmoraiis/" target="_blank" style="color:#d4af37; text-decoration:none; font-weight:bold;">
+  Deivison Morais
+</a>
+    </div>
+  </footer>
+
+  <script>
     const SUPABASE_URL = "https://mgxyupekvuihjbzvzfmf.supabase.co";
     const SUPABASE_KEY = "sb_publishable_fSGhfKrj2NK5UHNYRGk8nw_fl4mCJ_n";
+    const SITE_SETTINGS_ID = "61c8c46f-f37f-460f-88a1-8f6b6b36f7d2";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const PRODUCT_BUCKET = "products";
-    const SITE_ASSETS_BUCKET = "site-assets";
-    const SITE_SETTINGS_TABLE = "site_settings";
-    const SITE_SETTINGS_ID = "61c8c46f-f37f-460f-88a1-8f6b6b36f7d2";
-    const HERO_SLIDES_TABLE = "hero_slides";
-
-    const ADMIN_EMAIL = "admin@camisa10.com";
-    const ADMIN_PASSWORD = "Camisa10@admin";
-
-    let editingProductId = null;
-    let editingCategoryId = null;
-    let editingHeroSlideId = null;
     let allProducts = [];
     let allCategories = [];
-    let allHeroSlides = [];
-
-    function showMessage(elementId, text, type = "success") {
-      const el = document.getElementById(elementId);
-      el.textContent = text;
-      el.className = `message show ${type}`;
-    }
-
-    function clearMessage(elementId) {
-      const el = document.getElementById(elementId);
-      el.textContent = "";
-      el.className = "message";
-    }
+    let activeCategory = "all";
+    let searchTerm = "";
+    let siteSettings = null;
+    let heroSlides = [];
+    let currentHeroIndex = 0;
+    let heroInterval = null;
+    let heroTouchStartX = 0;
+    let heroTouchEndX = 0;
 
     function formatPrice(value) {
       const number = Number(value || 0);
@@ -469,519 +1490,530 @@
       });
     }
 
-    function formatBadgeLabel(badgeType) {
-      switch (badgeType) {
-        case "destaque":
-          return "⭐ Destaque";
-        case "mais-vendida":
-          return "🔥 Mais vendida";
-        case "novo":
-          return "🚀 Novo";
-        default:
-          return "";
-      }
+    function sanitizePhone(phone) {
+      return String(phone || "").replace(/\D/g, "");
     }
 
-    function getSelectedSizes() {
-      return [...document.querySelectorAll(".size-check:checked")].map(item => item.value);
+    function buildWhatsAppLink(message = "") {
+      const rawPhone = siteSettings?.whatsapp_number || "5597981098445";
+      const phone = sanitizePhone(rawPhone);
+      if (!phone) return "#";
+      return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
     }
 
-    function setSelectedSizes(sizes = []) {
-      document.querySelectorAll(".size-check").forEach(check => {
-        check.checked = sizes.includes(check.value);
+    function setWhatsAppLinks() {
+      const defaultMessage = "Olá! Vim pelo site da Camisa 10 Store e quero fazer um pedido.";
+      const link = buildWhatsAppLink(defaultMessage);
+
+      ["headerWhatsApp", "contactWhatsApp", "footerWhatsApp", "mobileDrawerWhatsApp"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.href = link;
       });
     }
 
-    function generateSlug(text) {
-      return text
-        .toString()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-]/g, "")
-        .replace(/-+/g, "-");
-    }
+    function applySiteSettings() {
+      if (!siteSettings) return;
 
-    function resetMainPreview() {
-      document.getElementById("main-image-preview").src = "https://via.placeholder.com/400x400?text=Sem+Imagem";
-    }
+      const brand = siteSettings.hero_title || "Camisa 10 Store";
 
-    function resetMultiPreview() {
-      document.getElementById("images-preview").innerHTML = "";
-    }
+      document.getElementById("brandTitle").textContent = brand;
+      document.getElementById("mobileBrandTitle").textContent = brand;
+      document.getElementById("mobileDrawerBrandTitle").textContent = brand;
 
-    function resetGalleryBox() {
-      document.getElementById("current-gallery-box").classList.add("hidden");
-      document.getElementById("current-gallery-list").innerHTML = "";
-    }
+      document.getElementById("catalogTitle").textContent =
+        siteSettings.catalog_title || "Catálogo completo";
 
-    function previewSelectedMainImage(event) {
-      const file = event.target.files[0];
-      if (!file) {
-        resetMainPreview();
-        return;
-      }
+      document.getElementById("catalogSubtitle").textContent =
+        siteSettings.catalog_subtitle || "Escolha seu time e encontre sua próxima camisa com mais facilidade.";
 
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById("main-image-preview").src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
+      document.getElementById("contactText").textContent =
+        siteSettings.contact_text || "Fale com a Camisa 10 Store no WhatsApp e finalize seu pedido de forma rápida e simples.";
 
-    function previewSelectedImages(event) {
-      const files = event.target.files;
-      const previewContainer = document.getElementById("images-preview");
-      previewContainer.innerHTML = "";
+      document.getElementById("footerText").textContent =
+        siteSettings.footer_text || "© Camisa 10 Store";
 
-      if (!files || !files.length) return;
+      document.getElementById("footerBrandTitle").textContent = brand;
 
-      [...files].forEach(file => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const img = document.createElement("img");
-          img.src = e.target.result;
-          previewContainer.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-      });
-    }
+      document.getElementById("footerMainText").textContent =
+        `${siteSettings.delivery_text || "Entrega rápida em Humaitá e região"}. Atendimento direto pelo WhatsApp para pedidos e dúvidas.`;
 
-    function previewBannerImage(event, previewId) {
-      const file = event.target.files[0];
-      if (!file) return;
+      const logoImage = document.getElementById("logoImage");
+      const logoFallback = document.getElementById("logoFallback");
 
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById(previewId).src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function resetForm() {
-      document.getElementById("product-name").value = "";
-      document.getElementById("product-price").value = "";
-      document.getElementById("product-old-price").value = "";
-      document.getElementById("product-file").value = "";
-      document.getElementById("product-files").value = "";
-      document.getElementById("product-image").value = "";
-      document.getElementById("product-category").value = "";
-      document.getElementById("product-description").value = "";
-      document.getElementById("product-featured").checked = false;
-      document.getElementById("product-badge-type").value = "";
-      document.getElementById("product-sale-type").value = "pronta_entrega";
-      setSelectedSizes([]);
-      resetMainPreview();
-      resetMultiPreview();
-      resetGalleryBox();
-
-      editingProductId = null;
-
-      document.getElementById("form-title").textContent = "Cadastrar Produto";
-      document.getElementById("save-product-btn").textContent = "Salvar produto";
-      document.getElementById("cancel-edit-btn").classList.add("hidden");
-
-      clearMessage("form-message");
-    }
-
-    function resetCategoryForm() {
-      document.getElementById("category-name").value = "";
-      editingCategoryId = null;
-      document.getElementById("category-form-title").textContent = "Cadastrar Categoria";
-      document.getElementById("save-category-btn").textContent = "Salvar categoria";
-      document.getElementById("cancel-category-edit-btn").classList.add("hidden");
-      clearMessage("category-message");
-    }
-
-    function logout() {
-      localStorage.removeItem("camisa10_admin_logged");
-      document.getElementById("admin-panel").classList.add("hidden");
-      document.getElementById("admin-panel").style.display = "none";
-      document.getElementById("login-screen").classList.remove("hidden");
-      document.getElementById("login-screen").style.display = "block";
-      clearMessage("login-message");
-    }
-
-    function handleLogin() {
-      clearMessage("login-message");
-
-      const email = document.getElementById("login-email").value.trim();
-      const password = document.getElementById("login-password").value.trim();
-
-      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-        localStorage.setItem("camisa10_admin_logged", "true");
-        document.getElementById("login-screen").classList.add("hidden");
-        document.getElementById("login-screen").style.display = "none";
-        document.getElementById("admin-panel").classList.remove("hidden");
-        document.getElementById("admin-panel").style.display = "block";
-        initializeAdmin();
+      if (siteSettings.logo_url) {
+        logoImage.src = siteSettings.logo_url;
+        logoImage.style.display = "block";
+        logoFallback.style.display = "none";
       } else {
-        showMessage("login-message", "E-mail ou senha incorretos.", "error");
+        logoImage.style.display = "none";
+        logoFallback.style.display = "flex";
       }
+
+      syncMobileLogos();
+      setWhatsAppLinks();
     }
 
-    async function loadCategories(selectedCategoryId = null) {
-      const select = document.getElementById("product-category");
-      select.innerHTML = '<option value="">Carregando categorias...</option>';
+    function syncMobileLogos() {
+      const sourceLogo = document.getElementById("logoImage");
+      const useFallback = !sourceLogo || sourceLogo.style.display === "none";
 
-      const { data, error } = await supabaseClient
-        .from("categories")
-        .select("id, name")
-        .order("name", { ascending: true });
+      [["mobileLogoImage", "mobileLogoFallback"], ["mobileDrawerLogo", "mobileDrawerLogoFallback"]].forEach(([imgId, fbId]) => {
+        const img = document.getElementById(imgId);
+        const fb = document.getElementById(fbId);
 
-      if (error) {
-        console.error("Erro ao carregar categorias:", error);
-        select.innerHTML = '<option value="">Erro ao carregar categorias</option>';
-        showMessage("form-message", "Não foi possível carregar as categorias.", "error");
-        return;
-      }
-
-      if (!data || data.length === 0) {
-        select.innerHTML = '<option value="">Nenhuma categoria cadastrada</option>';
-        return;
-      }
-
-      select.innerHTML = '<option value="">Selecione uma categoria</option>';
-
-      data.forEach(category => {
-        const option = document.createElement("option");
-        option.value = category.id;
-        option.textContent = category.name;
-
-        if (selectedCategoryId && String(selectedCategoryId) === String(category.id)) {
-          option.selected = true;
+        if (img) {
+          if (!useFallback && sourceLogo.src) {
+            img.src = sourceLogo.src;
+            img.style.display = "block";
+          } else {
+            img.style.display = "none";
+          }
         }
 
-        select.appendChild(option);
+        if (fb) {
+          fb.style.display = useFallback ? "flex" : "none";
+        }
       });
     }
 
-    async function loadCategoriesList() {
-      const tbody = document.getElementById("categories-table-body");
-      tbody.innerHTML = `<tr><td colspan="2" class="empty-state">Carregando categorias...</td></tr>`;
-      clearMessage("category-list-message");
+    function normalizeCategoryName(product) {
+      if (product.category_name) return product.category_name;
+      if (product.categories?.name) return product.categories.name;
+      if (product.category) return product.category;
+      return "Sem categoria";
+    }
 
+    function normalizeCategorySlug(text) {
+      return String(text || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toLowerCase();
+    }
+
+    function getProductImage(product) {
+      return product.image_url || product.photo_url || product.cover_url || product.product_images?.[0]?.image_url || "";
+    }
+
+    function getProductUrl(product) {
+      if (product.slug) {
+        return `produto.html?slug=${encodeURIComponent(product.slug)}`;
+      }
+      return `produto.html?id=${encodeURIComponent(product.id)}`;
+    }
+
+    function getCategoryButtonHTML(slug, name, kind = "chip") {
+      const active = slug === activeCategory ? "active" : "";
+      if (kind === "drawer") {
+        return `<button class="drawer-category-btn ${active}" type="button" onclick="setCategory('${slug}')">${name}</button>`;
+      }
+      return `<button class="category-chip ${active}" type="button" onclick="setCategory('${slug}')">${name}</button>`;
+    }
+
+    function renderCategoryButtons() {
+      const categories = [
+        { slug: "all", name: "Todas" },
+        ...allCategories.map(cat => ({
+          slug: normalizeCategorySlug(cat.name),
+          name: cat.name
+        }))
+      ];
+
+      const desktopRail = document.getElementById("desktopCategoryRail");
+      const heroButtons = document.getElementById("heroCategoryButtons");
+      const catalogButtons = document.getElementById("catalogCategoryButtons");
+      const drawerButtons = document.getElementById("drawerCategories");
+
+      if (desktopRail) {
+        desktopRail.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name)).join("");
+      }
+
+      if (heroButtons) {
+        heroButtons.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name)).join("");
+      }
+
+      if (catalogButtons) {
+        catalogButtons.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name)).join("");
+      }
+
+      if (drawerButtons) {
+        drawerButtons.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, "drawer")).join("");
+      }
+    }
+
+    function getFilteredProducts() {
+      return allProducts.filter(product => {
+        const title = String(product.name || product.title || "").toLowerCase();
+        const categoryName = normalizeCategoryName(product);
+        const categorySlug = normalizeCategorySlug(categoryName);
+
+        const categoryMatches = activeCategory === "all" || categorySlug === activeCategory;
+        const searchMatches = !searchTerm || title.includes(searchTerm);
+
+        return categoryMatches && searchMatches;
+      });
+    }
+
+    function getProductBadge(product, isFeatured = false) {
+      const badgeType = product.badge_type || (isFeatured ? "destaque" : "");
+      if (!badgeType) return "";
+
+      const badgeMap = {
+        "destaque": { label: "⭐ Destaque", className: "destaque" },
+        "mais-vendida": { label: "🔥 Mais vendida", className: "mais-vendida" },
+        "novo": { label: "🚀 Novo", className: "novo" }
+      };
+
+      const badge = badgeMap[badgeType];
+      if (!badge) return "";
+      return `<span class="product-badge ${badge.className}">${badge.label}</span>`;
+    }
+
+    function buildProductCard(product, isFeatured = false) {
+      const imagem = getProductImage(product) || "https://via.placeholder.com/300x300?text=Camisa";
+      const categoryName = normalizeCategoryName(product);
+      const title = product.name || product.title || "Camisa disponível";
+      const price = formatPrice(product.price);
+      const oldPrice = product.old_price ? formatPrice(product.old_price) : "";
+      const hasPromo = Number(product.old_price || 0) > Number(product.price || 0);
+      const url = getProductUrl(product);
+      const badge = getProductBadge(product, isFeatured);
+      const saleTypeLabel = (product.sale_type || "pronta_entrega") === "sob_encomenda" ? "Sob encomenda" : "Pronta entrega";
+
+      return `
+        <article class="product-card">
+          <a href="${url}" class="product-image-link">
+            <div class="product-image-wrap">
+              ${badge}
+              ${
+                imagem
+                  ? `<img class="product-image" src="${imagem}" alt="${title}" loading="lazy" />`
+                  : `<div class="product-image-placeholder">Camisa 10 Store</div>`
+              }
+            </div>
+          </a>
+
+          <div class="product-body">
+            <span class="product-category">${categoryName}</span>
+            <h3 class="product-title">${title}</h3>
+            <span class="product-badge ${saleTypeLabel === "Sob encomenda" ? "novo" : "destaque"}">${saleTypeLabel}</span>
+            ${hasPromo ? `<span class="product-promo-badge">🔥 Promoção</span>` : ""}
+            <div class="product-price-box">
+              ${hasPromo ? `<span class="product-old-price">${oldPrice}</span>` : ""}
+              <div class="product-price">${price}</div>
+            </div>
+            <a href="${url}" class="btn btn-primary">Ver produto</a>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderFeaturedProducts() {
+      const grid = document.getElementById("featuredProductsGrid");
+      const featured = allProducts.filter(product => product.featured === true || product.is_featured === true);
+
+      if (!featured.length) {
+        grid.innerHTML = `<div class="state-box">Nenhum destaque disponível no momento.</div>`;
+        return;
+      }
+
+      const sortedFeatured = [...featured].sort((a, b) => {
+        const aDate = new Date(a.created_at || 0).getTime();
+        const bDate = new Date(b.created_at || 0).getTime();
+        return bDate - aDate;
+      });
+
+      grid.innerHTML = sortedFeatured.slice(0, 4).map(product => buildProductCard(product, true)).join("");
+    }
+
+    function renderProducts() {
+      const prontaGrid = document.getElementById("grid-pronta");
+      const encomendaGrid = document.getElementById("grid-encomenda");
+      const filtered = getFilteredProducts();
+
+      const pronta = filtered.filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega");
+      const encomenda = filtered.filter(product => product.sale_type === "sob_encomenda");
+
+      if (prontaGrid) {
+        prontaGrid.innerHTML = pronta.length
+          ? pronta.map(product => buildProductCard(product)).join("")
+          : `<div class="state-box">Nenhum produto à pronta entrega com esse filtro.</div>`;
+      }
+
+      if (encomendaGrid) {
+        encomendaGrid.innerHTML = encomenda.length
+          ? encomenda.map(product => buildProductCard(product)).join("")
+          : `<div class="state-box">Nenhum produto sob encomenda com esse filtro.</div>`;
+      }
+    }
+
+    function syncSearchInputs(value) {
+      const heroInput = document.getElementById("heroSearchInput");
+      const catalogInput = document.getElementById("catalogSearchInput");
+
+      if (heroInput && heroInput.value !== value) heroInput.value = value;
+      if (catalogInput && catalogInput.value !== value) catalogInput.value = value;
+    }
+
+    function setSearchTerm(value) {
+      searchTerm = String(value || "").trim().toLowerCase();
+      syncSearchInputs(value);
+      renderProducts();
+    }
+
+    function setCategory(slug) {
+      activeCategory = slug || "all";
+      renderCategoryButtons();
+      renderProducts();
+      closeMobileDrawer();
+      document.getElementById("catalogo")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    window.setCategory = setCategory;
+
+    function setupSearch() {
+      const heroInput = document.getElementById("heroSearchInput");
+      const catalogInput = document.getElementById("catalogSearchInput");
+
+      [heroInput, catalogInput].forEach(input => {
+        if (!input) return;
+        input.addEventListener("input", (event) => {
+          setSearchTerm(event.target.value);
+        });
+      });
+    }
+
+    function openMobileDrawer() {
+      const drawer = document.getElementById("mobileMenuDrawer");
+      const backdrop = document.getElementById("mobileMenuBackdrop");
+      if (!drawer || !backdrop) return;
+
+      drawer.classList.add("open");
+      backdrop.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeMobileDrawer() {
+      const drawer = document.getElementById("mobileMenuDrawer");
+      const backdrop = document.getElementById("mobileMenuBackdrop");
+      if (!drawer || !backdrop) return;
+
+      drawer.classList.remove("open");
+      backdrop.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    function setupMobileDrawer() {
+      document.getElementById("mobileMenuBtn")?.addEventListener("click", openMobileDrawer);
+      document.getElementById("mobileDrawerClose")?.addEventListener("click", closeMobileDrawer);
+      document.getElementById("mobileMenuBackdrop")?.addEventListener("click", closeMobileDrawer);
+    }
+
+    function createHeroSlide(slide, index) {
+      const title = slide.title || "CAMISA 10 STORE";
+      const subtitle = slide.subtitle || "Os modelos mais procurados estão aqui.";
+      const imageUrl = slide.image_url || "";
+
+      return `
+        <div class="hero-slide ${index === 0 ? "active" : ""}" data-index="${index}">
+          <div class="hero-slide-bg" style="background-image:url('${imageUrl}');"></div>
+          <div class="hero-slide-overlay"></div>
+          <div class="hero-content">
+            <div class="hero-kicker">⚽ A loja mais completa de camisas em Humaitá</div>
+            <h1 class="hero-title">${title}</h1>
+            <p class="hero-subtitle">${subtitle}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderHeroDots() {
+      const dotsContainer = document.getElementById("heroDots");
+      if (!dotsContainer) return;
+
+      dotsContainer.innerHTML = heroSlides.map((_, index) => `
+        <button
+          class="hero-dot ${index === currentHeroIndex ? "active" : ""}"
+          aria-label="Ir para slide ${index + 1}"
+          onclick="goToHeroSlide(${index})"
+        ></button>
+      `).join("");
+    }
+
+    function updateHeroSlider() {
+      document.querySelectorAll(".hero-slide").forEach((slide, index) => {
+        slide.classList.toggle("active", index === currentHeroIndex);
+      });
+
+      document.querySelectorAll(".hero-dot").forEach((dot, index) => {
+        dot.classList.toggle("active", index === currentHeroIndex);
+      });
+    }
+
+    function goToHeroSlide(index) {
+      if (!heroSlides.length) return;
+      currentHeroIndex = index;
+      updateHeroSlider();
+      restartHeroAutoplay();
+    }
+    window.goToHeroSlide = goToHeroSlide;
+
+    function nextHeroSlide() {
+      if (!heroSlides.length) return;
+      currentHeroIndex = (currentHeroIndex + 1) % heroSlides.length;
+      updateHeroSlider();
+    }
+
+    function prevHeroSlide() {
+      if (!heroSlides.length) return;
+      currentHeroIndex = (currentHeroIndex - 1 + heroSlides.length) % heroSlides.length;
+      updateHeroSlider();
+    }
+
+    function startHeroAutoplay() {
+      if (heroInterval || heroSlides.length <= 1) return;
+      heroInterval = setInterval(nextHeroSlide, 5000);
+    }
+
+    function restartHeroAutoplay() {
+      if (heroInterval) {
+        clearInterval(heroInterval);
+        heroInterval = null;
+      }
+      startHeroAutoplay();
+    }
+
+    function bindHeroControls() {
+      document.getElementById("heroPrevBtn")?.addEventListener("click", () => {
+        prevHeroSlide();
+        restartHeroAutoplay();
+      });
+
+      document.getElementById("heroNextBtn")?.addEventListener("click", () => {
+        nextHeroSlide();
+        restartHeroAutoplay();
+      });
+    }
+
+    function setupHeroSwipe() {
+      const slider = document.getElementById("heroSlider");
+      if (!slider) return;
+
+      let startX = 0;
+      let currentX = 0;
+      let isDragging = false;
+      let isHorizontalSwipe = false;
+
+      slider.addEventListener("touchstart", (event) => {
+        startX = event.touches[0].clientX;
+        currentX = startX;
+        isDragging = true;
+        isHorizontalSwipe = false;
+      }, { passive: true });
+
+      slider.addEventListener("touchmove", (event) => {
+        if (!isDragging) return;
+
+        currentX = event.touches[0].clientX;
+        const deltaX = currentX - startX;
+
+        if (Math.abs(deltaX) > 8) {
+          isHorizontalSwipe = true;
+        }
+      }, { passive: true });
+
+      slider.addEventListener("touchend", () => {
+        if (!isDragging) return;
+
+        const deltaX = currentX - startX;
+        isDragging = false;
+
+        if (!isHorizontalSwipe) return;
+        if (Math.abs(deltaX) < 55) return;
+
+        if (deltaX < 0) {
+          nextHeroSlide();
+        } else {
+          prevHeroSlide();
+        }
+
+        restartHeroAutoplay();
+      }, { passive: true });
+    }
+
+    function renderHeroSlides() {
+      const slider = document.getElementById("heroSlider");
+      if (!slider) return;
+
+      if (!heroSlides.length) {
+        heroSlides = [{
+          title: siteSettings?.hero_title || "CAMISA 10 STORE",
+          subtitle: siteSettings?.hero_subtitle || "Os mantos mais desejados do momento, com visual forte e entrega rápida em Humaitá.",
+          image_url: siteSettings?.hero_image_url || ""
+        }];
+      }
+
+      slider.innerHTML = heroSlides.map((slide, index) => createHeroSlide(slide, index)).join("");
+      currentHeroIndex = 0;
+      renderHeroDots();
+      updateHeroSlider();
+      bindHeroControls();
+      setupHeroSwipe();
+      restartHeroAutoplay();
+    }
+
+    async function loadHeroSlides() {
+      const { data, error } = await supabaseClient
+        .from("hero_slides")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        console.warn("Erro ao carregar hero_slides:", error);
+        heroSlides = [];
+        return;
+      }
+
+      heroSlides = data || [];
+    }
+
+    async function loadSiteSettings() {
+      const { data, error } = await supabaseClient
+        .from("site_settings")
+        .select("*")
+        .eq("id", SITE_SETTINGS_ID)
+        .single();
+
+      if (error) {
+        console.warn("Erro ao carregar site_settings:", error);
+        syncMobileLogos();
+        setWhatsAppLinks();
+        return;
+      }
+
+      if (data) {
+        siteSettings = data;
+        applySiteSettings();
+      }
+    }
+
+    async function loadCategories() {
       const { data, error } = await supabaseClient
         .from("categories")
-        .select("id, name")
+        .select("*")
         .order("name", { ascending: true });
 
       if (error) {
-        console.error("Erro ao carregar lista de categorias:", error);
-        tbody.innerHTML = `<tr><td colspan="2" class="empty-state">Erro ao carregar categorias.</td></tr>`;
-        showMessage("category-list-message", "Não foi possível buscar as categorias.", "error");
+        console.warn("Erro ao carregar categories:", error);
+        allCategories = [];
         return;
       }
 
       allCategories = data || [];
-      renderCategories(allCategories);
-    }
-
-    function renderCategories(categories) {
-      const tbody = document.getElementById("categories-table-body");
-
-      if (!categories || categories.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="2" class="empty-state">Nenhuma categoria cadastrada.</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = categories.map(category => `
-        <tr>
-          <td>${category.name}</td>
-          <td>
-            <div class="table-actions">
-              <button class="btn btn-success" onclick="editCategory('${category.id}', ${JSON.stringify(category.name).replace(/"/g, '&quot;')})">Editar</button>
-              <button class="btn btn-danger" onclick="deleteCategory('${category.id}')">Excluir</button>
-            </div>
-          </td>
-        </tr>
-      `).join("");
-    }
-
-    function filterCategories() {
-      const term = document.getElementById("category-search-input").value.trim().toLowerCase();
-
-      if (!term) {
-        renderCategories(allCategories);
-        return;
-      }
-
-      const filtered = allCategories.filter(category =>
-        (category.name || "").toLowerCase().includes(term)
-      );
-
-      renderCategories(filtered);
-    }
-
-    async function saveCategory() {
-      clearMessage("category-message");
-
-      const name = document.getElementById("category-name").value.trim();
-
-      if (!name) {
-        showMessage("category-message", "Digite o nome da categoria.", "error");
-        return;
-      }
-
-      const payload = { name };
-      let response;
-
-      if (editingCategoryId) {
-        response = await supabaseClient
-          .from("categories")
-          .update(payload)
-          .eq("id", editingCategoryId)
-          .select();
-      } else {
-        response = await supabaseClient
-          .from("categories")
-          .insert([payload])
-          .select();
-      }
-
-      if (response.error) {
-        console.error("Erro ao salvar categoria:", response.error);
-        showMessage("category-message", `Erro ao salvar categoria: ${response.error.message}`, "error");
-        return;
-      }
-
-      showMessage(
-        "category-message",
-        editingCategoryId ? "Categoria atualizada com sucesso." : "Categoria cadastrada com sucesso.",
-        "success"
-      );
-
-      resetCategoryForm();
-      await loadCategories();
-      await loadCategoriesList();
-      await loadProducts();
-    }
-
-    function editCategory(categoryId, categoryName) {
-      editingCategoryId = categoryId;
-      document.getElementById("category-name").value = categoryName || "";
-      document.getElementById("category-form-title").textContent = "Editar Categoria";
-      document.getElementById("save-category-btn").textContent = "Atualizar categoria";
-      document.getElementById("cancel-category-edit-btn").classList.remove("hidden");
-      clearMessage("category-message");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function cancelCategoryEdit() {
-      resetCategoryForm();
-    }
-
-    async function deleteCategory(categoryId) {
-      const confirmDelete = confirm("Tem certeza que deseja excluir esta categoria?");
-      if (!confirmDelete) return;
-
-      const { data: linkedProducts, error: productsError } = await supabaseClient
-        .from("products")
-        .select("id")
-        .eq("category_id", categoryId)
-        .limit(1);
-
-      if (productsError) {
-        console.error(productsError);
-        showMessage("category-list-message", "Erro ao verificar produtos vinculados.", "error");
-        return;
-      }
-
-      if (linkedProducts && linkedProducts.length > 0) {
-        showMessage("category-list-message", "Essa categoria está vinculada a produtos. Remova ou altere os produtos antes de excluir.", "error");
-        return;
-      }
-
-      const { error } = await supabaseClient
-        .from("categories")
-        .delete()
-        .eq("id", categoryId);
-
-      if (error) {
-        console.error("Erro ao excluir categoria:", error);
-        showMessage("category-list-message", `Erro ao excluir categoria: ${error.message}`, "error");
-        return;
-      }
-
-      showMessage("category-list-message", "Categoria excluída com sucesso.", "success");
-
-      if (editingCategoryId && String(editingCategoryId) === String(categoryId)) {
-        resetCategoryForm();
-      }
-
-      await loadCategories();
-      await loadCategoriesList();
-      await loadProducts();
-    }
-
-    async function uploadMainImage() {
-      clearMessage("form-message");
-
-      const fileInput = document.getElementById("product-file");
-      const file = fileInput.files[0];
-
-      if (!file) {
-        showMessage("form-message", "Selecione a imagem principal antes de fazer upload.", "error");
-        return;
-      }
-
-      const fileExt = file.name.split(".").pop();
-      const safeName = file.name
-        .replace(/\.[^/.]+$/, "")
-        .replace(/[^a-zA-Z0-9-_]/g, "-")
-        .toLowerCase();
-
-      const fileName = `${Date.now()}-${safeName}.${fileExt}`;
-      const filePath = `produtos/main/${fileName}`;
-
-      const { error: uploadError } = await supabaseClient.storage
-        .from(PRODUCT_BUCKET)
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: true
-        });
-
-      if (uploadError) {
-        console.error("Erro no upload da imagem principal:", uploadError);
-        showMessage("form-message", `Erro ao enviar imagem principal: ${uploadError.message || "sem detalhe"}`, "error");
-        return;
-      }
-
-      const { data: publicUrlData } = supabaseClient.storage
-        .from(PRODUCT_BUCKET)
-        .getPublicUrl(filePath);
-
-      if (!publicUrlData?.publicUrl) {
-        showMessage("form-message", "Upload feito, mas não foi possível gerar a URL da imagem principal.", "error");
-        return;
-      }
-
-      document.getElementById("product-image").value = publicUrlData.publicUrl;
-      document.getElementById("main-image-preview").src = publicUrlData.publicUrl;
-
-      showMessage("form-message", "Imagem principal enviada com sucesso.", "success");
-    }
-
-    async function uploadMultipleProductImages(productId) {
-      const fileInput = document.getElementById("product-files");
-      const files = fileInput.files;
-
-      if (!files || !files.length) {
-        return { success: true, uploaded: 0 };
-      }
-
-      let uploadedCount = 0;
-
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const fileExt = file.name.split(".").pop();
-        const safeName = file.name
-          .replace(/\.[^/.]+$/, "")
-          .replace(/[^a-zA-Z0-9-_]/g, "-")
-          .toLowerCase();
-
-        const fileName = `${Date.now()}-${i}-${safeName}.${fileExt}`;
-        const filePath = `produtos/${productId}/${fileName}`;
-
-        const { error: uploadError } = await supabaseClient.storage
-          .from(PRODUCT_BUCKET)
-          .upload(filePath, file, {
-            cacheControl: "3600",
-            upsert: true
-          });
-
-        if (uploadError) {
-          console.error("Erro no upload da imagem adicional:", uploadError);
-          return {
-            success: false,
-            message: uploadError.message || "Erro no upload da imagem adicional"
-          };
-        }
-
-        const { data: publicUrlData } = supabaseClient.storage
-          .from(PRODUCT_BUCKET)
-          .getPublicUrl(filePath);
-
-        const imageUrl = publicUrlData?.publicUrl;
-
-        if (!imageUrl) {
-          return {
-            success: false,
-            message: "Não foi possível obter a URL pública de uma das imagens."
-          };
-        }
-
-        const { error: insertImageError } = await supabaseClient
-          .from("product_images")
-          .insert([{
-            product_id: productId,
-            image_url: imageUrl,
-            sort_order: i
-          }]);
-
-        if (insertImageError) {
-          console.error("Erro ao salvar em product_images:", insertImageError);
-          return {
-            success: false,
-            message: insertImageError.message || "Erro ao salvar imagem adicional no banco"
-          };
-        }
-
-        uploadedCount++;
-      }
-
-      return {
-        success: true,
-        uploaded: uploadedCount
-      };
-    }
-
-    async function saveProductSizes(productId, sizes) {
-      const { error: deleteError } = await supabaseClient
-        .from("product_sizes")
-        .delete()
-        .eq("product_id", productId);
-
-      if (deleteError) {
-        console.error("Erro ao limpar tamanhos antigos:", deleteError);
-        return {
-          success: false,
-          message: deleteError.message || "Erro ao limpar tamanhos antigos"
-        };
-      }
-
-      if (!sizes.length) {
-        return { success: true };
-      }
-
-      const rows = sizes.map(size => ({
-        product_id: productId,
-        size,
-        available: true
-      }));
-
-      const { error: insertError } = await supabaseClient
-        .from("product_sizes")
-        .insert(rows);
-
-      if (insertError) {
-        console.error("Erro ao salvar tamanhos:", insertError);
-        return {
-          success: false,
-          message: insertError.message || "Erro ao salvar tamanhos"
-        };
-      }
-
-      return { success: true };
     }
 
     async function loadProducts() {
-      const tbody = document.getElementById("products-table-body");
-      tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Carregando produtos...</td></tr>`;
-      clearMessage("list-message");
-
       const { data, error } = await supabaseClient
         .from("products")
         .select(`
@@ -1000,942 +2032,66 @@
           categories (
             id,
             name
-          ),
-          product_sizes (
-            id,
-            size,
-            available
           )
         `)
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Erro ao carregar produtos:", error);
-        tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Erro ao carregar produtos.</td></tr>`;
-        showMessage("list-message", "Erro ao buscar produtos no Supabase.", "error");
+        console.error("Erro real do Supabase:", error);
+        allProducts = [];
         return;
       }
 
-      allProducts = data || [];
-      renderProducts(allProducts);
+      allProducts = (data || []).map(product => ({
+        ...product,
+        category_name: product.categories?.name || product.category_name || product.category || "Sem categoria"
+      }));
     }
 
-    function renderProducts(products) {
-      const tbody = document.getElementById("products-table-body");
+    async function init() {
+      try {
+        setupSearch();
+        setupMobileDrawer();
+        await loadSiteSettings();
+        await loadHeroSlides();
+        renderHeroSlides();
 
-      if (!products || products.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Nenhum produto cadastrado.</td></tr>`;
-        return;
-      }
+        await loadCategories();
+        await loadProducts();
 
-      tbody.innerHTML = products.map(product => {
-        const sizes = Array.isArray(product.product_sizes)
-          ? product.product_sizes.filter(item => item.available).map(item => item.size)
-          : [];
+        if (!allCategories.length && allProducts.length) {
+          const uniqueCategories = [...new Set(
+            allProducts.map(item => normalizeCategoryName(item)).filter(Boolean)
+          )];
+          allCategories = uniqueCategories.map(name => ({ name }));
+        }
 
-        const categoryName = product.categories?.name || "Sem categoria";
-        const saleType = product.sale_type === "sob_encomenda" ? "Sob encomenda" : "Pronta entrega";
+        renderCategoryButtons();
+        renderFeaturedProducts();
+        renderProducts();
+      } catch (error) {
+        console.error("Erro geral ao iniciar o site:", error);
 
-        return `
-          <tr>
-            <td>
-              <img
-                src="${product.image_url || 'https://via.placeholder.com/80x80?text=Sem+Imagem'}"
-                alt="${product.name || ''}"
-                class="product-thumb"
-                onerror="this.src='https://via.placeholder.com/80x80?text=Imagem';"
-              />
-            </td>
-            <td>
-              <div style="font-weight:bold;">
-                ${product.name || "-"}
-                ${product.featured ? '<span class="badge-featured">Destaque home</span>' : ''}
-                ${product.badge_type ? `<span class="badge">${formatBadgeLabel(product.badge_type)}</span>` : ''}
-              </div>
-              <div class="small-muted">Slug: ${product.slug || "-"}</div>
-            </td>
-            <td>${categoryName}</td>
-            <td><span class="badge">${saleType}</span></td>
-            <td>${formatPrice(product.price)}</td>
-            <td>${product.old_price ? `<span class="badge">De ${formatPrice(product.old_price)}</span>` : '<span class="small-muted">Sem promoção</span>'}</td>
-            <td>
-              ${
-                sizes.length
-                  ? sizes.map(size => `<span class="badge">${size}</span>`).join("")
-                  : '<span class="small-muted">Sem tamanhos</span>'
-              }
-            </td>
-            <td>
-              <div class="table-actions">
-                <button class="btn btn-success" onclick="editProduct('${product.id}')">Editar</button>
-                <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">Excluir</button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join("");
-    }
+        document.getElementById("featuredProductsGrid").innerHTML =
+          `<div class="state-box">Ocorreu um erro ao carregar os destaques.</div>`;
 
-    function filterProducts() {
-      const term = document.getElementById("search-input").value.trim().toLowerCase();
-
-      if (!term) {
-        renderProducts(allProducts);
-        return;
-      }
-
-      const filtered = allProducts.filter(product =>
-        (product.name || "").toLowerCase().includes(term)
-      );
-
-      renderProducts(filtered);
-    }
-
-    async function loadProductGallery(productId) {
-      const galleryBox = document.getElementById("current-gallery-box");
-      const galleryList = document.getElementById("current-gallery-list");
-
-      galleryList.innerHTML = "";
-      galleryBox.classList.add("hidden");
-
-      const { data, error } = await supabaseClient
-        .from("product_images")
-        .select("id, image_url, sort_order")
-        .eq("product_id", productId)
-        .order("sort_order", { ascending: true });
-
-      if (error) {
-        console.error("Erro ao carregar galeria:", error);
-        return;
-      }
-
-      if (!data || !data.length) {
-        return;
-      }
-
-      galleryBox.classList.remove("hidden");
-
-      galleryList.innerHTML = data.map(image => `
-        <div class="gallery-item">
-          <img src="${image.image_url}" alt="Imagem adicional" />
-          <button class="btn btn-danger" onclick="deleteGalleryImage('${image.id}')">Remover</button>
-        </div>
-      `).join("");
-    }
-
-    async function deleteGalleryImage(imageId) {
-      const confirmDelete = confirm("Deseja remover esta imagem da galeria?");
-      if (!confirmDelete) return;
-
-      const { error } = await supabaseClient
-        .from("product_images")
-        .delete()
-        .eq("id", imageId);
-
-      if (error) {
-        console.error("Erro ao excluir imagem da galeria:", error);
-        showMessage("form-message", `Erro ao excluir imagem: ${error.message}`, "error");
-        return;
-      }
-
-      showMessage("form-message", "Imagem da galeria removida com sucesso.", "success");
-
-      if (editingProductId) {
-        await loadProductGallery(editingProductId);
+        document.getElementById("productsGrid").innerHTML =
+          `<div class="state-box">Ocorreu um erro ao carregar o catálogo.</div>`;
       }
     }
 
-    async function saveProduct() {
-      clearMessage("form-message");
-
-      const name = document.getElementById("product-name").value.trim();
-      const price = document.getElementById("product-price").value.trim();
-      const old_price = document.getElementById("product-old-price").value.trim();
-      const image_url = document.getElementById("product-image").value.trim();
-      const category_id = document.getElementById("product-category").value;
-      const description = document.getElementById("product-description").value.trim();
-      const featured = document.getElementById("product-featured").checked;
-      const badge_type = document.getElementById("product-badge-type").value;
-      const sale_type = document.getElementById("product-sale-type").value || "pronta_entrega";
-      const sizes = getSelectedSizes();
-
-      if (!name || !price || !image_url || !category_id) {
-        showMessage("form-message", "Preencha nome, preço, imagem principal e categoria.", "error");
-        return;
-      }
-
-      const payload = {
-        name,
-        price: Number(price),
-        old_price: old_price ? Number(old_price) : null,
-        image_url,
-        category_id,
-        description,
-        featured,
-        badge_type: badge_type || null,
-        sale_type
-      };
-
-      let response;
-      const currentEditingProductId = editingProductId;
-
-      if (editingProductId) {
-        response = await supabaseClient
-          .from("products")
-          .update(payload)
-          .eq("id", editingProductId)
-          .select();
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        if (heroInterval) {
+          clearInterval(heroInterval);
+          heroInterval = null;
+        }
       } else {
-        payload.slug = `${generateSlug(name)}-${Date.now()}`;
-
-        response = await supabaseClient
-          .from("products")
-          .insert([payload])
-          .select();
-      }
-
-      if (response.error) {
-        console.error("Erro real do Supabase:", response.error);
-        showMessage(
-          "form-message",
-          `Erro ao salvar produto: ${response.error.message || "sem detalhe"}`,
-          "error"
-        );
-        return;
-      }
-
-      const savedProduct = response.data?.[0];
-
-      if (!savedProduct) {
-        showMessage("form-message", "Produto salvo, mas não foi possível recuperar o ID.", "error");
-        return;
-      }
-
-      const sizeResult = await saveProductSizes(savedProduct.id, sizes);
-
-      if (!sizeResult.success) {
-        showMessage(
-          "form-message",
-          `Produto salvo, mas houve erro nos tamanhos: ${sizeResult.message}`,
-          "error"
-        );
-        return;
-      }
-
-      const uploadResult = await uploadMultipleProductImages(savedProduct.id);
-
-      if (!uploadResult.success) {
-        showMessage(
-          "form-message",
-          `Produto salvo, mas houve erro nas fotos adicionais: ${uploadResult.message}`,
-          "error"
-        );
-        return;
-      }
-
-      showMessage(
-        "form-message",
-        currentEditingProductId
-          ? `Produto atualizado com sucesso. ${uploadResult.uploaded} foto(s) adicional(is) enviada(s).`
-          : `Produto cadastrado com sucesso. ${uploadResult.uploaded} foto(s) adicional(is) enviada(s).`,
-        "success"
-      );
-
-      resetForm();
-      await loadCategories();
-      await loadProducts();
-    }
-
-    async function editProduct(productId) {
-      clearMessage("form-message");
-
-      const { data, error } = await supabaseClient
-        .from("products")
-        .select(`
-          *,
-          sale_type,
-          product_sizes (
-            id,
-            size,
-            available
-          )
-        `)
-        .eq("id", productId)
-        .single();
-
-      if (error) {
-        console.error("Erro ao buscar produto para edição:", error);
-        showMessage("form-message", "Não foi possível carregar o produto para edição.", "error");
-        return;
-      }
-
-      editingProductId = data.id;
-
-      document.getElementById("product-name").value = data.name || "";
-      document.getElementById("product-price").value = data.price || "";
-      document.getElementById("product-old-price").value = data.old_price || "";
-      document.getElementById("product-image").value = data.image_url || "";
-      document.getElementById("product-description").value = data.description || "";
-      document.getElementById("product-featured").checked = !!data.featured;
-      document.getElementById("product-badge-type").value = data.badge_type || "";
-      document.getElementById("product-sale-type").value = data.sale_type || "pronta_entrega";
-
-      if (data.image_url) {
-        document.getElementById("main-image-preview").src = data.image_url;
-      } else {
-        resetMainPreview();
-      }
-
-      document.getElementById("product-file").value = "";
-      document.getElementById("product-files").value = "";
-      resetMultiPreview();
-
-      await loadCategories(data.category_id);
-
-      const availableSizes = Array.isArray(data.product_sizes)
-        ? data.product_sizes.filter(item => item.available).map(item => item.size)
-        : [];
-
-      setSelectedSizes(availableSizes);
-
-      await loadProductGallery(productId);
-
-      document.getElementById("form-title").textContent = "Editar Produto";
-      document.getElementById("save-product-btn").textContent = "Atualizar produto";
-      document.getElementById("cancel-edit-btn").classList.remove("hidden");
-
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function cancelEdit() {
-      resetForm();
-      loadCategories();
-    }
-
-    async function deleteProduct(productId) {
-      const confirmDelete = confirm("Tem certeza que deseja excluir este produto?");
-      if (!confirmDelete) return;
-
-      const { error: sizesError } = await supabaseClient
-        .from("product_sizes")
-        .delete()
-        .eq("product_id", productId);
-
-      if (sizesError) {
-        console.error("Erro ao excluir tamanhos do produto:", sizesError);
-      }
-
-      const { error: imagesError } = await supabaseClient
-        .from("product_images")
-        .delete()
-        .eq("product_id", productId);
-
-      if (imagesError) {
-        console.error("Erro ao excluir imagens do produto:", imagesError);
-      }
-
-      const { error } = await supabaseClient
-        .from("products")
-        .delete()
-        .eq("id", productId);
-
-      if (error) {
-        console.error("Erro ao excluir produto:", error);
-        showMessage("list-message", `Erro ao excluir produto: ${error.message}`, "error");
-        return;
-      }
-
-      showMessage("list-message", "Produto excluído com sucesso.", "success");
-      await loadProducts();
-
-      if (editingProductId && String(editingProductId) === String(productId)) {
-        resetForm();
-      }
-    }
-
-    async function uploadHeroBannerImage() {
-      clearMessage("settings-message");
-
-      const fileInput = document.getElementById("hero-image-file");
-      const file = fileInput.files[0];
-
-      if (!file) {
-        showMessage("settings-message", "Selecione uma imagem antes de fazer upload.", "error");
-        return;
-      }
-
-      const fileExt = file.name.split(".").pop();
-      const safeName = file.name
-        .replace(/\.[^/.]+$/, "")
-        .replace(/[^a-zA-Z0-9-_]/g, "-")
-        .toLowerCase();
-
-      const fileName = `${Date.now()}-${safeName}.${fileExt}`;
-      const filePath = `banners/home/${fileName}`;
-
-      const { error: uploadError } = await supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: true
-        });
-
-      if (uploadError) {
-        console.error(uploadError);
-        showMessage("settings-message", `Erro ao enviar imagem: ${uploadError.message}`, "error");
-        return;
-      }
-
-      const { data: publicUrlData } = supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .getPublicUrl(filePath);
-
-      const imageUrl = publicUrlData?.publicUrl || "";
-
-      document.getElementById("setting-hero-image-url").value = imageUrl;
-      document.getElementById("hero-banner-preview").src = imageUrl;
-
-      const { error } = await supabaseClient
-        .from(SITE_SETTINGS_TABLE)
-        .update({ hero_image_url: imageUrl })
-        .eq("id", SITE_SETTINGS_ID);
-
-      if (error) {
-        console.error(error);
-        showMessage("settings-message", `Upload feito, mas erro ao salvar no banco: ${error.message}`, "error");
-        return;
-      }
-
-      showMessage("settings-message", "Imagem do banner principal enviada e salva com sucesso.", "success");
-    }
-
-    async function uploadHeroLeftImage() {
-      clearMessage("settings-message");
-
-      const fileInput = document.getElementById("hero-left-image-file");
-      const file = fileInput.files[0];
-
-      if (!file) {
-        showMessage("settings-message", "Selecione a imagem da esquerda antes de fazer upload.", "error");
-        return;
-      }
-
-      const fileExt = file.name.split(".").pop();
-      const safeName = file.name
-        .replace(/\.[^/.]+$/, "")
-        .replace(/[^a-zA-Z0-9-_]/g, "-")
-        .toLowerCase();
-
-      const fileName = `${Date.now()}-${safeName}.${fileExt}`;
-      const filePath = `banners/home-left/${fileName}`;
-
-      const { error: uploadError } = await supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: true
-        });
-
-      if (uploadError) {
-        console.error(uploadError);
-        showMessage("settings-message", `Erro ao enviar imagem da esquerda: ${uploadError.message}`, "error");
-        return;
-      }
-
-      const { data: publicUrlData } = supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .getPublicUrl(filePath);
-
-      const imageUrl = publicUrlData?.publicUrl || "";
-
-      document.getElementById("setting-hero-left-image-url").value = imageUrl;
-      document.getElementById("hero-left-banner-preview").src = imageUrl;
-
-      const { error } = await supabaseClient
-        .from(SITE_SETTINGS_TABLE)
-        .update({ hero_left_image_url: imageUrl })
-        .eq("id", SITE_SETTINGS_ID);
-
-      if (error) {
-        console.error(error);
-        showMessage("settings-message", `Upload feito, mas erro ao salvar no banco: ${error.message}`, "error");
-        return;
-      }
-
-      showMessage("settings-message", "Imagem da esquerda enviada e salva com sucesso.", "success");
-    }
-
-    async function uploadLogoImage() {
-
-      clearMessage("settings-message");
-
-      const fileInput = document.getElementById("logo-file");
-      const file = fileInput?.files?.[0];
-
-      if (!file) {
-        showMessage("settings-message", "Selecione uma logo antes de fazer upload.", "error");
-        return;
-      }
-
-      const fileExt = file.name.split(".").pop();
-      const safeName = file.name
-        .replace(/\.[^/.]+$/, "")
-        .replace(/[^a-zA-Z0-9-_]/g, "-")
-        .toLowerCase();
-
-      const fileName = `${Date.now()}-${safeName}.${fileExt}`;
-      const filePath = `logo/${fileName}`;
-
-      const { error: uploadError } = await supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: true
-        });
-
-      if (uploadError) {
-        console.error("Erro no upload da logo:", uploadError);
-        showMessage("settings-message", `Erro ao enviar logo: ${uploadError.message}`, "error");
-        return;
-      }
-
-      const { data: publicUrlData } = supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .getPublicUrl(filePath);
-
-      const logoUrl = publicUrlData?.publicUrl || "";
-
-      if (!logoUrl) {
-        showMessage("settings-message", "Upload feito, mas não foi possível gerar a URL da logo.", "error");
-        return;
-      }
-
-      document.getElementById("setting-logo-url").value = logoUrl;
-      document.getElementById("logo-preview").src = logoUrl;
-
-      const { error: saveError } = await supabaseClient
-        .from(SITE_SETTINGS_TABLE)
-        .update({ logo_url: logoUrl })
-        .eq("id", SITE_SETTINGS_ID);
-
-      if (saveError) {
-        console.error("Erro ao salvar logo_url:", saveError);
-        showMessage("settings-message", `Upload feito, mas erro ao salvar no banco: ${saveError.message}`, "error");
-        return;
-      }
-
-      showMessage("settings-message", "Logo enviada e salva com sucesso.", "success");
-    }
-
-    function resetHeroSlidePreview() {
-      document.getElementById("hero-slide-preview").src = "https://via.placeholder.com/1200x500?text=Preview+do+Slide";
-    }
-
-    function resetHeroSlideForm() {
-      editingHeroSlideId = null;
-      document.getElementById("hero-slide-title").value = "";
-      document.getElementById("hero-slide-subtitle").value = "";
-      document.getElementById("hero-slide-file").value = "";
-      document.getElementById("hero-slide-image-url").value = "";
-      document.getElementById("hero-slide-primary-text").value = "Ver catálogo";
-      document.getElementById("hero-slide-primary-link").value = "#catalogo";
-      document.getElementById("hero-slide-secondary-text").value = "Pedir no WhatsApp";
-      document.getElementById("hero-slide-secondary-link").value = "#";
-      document.getElementById("hero-slide-sort-order").value = "";
-      document.getElementById("hero-slide-active").checked = true;
-      document.getElementById("hero-slide-form-title").textContent = "Cadastrar Slide";
-      document.getElementById("save-hero-slide-btn").textContent = "Salvar slide";
-      document.getElementById("cancel-hero-slide-edit-btn").classList.add("hidden");
-      resetHeroSlidePreview();
-      clearMessage("hero-slide-message");
-    }
-
-    async function uploadHeroSlideImage() {
-      clearMessage("hero-slide-message");
-
-      const fileInput = document.getElementById("hero-slide-file");
-      const file = fileInput.files[0];
-
-      if (!file) {
-        showMessage("hero-slide-message", "Selecione a imagem do slide antes de fazer upload.", "error");
-        return;
-      }
-
-      const fileExt = file.name.split(".").pop();
-      const safeName = file.name
-        .replace(/\.[^/.]+$/, "")
-        .replace(/[^a-zA-Z0-9-_]/g, "-")
-        .toLowerCase();
-
-      const fileName = `${Date.now()}-${safeName}.${fileExt}`;
-      const filePath = `hero-slides/${fileName}`;
-
-      const { error: uploadError } = await supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: true
-        });
-
-      if (uploadError) {
-        console.error("Erro no upload da imagem do slide:", uploadError);
-        showMessage("hero-slide-message", `Erro ao enviar imagem do slide: ${uploadError.message}`, "error");
-        return;
-      }
-
-      const { data: publicUrlData } = supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .getPublicUrl(filePath);
-
-      const imageUrl = publicUrlData?.publicUrl || "";
-
-      if (!imageUrl) {
-        showMessage("hero-slide-message", "Upload feito, mas não foi possível gerar a URL da imagem.", "error");
-        return;
-      }
-
-      document.getElementById("hero-slide-image-url").value = imageUrl;
-      document.getElementById("hero-slide-preview").src = imageUrl;
-      showMessage("hero-slide-message", "Imagem do slide enviada com sucesso.", "success");
-    }
-
-    async function loadHeroSlidesAdmin() {
-      const tbody = document.getElementById("hero-slides-table-body");
-      tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Carregando slides...</td></tr>`;
-      clearMessage("hero-slides-list-message");
-
-      const { data, error } = await supabaseClient
-        .from(HERO_SLIDES_TABLE)
-        .select("*")
-        .order("sort_order", { ascending: true })
-        .order("created_at", { ascending: true });
-
-      if (error) {
-        console.error("Erro ao carregar hero_slides:", error);
-        tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Erro ao carregar slides.</td></tr>`;
-        showMessage("hero-slides-list-message", `Erro ao buscar slides: ${error.message}`, "error");
-        return;
-      }
-
-      allHeroSlides = data || [];
-      renderHeroSlidesAdmin(allHeroSlides);
-    }
-
-    function renderHeroSlidesAdmin(slides) {
-      const tbody = document.getElementById("hero-slides-table-body");
-
-      if (!slides || slides.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Nenhum slide cadastrado ainda.</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = slides.map(slide => `
-        <tr>
-          <td>
-            <img
-              src="${slide.image_url || 'https://via.placeholder.com/120x70?text=Slide'}"
-              alt="${slide.title || 'Slide'}"
-              class="product-thumb"
-              style="width:90px;height:58px;border-radius:10px;object-fit:cover;"
-              onerror="this.src='https://via.placeholder.com/120x70?text=Slide';"
-            />
-          </td>
-          <td>
-            <div style="font-weight:bold;">${slide.title || "-"}</div>
-            <div class="small-muted" style="margin-top:4px;">${slide.subtitle || "-"}</div>
-          </td>
-          <td>
-            <div class="small-muted"><strong>Primário:</strong> ${slide.button_primary_text || "-"}</div>
-            <div class="small-muted"><strong>Secundário:</strong> ${slide.button_secondary_text || "-"}</div>
-          </td>
-          <td>${slide.sort_order ?? 0}</td>
-          <td>
-            ${
-              slide.is_active
-                ? '<span class="badge">Ativo</span>'
-                : '<span class="small-muted">Inativo</span>'
-            }
-          </td>
-          <td>
-            <div class="table-actions">
-              <button class="btn btn-success" type="button" onclick="editHeroSlide('${slide.id}')">Editar</button>
-              <button class="btn btn-danger" type="button" onclick="deleteHeroSlide('${slide.id}')">Excluir</button>
-            </div>
-          </td>
-        </tr>
-      `).join("");
-    }
-
-    function filterHeroSlides() {
-      const term = document.getElementById("hero-slide-search-input").value.trim().toLowerCase();
-
-      if (!term) {
-        renderHeroSlidesAdmin(allHeroSlides);
-        return;
-      }
-
-      const filtered = allHeroSlides.filter(slide =>
-        (slide.title || "").toLowerCase().includes(term)
-      );
-
-      renderHeroSlidesAdmin(filtered);
-    }
-
-    async function saveHeroSlide() {
-      clearMessage("hero-slide-message");
-
-      const payload = {
-        title: document.getElementById("hero-slide-title").value.trim(),
-        subtitle: document.getElementById("hero-slide-subtitle").value.trim(),
-        image_url: document.getElementById("hero-slide-image-url").value.trim(),
-        button_primary_text: document.getElementById("hero-slide-primary-text").value.trim() || "Ver catálogo",
-        button_primary_link: document.getElementById("hero-slide-primary-link").value.trim() || "#catalogo",
-        button_secondary_text: document.getElementById("hero-slide-secondary-text").value.trim() || "Pedir no WhatsApp",
-        button_secondary_link: document.getElementById("hero-slide-secondary-link").value.trim() || "#",
-        sort_order: Number(document.getElementById("hero-slide-sort-order").value || 0),
-        is_active: document.getElementById("hero-slide-active").checked
-      };
-
-      if (!payload.title || !payload.image_url) {
-        showMessage("hero-slide-message", "Preencha pelo menos o título e a imagem do slide.", "error");
-        return;
-      }
-
-      let response;
-
-      if (editingHeroSlideId) {
-        response = await supabaseClient
-          .from(HERO_SLIDES_TABLE)
-          .update(payload)
-          .eq("id", editingHeroSlideId)
-          .select()
-          .single();
-      } else {
-        response = await supabaseClient
-          .from(HERO_SLIDES_TABLE)
-          .insert([payload])
-          .select()
-          .single();
-      }
-
-      if (response.error) {
-        console.error("Erro ao salvar slide:", response.error);
-        showMessage("hero-slide-message", `Erro ao salvar slide: ${response.error.message}`, "error");
-        return;
-      }
-
-      showMessage(
-        "hero-slide-message",
-        editingHeroSlideId ? "Slide atualizado com sucesso." : "Slide cadastrado com sucesso.",
-        "success"
-      );
-
-      resetHeroSlideForm();
-      await loadHeroSlidesAdmin();
-    }
-
-    async function editHeroSlide(slideId) {
-      const slide = allHeroSlides.find(item => String(item.id) === String(slideId));
-
-      if (!slide) {
-        showMessage("hero-slides-list-message", "Não foi possível localizar o slide para edição.", "error");
-        return;
-      }
-
-      editingHeroSlideId = slide.id;
-      document.getElementById("hero-slide-title").value = slide.title || "";
-      document.getElementById("hero-slide-subtitle").value = slide.subtitle || "";
-      document.getElementById("hero-slide-image-url").value = slide.image_url || "";
-      document.getElementById("hero-slide-primary-text").value = slide.button_primary_text || "Ver catálogo";
-      document.getElementById("hero-slide-primary-link").value = slide.button_primary_link || "#catalogo";
-      document.getElementById("hero-slide-secondary-text").value = slide.button_secondary_text || "Pedir no WhatsApp";
-      document.getElementById("hero-slide-secondary-link").value = slide.button_secondary_link || "#";
-      document.getElementById("hero-slide-sort-order").value = slide.sort_order ?? 0;
-      document.getElementById("hero-slide-active").checked = !!slide.is_active;
-      document.getElementById("hero-slide-preview").src = slide.image_url || "https://via.placeholder.com/1200x500?text=Preview+do+Slide";
-      document.getElementById("hero-slide-form-title").textContent = "Editar Slide";
-      document.getElementById("save-hero-slide-btn").textContent = "Atualizar slide";
-      document.getElementById("cancel-hero-slide-edit-btn").classList.remove("hidden");
-      clearMessage("hero-slide-message");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function cancelHeroSlideEdit() {
-      resetHeroSlideForm();
-    }
-
-    async function deleteHeroSlide(slideId) {
-      const confirmDelete = confirm("Tem certeza que deseja excluir este slide do banner?");
-      if (!confirmDelete) return;
-
-      const { error } = await supabaseClient
-        .from(HERO_SLIDES_TABLE)
-        .delete()
-        .eq("id", slideId);
-
-      if (error) {
-        console.error("Erro ao excluir slide:", error);
-        showMessage("hero-slides-list-message", `Erro ao excluir slide: ${error.message}`, "error");
-        return;
-      }
-
-      showMessage("hero-slides-list-message", "Slide excluído com sucesso.", "success");
-
-      if (editingHeroSlideId && String(editingHeroSlideId) === String(slideId)) {
-        resetHeroSlideForm();
-      }
-
-      await loadHeroSlidesAdmin();
-    }
-
-    async function loadSiteSettings() {
-      clearMessage("settings-message");
-
-      const { data, error } = await supabaseClient
-        .from(SITE_SETTINGS_TABLE)
-        .select(`
-          id,
-          hero_title,
-          hero_subtitle,
-          hero_image_url,
-          hero_left_image_url,
-          delivery_text,
-          catalog_title,
-          catalog_subtitle,
-          contact_text,
-          footer_text,
-          logo_url,
-          instagram_url,
-          whatsapp_number
-        `)
-        .eq("id", SITE_SETTINGS_ID)
-        .single();
-
-      if (error) {
-        console.error("Erro ao carregar configurações do site:", error);
-        showMessage("settings-message", "Não foi possível carregar as configurações do site.", "error");
-        return;
-      }
-
-      document.getElementById("setting-hero-title").value = data.hero_title || "";
-      document.getElementById("setting-hero-subtitle").value = data.hero_subtitle || "";
-      document.getElementById("setting-hero-image-url").value = data.hero_image_url || "";
-      document.getElementById("setting-hero-left-image-url").value = data.hero_left_image_url || "";
-      document.getElementById("setting-delivery-text").value = data.delivery_text || "";
-      document.getElementById("setting-catalog-title").value = data.catalog_title || "";
-      document.getElementById("setting-catalog-subtitle").value = data.catalog_subtitle || "";
-      document.getElementById("setting-contact-text").value = data.contact_text || "";
-      document.getElementById("setting-footer-text").value = data.footer_text || "";
-      document.getElementById("setting-logo-url").value = data.logo_url || "";
-      document.getElementById("setting-instagram-url").value = data.instagram_url || "";
-      document.getElementById("setting-whatsapp-number").value = data.whatsapp_number || "";
-
-      if (data.hero_image_url) {
-        document.getElementById("hero-banner-preview").src = data.hero_image_url;
-      }
-
-      if (data.hero_left_image_url) {
-        document.getElementById("hero-left-banner-preview").src = data.hero_left_image_url;
-      }
-
-      if (data.logo_url) {
-        document.getElementById("logo-preview").src = data.logo_url;
-      }
-    }
-
-    async function saveSiteSettings() {
-      clearMessage("settings-message");
-
-      const payload = {
-        hero_title: document.getElementById("setting-hero-title").value.trim(),
-        hero_subtitle: document.getElementById("setting-hero-subtitle").value.trim(),
-        hero_image_url: document.getElementById("setting-hero-image-url").value.trim(),
-        hero_left_image_url: document.getElementById("setting-hero-left-image-url").value.trim(),
-        delivery_text: document.getElementById("setting-delivery-text").value.trim(),
-        catalog_title: document.getElementById("setting-catalog-title").value.trim(),
-        catalog_subtitle: document.getElementById("setting-catalog-subtitle").value.trim(),
-        contact_text: document.getElementById("setting-contact-text").value.trim(),
-        footer_text: document.getElementById("setting-footer-text").value.trim(),
-        logo_url: document.getElementById("setting-logo-url").value.trim(),
-        instagram_url: document.getElementById("setting-instagram-url").value.trim(),
-        whatsapp_number: document.getElementById("setting-whatsapp-number").value.trim()
-      };
-
-      const { error } = await supabaseClient
-        .from(SITE_SETTINGS_TABLE)
-        .update(payload)
-        .eq("id", SITE_SETTINGS_ID);
-
-      if (error) {
-        console.error("Erro ao salvar configurações do site:", error);
-        showMessage("settings-message", `Erro ao salvar configurações: ${error.message}`, "error");
-        return;
-      }
-
-      showMessage("settings-message", "Configurações do site salvas com sucesso.", "success");
-    }
-
-
-    function setupTabs() {
-      const buttons = document.querySelectorAll(".tab-btn");
-      const panels = document.querySelectorAll(".tab-panel");
-
-      buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-          const targetId = button.dataset.tab;
-          if (!targetId) return;
-
-          buttons.forEach((btn) => btn.classList.remove("active"));
-          panels.forEach((panel) => panel.classList.remove("active"));
-
-          button.classList.add("active");
-          const targetPanel = document.getElementById(targetId);
-          if (targetPanel) {
-            targetPanel.classList.add("active");
-          }
-        });
-      });
-    }
-
-    function showAdminPanel() {
-      document.getElementById("login-screen").classList.add("hidden");
-      document.getElementById("login-screen").style.display = "none";
-      document.getElementById("admin-panel").classList.remove("hidden");
-      document.getElementById("admin-panel").style.display = "block";
-      const topLogoutBtn = document.getElementById("topLogoutBtn");
-      if (topLogoutBtn) topLogoutBtn.classList.remove("hidden");
-    }
-
-    function showLoginScreen() {
-      document.getElementById("admin-panel").classList.add("hidden");
-      document.getElementById("admin-panel").style.display = "none";
-      document.getElementById("login-screen").classList.remove("hidden");
-      document.getElementById("login-screen").style.display = "block";
-      const topLogoutBtn = document.getElementById("topLogoutBtn");
-      if (topLogoutBtn) topLogoutBtn.classList.add("hidden");
-    }
-
-    async function initializeAdmin() {
-      await loadCategories();
-      await loadCategoriesList();
-      await loadProducts();
-      await loadSiteSettings();
-      await loadHeroSlidesAdmin();
-      resetHeroSlideForm();
-    }
-
-    document.addEventListener("DOMContentLoaded", async () => {
-      const logged = localStorage.getItem("camisa10_admin_logged") === "true";
-
-      setupTabs();
-
-      if (logged) {
-        showAdminPanel();
-        await initializeAdmin();
-      } else {
-        showLoginScreen();
+        restartHeroAutoplay();
       }
     });
+
+    init();
   </script>
 </body>
 </html>
