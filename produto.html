@@ -1272,7 +1272,7 @@
 
     function updatePurchaseSummary() {
       document.getElementById("purchase-product-name").textContent = currentProduct?.name || "-";
-      document.getElementById("purchase-product-price").textContent = currentProduct ? formatPrice(currentProduct.price) : "-";
+      document.getElementById("purchase-product-price").textContent = currentProduct ? (Number(currentProduct.old_price || 0) > Number(currentProduct.price || 0) ? `${formatPrice(currentProduct.price)} (promoção)` : formatPrice(currentProduct.price)) : "-";
       document.getElementById("selected-size-text").textContent = selectedSize || "Selecione um tamanho";
 
       const selectedBanner = document.getElementById("size-selected-banner");
@@ -1463,11 +1463,18 @@
     function buildWhatsAppMessage() {
       if (!currentProduct) return "";
 
-      const message =
-`Olá! Tenho interesse neste produto da Camisa 10 Store:
+      const saleLabel = currentProduct.sale_type === "sob_encomenda" ? "Quero encomendar este produto" : "Tenho interesse neste produto";
+      const promoLine = Number(currentProduct.old_price || 0) > Number(currentProduct.price || 0)
+        ? `
+De: ${formatPrice(currentProduct.old_price)}
+Por: ${formatPrice(currentProduct.price)}`
+        : `
+Preço: ${formatPrice(currentProduct.price)}`;
 
-Produto: ${currentProduct.name}
-Preço: ${formatPrice(currentProduct.price)}
+      const message =
+`Olá! ${saleLabel} da Camisa 10 Store:
+
+Produto: ${currentProduct.name}${promoLine}
 Tamanho: ${selectedSize}
 
 Link do produto:
@@ -1633,7 +1640,7 @@ ${window.location.href}`;
             <div class="related-card-body">
               <div class="related-category">${item.categories?.name || "Camisa 10 Store"}</div>
               <a href="${url}" class="related-name">${item.name || "Produto"}</a>
-              <div class="related-price">${formatPrice(item.price)}</div>
+              <div class="related-price">${Number(item.old_price || 0) > Number(item.price || 0) ? `<span style="text-decoration:line-through;opacity:.65;margin-right:6px;">${formatPrice(item.old_price)}</span>` : ""}${formatPrice(item.price)}</div>
               <a href="${url}" class="related-link">Ver detalhes</a>
             </div>
           </article>
@@ -1654,6 +1661,7 @@ ${window.location.href}`;
           name,
           slug,
           price,
+          old_price,
           image_url,
           categories (
             name
@@ -1689,6 +1697,7 @@ ${window.location.href}`;
           name,
           slug,
           price,
+          old_price,
           image_url,
           description,
           sale_type,
@@ -1736,6 +1745,20 @@ ${window.location.href}`;
       document.getElementById("product-name").textContent = product.name || "Produto";
       document.getElementById("product-price").textContent = formatPrice(product.price);
       document.getElementById("product-description").textContent = product.description || "Sem descrição disponível.";
+
+      const hasPromo = Number(product.old_price || 0) > Number(product.price || 0);
+      const oldPriceEl = document.getElementById("product-old-price");
+      const promoNoteEl = document.getElementById("promo-note");
+      if (oldPriceEl && promoNoteEl) {
+        if (hasPromo) {
+          oldPriceEl.textContent = formatPrice(product.old_price);
+          oldPriceEl.style.display = "block";
+          promoNoteEl.style.display = "inline-flex";
+        } else {
+          oldPriceEl.style.display = "none";
+          promoNoteEl.style.display = "none";
+        }
+      }
 
       const buyBtn = document.getElementById("buy-whatsapp-btn");
       if (buyBtn) {
