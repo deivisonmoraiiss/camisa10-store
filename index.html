@@ -545,24 +545,88 @@
         radial-gradient(circle at center, rgba(212,175,55,0.10), transparent 35%),
         linear-gradient(180deg, #111, #0b0b0b);
     }
-
-    .product-badge {
+    .badge-stack {
       position: absolute;
       top: 12px;
       left: 12px;
-      display: inline-flex;
-      align-items: center;
-      padding: 7px 10px;
-      border-radius: 999px;
-      font-size: 0.76rem;
-      font-weight: 800;
-      box-shadow: var(--shadow);
-      z-index: 2;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      pointer-events: none;
     }
 
-    .product-badge.destaque { background: var(--gold); color: #111; }
-    .product-badge.mais-vendida { background: #ff4d4f; color: #fff; }
-    .product-badge.novo { background: #2ecc71; color: #08140d; }
+    .product-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.24);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.08);
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .product-badge::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: currentColor;
+      opacity: 0.92;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.06);
+    }
+
+    .product-badge.destaque {
+      background: linear-gradient(135deg, rgba(212,175,55,0.95), rgba(244,211,94,0.88));
+      color: #141414;
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    .product-badge.mais-vendida {
+      background: linear-gradient(135deg, rgba(255,116,82,0.94), rgba(255,77,79,0.88));
+      color: #fff;
+    }
+
+    .product-badge.novo {
+      background: linear-gradient(135deg, rgba(36,191,120,0.95), rgba(60,223,145,0.86));
+      color: #08140d;
+    }
+
+    .sale-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      color: #f4d35e;
+      background: rgba(8,8,8,0.76);
+      border: 1px solid rgba(244,211,94,0.22);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      white-space: nowrap;
+    }
+
+    .sale-type-badge::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #f4d35e;
+      box-shadow: 0 0 0 4px rgba(244,211,94,0.08);
+    }
 
     .product-body {
       padding: 18px;
@@ -1646,8 +1710,8 @@
     }
 
     function getSaleTypeBadge(product) {
-      return product.sale_type === "sob_encomenda"
-        ? `<span class="sale-type-badge">🛒 Sob encomenda</span>`
+      return (product.sale_type || "pronta_entrega") === "sob_encomenda"
+        ? `<span class="sale-type-badge">Sob encomenda</span>`
         : "";
     }
 
@@ -1673,13 +1737,14 @@
       const title = product.name || product.title || "Camisa disponível";
       const priceHTML = getProductPriceHTML(product);
       const url = getProductUrl(product);
+      const productBadge = getProductBadge(product, isFeatured);
       const saleTypeBadge = getSaleTypeBadge(product);
 
       return `
         <article class="product-card">
           <a href="${url}" class="product-image-link">
             <div class="product-image-wrap">
-              ${saleTypeBadge}
+              ${(productBadge || saleTypeBadge) ? `<div class="badge-stack">${productBadge}${saleTypeBadge}</div>` : ""}
               ${
                 imagem
                   ? `<img class="product-image" src="${imagem}" alt="${title}" loading="lazy" />`
