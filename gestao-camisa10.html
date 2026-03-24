@@ -113,7 +113,32 @@
     .helper-box{display:none}
     .preview-box{padding:12px}
     .table-wrap{border-radius:16px}
-    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats{grid-template-columns:1fr}}
+
+    .form-header-row,.list-header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+    .inline-status{display:flex;gap:10px;flex-wrap:wrap}
+    .mini-kpi{display:inline-flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:16px;background:#101010;border:1px solid var(--line)}
+    .mini-kpi strong{color:var(--gold);font-size:1rem}
+    .mini-kpi span{color:var(--muted);font-size:.82rem}
+    .stepper-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:6px 0 18px}
+    .step-chip{border:1px solid var(--line);background:#151515;color:#f2f2f2;padding:12px 14px;border-radius:14px;font-weight:800;cursor:pointer;transition:.2s ease;text-align:center}
+    .step-chip.active{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#111;border-color:transparent}
+    .step-chip.done{border-color:rgba(212,175,55,.34);color:#f3d77d}
+    .product-step{display:none}
+    .product-step.active{display:block}
+    .step-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .helper-box-visible{display:block}
+    .sizes-box-premium .size-item{min-height:62px;transition:.2s ease}
+    .sizes-box-premium .size-item.active{background:linear-gradient(135deg, rgba(212,175,55,.20), rgba(212,175,55,.10));border-color:rgba(212,175,55,.55);box-shadow:0 10px 24px rgba(0,0,0,.18);color:#fff6cf}
+    .sizes-box-premium .size-item input{display:none}
+    .sizes-box-premium .size-item span{font-size:1rem}
+    .draft-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
+    .draft-summary-card{padding:16px;border-radius:16px;background:#101010;border:1px solid var(--line);display:grid;gap:6px}
+    .draft-summary-card span{color:var(--muted);font-size:.82rem}
+    .draft-summary-card strong{color:#fff;font-size:1rem}
+    .products-toolbar-advanced{display:grid;grid-template-columns:minmax(180px,1.2fr) minmax(160px,.9fr) minmax(160px,.9fr) auto;align-items:center}
+    .products-toolbar-advanced select{padding:12px 14px;border-radius:14px;border:1px solid #2d2d2d;background:#101010;color:#fff}
+
+    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced{grid-template-columns:1fr}}
     @media (max-width:700px){.container{width:min(94%,94%)}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}}
   </style>
 </head>
@@ -170,122 +195,200 @@
         <button class="tab-btn" data-tab="tab-slides">Slides do banner</button>
       </div>
 
+      
       <section id="tab-products" class="tab-panel active">
         <div class="grid-2">
           <div class="card">
-            <h3 class="section-title" id="form-title">Cadastrar Produto</h3>
-<div class="field">
-              <label for="product-name">Nome do produto</label>
-              <input type="text" id="product-name" placeholder="Ex: Camisa Flamengo 2026" />
+            <div class="form-header-row">
+              <div>
+                <h3 class="section-title" id="form-title">Cadastrar Produto</h3>
+                <p class="section-copy" style="margin-bottom:0;">Fluxo em etapas para cadastrar mais rápido, com menos erro.</p>
+              </div>
+              <div class="inline-status">
+                <span class="mini-kpi"><strong id="draft-step-indicator">Etapa 1/4</strong><span>Progresso do cadastro</span></span>
+              </div>
             </div>
 
-            <div class="grid-2-equal">
+            <div class="stepper-nav" id="product-stepper-nav">
+              <button type="button" class="step-chip active" data-step-target="1">1. Básico</button>
+              <button type="button" class="step-chip" data-step-target="2">2. Preço e venda</button>
+              <button type="button" class="step-chip" data-step-target="3">3. Imagens</button>
+              <button type="button" class="step-chip" data-step-target="4">4. Tamanhos e salvar</button>
+            </div>
+
+            <div class="product-step active" data-step="1">
+              <div class="grid-2-equal">
+                <div class="field">
+                  <label for="product-name">Nome do produto</label>
+                  <input type="text" id="product-name" placeholder="Ex: Camisa Flamengo 2026" />
+                </div>
+                <div class="field">
+                  <label for="product-slug-preview">Slug gerado automaticamente</label>
+                  <input type="text" id="product-slug-preview" placeholder="Será gerado automaticamente" readonly />
+                </div>
+              </div>
+
+              <div class="grid-2-equal">
+                <div class="field">
+                  <label for="product-category">Categoria</label>
+                  <select id="product-category">
+                    <option value="">Carregando categorias...</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="product-sale-type">Tipo de venda</label>
+                  <select id="product-sale-type">
+                    <option value="pronta_entrega">Pronta entrega</option>
+                    <option value="sob_encomenda">Sob encomenda</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="helper-box helper-box-visible">
+                Digite o nome da camisa e o sistema já prepara o slug. Isso evita erro na hora de editar ou publicar.
+              </div>
+            </div>
+
+            <div class="product-step" data-step="2">
+              <div class="grid-2-equal">
+                <div class="field">
+                  <label for="product-price">Preço atual</label>
+                  <input type="number" id="product-price" step="0.01" placeholder="Ex: 129.90" />
+                </div>
+                <div class="field">
+                  <label for="product-old-price">Preço antigo (opcional)</label>
+                  <input type="number" id="product-old-price" step="0.01" placeholder="Ex: 179.90" />
+                </div>
+              </div>
+
+              <div class="grid-2-equal">
+                <div class="field">
+                  <label for="product-badge-type">Selo do produto</label>
+                  <select id="product-badge-type">
+                    <option value="">Sem selo</option>
+                    <option value="destaque">⭐ Destaque</option>
+                    <option value="mais-vendida">🔥 Mais vendida</option>
+                    <option value="novo">🚀 Novo</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label style="display:flex; align-items:center; gap:10px; cursor:pointer; min-height:52px; margin-top:28px;">
+                    <input type="checkbox" id="product-featured" style="width:auto; accent-color:#d4af37;" />
+                    <span>Mostrar na seção Mais procuradas</span>
+                  </label>
+                </div>
+              </div>
+
               <div class="field">
-                <label for="product-price">Preço atual</label>
-                <input type="number" id="product-price" step="0.01" placeholder="Ex: 129.90" />
+                <label for="product-description">Descrição</label>
+                <textarea id="product-description" placeholder="Descrição do produto"></textarea>
               </div>
+            </div>
+
+            <div class="product-step" data-step="3">
+              <div class="grid-2-equal">
+                <div class="field">
+                  <label for="product-file">Imagem principal</label>
+                  <input type="file" id="product-file" accept="image/*" onchange="previewSelectedMainImage(event)" />
+                </div>
+                <div class="field">
+                  <label for="product-image">URL da imagem principal</label>
+                  <input type="text" id="product-image" placeholder="Se preferir, cole uma URL pronta" />
+                </div>
+              </div>
+
+              <div class="preview-box">
+                <div class="small-muted" style="margin-bottom:8px;">Pré-visualização da imagem principal</div>
+                <img id="main-image-preview" class="main-preview" src="https://via.placeholder.com/400x400?text=Sem+Imagem" alt="Preview principal">
+              </div>
+
+              <div class="field" style="margin-top:16px;">
+                <label for="product-files">Fotos adicionais da galeria</label>
+                <input type="file" id="product-files" accept="image/*" multiple onchange="previewSelectedImages(event)" />
+              </div>
+
+              <div class="preview-box">
+                <div class="small-muted" style="margin-bottom:8px;">Pré-visualização das fotos adicionais</div>
+                <div id="images-preview" class="multi-preview-grid"></div>
+              </div>
+
+              <div class="helper-box helper-box-visible">
+                O upload é automático quando você salvar o produto. Não precisa subir imagem manualmente antes.
+              </div>
+
+              <div id="current-gallery-box" class="preview-box hidden" style="margin-top:16px;">
+                <div class="small-muted" style="margin-bottom:8px;">Galeria atual do produto</div>
+                <div id="current-gallery-list" class="gallery-list"></div>
+              </div>
+            </div>
+
+            <div class="product-step" data-step="4">
               <div class="field">
-                <label for="product-old-price">Preço antigo (opcional)</label>
-                <input type="number" id="product-old-price" step="0.01" placeholder="Ex: 179.90" />
+                <label>Tamanhos disponíveis</label>
+                <div class="sizes-box sizes-box-premium">
+                  <label class="size-item"><input type="checkbox" value="P" class="size-check"> <span>P</span></label>
+                  <label class="size-item"><input type="checkbox" value="M" class="size-check"> <span>M</span></label>
+                  <label class="size-item"><input type="checkbox" value="G" class="size-check"> <span>G</span></label>
+                  <label class="size-item"><input type="checkbox" value="EG" class="size-check"> <span>EG</span></label>
+                </div>
               </div>
-              <div class="field">
-                <label for="product-category">Categoria</label>
-                <select id="product-category">
-                  <option value="">Carregando categorias...</option>
-                </select>
+
+              <div class="draft-summary" id="product-draft-summary">
+                <div class="draft-summary-card">
+                  <span>Nome</span>
+                  <strong id="summary-name">—</strong>
+                </div>
+                <div class="draft-summary-card">
+                  <span>Categoria</span>
+                  <strong id="summary-category">—</strong>
+                </div>
+                <div class="draft-summary-card">
+                  <span>Preço</span>
+                  <strong id="summary-price">—</strong>
+                </div>
+                <div class="draft-summary-card">
+                  <span>Tamanhos</span>
+                  <strong id="summary-sizes">—</strong>
+                </div>
               </div>
-            </div>
 
-            <div class="grid-2-equal">
-              <div class="field">
-                <label for="product-badge-type">Selo do produto</label>
-                <select id="product-badge-type">
-                  <option value="">Sem selo</option>
-                  <option value="destaque">⭐ Destaque</option>
-                  <option value="mais-vendida">🔥 Mais vendida</option>
-                  <option value="novo">🚀 Novo</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="product-sale-type">Tipo de venda</label>
-                <select id="product-sale-type">
-                  <option value="pronta_entrega">Pronta entrega</option>
-                  <option value="sob_encomenda">Sob encomenda</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="field">
-              <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
-                <input type="checkbox" id="product-featured" style="width:auto; accent-color:#d4af37;" />
-                <span>Mostrar na seção Mais procuradas</span>
-              </label>
-            </div>
-
-            <div class="field">
-              <label for="product-description">Descrição</label>
-              <textarea id="product-description" placeholder="Descrição do produto"></textarea>
-            </div>
-
-            <div class="field">
-              <label>Tamanhos disponíveis</label>
-              <div class="sizes-box">
-                <label class="size-item"><input type="checkbox" value="P" class="size-check"> P</label>
-                <label class="size-item"><input type="checkbox" value="M" class="size-check"> M</label>
-                <label class="size-item"><input type="checkbox" value="G" class="size-check"> G</label>
-                <label class="size-item"><input type="checkbox" value="EG" class="size-check"> EG</label>
+              <div class="helper-box helper-box-visible">
+                Revise os dados acima. Atalho: <strong>Ctrl + S</strong> para salvar mais rápido.
               </div>
             </div>
 
-            <div class="field">
-              <label for="product-file">Imagem principal</label>
-              <input type="file" id="product-file" accept="image/*" onchange="previewSelectedMainImage(event)" />
-              <div class="actions-row">
-                <button type="button" class="btn btn-secondary" onclick="uploadMainImage()">Fazer upload da imagem principal</button>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="product-image">URL da imagem principal</label>
-              <input type="text" id="product-image" placeholder="A URL será preenchida após o upload" />
-            </div>
-
-            <div class="preview-box">
-              <div class="small-muted" style="margin-bottom:8px;">Pré-visualização da imagem principal</div>
-              <img id="main-image-preview" class="main-preview" src="https://via.placeholder.com/400x400?text=Sem+Imagem" alt="Preview principal">
-            </div>
-
-            <div class="field" style="margin-top:16px;">
-              <label for="product-files">Fotos adicionais</label>
-              <input type="file" id="product-files" accept="image/*" multiple onchange="previewSelectedImages(event)" />
-            </div>
-
-            <div class="preview-box">
-              <div class="small-muted" style="margin-bottom:8px;">Pré-visualização das fotos adicionais</div>
-              <div id="images-preview" class="multi-preview-grid"></div>
-            </div>
-
-            <div class="helper-box">A imagem principal fica como capa do produto. As fotos adicionais entram na galeria da página da camisa.</div>
-
-            <div class="actions-row">
-              <button class="btn btn-primary" id="save-product-btn" onclick="saveProduct()">Salvar produto</button>
+            <div class="step-actions">
+              <button class="btn btn-secondary hidden" id="prev-step-btn" type="button" onclick="goToPreviousProductStep()">Voltar etapa</button>
+              <button class="btn btn-secondary" id="next-step-btn" type="button" onclick="goToNextProductStep()">Próxima etapa</button>
+              <button class="btn btn-primary hidden" id="save-product-btn" onclick="saveProduct()">Salvar produto</button>
               <button class="btn btn-secondary hidden" id="cancel-edit-btn" onclick="cancelEdit()">Cancelar edição</button>
             </div>
 
             <div id="form-message" class="message"></div>
-
-            <div id="current-gallery-box" class="preview-box hidden" style="margin-top:16px;">
-              <div class="small-muted" style="margin-bottom:8px;">Galeria atual do produto</div>
-              <div id="current-gallery-list" class="gallery-list"></div>
-            </div>
           </div>
 
           <div class="card">
-            <h3 class="section-title">Produtos cadastrados</h3>
-<div class="products-toolbar">
+            <div class="list-header-row">
+              <div>
+                <h3 class="section-title" style="margin-bottom:6px;">Produtos cadastrados</h3>
+                <div class="small-muted">Busque, filtre e duplique produtos para cadastrar muito mais rápido.</div>
+              </div>
+              <button class="btn btn-secondary" type="button" onclick="startNewProduct()">Novo produto</button>
+            </div>
+
+            <div class="products-toolbar products-toolbar-advanced">
               <input type="text" id="search-input" placeholder="Buscar por nome do produto..." oninput="filterProducts()" />
+              <select id="product-filter-category" onchange="filterProducts()">
+                <option value="">Todas as categorias</option>
+              </select>
+              <select id="product-filter-sale-type" onchange="filterProducts()">
+                <option value="">Todos os tipos</option>
+                <option value="pronta_entrega">Pronta entrega</option>
+                <option value="sob_encomenda">Sob encomenda</option>
+              </select>
               <button class="btn btn-secondary" onclick="loadProducts()">Atualizar</button>
             </div>
+
             <div class="table-wrap">
               <table>
                 <thead>
@@ -300,6 +403,7 @@
       </section>
 
       <section id="tab-categories" class="tab-panel">
+ class="tab-panel">
         <div class="grid-2-equal">
           <div class="card">
             <h3 class="section-title" id="category-form-title">Cadastrar Categoria</h3>
@@ -448,6 +552,8 @@
     let allProducts = [];
     let allCategories = [];
     let allHeroSlides = [];
+    let currentProductStep = 1;
+    const TOTAL_PRODUCT_STEPS = 4;
 
     function showMessage(elementId, text, type = "success") {
       const el = document.getElementById(elementId);
@@ -486,10 +592,18 @@
       return [...document.querySelectorAll(".size-check:checked")].map(item => item.value);
     }
 
+    function refreshSizeChipStates() {
+      document.querySelectorAll(".size-item").forEach(item => {
+        const input = item.querySelector(".size-check");
+        item.classList.toggle("active", !!input?.checked);
+      });
+    }
+
     function setSelectedSizes(sizes = []) {
       document.querySelectorAll(".size-check").forEach(check => {
         check.checked = sizes.includes(check.value);
       });
+      refreshSizeChipStates();
     }
 
     function generateSlug(text) {
@@ -503,6 +617,92 @@
         .replace(/[^a-z0-9-]/g, "")
         .replace(/-+/g, "-");
     }
+
+
+    function syncSlugPreview() {
+      const name = document.getElementById("product-name")?.value?.trim() || "";
+      const slugField = document.getElementById("product-slug-preview");
+      if (!slugField) return;
+
+      slugField.value = name ? generateSlug(name) : "";
+      updateDraftSummary();
+    }
+
+    function updateDraftSummary() {
+      const categorySelect = document.getElementById("product-category");
+      const selectedSizes = getSelectedSizes();
+      document.getElementById("summary-name").textContent = document.getElementById("product-name").value.trim() || "—";
+      document.getElementById("summary-category").textContent = categorySelect?.selectedOptions?.[0]?.textContent && categorySelect.value ? categorySelect.selectedOptions[0].textContent : "—";
+      document.getElementById("summary-price").textContent = document.getElementById("product-price").value ? formatPrice(document.getElementById("product-price").value) : "—";
+      document.getElementById("summary-sizes").textContent = selectedSizes.length ? selectedSizes.join(", ") : "—";
+    }
+
+    function setProductStep(step) {
+      currentProductStep = Math.max(1, Math.min(TOTAL_PRODUCT_STEPS, Number(step) || 1));
+
+      document.querySelectorAll(".product-step").forEach(panel => {
+        panel.classList.toggle("active", Number(panel.dataset.step) === currentProductStep);
+      });
+
+      document.querySelectorAll(".step-chip").forEach(button => {
+        const stepNumber = Number(button.dataset.stepTarget);
+        button.classList.toggle("active", stepNumber === currentProductStep);
+        button.classList.toggle("done", stepNumber < currentProductStep);
+      });
+
+      document.getElementById("draft-step-indicator").textContent = `Etapa ${currentProductStep}/${TOTAL_PRODUCT_STEPS}`;
+      document.getElementById("prev-step-btn").classList.toggle("hidden", currentProductStep === 1);
+      document.getElementById("next-step-btn").classList.toggle("hidden", currentProductStep === TOTAL_PRODUCT_STEPS);
+      document.getElementById("save-product-btn").classList.toggle("hidden", currentProductStep !== TOTAL_PRODUCT_STEPS);
+
+      updateDraftSummary();
+    }
+
+    function goToNextProductStep() {
+      if (currentProductStep < TOTAL_PRODUCT_STEPS) {
+        setProductStep(currentProductStep + 1);
+      }
+    }
+
+    function goToPreviousProductStep() {
+      if (currentProductStep > 1) {
+        setProductStep(currentProductStep - 1);
+      }
+    }
+
+    function startNewProduct() {
+      resetForm();
+      loadCategories();
+      setProductStep(1);
+      document.querySelector('.tab-btn[data-tab="tab-products"]')?.click();
+      setProductStep(1);
+      updateDraftSummary();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function uploadFileToBucket(bucketName, filePath, file) {
+      const { error } = await supabaseClient.storage
+        .from(bucketName)
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: true
+        });
+
+      if (error) {
+        throw error;
+      }
+
+      const { data } = supabaseClient.storage
+        .from(bucketName)
+        .getPublicUrl(filePath);
+
+      if (!data?.publicUrl) {
+        throw new Error("Não foi possível gerar a URL pública do arquivo.");
+      }
+
+      return data.publicUrl;
+    }
+
 
     function resetMainPreview() {
       document.getElementById("main-image-preview").src = "https://via.placeholder.com/400x400?text=Sem+Imagem";
@@ -567,6 +767,7 @@
       document.getElementById("product-file").value = "";
       document.getElementById("product-files").value = "";
       document.getElementById("product-image").value = "";
+      document.getElementById("product-slug-preview").value = "";
       document.getElementById("product-category").value = "";
       document.getElementById("product-description").value = "";
       document.getElementById("product-featured").checked = false;
@@ -624,6 +825,7 @@
 
     async function loadCategories(selectedCategoryId = null) {
       const select = document.getElementById("product-category");
+      const filterSelect = document.getElementById("product-filter-category");
       select.innerHTML = '<option value="">Carregando categorias...</option>';
 
       const { data, error } = await supabaseClient
@@ -640,10 +842,27 @@
 
       if (!data || data.length === 0) {
         select.innerHTML = '<option value="">Nenhuma categoria cadastrada</option>';
+        if (filterSelect) {
+          filterSelect.innerHTML = '<option value="">Todas as categorias</option>';
+        }
         return;
       }
 
       select.innerHTML = '<option value="">Selecione uma categoria</option>';
+
+      if (filterSelect) {
+        const currentValue = filterSelect.value;
+        filterSelect.innerHTML = '<option value="">Todas as categorias</option>';
+        data.forEach(category => {
+          const optionFilter = document.createElement("option");
+          optionFilter.value = category.id;
+          optionFilter.textContent = category.name;
+          if (currentValue && String(currentValue) === String(category.id)) {
+            optionFilter.selected = true;
+          }
+          filterSelect.appendChild(optionFilter);
+        });
+      }
 
       data.forEach(category => {
         const option = document.createElement("option");
@@ -656,6 +875,8 @@
 
         select.appendChild(option);
       });
+
+      updateDraftSummary();
     }
 
     async function loadCategoriesList() {
@@ -824,44 +1045,29 @@
 
       if (!file) {
         showMessage("form-message", "Selecione a imagem principal antes de fazer upload.", "error");
-        return;
+        return "";
       }
 
-      const fileExt = file.name.split(".").pop();
-      const safeName = file.name
-        .replace(/\.[^/.]+$/, "")
-        .replace(/[^a-zA-Z0-9-_]/g, "-")
-        .toLowerCase();
+      try {
+        const fileExt = file.name.split(".").pop();
+        const safeName = file.name
+          .replace(/\.[^/.]+$/, "")
+          .replace(/[^a-zA-Z0-9-_]/g, "-")
+          .toLowerCase();
 
-      const fileName = `${Date.now()}-${safeName}.${fileExt}`;
-      const filePath = `produtos/main/${fileName}`;
+        const fileName = `${Date.now()}-${safeName}.${fileExt}`;
+        const filePath = `produtos/main/${fileName}`;
+        const publicUrl = await uploadFileToBucket(PRODUCT_BUCKET, filePath, file);
 
-      const { error: uploadError } = await supabaseClient.storage
-        .from(PRODUCT_BUCKET)
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: true
-        });
-
-      if (uploadError) {
-        console.error("Erro no upload da imagem principal:", uploadError);
-        showMessage("form-message", `Erro ao enviar imagem principal: ${uploadError.message || "sem detalhe"}`, "error");
-        return;
+        document.getElementById("product-image").value = publicUrl;
+        document.getElementById("main-image-preview").src = publicUrl;
+        showMessage("form-message", "Imagem principal pronta para salvar.", "success");
+        return publicUrl;
+      } catch (error) {
+        console.error("Erro no upload da imagem principal:", error);
+        showMessage("form-message", `Erro ao enviar imagem principal: ${error.message || "sem detalhe"}`, "error");
+        return "";
       }
-
-      const { data: publicUrlData } = supabaseClient.storage
-        .from(PRODUCT_BUCKET)
-        .getPublicUrl(filePath);
-
-      if (!publicUrlData?.publicUrl) {
-        showMessage("form-message", "Upload feito, mas não foi possível gerar a URL da imagem principal.", "error");
-        return;
-      }
-
-      document.getElementById("product-image").value = publicUrlData.publicUrl;
-      document.getElementById("main-image-preview").src = publicUrlData.publicUrl;
-
-      showMessage("form-message", "Imagem principal enviada com sucesso.", "success");
     }
 
     async function uploadMultipleProductImages(productId) {
@@ -875,61 +1081,38 @@
       let uploadedCount = 0;
 
       for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const fileExt = file.name.split(".").pop();
-        const safeName = file.name
-          .replace(/\.[^/.]+$/, "")
-          .replace(/[^a-zA-Z0-9-_]/g, "-")
-          .toLowerCase();
+        try {
+          const file = files[i];
+          const fileExt = file.name.split(".").pop();
+          const safeName = file.name
+            .replace(/\.[^/.]+$/, "")
+            .replace(/[^a-zA-Z0-9-_]/g, "-")
+            .toLowerCase();
 
-        const fileName = `${Date.now()}-${i}-${safeName}.${fileExt}`;
-        const filePath = `produtos/${productId}/${fileName}`;
+          const fileName = `${Date.now()}-${i}-${safeName}.${fileExt}`;
+          const filePath = `produtos/${productId}/${fileName}`;
+          const imageUrl = await uploadFileToBucket(PRODUCT_BUCKET, filePath, file);
 
-        const { error: uploadError } = await supabaseClient.storage
-          .from(PRODUCT_BUCKET)
-          .upload(filePath, file, {
-            cacheControl: "3600",
-            upsert: true
-          });
+          const { error: insertImageError } = await supabaseClient
+            .from("product_images")
+            .insert([{
+              product_id: productId,
+              image_url: imageUrl,
+              sort_order: i
+            }]);
 
-        if (uploadError) {
-          console.error("Erro no upload da imagem adicional:", uploadError);
+          if (insertImageError) {
+            throw insertImageError;
+          }
+
+          uploadedCount++;
+        } catch (error) {
+          console.error("Erro no upload da imagem adicional:", error);
           return {
             success: false,
-            message: uploadError.message || "Erro no upload da imagem adicional"
+            message: error.message || "Erro no upload da imagem adicional"
           };
         }
-
-        const { data: publicUrlData } = supabaseClient.storage
-          .from(PRODUCT_BUCKET)
-          .getPublicUrl(filePath);
-
-        const imageUrl = publicUrlData?.publicUrl;
-
-        if (!imageUrl) {
-          return {
-            success: false,
-            message: "Não foi possível obter a URL pública de uma das imagens."
-          };
-        }
-
-        const { error: insertImageError } = await supabaseClient
-          .from("product_images")
-          .insert([{
-            product_id: productId,
-            image_url: imageUrl,
-            sort_order: i
-          }]);
-
-        if (insertImageError) {
-          console.error("Erro ao salvar em product_images:", insertImageError);
-          return {
-            success: false,
-            message: insertImageError.message || "Erro ao salvar imagem adicional no banco"
-          };
-        }
-
-        uploadedCount++;
       }
 
       return {
@@ -1068,6 +1251,7 @@
             <td>
               <div class="table-actions">
                 <button class="btn btn-success" onclick="editProduct('${product.id}')">Editar</button>
+                <button class="btn btn-secondary" onclick="duplicateProduct('${product.id}')">Duplicar</button>
                 <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">Excluir</button>
               </div>
             </td>
@@ -1078,15 +1262,15 @@
 
     function filterProducts() {
       const term = document.getElementById("search-input").value.trim().toLowerCase();
+      const categoryFilter = document.getElementById("product-filter-category")?.value || "";
+      const saleTypeFilter = document.getElementById("product-filter-sale-type")?.value || "";
 
-      if (!term) {
-        renderProducts(allProducts);
-        return;
-      }
-
-      const filtered = allProducts.filter(product =>
-        (product.name || "").toLowerCase().includes(term)
-      );
+      const filtered = allProducts.filter(product => {
+        const matchName = !term || (product.name || "").toLowerCase().includes(term);
+        const matchCategory = !categoryFilter || String(product.category_id) === String(categoryFilter);
+        const matchSaleType = !saleTypeFilter || (product.sale_type || "pronta_entrega") === saleTypeFilter;
+        return matchName && matchCategory && matchSaleType;
+      });
 
       renderProducts(filtered);
     }
@@ -1151,7 +1335,7 @@
       const name = document.getElementById("product-name").value.trim();
       const price = document.getElementById("product-price").value.trim();
       const old_price = document.getElementById("product-old-price").value.trim();
-      const image_url = document.getElementById("product-image").value.trim();
+      let image_url = document.getElementById("product-image").value.trim();
       const category_id = document.getElementById("product-category").value;
       const description = document.getElementById("product-description").value.trim();
       const featured = document.getElementById("product-featured").checked;
@@ -1159,8 +1343,22 @@
       const sale_type = document.getElementById("product-sale-type").value || "pronta_entrega";
       const sizes = getSelectedSizes();
 
-      if (!name || !price || !image_url || !category_id) {
-        showMessage("form-message", "Preencha nome, preço, imagem principal e categoria.", "error");
+      if (!name || !price || !category_id) {
+        showMessage("form-message", "Preencha nome, preço e categoria.", "error");
+        return;
+      }
+
+      if (document.getElementById("product-file").files[0]) {
+        const uploadedUrl = await uploadMainImage();
+        if (!uploadedUrl) {
+          return;
+        }
+        image_url = uploadedUrl;
+      }
+
+      if (!image_url) {
+        showMessage("form-message", "Defina a imagem principal do produto.", "error");
+        setProductStep(3);
         return;
       }
 
@@ -1244,6 +1442,7 @@
       resetForm();
       await loadCategories();
       await loadProducts();
+      setProductStep(1);
     }
 
     async function editProduct(productId) {
@@ -1276,6 +1475,7 @@
       document.getElementById("product-old-price").value = data.old_price || "";
       document.getElementById("product-image").value = data.image_url || "";
       document.getElementById("product-description").value = data.description || "";
+      document.getElementById("product-slug-preview").value = data.slug || "";
       document.getElementById("product-featured").checked = !!data.featured;
       document.getElementById("product-badge-type").value = data.badge_type || "";
       document.getElementById("product-sale-type").value = data.sale_type || "pronta_entrega";
@@ -1304,13 +1504,104 @@
       document.getElementById("save-product-btn").textContent = "Atualizar produto";
       document.getElementById("cancel-edit-btn").classList.remove("hidden");
 
+      setProductStep(1);
+      updateDraftSummary();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function cancelEdit() {
       resetForm();
       loadCategories();
+      setProductStep(1);
     }
+
+
+    async function duplicateProduct(productId) {
+      clearMessage("list-message");
+
+      const { data: product, error } = await supabaseClient
+        .from("products")
+        .select(`
+          *,
+          product_sizes (
+            size,
+            available
+          ),
+          product_images (
+            image_url,
+            sort_order
+          )
+        `)
+        .eq("id", productId)
+        .single();
+
+      if (error || !product) {
+        console.error("Erro ao duplicar produto:", error);
+        showMessage("list-message", "Não foi possível duplicar este produto.", "error");
+        return;
+      }
+
+      const clonePayload = {
+        name: `${product.name} (cópia)`,
+        slug: `${generateSlug(product.name)}-${Date.now()}`,
+        price: product.price,
+        old_price: product.old_price,
+        image_url: product.image_url,
+        description: product.description,
+        featured: false,
+        badge_type: product.badge_type,
+        sale_type: product.sale_type,
+        category_id: product.category_id
+      };
+
+      const { data: inserted, error: insertError } = await supabaseClient
+        .from("products")
+        .insert([clonePayload])
+        .select()
+        .single();
+
+      if (insertError || !inserted) {
+        console.error("Erro ao salvar cópia:", insertError);
+        showMessage("list-message", `Erro ao duplicar produto: ${insertError?.message || "sem detalhe"}`, "error");
+        return;
+      }
+
+      if (Array.isArray(product.product_sizes) && product.product_sizes.length) {
+        const sizeRows = product.product_sizes.map(item => ({
+          product_id: inserted.id,
+          size: item.size,
+          available: item.available
+        }));
+
+        const { error: sizeError } = await supabaseClient
+          .from("product_sizes")
+          .insert(sizeRows);
+
+        if (sizeError) {
+          console.error("Erro ao duplicar tamanhos:", sizeError);
+        }
+      }
+
+      if (Array.isArray(product.product_images) && product.product_images.length) {
+        const imageRows = product.product_images.map((item, index) => ({
+          product_id: inserted.id,
+          image_url: item.image_url,
+          sort_order: item.sort_order ?? index
+        }));
+
+        const { error: imageError } = await supabaseClient
+          .from("product_images")
+          .insert(imageRows);
+
+        if (imageError) {
+          console.error("Erro ao duplicar galeria:", imageError);
+        }
+      }
+
+      showMessage("list-message", "Produto duplicado com sucesso.", "success");
+      await loadProducts();
+    }
+
 
     async function deleteProduct(productId) {
       const confirmDelete = confirm("Tem certeza que deseja excluir este produto?");
@@ -1928,6 +2219,30 @@
       const logged = localStorage.getItem("camisa10_admin_logged") === "true";
 
       setupTabs();
+
+      document.getElementById("product-name")?.addEventListener("input", syncSlugPreview);
+      document.getElementById("product-price")?.addEventListener("input", updateDraftSummary);
+      document.getElementById("product-category")?.addEventListener("change", updateDraftSummary);
+      document.querySelectorAll(".size-check").forEach(check => {
+        check.addEventListener("change", () => {
+          refreshSizeChipStates();
+          updateDraftSummary();
+        });
+      });
+      document.querySelectorAll(".step-chip").forEach(button => {
+        button.addEventListener("click", () => setProductStep(Number(button.dataset.stepTarget)));
+      });
+      document.addEventListener("keydown", function(event) {
+        const isMac = navigator.platform.toUpperCase().includes("MAC");
+        const savePressed = (isMac && event.metaKey && event.key.toLowerCase() === "s") || (!isMac && event.ctrlKey && event.key.toLowerCase() === "s");
+        if (savePressed && !document.getElementById("admin-panel").classList.contains("hidden")) {
+          event.preventDefault();
+          saveProduct();
+        }
+      });
+      setProductStep(1);
+      refreshSizeChipStates();
+      updateDraftSummary();
 
       if (logged) {
         showAdminPanel();
