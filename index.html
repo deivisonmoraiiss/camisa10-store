@@ -562,19 +562,7 @@
 
     .product-badge.destaque { background: var(--gold); color: #111; }
     .product-badge.mais-vendida { background: #ff4d4f; color: #fff; }
-    .product-badge.novo { background: linear-gradient(135deg, #6d28d9, #a855f7); color: #fff; border: 1px solid rgba(255,255,255,.14); }
-    .product-badge.encomenda-premium {
-      background: linear-gradient(135deg, #6d28d9, #a855f7);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,.14);
-      box-shadow: 0 14px 28px rgba(109, 40, 217, 0.32);
-      position: static;
-      width: fit-content;
-      padding: 8px 12px;
-      font-size: 0.7rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
+    .product-badge.novo { background: #2ecc71; color: #08140d; }
 
     .product-body {
       padding: 18px;
@@ -606,38 +594,11 @@
       min-height: 44px;
     }
 
-    .product-price-box {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-top: auto;
-    }
-
-    .product-old-price {
-      font-size: .88rem;
-      color: rgba(255,255,255,.55);
-      text-decoration: line-through;
-      font-weight: 700;
-    }
-
     .product-price {
       font-size: 1.15rem;
       font-weight: 800;
       color: var(--gold-2);
-    }
-
-    .product-promo-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(46, 139, 87, .16);
-      border: 1px solid rgba(46, 139, 87, .28);
-      color: #bff3d2;
-      font-size: .74rem;
-      font-weight: 900;
-      width: fit-content;
+      margin-top: auto;
     }
 
     .state-box {
@@ -1666,40 +1627,41 @@
       });
     }
 
-    function getProductBadge(product, isFeatured = false) {
-      const badgeType = product.badge_type || (isFeatured ? "destaque" : "");
-      if (!badgeType) return "";
+    function getSaleTypeBadge(product) {
+      return product.sale_type === "sob_encomenda"
+        ? `<span class="sale-type-badge">🛒 Sob encomenda</span>`
+        : "";
+    }
 
-      const badgeMap = {
-        "destaque": { label: "⭐ Destaque", className: "destaque" },
-        "mais-vendida": { label: "🔥 Mais vendida", className: "mais-vendida" },
-        "novo": { label: "🚀 Novo", className: "novo" }
-      };
+    function getProductPriceHTML(product) {
+      const currentPrice = formatPrice(product.price);
+      const hasOldPrice = Number(product.old_price || 0) > Number(product.price || 0);
 
-      const badge = badgeMap[badgeType];
-      if (!badge) return "";
-      return `<span class="product-badge ${badge.className}">${badge.label}</span>`;
+      if (!hasOldPrice) {
+        return `<div class="product-price">${currentPrice}</div>`;
+      }
+
+      return `
+        <div class="product-price-stack">
+          <span class="product-price-old">${formatPrice(product.old_price)}</span>
+          <div class="product-price">${currentPrice}</div>
+        </div>
+      `;
     }
 
     function buildProductCard(product, isFeatured = false) {
       const imagem = getProductImage(product) || "https://via.placeholder.com/300x300?text=Camisa";
       const categoryName = normalizeCategoryName(product);
       const title = product.name || product.title || "Camisa disponível";
-      const price = formatPrice(product.price);
-      const oldPrice = product.old_price ? formatPrice(product.old_price) : "";
-      const hasPromo = Number(product.old_price || 0) > Number(product.price || 0);
+      const priceHTML = getProductPriceHTML(product);
       const url = getProductUrl(product);
-      const badge = getProductBadge(product, isFeatured);
-      const isSobEncomenda = (product.sale_type || "pronta_entrega") === "sob_encomenda";
-      const saleTypeBadge = isSobEncomenda
-        ? `<span class="product-badge encomenda-premium">🛒 Sob encomenda</span>`
-        : "";
+      const saleTypeBadge = getSaleTypeBadge(product);
 
       return `
         <article class="product-card">
           <a href="${url}" class="product-image-link">
             <div class="product-image-wrap">
-              ${badge}
+              ${saleTypeBadge}
               ${
                 imagem
                   ? `<img class="product-image" src="${imagem}" alt="${title}" loading="lazy" />`
@@ -1711,12 +1673,7 @@
           <div class="product-body">
             <span class="product-category">${categoryName}</span>
             <h3 class="product-title">${title}</h3>
-            ${saleTypeBadge}
-            ${hasPromo ? `<span class="product-promo-badge">🔥 Promoção</span>` : ""}
-            <div class="product-price-box">
-              ${hasPromo ? `<span class="product-old-price">${oldPrice}</span>` : ""}
-              <div class="product-price">${price}</div>
-            </div>
+            ${priceHTML}
             <a href="${url}" class="btn btn-primary">Ver produto</a>
           </div>
         </article>
