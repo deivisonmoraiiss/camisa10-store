@@ -257,55 +257,54 @@
       border-color: rgba(212, 175, 55, 0.34);
     }
 
-    .product-card-image {
+    .product-image-wrap {
+      position: relative;
       width: 100%;
       aspect-ratio: 1 / 1;
-      object-fit: cover;
+      overflow: hidden;
       background: #0d0d0d;
     }
 
-    .product-card-content {
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      flex: 1;
+    .product-card-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #0d0d0d;
+      display: block;
     }
 
-    .product-category-badge {
-      display: inline-block;
-      width: fit-content;
-      padding: 7px 11px;
+    .sale-type-chip {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(212, 175, 55, 0.12);
-      border: 1px solid rgba(212, 175, 55, 0.2);
-      color: #f0db93;
-      font-size: 12px;
-      font-weight: bold;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      line-height: 1;
+      color: #f4d06f;
+      background: rgba(8, 8, 8, 0.76);
+      border: 1px solid rgba(244, 208, 111, 0.22);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+      white-space: nowrap;
     }
 
-    
-.sale-type-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin: 10px 0 0;
-  padding: 7px 12px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  background: rgba(212, 175, 55, 0.12);
-  border: 1px solid rgba(212, 175, 55, 0.25);
-  color: #f4d06f;
-}
+    .sale-type-chip::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #f4d06f;
+      box-shadow: 0 0 0 4px rgba(244,208,111,0.08);
+    }
 
-.sale-type-chip.sob-encomenda {
-  background: rgba(37, 211, 102, 0.12);
-  border-color: rgba(37, 211, 102, 0.25);
-  color: #73e7a1;
-}
 .product-card-content h3 {
       font-size: 18px;
       color: #fff;
@@ -317,6 +316,22 @@
       color: var(--gold);
       font-size: 22px;
       font-weight: bold;
+    }
+
+    .product-price-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .product-price-old {
+      color: rgba(255,255,255,0.55);
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+      text-decoration-color: rgba(255,255,255,0.55);
     }
 
     .product-btn {
@@ -654,17 +669,18 @@
 
     function getSaleTypeBadge(product) {
       return (product.sale_type || "pronta_entrega") === "sob_encomenda"
-        ? `<div class="sale-type-chip sob-encomenda">Sob encomenda</div>`
+        ? `<div class="sale-type-chip">Sob encomenda</div>`
         : "";
     }
 
     function getProductPriceHTML(product) {
+      const currentPrice = `<div class="product-price">${formatPrice(product.price)}</div>`;
       const hasOldPrice = Number(product.old_price || 0) > Number(product.price || 0);
-      if (!hasOldPrice) return `${priceHTML}`;
+      if (!hasOldPrice) return currentPrice;
       return `
         <div class="product-price-stack">
           <span class="product-price-old">${formatPrice(product.old_price)}</span>
-          ${priceHTML}
+          ${currentPrice}
         </div>
       `;
     }
@@ -677,12 +693,15 @@
 
   return `
     <div class="product-card">
-      <img
-        src="${image}"
-        alt="${product.name || "Produto"}"
-        class="product-card-image"
-        onerror="this.src='https://via.placeholder.com/600x600?text=Imagem';"
-      />
+      <div class="product-image-wrap">
+        ${saleTypeBadge}
+        <img
+          src="${image}"
+          alt="${product.name || "Produto"}"
+          class="product-card-image"
+          onerror="this.src='https://via.placeholder.com/600x600?text=Imagem';"
+        />
+      </div>
 
       <div class="product-card-content">
         <span class="product-category-badge">
