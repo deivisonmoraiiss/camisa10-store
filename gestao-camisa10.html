@@ -87,30 +87,6 @@
     .multi-preview-grid img,.gallery-item img{width:110px;height:110px;object-fit:cover;border-radius:12px;border:1px solid #2b2b2b;background:#0f0f0f}
     .gallery-item{position:relative;width:110px}
     .gallery-item button{width:100%;margin-top:6px;padding:8px 10px;font-size:12px;border-radius:10px}
-    .dropzone{border:1px dashed rgba(212,175,55,.32);border-radius:18px;background:rgba(212,175,55,.04);padding:16px;display:grid;gap:12px;transition:.2s ease}
-    .dropzone.dragover{border-color:rgba(212,175,55,.7);background:rgba(212,175,55,.10);box-shadow:0 0 0 3px rgba(212,175,55,.08)}
-    .dropzone-title{font-weight:800;color:#fff}
-    .dropzone-copy{color:var(--muted);font-size:.85rem;line-height:1.6}
-    .gallery-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:12px}
-    .gallery-item{width:auto;padding:10px;border:1px solid var(--line);border-radius:14px;background:#0f0f0f;cursor:grab}
-    .gallery-item.dragging{opacity:.45;transform:scale(.98)}
-    .gallery-item img{width:100%;height:120px}
-    .gallery-item-main-badge{position:absolute;top:16px;left:16px;padding:5px 8px;border-radius:999px;background:rgba(0,0,0,.75);border:1px solid rgba(212,175,55,.35);color:#f3d77d;font-size:11px;font-weight:900}
-    .gallery-item-order{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 0 6px;color:var(--muted);font-size:.78rem}
-    .gallery-item-actions{display:grid;gap:6px}
-    .gallery-hint{margin-top:10px;color:var(--muted);font-size:.82rem;line-height:1.6}
-    .products-list{display:grid;gap:12px}
-    .product-list-item{display:grid;grid-template-columns:74px minmax(0,1.4fr) minmax(160px,.8fr) auto;gap:14px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:18px;background:#101010}
-    .product-list-thumb{width:74px;height:74px;border-radius:16px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f}
-    .product-list-main{display:grid;gap:6px;min-width:0}
-    .product-list-title{font-weight:900;color:#fff;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-    .product-meta-row,.product-list-side{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    .product-list-side{justify-content:flex-end}
-    .status-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#666}
-    .status-dot.visible{background:#2e8b57;box-shadow:0 0 0 4px rgba(46,139,87,.12)}
-    .status-dot.hidden{background:#db5c58;box-shadow:0 0 0 4px rgba(219,92,88,.12)}
-    .quick-filter-help{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin:-4px 0 12px}
-    .search-hotkey{padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#111;color:var(--muted);font-size:.78rem}
     .small-muted{color:var(--muted);font-size:.84rem}
     .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(212,175,55,.12);color:#f0d98a;border:1px solid rgba(212,175,55,.2);font-size:12px;font-weight:800;margin:2px 4px 2px 0}
     .badge-featured{background:var(--gold);color:#111;border:none;font-size:11px;padding:4px 8px;border-radius:7px;margin-left:6px;font-weight:900}
@@ -268,8 +244,8 @@
                 </div>
               </div>
 
-              <div class="field">
-                <label style="display:flex; align-items:center; gap:10px; cursor:pointer; min-height:52px;">
+              <div class="field" style="margin-top:14px;">
+                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
                   <input type="checkbox" id="product-visible" style="width:auto; accent-color:#d4af37;" checked />
                   <span>Produto visível no site</span>
                 </label>
@@ -318,45 +294,38 @@
 
             <div class="product-step" data-step="3">
               <div class="grid-2-equal">
-                <div class="dropzone" id="main-image-dropzone">
-                  <div class="dropzone-title">Imagem principal</div>
-                  <div class="dropzone-copy">Arraste a imagem principal aqui ou escolha do computador.</div>
+                <div class="field">
+                  <label for="product-file">Imagem principal</label>
                   <input type="file" id="product-file" accept="image/*" onchange="previewSelectedMainImage(event)" />
-                  <div class="field" style="margin-bottom:0;">
-                    <label for="product-image">URL da imagem principal</label>
-                    <input type="text" id="product-image" placeholder="Se preferir, cole uma URL pronta" />
-                  </div>
                 </div>
-
-                <div class="preview-box">
-                  <div class="small-muted" style="margin-bottom:8px;">Pré-visualização da imagem principal</div>
-                  <img id="main-image-preview" class="main-preview" src="https://via.placeholder.com/400x400?text=Sem+Imagem" alt="Preview principal">
+                <div class="field">
+                  <label for="product-image">URL da imagem principal</label>
+                  <input type="text" id="product-image" placeholder="Se preferir, cole uma URL pronta" />
                 </div>
               </div>
 
-              <div class="dropzone" id="gallery-dropzone" style="margin-top:16px;">
-                <div class="dropzone-title">Fotos adicionais da galeria</div>
-                <div class="dropzone-copy">Arraste várias imagens para cá. Depois você pode mudar a ordem manualmente antes de salvar.</div>
+              <div class="preview-box">
+                <div class="small-muted" style="margin-bottom:8px;">Pré-visualização da imagem principal</div>
+                <img id="main-image-preview" class="main-preview" src="https://via.placeholder.com/400x400?text=Sem+Imagem" alt="Preview principal">
+              </div>
+
+              <div class="field" style="margin-top:16px;">
+                <label for="product-files">Fotos adicionais da galeria</label>
                 <input type="file" id="product-files" accept="image/*" multiple onchange="previewSelectedImages(event)" />
               </div>
 
               <div class="preview-box">
                 <div class="small-muted" style="margin-bottom:8px;">Pré-visualização das fotos adicionais</div>
-                <div id="images-preview" class="gallery-list"></div>
-                <div class="gallery-hint">Dica: arraste os cards para definir a ordem das fotos.</div>
+                <div id="images-preview" class="multi-preview-grid"></div>
               </div>
 
               <div class="helper-box helper-box-visible">
-                O upload continua automático ao salvar, mas agora você pode arrastar, soltar e organizar a galeria antes de cadastrar.
+                O upload é automático quando você salvar o produto. Não precisa subir imagem manualmente antes.
               </div>
 
               <div id="current-gallery-box" class="preview-box hidden" style="margin-top:16px;">
                 <div class="small-muted" style="margin-bottom:8px;">Galeria atual do produto</div>
                 <div id="current-gallery-list" class="gallery-list"></div>
-                <div class="actions-row" style="margin-top:12px;">
-                  <button class="btn btn-secondary" type="button" onclick="saveExistingGalleryOrder()">Salvar ordem da galeria</button>
-                </div>
-                <div class="gallery-hint">Na edição, arraste as imagens para definir a ordem que vai aparecer no site.</div>
               </div>
             </div>
 
@@ -387,10 +356,6 @@
                 <div class="draft-summary-card">
                   <span>Tamanhos</span>
                   <strong id="summary-sizes">—</strong>
-                </div>
-                <div class="draft-summary-card">
-                  <span>Status</span>
-                  <strong id="summary-visibility">Visível</strong>
                 </div>
               </div>
 
@@ -431,12 +396,13 @@
               <button class="btn btn-secondary" onclick="loadProducts()">Atualizar</button>
             </div>
 
-            <div class="quick-filter-help">
-              <div class="small-muted">Lista em cards, sem rolagem lateral. Buscar ficou mais rápido por nome, slug, categoria e tipo.</div>
-              <div class="search-hotkey">Pressione / para buscar</div>
-            </div>
-            <div id="products-table-body" class="products-list">
-              <div class="empty-state">Carregando produtos...</div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Imagem</th><th>Produto</th><th>Categoria</th><th>Tipo</th><th>Preço</th><th>Tamanhos</th><th>Ações</th></tr>
+                </thead>
+                <tbody id="products-table-body"><tr><td colspan="7" class="empty-state">Carregando produtos...</td></tr></tbody>
+              </table>
             </div>
             <div id="list-message" class="message"></div>
           </div>
@@ -593,8 +559,6 @@
     let allProducts = [];
     let allCategories = [];
     let allHeroSlides = [];
-    let stagedGalleryFiles = [];
-    let currentGalleryImages = [];
     let currentProductStep = 1;
     const TOTAL_PRODUCT_STEPS = 4;
 
@@ -629,23 +593,6 @@
         default:
           return "";
       }
-    }
-
-    function normalizeText(value) {
-      return (value || "")
-        .toString()
-        .normalize("NFD")
-        .replace(/[̀-ͯ]/g, "")
-        .toLowerCase()
-        .trim();
-    }
-
-    function debounce(fn, wait = 180) {
-      let timeout;
-      return (...args) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => fn(...args), wait);
-      };
     }
 
     function getSelectedSizes() {
@@ -769,8 +716,7 @@
     }
 
     function resetMultiPreview() {
-      stagedGalleryFiles = [];
-      renderStagedGalleryPreview();
+      document.getElementById("images-preview").innerHTML = "";
     }
 
     function resetGalleryBox() {
@@ -793,55 +739,21 @@
     }
 
     function previewSelectedImages(event) {
-      const files = [...(event.target.files || [])];
-      if (!files.length) return;
-
-      stagedGalleryFiles = [...stagedGalleryFiles, ...files].map((file, index) => ({
-        id: `${Date.now()}-${index}-${Math.random().toString(36).slice(2, 8)}`,
-        file
-      }));
-
-      renderStagedGalleryPreview();
-      event.target.value = "";
-    }
-
-    function renderStagedGalleryPreview() {
+      const files = event.target.files;
       const previewContainer = document.getElementById("images-preview");
-      if (!previewContainer) return;
+      previewContainer.innerHTML = "";
 
-      if (!stagedGalleryFiles.length) {
-        previewContainer.innerHTML = `<div class="small-muted">Nenhuma foto adicional selecionada.</div>`;
-        return;
-      }
+      if (!files || !files.length) return;
 
-      previewContainer.innerHTML = stagedGalleryFiles.map((item, index) => `
-        <div class="gallery-item" draggable="true" data-staged-id="${item.id}">
-          <img src="${URL.createObjectURL(item.file)}" alt="Foto adicional ${index + 1}" />
-          <div class="gallery-item-order"><span>Ordem ${index + 1}</span><span>${item.file.name}</span></div>
-          <div class="gallery-item-actions">
-            <button class="btn btn-secondary" type="button" onclick="moveStagedImage('${item.id}', -1)">Subir</button>
-            <button class="btn btn-secondary" type="button" onclick="moveStagedImage('${item.id}', 1)">Descer</button>
-            <button class="btn btn-danger" type="button" onclick="removeStagedImage('${item.id}')">Remover</button>
-          </div>
-        </div>
-      `).join("");
-
-      enableSortableGallery("images-preview", stagedGalleryFiles, "data-staged-id");
-    }
-
-    function moveStagedImage(id, direction) {
-      const index = stagedGalleryFiles.findIndex(item => item.id === id);
-      if (index === -1) return;
-      const targetIndex = index + direction;
-      if (targetIndex < 0 || targetIndex >= stagedGalleryFiles.length) return;
-      const [item] = stagedGalleryFiles.splice(index, 1);
-      stagedGalleryFiles.splice(targetIndex, 0, item);
-      renderStagedGalleryPreview();
-    }
-
-    function removeStagedImage(id) {
-      stagedGalleryFiles = stagedGalleryFiles.filter(item => item.id !== id);
-      renderStagedGalleryPreview();
+      [...files].forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          previewContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
     }
 
     function previewBannerImage(event, previewId) {
@@ -855,40 +767,6 @@
       reader.readAsDataURL(file);
     }
 
-    function enableSortableGallery(containerId, stateArray, attrName) {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-
-      let draggedId = null;
-      container.querySelectorAll('.gallery-item[draggable="true"]').forEach(item => {
-        item.addEventListener('dragstart', () => {
-          draggedId = item.getAttribute(attrName);
-          item.classList.add('dragging');
-        });
-        item.addEventListener('dragend', () => {
-          item.classList.remove('dragging');
-        });
-        item.addEventListener('dragover', (event) => {
-          event.preventDefault();
-        });
-        item.addEventListener('drop', (event) => {
-          event.preventDefault();
-          const targetId = item.getAttribute(attrName);
-          if (!draggedId || draggedId === targetId) return;
-          const fromIndex = stateArray.findIndex(entry => String(entry.id) === String(draggedId));
-          const toIndex = stateArray.findIndex(entry => String(entry.id) === String(targetId));
-          if (fromIndex === -1 || toIndex === -1) return;
-          const [moved] = stateArray.splice(fromIndex, 1);
-          stateArray.splice(toIndex, 0, moved);
-          if (containerId === 'images-preview') {
-            renderStagedGalleryPreview();
-          } else {
-            renderCurrentGallery();
-          }
-        });
-      });
-    }
-
     function resetForm() {
       document.getElementById("product-name").value = "";
       document.getElementById("product-price").value = "";
@@ -900,14 +778,14 @@
       document.getElementById("product-category").value = "";
       document.getElementById("product-description").value = "";
       document.getElementById("product-featured").checked = false;
-      document.getElementById("product-visible").checked = true;
+      const visibleCheck = document.getElementById("product-visible");
+      if (visibleCheck) visibleCheck.checked = true;
       document.getElementById("product-badge-type").value = "";
       document.getElementById("product-sale-type").value = "pronta_entrega";
       setSelectedSizes([]);
       resetMainPreview();
       resetMultiPreview();
       resetGalleryBox();
-      currentGalleryImages = [];
 
       editingProductId = null;
 
@@ -1273,7 +1151,7 @@
       const rows = sizes.map(size => ({
         product_id: productId,
         size,
-        available: true
+        is_available: true
       }));
 
       const { error: insertError } = await supabaseClient
@@ -1305,12 +1183,12 @@
           price,
           old_price,
           image_url,
-          description,
-          featured,
+          short_description,
+          is_featured,
+          is_visible,
           badge_type,
           sale_type,
           category_id,
-          visible,
           created_at,
           categories (
             id,
@@ -1319,7 +1197,7 @@
           product_sizes (
             id,
             size,
-            available
+            is_available
           )
         `)
         .order("created_at", { ascending: false });
@@ -1336,71 +1214,72 @@
     }
 
     function renderProducts(products) {
-      const container = document.getElementById("products-table-body");
+      const tbody = document.getElementById("products-table-body");
 
       if (!products || products.length === 0) {
-        container.innerHTML = `<div class="empty-state">Nenhum produto cadastrado.</div>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Nenhum produto cadastrado.</td></tr>`;
         return;
       }
 
-      container.innerHTML = products.map(product => {
+      tbody.innerHTML = products.map(product => {
         const sizes = Array.isArray(product.product_sizes)
-          ? product.product_sizes.filter(item => item.available).map(item => item.size)
+          ? product.product_sizes.filter(item => item.is_available).map(item => item.size)
           : [];
 
         const categoryName = product.categories?.name || "Sem categoria";
         const saleType = product.sale_type === "sob_encomenda" ? "Sob encomenda" : "Pronta entrega";
-        const isVisible = product.visible !== false;
 
         return `
-          <div class="product-list-item">
-            <img
-              src="${product.image_url || 'https://via.placeholder.com/160x160?text=Sem+Imagem'}"
-              alt="${product.name || ''}"
-              class="product-list-thumb"
-              onerror="this.src='https://via.placeholder.com/160x160?text=Imagem';"
-            />
-
-            <div class="product-list-main">
-              <div class="product-list-title">
-                <span>${product.name || '-'}</span>
-                ${product.featured ? '<span class="badge-featured">Destaque home</span>' : ''}
+          <tr>
+            <td>
+              <img
+                src="${product.image_url || 'https://via.placeholder.com/80x80?text=Sem+Imagem'}"
+                alt="${product.name || ''}"
+                class="product-thumb"
+                onerror="this.src='https://via.placeholder.com/80x80?text=Imagem';"
+              />
+            </td>
+            <td>
+              <div style="font-weight:bold;">
+                ${product.name || "-"}
+                ${product.is_featured ? '<span class="badge-featured">Destaque home</span>' : ''}
                 ${product.badge_type ? `<span class="badge">${formatBadgeLabel(product.badge_type)}</span>` : ''}
               </div>
-              <div class="small-muted">Slug: ${product.slug || '-'}</div>
-              <div class="product-meta-row">
-                <span class="badge">${categoryName}</span>
-                <span class="badge">${saleType}</span>
-                <span class="badge"><span class="status-dot ${isVisible ? 'visible' : 'hidden'}"></span> ${isVisible ? 'Visível' : 'Oculto'}</span>
-                ${product.old_price ? `<span class="badge">De ${formatPrice(product.old_price)}</span>` : ''}
-              </div>
-              <div class="product-meta-row">
-                <span style="font-weight:900;color:#fff;">${formatPrice(product.price)}</span>
-                ${sizes.length ? sizes.map(size => `<span class="badge">${size}</span>`).join('') : '<span class="small-muted">Sem tamanhos</span>'}
-              </div>
-            </div>
-
-            <div class="product-list-side">
+              <div class="small-muted">Slug: ${product.slug || "-"}</div>
+            </td>
+            <td>${categoryName}</td>
+            <td>
+              <span class="badge">${saleType}</span>
+              ${product.is_visible ? '<span class="badge">Visível</span>' : '<span class="badge" style="background:rgba(217,83,79,.16);color:#ffd2d0;border-color:rgba(217,83,79,.28);">Oculto</span>'}
+            </td>
+            <td>${formatPrice(product.price)}</td>
+            <td>${product.old_price ? `<span class="badge">De ${formatPrice(product.old_price)}</span>` : '<span class="small-muted">Sem promoção</span>'}</td>
+            <td>
+              ${
+                sizes.length
+                  ? sizes.map(size => `<span class="badge">${size}</span>`).join("")
+                  : '<span class="small-muted">Sem tamanhos</span>'
+              }
+            </td>
+            <td>
               <div class="table-actions">
                 <button class="btn btn-success" onclick="editProduct('${product.id}')">Editar</button>
-                <button class="btn btn-secondary" onclick="toggleProductVisibility('${product.id}', ${isVisible ? 'false' : 'true'})">${isVisible ? 'Ocultar' : 'Mostrar'}</button>
                 <button class="btn btn-secondary" onclick="duplicateProduct('${product.id}')">Duplicar</button>
                 <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">Excluir</button>
               </div>
-            </div>
-          </div>
+            </td>
+          </tr>
         `;
       }).join("");
     }
 
     function filterProducts() {
-      const term = normalizeText(document.getElementById("search-input").value);
+      const term = document.getElementById("search-input").value.trim().toLowerCase();
       const categoryFilter = document.getElementById("product-filter-category")?.value || "";
       const saleTypeFilter = document.getElementById("product-filter-sale-type")?.value || "";
 
       const filtered = allProducts.filter(product => {
-        const searchBase = normalizeText(`${product.name || ''} ${product.slug || ''} ${product.categories?.name || ''} ${product.sale_type || ''}`);
-        const matchName = !term || searchBase.includes(term);
+        const matchName = !term || (product.name || "").toLowerCase().includes(term);
         const matchCategory = !categoryFilter || String(product.category_id) === String(categoryFilter);
         const matchSaleType = !saleTypeFilter || (product.sale_type || "pronta_entrega") === saleTypeFilter;
         return matchName && matchCategory && matchSaleType;
@@ -1415,7 +1294,6 @@
 
       galleryList.innerHTML = "";
       galleryBox.classList.add("hidden");
-      currentGalleryImages = [];
 
       const { data, error } = await supabaseClient
         .from("product_images")
@@ -1432,61 +1310,14 @@
         return;
       }
 
-      currentGalleryImages = data.map((image, index) => ({ ...image, sort_order: image.sort_order ?? index }));
       galleryBox.classList.remove("hidden");
-      renderCurrentGallery();
-    }
 
-    function renderCurrentGallery() {
-      const galleryList = document.getElementById("current-gallery-list");
-      if (!galleryList) return;
-
-      galleryList.innerHTML = currentGalleryImages.map((image, index) => `
-        <div class="gallery-item" draggable="true" data-gallery-id="${image.id}">
+      galleryList.innerHTML = data.map(image => `
+        <div class="gallery-item">
           <img src="${image.image_url}" alt="Imagem adicional" />
-          ${index === 0 ? '<div class="gallery-item-main-badge">Capa da galeria</div>' : ''}
-          <div class="gallery-item-order"><span>Ordem ${index + 1}</span><span>${index === 0 ? 'Primeira foto' : 'Galeria'}</span></div>
-          <div class="gallery-item-actions">
-            <button class="btn btn-secondary" type="button" onclick="moveExistingGalleryImage('${image.id}', -1)">Subir</button>
-            <button class="btn btn-secondary" type="button" onclick="moveExistingGalleryImage('${image.id}', 1)">Descer</button>
-            <button class="btn btn-danger" onclick="deleteGalleryImage('${image.id}')">Remover</button>
-          </div>
+          <button class="btn btn-danger" onclick="deleteGalleryImage('${image.id}')">Remover</button>
         </div>
       `).join("");
-
-      enableSortableGallery("current-gallery-list", currentGalleryImages, "data-gallery-id");
-    }
-
-    function moveExistingGalleryImage(id, direction) {
-      const index = currentGalleryImages.findIndex(item => String(item.id) === String(id));
-      if (index === -1) return;
-      const targetIndex = index + direction;
-      if (targetIndex < 0 || targetIndex >= currentGalleryImages.length) return;
-      const [item] = currentGalleryImages.splice(index, 1);
-      currentGalleryImages.splice(targetIndex, 0, item);
-      renderCurrentGallery();
-    }
-
-    async function saveExistingGalleryOrder() {
-      if (!editingProductId || !currentGalleryImages.length) return;
-      clearMessage("form-message");
-
-      for (let index = 0; index < currentGalleryImages.length; index++) {
-        const image = currentGalleryImages[index];
-        const { error } = await supabaseClient
-          .from("product_images")
-          .update({ sort_order: index })
-          .eq("id", image.id);
-
-        if (error) {
-          console.error("Erro ao salvar ordem da galeria:", error);
-          showMessage("form-message", `Erro ao salvar a ordem da galeria: ${error.message}`, "error");
-          return;
-        }
-      }
-
-      showMessage("form-message", "Ordem da galeria salva com sucesso.", "success");
-      await loadProductGallery(editingProductId);
     }
 
     async function deleteGalleryImage(imageId) {
@@ -1521,7 +1352,7 @@
       const category_id = document.getElementById("product-category").value;
       const description = document.getElementById("product-description").value.trim();
       const featured = document.getElementById("product-featured").checked;
-      const visible = document.getElementById("product-visible").checked;
+      const is_visible = document.getElementById("product-visible") ? document.getElementById("product-visible").checked : true;
       const badge_type = document.getElementById("product-badge-type").value;
       const sale_type = document.getElementById("product-sale-type").value || "pronta_entrega";
       const sizes = getSelectedSizes();
@@ -1551,9 +1382,9 @@
         old_price: old_price ? Number(old_price) : null,
         image_url,
         category_id,
-        description,
-        featured,
-        visible,
+        short_description: description,
+        is_featured: featured,
+        is_visible,
         badge_type: badge_type || null,
         sale_type
       };
@@ -1640,7 +1471,7 @@
           product_sizes (
             id,
             size,
-            available
+            is_available
           )
         `)
         .eq("id", productId)
@@ -1658,10 +1489,10 @@
       document.getElementById("product-price").value = data.price || "";
       document.getElementById("product-old-price").value = data.old_price || "";
       document.getElementById("product-image").value = data.image_url || "";
-      document.getElementById("product-description").value = data.description || "";
+      document.getElementById("product-description").value = data.short_description || "";
       document.getElementById("product-slug-preview").value = data.slug || "";
-      document.getElementById("product-featured").checked = !!data.featured;
-      document.getElementById("product-visible").checked = data.visible !== false;
+      document.getElementById("product-featured").checked = !!data.is_featured;
+      if (document.getElementById("product-visible")) document.getElementById("product-visible").checked = data.is_visible !== false;
       document.getElementById("product-badge-type").value = data.badge_type || "";
       document.getElementById("product-sale-type").value = data.sale_type || "pronta_entrega";
 
@@ -1678,7 +1509,7 @@
       await loadCategories(data.category_id);
 
       const availableSizes = Array.isArray(data.product_sizes)
-        ? data.product_sizes.filter(item => item.available).map(item => item.size)
+        ? data.product_sizes.filter(item => item.is_available).map(item => item.size)
         : [];
 
       setSelectedSizes(availableSizes);
@@ -1710,7 +1541,7 @@
           *,
           product_sizes (
             size,
-            available
+            is_available
           ),
           product_images (
             image_url,
@@ -1732,9 +1563,9 @@
         price: product.price,
         old_price: product.old_price,
         image_url: product.image_url,
-        description: product.description,
-        featured: false,
-        visible: product.visible !== false,
+        short_description: product.short_description,
+        is_featured: false,
+        is_visible: product.is_visible !== false,
         badge_type: product.badge_type,
         sale_type: product.sale_type,
         category_id: product.category_id
@@ -1756,7 +1587,7 @@
         const sizeRows = product.product_sizes.map(item => ({
           product_id: inserted.id,
           size: item.size,
-          available: item.available
+          is_available: item.is_available
         }));
 
         const { error: sizeError } = await supabaseClient
@@ -1788,23 +1619,6 @@
       await loadProducts();
     }
 
-
-    async function toggleProductVisibility(productId, nextVisible) {
-      clearMessage("list-message");
-      const { error } = await supabaseClient
-        .from("products")
-        .update({ visible: nextVisible })
-        .eq("id", productId);
-
-      if (error) {
-        console.error("Erro ao alterar visibilidade:", error);
-        showMessage("list-message", `Não foi possível alterar a visibilidade: ${error.message}`, "error");
-        return;
-      }
-
-      showMessage("list-message", nextVisible ? "Produto exibido no site." : "Produto ocultado do site.", "success");
-      await loadProducts();
-    }
 
     async function deleteProduct(productId) {
       const confirmDelete = confirm("Tem certeza que deseja excluir este produto?");
@@ -2426,10 +2240,6 @@
       document.getElementById("product-name")?.addEventListener("input", syncSlugPreview);
       document.getElementById("product-price")?.addEventListener("input", updateDraftSummary);
       document.getElementById("product-category")?.addEventListener("change", updateDraftSummary);
-      document.getElementById("product-visible")?.addEventListener("change", updateDraftSummary);
-      const debouncedFilterProducts = debounce(filterProducts, 120);
-      document.getElementById("search-input")?.addEventListener("input", debouncedFilterProducts);
-      document.getElementById("search-input")?.removeAttribute("oninput");
       document.querySelectorAll(".size-check").forEach(check => {
         check.addEventListener("change", () => {
           refreshSizeChipStates();
@@ -2446,44 +2256,6 @@
           event.preventDefault();
           saveProduct();
         }
-        if (event.key === "/" && document.activeElement?.tagName !== "INPUT" && document.activeElement?.tagName !== "TEXTAREA") {
-          event.preventDefault();
-          document.getElementById("search-input")?.focus();
-        }
-      });
-
-      [
-        { zoneId: "main-image-dropzone", inputId: "product-file", multiple: false },
-        { zoneId: "gallery-dropzone", inputId: "product-files", multiple: true }
-      ].forEach(({ zoneId, inputId }) => {
-        const zone = document.getElementById(zoneId);
-        const input = document.getElementById(inputId);
-        if (!zone || !input) return;
-
-        ["dragenter", "dragover"].forEach(eventName => {
-          zone.addEventListener(eventName, (event) => {
-            event.preventDefault();
-            zone.classList.add("dragover");
-          });
-        });
-
-        ["dragleave", "drop"].forEach(eventName => {
-          zone.addEventListener(eventName, (event) => {
-            event.preventDefault();
-            zone.classList.remove("dragover");
-          });
-        });
-
-        zone.addEventListener("drop", (event) => {
-          const dt = event.dataTransfer;
-          if (!dt?.files?.length) return;
-          input.files = dt.files;
-          if (inputId === "product-file") {
-            previewSelectedMainImage({ target: input });
-          } else {
-            previewSelectedImages({ target: input });
-          }
-        });
       });
       setProductStep(1);
       refreshSizeChipStates();
