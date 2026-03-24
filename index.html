@@ -1709,6 +1709,22 @@
       });
     }
 
+    function getProductBadge(product, isFeatured = false) {
+      const badgeType = product.badge_type || (isFeatured ? "destaque" : "");
+      if (!badgeType) return "";
+
+      const badgeMap = {
+        "destaque": { label: "Mais procurada", className: "destaque" },
+        "mais-vendida": { label: "Mais vendida", className: "mais-vendida" },
+        "novo": { label: "Novo", className: "novo" }
+      };
+
+      const badge = badgeMap[badgeType];
+      if (!badge) return "";
+
+      return `<span class="product-badge ${badge.className}">${badge.label}</span>`;
+    }
+
     function getSaleTypeBadge(product) {
       return (product.sale_type || "pronta_entrega") === "sob_encomenda"
         ? `<span class="sale-type-badge">Sob encomenda</span>`
@@ -2130,8 +2146,18 @@
         document.getElementById("featuredProductsGrid").innerHTML =
           `<div class="state-box">Ocorreu um erro ao carregar os destaques.</div>`;
 
-        document.getElementById("productsGrid").innerHTML =
-          `<div class="state-box">Ocorreu um erro ao carregar o catálogo.</div>`;
+        const prontaGrid = document.getElementById("grid-pronta");
+        const encomendaGrid = document.getElementById("grid-encomenda");
+
+        if (prontaGrid) {
+          prontaGrid.innerHTML =
+            `<div class="state-box">Ocorreu um erro ao carregar os produtos à pronta entrega.</div>`;
+        }
+
+        if (encomendaGrid) {
+          encomendaGrid.innerHTML =
+            `<div class="state-box">Ocorreu um erro ao carregar os produtos sob encomenda.</div>`;
+        }
       }
     }
 
