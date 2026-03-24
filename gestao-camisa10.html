@@ -137,9 +137,24 @@
     .draft-summary-card strong{color:#fff;font-size:1rem}
     .products-toolbar-advanced{display:grid;grid-template-columns:minmax(180px,1.2fr) minmax(160px,.9fr) minmax(160px,.9fr) auto;align-items:center}
     .products-toolbar-advanced select{padding:12px 14px;border-radius:14px;border:1px solid #2d2d2d;background:#101010;color:#fff}
+    .product-admin-list{display:grid;gap:14px}
+    .product-admin-card{display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px;padding:16px;border-radius:18px;background:#101010;border:1px solid var(--line);align-items:start}
+    .product-admin-thumb{width:110px;height:110px;border-radius:16px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f}
+    .product-admin-content{display:grid;gap:12px;min-width:0}
+    .product-admin-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap}
+    .product-admin-title{font-size:1rem;font-weight:900;color:#fff;line-height:1.35}
+    .product-admin-sub{color:var(--muted);font-size:.84rem;word-break:break-word}
+    .product-admin-price{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .price-main{font-size:1.05rem;font-weight:900;color:var(--gold-2)}
+    .price-old{text-decoration:line-through;color:#8f8f8f;font-size:.88rem}
+    .product-admin-meta{display:flex;gap:8px;flex-wrap:wrap}
+    .product-admin-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .product-admin-actions .btn{padding:10px 14px}
+    .product-admin-desc{color:#d9d9d9;font-size:.9rem;line-height:1.6}
+
 
     @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced{grid-template-columns:1fr}}
-    @media (max-width:700px){.container{width:min(94%,94%)}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}}
+    @media (max-width:700px){.container{width:min(94%,94%)}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:1fr}.product-admin-thumb{width:100%;height:220px}.product-admin-actions .btn{width:100%}}
   </style>
 </head>
 <body>
@@ -197,7 +212,7 @@
 
       
       <section id="tab-products" class="tab-panel active">
-        <div class="grid-2">
+        <div class="stack">
           <div class="card">
             <div class="form-header-row">
               <div>
@@ -396,13 +411,8 @@
               <button class="btn btn-secondary" onclick="loadProducts()">Atualizar</button>
             </div>
 
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr><th>Imagem</th><th>Produto</th><th>Categoria</th><th>Tipo</th><th>Preço</th><th>Tamanhos</th><th>Ações</th></tr>
-                </thead>
-                <tbody id="products-table-body"><tr><td colspan="7" class="empty-state">Carregando produtos...</td></tr></tbody>
-              </table>
+            <div id="products-table-body" class="product-admin-list">
+              <div class="empty-state">Carregando produtos...</div>
             </div>
             <div id="list-message" class="message"></div>
           </div>
@@ -1171,7 +1181,7 @@
 
     async function loadProducts() {
       const tbody = document.getElementById("products-table-body");
-      tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Carregando produtos...</td></tr>`;
+      tbody.innerHTML = `<div class="empty-state">Carregando produtos...</div>`;
       clearMessage("list-message");
 
       const { data, error } = await supabaseClient
@@ -1204,7 +1214,7 @@
 
       if (error) {
         console.error("Erro ao carregar produtos:", error);
-        tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Erro ao carregar produtos.</td></tr>`;
+        tbody.innerHTML = `<div class="empty-state">Erro ao carregar produtos.</div>`;
         showMessage("list-message", "Erro ao buscar produtos no Supabase.", "error");
         return;
       }
@@ -1217,7 +1227,7 @@
       const tbody = document.getElementById("products-table-body");
 
       if (!products || products.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Nenhum produto cadastrado.</td></tr>`;
+        tbody.innerHTML = `<div class="empty-state">Nenhum produto cadastrado.</div>`;
         return;
       }
 
@@ -1228,47 +1238,57 @@
 
         const categoryName = product.categories?.name || "Sem categoria";
         const saleType = product.sale_type === "sob_encomenda" ? "Sob encomenda" : "Pronta entrega";
+        const visibleBadge = product.is_visible
+          ? '<span class="badge">Visível</span>'
+          : '<span class="badge" style="background:rgba(217,83,79,.16);color:#ffd2d0;border-color:rgba(217,83,79,.28);">Oculto</span>';
+        const featuredBadge = product.is_featured ? '<span class="badge-featured">Destaque home</span>' : '';
+        const badgeType = product.badge_type ? `<span class="badge">${formatBadgeLabel(product.badge_type)}</span>` : '';
+        const sizesHtml = sizes.length
+          ? sizes.map(size => `<span class="badge">${size}</span>`).join("")
+          : '<span class="small-muted">Sem tamanhos</span>';
+        const oldPrice = product.old_price ? `<span class="price-old">${formatPrice(product.old_price)}</span>` : '';
+        const description = product.short_description ? `<div class="product-admin-desc">${product.short_description}</div>` : '';
 
         return `
-          <tr>
-            <td>
-              <img
-                src="${product.image_url || 'https://via.placeholder.com/80x80?text=Sem+Imagem'}"
-                alt="${product.name || ''}"
-                class="product-thumb"
-                onerror="this.src='https://via.placeholder.com/80x80?text=Imagem';"
-              />
-            </td>
-            <td>
-              <div style="font-weight:bold;">
-                ${product.name || "-"}
-                ${product.is_featured ? '<span class="badge-featured">Destaque home</span>' : ''}
-                ${product.badge_type ? `<span class="badge">${formatBadgeLabel(product.badge_type)}</span>` : ''}
+          <article class="product-admin-card">
+            <img
+              src="${product.image_url || 'https://via.placeholder.com/240x240?text=Sem+Imagem'}"
+              alt="${product.name || ''}"
+              class="product-admin-thumb"
+              onerror="this.src='https://via.placeholder.com/240x240?text=Imagem';"
+            />
+            <div class="product-admin-content">
+              <div class="product-admin-top">
+                <div>
+                  <div class="product-admin-title">${product.name || "-"} ${featuredBadge}</div>
+                  <div class="product-admin-sub">Slug: ${product.slug || "-"}</div>
+                </div>
+                <div class="product-admin-price">
+                  <span class="price-main">${formatPrice(product.price)}</span>
+                  ${oldPrice}
+                </div>
               </div>
-              <div class="small-muted">Slug: ${product.slug || "-"}</div>
-            </td>
-            <td>${categoryName}</td>
-            <td>
-              <span class="badge">${saleType}</span>
-              ${product.is_visible ? '<span class="badge">Visível</span>' : '<span class="badge" style="background:rgba(217,83,79,.16);color:#ffd2d0;border-color:rgba(217,83,79,.28);">Oculto</span>'}
-            </td>
-            <td>${formatPrice(product.price)}</td>
-            <td>${product.old_price ? `<span class="badge">De ${formatPrice(product.old_price)}</span>` : '<span class="small-muted">Sem promoção</span>'}</td>
-            <td>
-              ${
-                sizes.length
-                  ? sizes.map(size => `<span class="badge">${size}</span>`).join("")
-                  : '<span class="small-muted">Sem tamanhos</span>'
-              }
-            </td>
-            <td>
-              <div class="table-actions">
+
+              ${description}
+
+              <div class="product-admin-meta">
+                <span class="badge">${categoryName}</span>
+                <span class="badge">${saleType}</span>
+                ${visibleBadge}
+                ${badgeType}
+              </div>
+
+              <div class="product-admin-meta">
+                ${sizesHtml}
+              </div>
+
+              <div class="product-admin-actions">
                 <button class="btn btn-success" onclick="editProduct('${product.id}')">Editar</button>
                 <button class="btn btn-secondary" onclick="duplicateProduct('${product.id}')">Duplicar</button>
                 <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">Excluir</button>
               </div>
-            </td>
-          </tr>
+            </div>
+          </article>
         `;
       }).join("");
     }
