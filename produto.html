@@ -358,6 +358,35 @@
       letter-spacing: 0.04em;
     }
 
+    .sale-type-badge {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(8,8,8,0.76);
+      border: 1px solid rgba(244,211,94,0.22);
+      color: #f4d35e;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      white-space: nowrap;
+    }
+
+    .sale-type-badge::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #f4d35e;
+      box-shadow: 0 0 0 4px rgba(244,211,94,0.08);
+    }
+
     .product-title {
       font-size: clamp(2rem, 4vw, 3rem);
       line-height: 1.08;
@@ -1138,7 +1167,7 @@
 
           <div class="info-card">
             <div id="product-category" class="category-badge">Categoria</div>
-            <div id="product-sale-type" class="sale-type-badge" style="display:none;">🛒 Sob encomenda</div>
+            <div id="product-sale-type" class="sale-type-badge" style="display:none;">Sob encomenda</div>
 
             <h1 id="product-name" class="product-title">Produto</h1>
 
@@ -1764,6 +1793,12 @@ ${window.location.href}`;
       document.getElementById("product-name").textContent = product.name || "Produto";
       document.getElementById("product-price").textContent = formatPrice(product.price);
       document.getElementById("product-description").textContent = product.description || "Sem descrição disponível.";
+
+      const saleTypeBadge = document.getElementById("product-sale-type");
+      if (saleTypeBadge) {
+        const isSobEncomenda = getProductSaleType(product) === "sob_encomenda";
+        saleTypeBadge.style.display = isSobEncomenda ? "inline-flex" : "none";
+      }
 
       const buyBtn = document.getElementById("buy-whatsapp-btn");
       if (buyBtn) {
