@@ -1747,7 +1747,7 @@ ${window.location.href}`;
           price,
           old_price,
           image_url,
-          description,
+          short_description,
           sale_type,
           category_id,
           categories (
@@ -1756,7 +1756,9 @@ ${window.location.href}`;
           ),
           product_sizes (
             id,
-            size
+            size,
+            available,
+            is_available
           )
         `);
 
@@ -1792,7 +1794,7 @@ ${window.location.href}`;
       document.getElementById("product-category").textContent = product.categories?.name || "Camisa 10 Store";
       document.getElementById("product-name").textContent = product.name || "Produto";
       document.getElementById("product-price").textContent = formatPrice(product.price);
-      document.getElementById("product-description").textContent = product.description || "Sem descrição disponível.";
+      document.getElementById("product-description").textContent = product.short_description || "Sem descrição disponível.";
 
       const saleTypeBadge = document.getElementById("product-sale-type");
       if (saleTypeBadge) {
