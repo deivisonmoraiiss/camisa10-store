@@ -138,19 +138,21 @@
     .products-toolbar-advanced{display:grid;grid-template-columns:minmax(180px,1.2fr) minmax(160px,.9fr) minmax(160px,.9fr) auto;align-items:center}
     .products-toolbar-advanced select{padding:12px 14px;border-radius:14px;border:1px solid #2d2d2d;background:#101010;color:#fff}
     .product-admin-list{display:grid;gap:14px}
-    .product-admin-card{display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px;padding:16px;border-radius:18px;background:#101010;border:1px solid var(--line);align-items:start}
-    .product-admin-thumb{width:110px;height:110px;border-radius:16px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f}
-    .product-admin-content{display:grid;gap:12px;min-width:0}
-    .product-admin-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap}
+    .product-admin-card{display:grid;grid-template-columns:34px 88px minmax(0,1fr);gap:14px;padding:14px;border-radius:18px;background:#101010;border:1px solid var(--line);align-items:start}
+    .product-admin-select{display:flex;align-items:flex-start;justify-content:center;padding-top:4px}
+    .product-admin-select input{width:16px;height:16px;accent-color:var(--gold);cursor:pointer}
+    .product-admin-thumb{width:88px;height:88px;border-radius:14px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f}
+    .product-admin-content{display:grid;gap:10px;min-width:0}
+    .product-admin-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
     .product-admin-title{font-size:1rem;font-weight:900;color:#fff;line-height:1.35}
     .product-admin-sub{color:var(--muted);font-size:.84rem;word-break:break-word}
     .product-admin-price{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
     .price-main{font-size:1.05rem;font-weight:900;color:var(--gold-2)}
     .price-old{text-decoration:line-through;color:#8f8f8f;font-size:.88rem}
-    .product-admin-meta{display:flex;gap:8px;flex-wrap:wrap}
-    .product-admin-actions{display:flex;gap:8px;flex-wrap:wrap}
-    .product-admin-actions .btn{padding:10px 14px}
-    .product-admin-desc{color:#d9d9d9;font-size:.9rem;line-height:1.6}
+    .product-admin-meta{display:flex;gap:6px;flex-wrap:wrap}
+    .product-admin-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+    .product-admin-actions .btn{padding:9px 12px;font-size:.84rem}
+    .product-admin-desc{color:#d9d9d9;font-size:.88rem;line-height:1.5}
     .product-admin-select{display:flex;align-items:flex-start;justify-content:center;padding-top:4px}
     .product-admin-select input{width:20px;height:20px;accent-color:var(--gold);cursor:pointer}
     .batch-card{margin-top:16px;padding:16px;border-radius:18px;background:linear-gradient(180deg,rgba(212,175,55,.10),rgba(212,175,55,.04));border:1px solid rgba(212,175,55,.18);display:grid;gap:14px}
@@ -177,7 +179,7 @@
     .batch-hidden{display:none!important}
 
     @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row{grid-template-columns:1fr}}
-    @media (max-width:700px){.container{width:min(94%,94%)}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:1fr}.product-admin-header-row{grid-template-columns:1fr}.product-admin-thumb{width:100%;height:220px}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}}
+    @media (max-width:700px){.container{width:min(94%,94%)}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:28px 72px minmax(0,1fr);padding:12px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-thumb{width:72px;height:72px}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}}
   </style>
 </head>
 <body>
@@ -479,7 +481,7 @@
                     </select>
                   </div>
 
-                  <input type="number" id="batch-price-value" placeholder="Ex.: 10 ou 129.90" step="0.01" oninput="updateBatchPreview()" />
+                  <input type="text" inputmode="decimal" id="batch-price-value" placeholder="Ex.: 10 ou 129,90" oninput="updateBatchPreview()" />
 
                   <div id="batch-price-preview" class="batch-summary">Nenhuma alteração de preço configurada.</div>
 
@@ -1290,7 +1292,25 @@
 
     function normalizeMoneyInput(value) {
       if (value === null || value === undefined) return NaN;
-      const normalized = String(value).replace(/\./g, "").replace(",", ".").trim();
+      let normalized = String(value).trim();
+      if (!normalized) return NaN;
+
+      normalized = normalized.replace(/\s+/g, '').replace(/R\$/gi, '');
+
+      const hasComma = normalized.includes(',');
+      const hasDot = normalized.includes('.');
+
+      if (hasComma && hasDot) {
+        if (normalized.lastIndexOf(',') > normalized.lastIndexOf('.')) {
+          normalized = normalized.replace(/\./g, '').replace(',', '.');
+        } else {
+          normalized = normalized.replace(/,/g, '');
+        }
+      } else if (hasComma) {
+        normalized = normalized.replace(/\./g, '').replace(',', '.');
+      }
+
+      normalized = normalized.replace(/[^0-9.-]/g, '');
       return Number(normalized);
     }
 
