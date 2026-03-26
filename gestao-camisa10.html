@@ -178,8 +178,28 @@
     .product-admin-header-row{display:grid;grid-template-columns:auto 110px minmax(0,1fr);gap:16px;align-items:start}
     .batch-hidden{display:none!important}
 
-    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row{grid-template-columns:1fr}}
-    @media (max-width:700px){.container{width:min(94%,94%)}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:28px 72px minmax(0,1fr);padding:12px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-thumb{width:72px;height:72px}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}}
+
+    .batch-create-layout{display:grid;grid-template-columns:minmax(320px,420px) minmax(0,1fr);gap:20px;align-items:start}
+    .batch-create-side,.batch-create-main{display:grid;gap:18px}
+    .batch-shared-preview,.batch-item-gallery-preview{display:flex;flex-wrap:wrap;gap:10px}
+    .batch-shared-preview img,.batch-item-gallery-preview img{width:88px;height:88px;object-fit:cover;border-radius:12px;border:1px solid #2b2b2b;background:#0f0f0f}
+    .batch-item-main-preview{width:100px;height:100px;object-fit:cover;border-radius:14px;border:1px solid #2b2b2b;background:#0f0f0f}
+    .batch-products-builder{display:grid;gap:14px}
+    .batch-item-card{padding:16px;border-radius:18px;background:#101010;border:1px solid var(--line);display:grid;gap:14px}
+    .batch-item-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap}
+    .batch-item-title{font-weight:900;color:#fff;font-size:1rem}
+    .batch-item-sub{color:var(--muted);font-size:.84rem}
+    .batch-item-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(260px,.9fr);gap:14px}
+    .batch-item-image-grid{display:grid;grid-template-columns:110px minmax(0,1fr);gap:14px;align-items:start}
+    .batch-item-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .batch-chip-row{display:flex;gap:8px;flex-wrap:wrap}
+    .batch-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#151515;border:1px solid var(--line);font-size:.84rem;color:#f3f3f3}
+    .batch-create-kpi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .batch-save-bar{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}
+    .batch-summary-list{display:grid;gap:8px;color:#e7e7e7}
+
+    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi{grid-template-columns:1fr}}
+    @media (max-width:700px){.container{width:min(94%,94%)}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:28px 72px minmax(0,1fr);padding:12px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-thumb{width:72px;height:72px}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}}
   </style>
 </head>
 <body>
@@ -230,6 +250,7 @@
 
       <div class="tabs">
         <button class="tab-btn active" data-tab="tab-products">Produtos</button>
+        <button class="tab-btn" data-tab="tab-batch-create">Cadastro em lote</button>
         <button class="tab-btn" data-tab="tab-categories">Categorias</button>
         <button class="tab-btn" data-tab="tab-shop">Ajustes da loja</button>
         <button class="tab-btn" data-tab="tab-slides">Slides do banner</button>
@@ -527,7 +548,142 @@
         </div>
       </section>
 
-      <section id="tab-categories" class="tab-panel">
+      
+      <section id="tab-batch-create" class="tab-panel">
+        <div class="stack">
+          <div class="card">
+            <div class="form-header-row">
+              <div>
+                <h3 class="section-title">Cadastro em lote — Sob encomenda</h3>
+                <p class="section-copy" style="margin-bottom:0;">Cadastre várias camisas de uma vez com categoria, tamanhos e imagens compartilhadas ou próprias em cada produto.</p>
+              </div>
+              <div class="inline-status">
+                <span class="mini-kpi"><strong id="batch-create-count">0</strong><span>Produtos preparados</span></span>
+              </div>
+            </div>
+
+            <div class="batch-create-layout" style="margin-top:18px;">
+              <div class="batch-create-side">
+                <div class="mini-card">
+                  <h4>1. Configuração padrão</h4>
+                  <div class="field">
+                    <label for="batch-create-category">Categoria</label>
+                    <select id="batch-create-category">
+                      <option value="">Selecione a categoria</option>
+                    </select>
+                  </div>
+
+                  <div class="field">
+                    <label>Tipo de venda</label>
+                    <input type="text" value="Sob encomenda" readonly />
+                  </div>
+
+                  <div class="field">
+                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                      <input type="checkbox" id="batch-create-visible" style="width:auto; accent-color:#d4af37;" checked />
+                      <span>Produtos visíveis no site</span>
+                    </label>
+                  </div>
+
+                  <div class="field">
+                    <label for="batch-create-description">Descrição padrão</label>
+                    <textarea id="batch-create-description" placeholder="Texto que será usado em todos os produtos do lote"></textarea>
+                  </div>
+
+                  <div class="field">
+                    <label>Tamanhos padrão</label>
+                    <div class="sizes-box sizes-box-premium" id="batch-create-sizes">
+                      <label class="size-item"><input type="checkbox" value="P" class="batch-size-check"> <span>P</span></label>
+                      <label class="size-item"><input type="checkbox" value="M" class="batch-size-check"> <span>M</span></label>
+                      <label class="size-item"><input type="checkbox" value="G" class="batch-size-check"> <span>G</span></label>
+                      <label class="size-item"><input type="checkbox" value="EG" class="batch-size-check"> <span>EG</span></label>
+                    </div>
+                  </div>
+
+                  <div class="helper-box helper-box-visible">
+                    Essa área define o padrão do lote inteiro. Como a maior parte vai ser sob encomenda, o tipo já fica travado assim para acelerar seu cadastro.
+                  </div>
+                </div>
+
+                <div class="mini-card">
+                  <h4>2. Imagens compartilhadas do lote</h4>
+                  <div class="field">
+                    <label for="batch-shared-main-file">Imagem principal compartilhada</label>
+                    <input type="file" id="batch-shared-main-file" accept="image/*" onchange="handleBatchSharedMainFile(event)" />
+                  </div>
+                  <div class="field">
+                    <label for="batch-shared-main-url">Ou URL da imagem principal</label>
+                    <input type="text" id="batch-shared-main-url" placeholder="Cole uma URL se preferir" oninput="renderBatchSharedPreviews(); renderBatchCreateProducts();" />
+                  </div>
+                  <div class="field">
+                    <label for="batch-shared-extra-files">Fotos adicionais compartilhadas</label>
+                    <input type="file" id="batch-shared-extra-files" accept="image/*" multiple onchange="handleBatchSharedExtraFiles(event)" />
+                  </div>
+                  <div class="preview-box">
+                    <div class="small-muted" style="margin-bottom:8px;">Prévia das imagens compartilhadas</div>
+                    <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;">
+                      <img id="batch-shared-main-preview" class="batch-item-main-preview" src="https://via.placeholder.com/300x300?text=Principal" alt="Preview principal compartilhada">
+                      <div id="batch-shared-extra-preview" class="batch-shared-preview"></div>
+                    </div>
+                  </div>
+                  <div class="helper-box helper-box-visible">
+                    Se marcar “usar imagens compartilhadas” em um produto, ele aproveita essas imagens. Você ainda pode trocar a principal ou enviar extras próprios em cada card.
+                  </div>
+                </div>
+              </div>
+
+              <div class="batch-create-main">
+                <div class="mini-card">
+                  <h4>3. Monte o lote</h4>
+                  <div class="field">
+                    <label for="batch-create-names">Nomes dos produtos (um por linha)</label>
+                    <textarea id="batch-create-names" placeholder="Ex:
+Camisa Flamengo 24/25
+Camisa Brasil 2026
+Camisa Real Madrid 24/25"></textarea>
+                  </div>
+
+                  <div class="batch-save-bar">
+                    <div class="batch-create-kpi">
+                      <div class="mini-kpi"><strong id="batch-kpi-lines">0</strong><span>Linhas válidas</span></div>
+                      <div class="mini-kpi"><strong id="batch-kpi-with-shared">0</strong><span>Usando compartilhadas</span></div>
+                      <div class="mini-kpi"><strong id="batch-kpi-with-own">0</strong><span>Com imagens próprias</span></div>
+                    </div>
+                    <div class="actions-row" style="margin-top:0;">
+                      <button class="btn btn-secondary" type="button" onclick="generateBatchCreateProducts()">Gerar cards do lote</button>
+                      <button class="btn btn-ghost" type="button" onclick="clearBatchCreateBuilder()">Limpar lote</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mini-card">
+                  <h4>4. Ajuste as imagens de cada produto</h4>
+                  <div id="batch-create-builder" class="batch-products-builder">
+                    <div class="empty-state">Cole os nomes dos produtos e clique em “Gerar cards do lote”.</div>
+                  </div>
+                </div>
+
+                <div class="mini-card">
+                  <div class="batch-save-bar">
+                    <div class="batch-summary-list">
+                      <strong>Antes de salvar:</strong>
+                      <span>• cada produto precisa ter imagem principal própria ou compartilhada</span>
+                      <span>• os tamanhos marcados serão aplicados em todo o lote</span>
+                      <span>• a descrição padrão será repetida em todos os produtos</span>
+                    </div>
+                    <div class="actions-row" style="margin-top:0;">
+                      <button class="btn btn-primary" type="button" onclick="saveBatchCreateProducts()">Cadastrar lote inteiro</button>
+                    </div>
+                  </div>
+                  <div id="batch-create-message" class="message"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+<section id="tab-categories" class="tab-panel">
  class="tab-panel">
         <div class="grid-2-equal">
           <div class="card">
@@ -681,6 +837,9 @@
     let allHeroSlides = [];
     let currentProductStep = 1;
     const TOTAL_PRODUCT_STEPS = 4;
+    let batchCreateProducts = [];
+    let batchCreateSharedMainFile = null;
+    let batchCreateSharedExtraFiles = [];
 
     function showMessage(elementId, text, type = "success") {
       const el = document.getElementById(elementId);
@@ -743,6 +902,15 @@
         .replace(/\s+/g, "-")
         .replace(/[^a-z0-9-]/g, "")
         .replace(/-+/g, "-");
+    }
+
+    function escapeHtml(value = "") {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
     }
 
 
@@ -2608,6 +2776,408 @@
       if (topLogoutBtn) topLogoutBtn.classList.add("hidden");
     }
 
+
+    function getBatchCreateSelectedSizes() {
+      return [...document.querySelectorAll(".batch-size-check:checked")].map(item => item.value);
+    }
+
+    function refreshBatchSizeChipStates() {
+      document.querySelectorAll("#batch-create-sizes .size-item").forEach(item => {
+        const input = item.querySelector(".batch-size-check");
+        item.classList.toggle("active", !!input?.checked);
+      });
+    }
+
+    function parseBatchCreateNames() {
+      const raw = document.getElementById("batch-create-names")?.value || "";
+      return raw.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+    }
+
+    function updateBatchCreateKpis() {
+      const lines = parseBatchCreateNames().length;
+      const withShared = batchCreateProducts.filter(item => item.useSharedImages).length;
+      const withOwn = batchCreateProducts.filter(item => item.mainFile || (item.mainUrl || "").trim() || (item.extraFiles || []).length).length;
+      document.getElementById("batch-kpi-lines").textContent = String(lines);
+      document.getElementById("batch-kpi-with-shared").textContent = String(withShared);
+      document.getElementById("batch-kpi-with-own").textContent = String(withOwn);
+      document.getElementById("batch-create-count").textContent = String(batchCreateProducts.length);
+    }
+
+    function getFilePreview(file) {
+      return new Promise(resolve => {
+        if (!file) return resolve("");
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target?.result || "");
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function handleBatchSharedMainFile(event) {
+      batchCreateSharedMainFile = event.target?.files?.[0] || null;
+      await renderBatchSharedPreviews();
+      await renderBatchCreateProducts();
+    }
+
+    async function handleBatchSharedExtraFiles(event) {
+      batchCreateSharedExtraFiles = [...(event.target?.files || [])];
+      await renderBatchSharedPreviews();
+      await renderBatchCreateProducts();
+    }
+
+    async function renderBatchSharedPreviews() {
+      const mainPreview = document.getElementById("batch-shared-main-preview");
+      const extraPreview = document.getElementById("batch-shared-extra-preview");
+      const mainUrl = document.getElementById("batch-shared-main-url")?.value?.trim() || "";
+
+      if (mainPreview) {
+        if (batchCreateSharedMainFile) {
+          mainPreview.src = await getFilePreview(batchCreateSharedMainFile);
+        } else if (mainUrl) {
+          mainPreview.src = mainUrl;
+        } else {
+          mainPreview.src = "https://via.placeholder.com/300x300?text=Principal";
+        }
+      }
+
+      if (extraPreview) {
+        extraPreview.innerHTML = "";
+        for (const file of batchCreateSharedExtraFiles) {
+          const img = document.createElement("img");
+          img.src = await getFilePreview(file);
+          img.alt = file.name || "Imagem compartilhada";
+          extraPreview.appendChild(img);
+        }
+      }
+
+      updateBatchCreateKpis();
+    }
+
+    function generateBatchCreateProducts() {
+      clearMessage("batch-create-message");
+      const names = parseBatchCreateNames();
+
+      if (!names.length) {
+        showMessage("batch-create-message", "Cole pelo menos um nome para montar o lote.", "error");
+        return;
+      }
+
+      batchCreateProducts = names.map((name, index) => {
+        const existing = batchCreateProducts[index];
+        return {
+          name,
+          slug: generateSlug(name),
+          useSharedImages: existing?.useSharedImages ?? true,
+          mainFile: existing?.mainFile || null,
+          mainUrl: existing?.mainUrl || "",
+          extraFiles: existing?.extraFiles || []
+        };
+      });
+
+      renderBatchCreateProducts();
+    }
+
+    function clearBatchCreateBuilder() {
+      batchCreateProducts = [];
+      document.getElementById("batch-create-names").value = "";
+      clearMessage("batch-create-message");
+      renderBatchCreateProducts();
+    }
+
+    function syncBatchProductName(index, value) {
+      if (!batchCreateProducts[index]) return;
+      batchCreateProducts[index].name = value;
+      batchCreateProducts[index].slug = generateSlug(value);
+      renderBatchCreateProducts();
+    }
+
+    function toggleBatchItemUseShared(index, checked) {
+      if (!batchCreateProducts[index]) return;
+      batchCreateProducts[index].useSharedImages = checked;
+      renderBatchCreateProducts();
+    }
+
+    function handleBatchItemMainFile(index, event) {
+      if (!batchCreateProducts[index]) return;
+      batchCreateProducts[index].mainFile = event.target?.files?.[0] || null;
+      renderBatchCreateProducts();
+    }
+
+    function handleBatchItemMainUrl(index, value) {
+      if (!batchCreateProducts[index]) return;
+      batchCreateProducts[index].mainUrl = value;
+      renderBatchCreateProducts();
+    }
+
+    function handleBatchItemExtraFiles(index, event) {
+      if (!batchCreateProducts[index]) return;
+      batchCreateProducts[index].extraFiles = [...(event.target?.files || [])];
+      renderBatchCreateProducts();
+    }
+
+    function removeBatchItem(index) {
+      batchCreateProducts.splice(index, 1);
+      renderBatchCreateProducts();
+    }
+
+    async function renderBatchCreateProducts() {
+      const builder = document.getElementById("batch-create-builder");
+      if (!builder) return;
+
+      document.getElementById("batch-create-count").textContent = String(batchCreateProducts.length);
+
+      if (!batchCreateProducts.length) {
+        builder.innerHTML = '<div class="empty-state">Cole os nomes dos produtos e clique em “Gerar cards do lote”.</div>';
+        updateBatchCreateKpis();
+        return;
+      }
+
+      builder.innerHTML = batchCreateProducts.map((item, index) => {
+        const hasOwnMain = !!item.mainFile || !!(item.mainUrl || "").trim();
+        const hasOwnExtras = (item.extraFiles || []).length > 0;
+        return `
+          <div class="batch-item-card">
+            <div class="batch-item-top">
+              <div>
+                <div class="batch-item-title">${escapeHtml(item.name || `Produto ${index + 1}`)}</div>
+                <div class="batch-item-sub">Slug: ${escapeHtml(item.slug || "—")}</div>
+              </div>
+              <div class="batch-item-actions">
+                <label class="batch-chip">
+                  <input type="checkbox" style="width:auto; accent-color:#d4af37;" ${item.useSharedImages ? "checked" : ""} onchange="toggleBatchItemUseShared(${index}, this.checked)" />
+                  <span>Usar imagens compartilhadas</span>
+                </label>
+                <button class="btn btn-ghost" type="button" onclick="removeBatchItem(${index})">Remover</button>
+              </div>
+            </div>
+
+            <div class="batch-item-grid">
+              <div class="field">
+                <label>Nome do produto</label>
+                <input type="text" value="${escapeHtml(item.name || "")}" oninput="syncBatchProductName(${index}, this.value)" />
+              </div>
+              <div class="field">
+                <label>Slug</label>
+                <input type="text" value="${escapeHtml(item.slug || "")}" readonly />
+              </div>
+            </div>
+
+            <div class="batch-item-grid">
+              <div class="field">
+                <label>Imagem principal própria</label>
+                <input type="file" accept="image/*" onchange="handleBatchItemMainFile(${index}, event)" />
+              </div>
+              <div class="field">
+                <label>Ou URL da principal</label>
+                <input type="text" value="${escapeHtml(item.mainUrl || "")}" placeholder="Cole uma URL se preferir" oninput="handleBatchItemMainUrl(${index}, this.value)" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Fotos adicionais próprias</label>
+              <input type="file" accept="image/*" multiple onchange="handleBatchItemExtraFiles(${index}, event)" />
+            </div>
+
+            <div class="batch-item-image-grid">
+              <div>
+                <div class="small-muted" style="margin-bottom:8px;">Principal que será usada</div>
+                <img id="batch-item-main-preview-${index}" class="batch-item-main-preview" src="https://via.placeholder.com/300x300?text=Imagem" alt="Preview principal">
+              </div>
+              <div>
+                <div class="small-muted" style="margin-bottom:8px;">Resumo visual</div>
+                <div class="batch-chip-row">
+                  <span class="batch-chip">${hasOwnMain ? "Principal própria" : item.useSharedImages ? "Principal compartilhada" : "Sem principal"}</span>
+                  <span class="batch-chip">${hasOwnExtras ? `${item.extraFiles.length} extra(s) própria(s)` : "Sem extras próprias"}</span>
+                  <span class="batch-chip">${item.useSharedImages ? `${batchCreateSharedExtraFiles.length} extra(s) compartilhada(s)` : "Sem compartilhadas"}</span>
+                </div>
+                <div id="batch-item-gallery-preview-${index}" class="batch-item-gallery-preview" style="margin-top:12px;"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      const sharedMainUrl = document.getElementById("batch-shared-main-url")?.value?.trim() || "";
+
+      for (let index = 0; index < batchCreateProducts.length; index++) {
+        const item = batchCreateProducts[index];
+        const mainPreview = document.getElementById(`batch-item-main-preview-${index}`);
+        const galleryPreview = document.getElementById(`batch-item-gallery-preview-${index}`);
+
+        if (mainPreview) {
+          if (item.mainFile) {
+            mainPreview.src = await getFilePreview(item.mainFile);
+          } else if ((item.mainUrl || "").trim()) {
+            mainPreview.src = item.mainUrl.trim();
+          } else if (item.useSharedImages && batchCreateSharedMainFile) {
+            mainPreview.src = await getFilePreview(batchCreateSharedMainFile);
+          } else if (item.useSharedImages && sharedMainUrl) {
+            mainPreview.src = sharedMainUrl;
+          } else {
+            mainPreview.src = "https://via.placeholder.com/300x300?text=Imagem";
+          }
+        }
+
+        if (galleryPreview) {
+          galleryPreview.innerHTML = "";
+          const files = [];
+          if (item.useSharedImages) files.push(...batchCreateSharedExtraFiles);
+          files.push(...(item.extraFiles || []));
+          for (const file of files) {
+            const img = document.createElement("img");
+            img.src = await getFilePreview(file);
+            img.alt = file.name || "Imagem";
+            galleryPreview.appendChild(img);
+          }
+        }
+      }
+
+      updateBatchCreateKpis();
+    }
+
+    async function uploadBatchMainImageForProduct(item, slugBase) {
+      const ownUrl = (item.mainUrl || "").trim();
+      if (item.mainFile) {
+        const fileExt = item.mainFile.name.split(".").pop();
+        const safeName = item.mainFile.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9-_]/g, "-").toLowerCase();
+        return await uploadFileToBucket(PRODUCT_BUCKET, `produtos/main/${Date.now()}-${slugBase}-${safeName}.${fileExt}`, item.mainFile);
+      }
+      if (ownUrl) return ownUrl;
+
+      const sharedUrl = document.getElementById("batch-shared-main-url")?.value?.trim() || "";
+      if (item.useSharedImages && batchCreateSharedMainFile) {
+        const fileExt = batchCreateSharedMainFile.name.split(".").pop();
+        const safeName = batchCreateSharedMainFile.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9-_]/g, "-").toLowerCase();
+        return await uploadFileToBucket(PRODUCT_BUCKET, `produtos/main/${Date.now()}-${slugBase}-shared-${safeName}.${fileExt}`, batchCreateSharedMainFile);
+      }
+      if (item.useSharedImages && sharedUrl) return sharedUrl;
+      return "";
+    }
+
+    async function uploadAdditionalImagesForBatchProduct(productId, item) {
+      const allFiles = [];
+      if (item.useSharedImages) allFiles.push(...batchCreateSharedExtraFiles);
+      allFiles.push(...(item.extraFiles || []));
+
+      let uploaded = 0;
+      for (let i = 0; i < allFiles.length; i++) {
+        const file = allFiles[i];
+        const fileExt = file.name.split(".").pop();
+        const safeName = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9-_]/g, "-").toLowerCase();
+        const filePath = `produtos/${productId}/${Date.now()}-${i}-${safeName}.${fileExt}`;
+        const imageUrl = await uploadFileToBucket(PRODUCT_BUCKET, filePath, file);
+
+        const { error } = await supabaseClient
+          .from("product_images")
+          .insert([{
+            product_id: productId,
+            image_url: imageUrl,
+            sort_order: i
+          }]);
+
+        if (error) throw error;
+        uploaded++;
+      }
+      return uploaded;
+    }
+
+    async function saveBatchCreateProducts() {
+      clearMessage("batch-create-message");
+      const categoryId = document.getElementById("batch-create-category")?.value || "";
+      const description = document.getElementById("batch-create-description")?.value?.trim() || "";
+      const sizes = getBatchCreateSelectedSizes();
+      const isVisible = !!document.getElementById("batch-create-visible")?.checked;
+
+      if (!batchCreateProducts.length) {
+        showMessage("batch-create-message", "Monte o lote primeiro para poder cadastrar.", "error");
+        return;
+      }
+      if (!categoryId) {
+        showMessage("batch-create-message", "Selecione a categoria do lote.", "error");
+        return;
+      }
+      if (!sizes.length) {
+        showMessage("batch-create-message", "Selecione pelo menos um tamanho para o lote.", "error");
+        return;
+      }
+
+      const confirmSave = confirm(`Deseja cadastrar ${batchCreateProducts.length} produto(s) em lote?`);
+      if (!confirmSave) return;
+
+      let successCount = 0;
+
+      try {
+        for (let index = 0; index < batchCreateProducts.length; index++) {
+          const item = batchCreateProducts[index];
+          const name = (item.name || "").trim();
+          if (!name) throw new Error(`O produto ${index + 1} está sem nome.`);
+
+          const slugBase = generateSlug(name) || `produto-${Date.now()}-${index + 1}`;
+          const mainImageUrl = await uploadBatchMainImageForProduct(item, slugBase);
+
+          if (!mainImageUrl) {
+            throw new Error(`O produto "${name}" está sem imagem principal própria ou compartilhada.`);
+          }
+
+          const payload = {
+            name,
+            slug: `${slugBase}-${Date.now()}-${index + 1}`,
+            price: null,
+            old_price: null,
+            image_url: mainImageUrl,
+            short_description: description,
+            is_featured: false,
+            is_visible: isVisible,
+            badge_type: null,
+            sale_type: "sob_encomenda",
+            category_id: categoryId
+          };
+
+          const { data, error } = await supabaseClient
+            .from("products")
+            .insert([payload])
+            .select()
+            .single();
+
+          if (error || !data) throw (error || new Error(`Falha ao cadastrar ${name}.`));
+
+          const sizeRows = sizes.map(size => ({
+            product_id: data.id,
+            size,
+            is_available: true
+          }));
+
+          const { error: sizeError } = await supabaseClient
+            .from("product_sizes")
+            .insert(sizeRows);
+
+          if (sizeError) throw sizeError;
+
+          await uploadAdditionalImagesForBatchProduct(data.id, item);
+          successCount++;
+        }
+
+        showMessage("batch-create-message", `${successCount} produto(s) cadastrados com sucesso no lote.`, "success");
+
+        batchCreateProducts = [];
+        batchCreateSharedMainFile = null;
+        batchCreateSharedExtraFiles = [];
+        document.getElementById("batch-create-names").value = "";
+        document.getElementById("batch-create-description").value = "";
+        document.getElementById("batch-shared-main-file").value = "";
+        document.getElementById("batch-shared-main-url").value = "";
+        document.getElementById("batch-shared-extra-files").value = "";
+        document.querySelectorAll(".batch-size-check").forEach(check => check.checked = false);
+        refreshBatchSizeChipStates();
+        await renderBatchSharedPreviews();
+        await renderBatchCreateProducts();
+        await loadProducts();
+      } catch (error) {
+        console.error("Erro no cadastro em lote:", error);
+        showMessage("batch-create-message", `Erro no cadastro em lote: ${error?.message || "sem detalhe"}.${successCount ? ` Já foram salvos ${successCount} produto(s).` : ""}`, "error");
+      }
+    }
+
+
     async function initializeAdmin() {
       await loadCategories();
       await loadCategoriesList();
@@ -2616,6 +3186,12 @@
       await loadHeroSlidesAdmin();
       resetHeroSlideForm();
       updateBatchPreview();
+      const batchCategorySelect = document.getElementById("batch-create-category");
+      if (batchCategorySelect) {
+        batchCategorySelect.innerHTML = '<option value="">Selecione a categoria</option>' + allCategories.map(category => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join("");
+      }
+      renderBatchSharedPreviews();
+      renderBatchCreateProducts();
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
@@ -2632,6 +3208,10 @@
           updateDraftSummary();
         });
       });
+      document.querySelectorAll(".batch-size-check").forEach(check => {
+        check.addEventListener("change", refreshBatchSizeChipStates);
+      });
+      document.getElementById("batch-create-names")?.addEventListener("input", updateBatchCreateKpis);
       document.querySelectorAll(".step-chip").forEach(button => {
         button.addEventListener("click", () => setProductStep(Number(button.dataset.stepTarget)));
       });
@@ -2645,7 +3225,9 @@
       });
       setProductStep(1);
       refreshSizeChipStates();
+      refreshBatchSizeChipStates();
       updateDraftSummary();
+      updateBatchCreateKpis();
 
       if (logged) {
         showAdminPanel();
