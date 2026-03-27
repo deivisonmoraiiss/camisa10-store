@@ -937,6 +937,10 @@ Camisa Real Madrid 24/25"></textarea>
             <div class="stat-card"><strong id="gestaoKpiInvestido">R$ 0,00</strong><span>Valor investido</span></div>
             <div class="stat-card"><strong id="gestaoKpiFornecedores">0</strong><span>Fornecedores</span></div>
           </div>
+          <div class="module-mini-tabs" style="margin-top:-4px;">
+            <span class="module-chip" id="gestaoSyncStatus">Modo local</span>
+            <span class="module-chip" id="gestaoSyncHint">Salvando no navegador deste aparelho</span>
+          </div>
 
           <div class="gestao-subtabs">
             <button class="gestao-subtab active" type="button" data-gestao-tab="gestao-dashboard">Resumo</button>
@@ -1118,8 +1122,11 @@ Camisa Real Madrid 24/25"></textarea>
     let batchCreateSharedExtraFiles = [];
     const GESTAO_SUPPLIERS_KEY = "camisa10_gestao_suppliers_v1";
     const GESTAO_ENTRIES_KEY = "camisa10_gestao_entries_v1";
+    const GESTAO_SUPPLIERS_TABLE = "inventory_suppliers";
+    const GESTAO_ENTRIES_TABLE = "inventory_entries";
     let gestaoSuppliers = [];
     let gestaoEntries = [];
+    let gestaoSyncMode = "local";
 
     function showMessage(elementId, text, type = "success") {
       const el = document.getElementById(elementId);
@@ -3511,7 +3518,68 @@ Camisa Real Madrid 24/25"></textarea>
     }
 
 
-    function loadGestaoState() {
+
+    function updateGestaoSyncUi() {
+      const statusEl = document.getElementById('gestaoSyncStatus');
+      const hintEl = document.getElementById('gestaoSyncHint');
+      if (!statusEl || !hintEl) return;
+
+      if (gestaoSyncMode === 'online') {
+        statusEl.textContent = 'Modo online';
+        hintEl.textContent = 'Gestão salva no Supabase e sincronizada entre aparelhos';
+      } else {
+        statusEl.textContent = 'Modo local';
+        hintEl.textContent = 'Salvando no navegador deste aparelho';
+      }
+    }
+
+    async function loadGestaoStateFromSupabase() {
+      const { data: suppliers, error: supplierError } = await supabaseClient
+        .from(GESTAO_SUPPLIERS_TABLE)
+        .select('id, name, note, created_at')
+        .order('created_at', { ascending: false });
+
+      if (supplierError) throw supplierError;
+
+      const { data: entries, error: entryError } = await supabaseClient
+        .from(GESTAO_ENTRIES_TABLE)
+        .select('id, product_id, size, quantity, cost, entry_date, supplier_id, note, created_at')
+        .order('entry_date', { ascending: false })
+        .order('created_at', { ascending: false });
+
+      if (entryError) throw entryError;
+
+      gestaoSuppliers = (suppliers || []).map(item => ({
+        id: item.id,
+        name: item.name,
+        note: item.note || ''
+      }));
+
+      gestaoEntries = (entries || []).map(item => ({
+        id: item.id,
+        productId: item.product_id,
+        size: item.size || 'M',
+        quantity: Number(item.quantity || 0),
+        cost: Number(item.cost || 0),
+        date: item.entry_date || '',
+        supplierId: item.supplier_id || '',
+        note: item.note || ''
+      }));
+
+      localStorage.setItem(GESTAO_SUPPLIERS_KEY, JSON.stringify(gestaoSuppliers));
+      localStorage.setItem(GESTAO_ENTRIES_KEY, JSON.stringify(gestaoEntries));
+      gestaoSyncMode = 'online';
+      updateGestaoSyncUi();
+    }
+
+    async function loadGestaoState() {
+      try {
+        await loadGestaoStateFromSupabase();
+        return;
+      } catch (error) {
+        console.warn('Gestão em modo local:', error?.message || error);
+      }
+
       try {
         gestaoSuppliers = JSON.parse(localStorage.getItem(GESTAO_SUPPLIERS_KEY) || '[]');
         gestaoEntries = JSON.parse(localStorage.getItem(GESTAO_ENTRIES_KEY) || '[]');
@@ -3519,11 +3587,71 @@ Camisa Real Madrid 24/25"></textarea>
         gestaoSuppliers = [];
         gestaoEntries = [];
       }
+      gestaoSyncMode = 'local';
+      updateGestaoSyncUi();
     }
 
-    function persistGestaoState() {
+    async function persistGestaoState() {
       localStorage.setItem(GESTAO_SUPPLIERS_KEY, JSON.stringify(gestaoSuppliers));
       localStorage.setItem(GESTAO_ENTRIES_KEY, JSON.stringify(gestaoEntries));
+
+      if (gestaoSyncMode !== 'online') return;
+
+      await Promise.all([
+        syncGestaoSuppliersToSupabase(),
+        syncGestaoEntriesToSupabase()
+      ]);
+    }
+
+    async function syncGestaoSuppliersToSupabase() {
+      const payload = gestaoSuppliers.map(item => ({
+        id: item.id,
+        name: item.name,
+        note: item.note || ''
+      }));
+
+      const { error: deleteError } = await supabaseClient
+        .from(GESTAO_SUPPLIERS_TABLE)
+        .delete()
+        .not('id', 'is', null);
+
+      if (deleteError) throw deleteError;
+
+      if (!payload.length) return;
+
+      const { error } = await supabaseClient
+        .from(GESTAO_SUPPLIERS_TABLE)
+        .insert(payload);
+
+      if (error) throw error;
+    }
+
+    async function syncGestaoEntriesToSupabase() {
+      const payload = gestaoEntries.map(item => ({
+        id: item.id,
+        product_id: item.productId,
+        size: item.size || 'M',
+        quantity: Number(item.quantity || 0),
+        cost: Number(item.cost || 0),
+        entry_date: item.date || null,
+        supplier_id: item.supplierId || null,
+        note: item.note || ''
+      }));
+
+      const { error: deleteError } = await supabaseClient
+        .from(GESTAO_ENTRIES_TABLE)
+        .delete()
+        .not('id', 'is', null);
+
+      if (deleteError) throw deleteError;
+
+      if (!payload.length) return;
+
+      const { error } = await supabaseClient
+        .from(GESTAO_ENTRIES_TABLE)
+        .insert(payload);
+
+      if (error) throw error;
     }
 
     function populateGestaoProductOptions() {
@@ -3685,7 +3813,7 @@ Camisa Real Madrid 24/25"></textarea>
       });
     }
 
-    function saveGestaoSupplier() {
+    async function saveGestaoSupplier() {
       clearMessage('gestao-supplier-message');
       const name = document.getElementById('gestao-supplier-name').value.trim();
       const note = document.getElementById('gestao-supplier-note').value.trim();
@@ -3694,22 +3822,36 @@ Camisa Real Madrid 24/25"></textarea>
         return;
       }
       gestaoSuppliers.unshift({ id: `sup-${Date.now()}`, name, note });
-      persistGestaoState();
+      try {
+        await persistGestaoState();
+      } catch (error) {
+        console.error('Erro ao salvar fornecedor:', error);
+        gestaoSyncMode = 'local';
+        updateGestaoSyncUi();
+        showMessage('gestao-supplier-message', 'Fornecedor salvo no aparelho. Para sincronizar online, crie as tabelas inventory_suppliers e inventory_entries no Supabase.', 'success');
+      }
       document.getElementById('gestao-supplier-name').value = '';
       document.getElementById('gestao-supplier-note').value = '';
       renderGestao();
       showMessage('gestao-supplier-message', 'Fornecedor salvo com sucesso.', 'success');
     }
 
-    function deleteGestaoSupplier(id) {
+    async function deleteGestaoSupplier(id) {
       const confirmDelete = confirm('Deseja excluir este fornecedor?');
       if (!confirmDelete) return;
       gestaoSuppliers = gestaoSuppliers.filter(item => String(item.id) !== String(id));
-      persistGestaoState();
+      gestaoEntries = gestaoEntries.map(item => String(item.supplierId) === String(id) ? ({ ...item, supplierId: '' }) : item);
+      try {
+        await persistGestaoState();
+      } catch (error) {
+        console.error('Erro ao excluir fornecedor:', error);
+        gestaoSyncMode = 'local';
+        updateGestaoSyncUi();
+      }
       renderGestao();
     }
 
-    function saveGestaoEntry() {
+    async function saveGestaoEntry() {
       clearMessage('gestao-entry-message');
       const productId = document.getElementById('gestao-entry-product').value;
       const size = document.getElementById('gestao-entry-size').value;
@@ -3737,7 +3879,14 @@ Camisa Real Madrid 24/25"></textarea>
         supplierId: supplierId || '',
         note
       });
-      persistGestaoState();
+      try {
+        await persistGestaoState();
+      } catch (error) {
+        console.error('Erro ao salvar entrada:', error);
+        gestaoSyncMode = 'local';
+        updateGestaoSyncUi();
+        showMessage('gestao-entry-message', 'Entrada salva no aparelho. Para sincronizar online, crie as tabelas inventory_suppliers e inventory_entries no Supabase.', 'success');
+      }
       document.getElementById('gestao-entry-qty').value = '';
       document.getElementById('gestao-entry-cost').value = '';
       document.getElementById('gestao-entry-date').value = '';
@@ -3759,7 +3908,7 @@ Camisa Real Madrid 24/25"></textarea>
       if (batchCategorySelect) {
         batchCategorySelect.innerHTML = '<option value="">Selecione a categoria</option>' + allCategories.map(category => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join("");
       }
-      loadGestaoState();
+      await loadGestaoState();
       renderGestao();
       renderBatchSharedPreviews();
       renderBatchCreateProducts();
