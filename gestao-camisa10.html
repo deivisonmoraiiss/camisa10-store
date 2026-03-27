@@ -1177,7 +1177,8 @@ Camisa Real Madrid 24/25"></textarea>
                         Quando você salvar, todos os itens entram no mesmo pedido, usando o mesmo fornecedor e a mesma data. Os custos extras entram no valor investido.
                       </div>
                       <div class="actions-row">
-                        <button class="btn btn-primary" type="button" onclick="saveGestaoEntry()">Salvar pedido completo</button>
+                        <button class="btn btn-primary" id="gestao-entry-save-btn" type="button" onclick="saveGestaoEntry()">Salvar pedido completo</button>
+                        <button class="btn btn-secondary hidden" id="gestao-entry-cancel-btn" type="button" onclick="cancelGestaoOrderEdit()">Cancelar edição</button>
                       </div>
                       <div id="gestao-entry-message" class="message"></div>
                     </div>
@@ -1312,7 +1313,8 @@ Camisa Real Madrid 24/25"></textarea>
                   <input type="text" id="gestao-supplier-contact" placeholder="Ex: WhatsApp, Instagram ou nome do contato" />
                 </div>
                 <div class="actions-row">
-                  <button class="btn btn-primary" type="button" onclick="saveGestaoSupplier()">Salvar fornecedor</button>
+                  <button class="btn btn-primary" id="gestao-supplier-save-btn" type="button" onclick="saveGestaoSupplier()">Salvar fornecedor</button>
+                  <button class="btn btn-secondary hidden" id="gestao-supplier-cancel-btn" type="button" onclick="cancelGestaoSupplierEdit()">Cancelar edição</button>
                 </div>
                 <div id="gestao-supplier-message" class="message"></div>
               </div>
@@ -1371,6 +1373,8 @@ Camisa Real Madrid 24/25"></textarea>
     let gestaoSyncMode = "local";
     let gestaoPendingOrderItems = [];
     let gestaoSalesMeta = {};
+    let editingGestaoSupplierId = null;
+    let editingGestaoOrderId = null;
 
 
     function generateClientUuid() {
@@ -4371,6 +4375,9 @@ Camisa Real Madrid 24/25"></textarea>
                 <span class="badge">Custos extras: ${formatPrice(order.extraCost)}</span>
                 <span class="badge">Contato: ${escapeHtml(contact)}</span>
               </div>
+              <div class="actions-row" style="margin-top:10px;">
+                <button class="btn btn-success" type="button" onclick="editGestaoOrder('${order.orderId}')">Editar pedido</button>
+              </div>
               ${order.note ? `<div class="small-muted" style="margin-top:10px;">Obs.: ${escapeHtml(order.note)}</div>` : ''}
               ${itemsHtml}
             </div>
@@ -4467,6 +4474,88 @@ Camisa Real Madrid 24/25"></textarea>
       `).join('');
     }
 
+
+    function resetGestaoSupplierForm() {
+      editingGestaoSupplierId = null;
+      const nameField = document.getElementById('gestao-supplier-name');
+      const contactField = document.getElementById('gestao-supplier-contact');
+      const saveBtn = document.getElementById('gestao-supplier-save-btn');
+      const cancelBtn = document.getElementById('gestao-supplier-cancel-btn');
+      if (nameField) nameField.value = '';
+      if (contactField) contactField.value = '';
+      if (saveBtn) saveBtn.textContent = 'Salvar fornecedor';
+      if (cancelBtn) cancelBtn.classList.add('hidden');
+      clearMessage('gestao-supplier-message');
+    }
+
+    function editGestaoSupplier(id) {
+      const supplier = gestaoSuppliers.find(item => String(item.id) === String(id));
+      if (!supplier) return;
+      editingGestaoSupplierId = supplier.id;
+      document.getElementById('gestao-supplier-name').value = supplier.name || '';
+      document.getElementById('gestao-supplier-contact').value = supplier.contact || '';
+      const saveBtn = document.getElementById('gestao-supplier-save-btn');
+      const cancelBtn = document.getElementById('gestao-supplier-cancel-btn');
+      if (saveBtn) saveBtn.textContent = 'Atualizar fornecedor';
+      if (cancelBtn) cancelBtn.classList.remove('hidden');
+      clearMessage('gestao-supplier-message');
+      activateGestaoTab('gestao-fornecedores');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function cancelGestaoSupplierEdit() {
+      resetGestaoSupplierForm();
+    }
+
+    function loadGestaoOrderIntoForm(orderId) {
+      const order = getGroupedGestaoOrders().find(item => String(item.orderId) === String(orderId));
+      if (!order) return false;
+      editingGestaoOrderId = order.orderId;
+      document.getElementById('gestao-entry-supplier').value = order.supplierId || '';
+      document.getElementById('gestao-entry-date').value = order.date || new Date().toISOString().slice(0,10);
+      document.getElementById('gestao-entry-extra').value = order.extraCost ? String(order.extraCost).replace('.', ',') : '';
+      document.getElementById('gestao-entry-note').value = order.note || '';
+      gestaoPendingOrderItems = order.items.map((item, index) => ({
+        tempId: item.id || `edit-${Date.now()}-${index}`,
+        originalId: item.id || '',
+        productId: item.productId,
+        size: item.size,
+        quantity: Number(item.quantity || 0),
+        cost: Number(item.cost || 0)
+      }));
+      const saveBtn = document.getElementById('gestao-entry-save-btn');
+      const cancelBtn = document.getElementById('gestao-entry-cancel-btn');
+      if (saveBtn) saveBtn.textContent = 'Atualizar pedido';
+      if (cancelBtn) cancelBtn.classList.remove('hidden');
+      renderGestaoPendingOrder();
+      activateGestaoTab('gestao-entradas');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return true;
+    }
+
+    function editGestaoOrder(orderId) {
+      const loaded = loadGestaoOrderIntoForm(orderId);
+      if (!loaded) {
+        showMessage('gestao-entry-message', 'Não foi possível localizar esse pedido para edição.', 'error');
+      }
+    }
+
+    function cancelGestaoOrderEdit() {
+      editingGestaoOrderId = null;
+      gestaoPendingOrderItems = [];
+      document.getElementById('gestao-entry-date').value = new Date().toISOString().slice(0,10);
+      document.getElementById('gestao-entry-supplier').value = '';
+      document.getElementById('gestao-entry-extra').value = '';
+      document.getElementById('gestao-entry-note').value = '';
+      const saveBtn = document.getElementById('gestao-entry-save-btn');
+      const cancelBtn = document.getElementById('gestao-entry-cancel-btn');
+      if (saveBtn) saveBtn.textContent = 'Salvar pedido completo';
+      if (cancelBtn) cancelBtn.classList.add('hidden');
+      clearMessage('gestao-entry-message');
+      resetGestaoEntryItemFields();
+      renderGestaoPendingOrder();
+    }
+
     function renderGestaoSuppliers() {
       const container = document.getElementById('gestaoSuppliersList');
       if (!container) return;
@@ -4481,7 +4570,10 @@ Camisa Real Madrid 24/25"></textarea>
               <div class="gestao-list-title">${escapeHtml(item.name)}</div>
               <div class="gestao-list-sub">${item.contact ? escapeHtml(item.contact) : 'Sem contato informado'}</div>
             </div>
-            <button class="btn btn-danger" type="button" onclick="deleteGestaoSupplier('${item.id}')">Excluir</button>
+            <div class="table-actions">
+              <button class="btn btn-success" type="button" onclick="editGestaoSupplier('${item.id}')">Editar</button>
+              <button class="btn btn-danger" type="button" onclick="deleteGestaoSupplier('${item.id}')">Excluir</button>
+            </div>
           </div>
         </article>
       `).join('');
