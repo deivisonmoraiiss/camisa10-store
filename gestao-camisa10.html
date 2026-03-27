@@ -64,11 +64,11 @@
 
     .module-shell{display:grid;gap:18px}
     .module-switcher{
-      display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px;
-      position:sticky;top:84px;z-index:45;
-      background:rgba(7,7,7,.94);padding:10px;border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(12px)
+      display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;
+      position:static;top:auto;z-index:auto;
+      background:transparent;padding:0;border:none;border-radius:0;backdrop-filter:none
     }
-    .module-btn{flex:1;min-width:160px;border:none;background:#141414;color:#f2f2f2;border:1px solid var(--line);padding:14px 18px;border-radius:16px;font-weight:900;cursor:pointer;transition:.2s ease;text-align:left}
+    .module-btn{flex:0 0 auto;min-width:130px;border:none;background:#141414;color:#f2f2f2;border:1px solid var(--line);padding:10px 14px;border-radius:14px;font-weight:900;cursor:pointer;transition:.2s ease;text-align:left}
     .module-btn small{display:block;color:var(--muted);font-weight:600;font-size:.78rem;margin-top:4px}
     .module-btn.active{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#111;border-color:transparent;box-shadow:0 14px 28px rgba(0,0,0,.18)}
     .module-btn.active small{color:#2f2510}
@@ -264,12 +264,17 @@
     .metric-card strong{font-size:1.2rem;color:#fff}
 
     .order-collapsible{border:1px solid var(--line);border-radius:18px;background:#101010;overflow:hidden}
-    .order-collapsible summary{list-style:none;cursor:pointer;padding:16px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+    .order-collapsible summary{list-style:none;cursor:pointer;padding:16px;display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:flex-start}
     .order-collapsible summary::-webkit-details-marker{display:none}
     .order-collapsible[open] summary{border-bottom:1px solid rgba(255,255,255,.06)}
     .order-collapsible-body{padding:14px 16px 16px}
     .order-summary-main{display:grid;gap:6px}
     .order-summary-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+    .order-summary-thumb{width:64px;height:64px;border-radius:14px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f}
+    .order-detail-item{display:grid;grid-template-columns:60px minmax(0,1fr);gap:12px;align-items:start;margin-top:10px;padding:12px;border-radius:14px;background:#0d0d0d;border:1px solid rgba(255,255,255,.05)}
+    .order-detail-item img{width:60px;height:60px;border-radius:12px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f}
+    .stock-group-card{display:grid;grid-template-columns:72px minmax(0,1fr);gap:14px;align-items:start}
+    .stock-size-summary{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
     .stock-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
     .stock-toolbar input{flex:1;min-width:220px;padding:12px 14px;border-radius:14px;border:1px solid #2d2d2d;background:#101010;color:#fff}
     .stock-card{display:grid;grid-template-columns:72px minmax(0,1fr);gap:14px;align-items:start}
@@ -280,7 +285,7 @@
     .metric-card strong{font-size:1.2rem;color:#fff}
 
     @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid{grid-template-columns:1fr}}
-    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:28px 72px minmax(0,1fr);padding:12px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-thumb{width:72px;height:72px}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{top:78px;padding:8px;display:grid;grid-template-columns:1fr 1fr;border-radius:18px}.module-btn{min-width:0;padding:12px 14px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
+    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:28px 72px minmax(0,1fr);padding:12px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-thumb{width:72px;height:72px}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
   </style>
 </head>
 <body>
@@ -981,7 +986,6 @@ Camisa Real Madrid 24/25"></textarea>
 
           <div class="gestao-subtabs">
             <button class="gestao-subtab active" type="button" data-gestao-tab="gestao-dashboard">Resumo</button>
-            <button class="gestao-subtab" type="button" data-gestao-tab="gestao-indicadores">Indicadores</button>
             <button class="gestao-subtab" type="button" data-gestao-tab="gestao-indicadores">Indicadores</button>
             <button class="gestao-subtab" type="button" data-gestao-tab="gestao-entradas">Pedidos / Entradas</button>
             <button class="gestao-subtab" type="button" data-gestao-tab="gestao-estoque">Estoque</button>
@@ -4332,15 +4336,20 @@ Camisa Real Madrid 24/25"></textarea>
         const itemsTotal = order.items.reduce((sum, item) => sum + (Number(item.cost || 0) * Number(item.quantity || 0)), 0);
         const grandTotal = itemsTotal + Number(order.extraCost || 0);
         const contact = gestaoSuppliers.find(s => String(s.id) === String(order.supplierId))?.contact || '—';
+        const coverImage = getProductImageById(order.items[0]?.productId);
         const itemsHtml = order.items.map(entry => `
-          <div class="batch-summary" style="margin-top:10px;">
-            <strong>${escapeHtml(getProductNameById(entry.productId))}</strong> • tam. ${escapeHtml(entry.size)} • ${entry.quantity} un.<br>
-            Custo unitário: <strong>${formatPrice(entry.cost)}</strong> • Total item: <strong>${formatPrice(Number(entry.cost || 0) * Number(entry.quantity || 0))}</strong>
+          <div class="order-detail-item">
+            <img src="${escapeHtml(getProductImageById(entry.productId))}" alt="${escapeHtml(getProductNameById(entry.productId))}" onerror="this.src='https://via.placeholder.com/240x240?text=Camisa';" />
+            <div>
+              <strong>${escapeHtml(getProductNameById(entry.productId))}</strong> • tam. ${escapeHtml(entry.size)} • ${entry.quantity} un.<br>
+              Custo unitário: <strong>${formatPrice(entry.cost)}</strong> • Total item: <strong>${formatPrice(Number(entry.cost || 0) * Number(entry.quantity || 0))}</strong>
+            </div>
           </div>
         `).join('');
         return `
           <details class="order-collapsible">
             <summary>
+              <img class="order-summary-thumb" src="${escapeHtml(coverImage)}" alt="Pedido ${escapeHtml(order.supplierName)}" onerror="this.src='https://via.placeholder.com/240x240?text=Camisa';" />
               <div class="order-summary-main">
                 <div class="gestao-list-title">Pedido • ${escapeHtml(order.supplierName)}</div>
                 <div class="gestao-list-sub">${escapeHtml(order.date || '')} • ${totalPieces} peça(s) • ${order.items.length} item(ns)</div>
@@ -4358,6 +4367,7 @@ Camisa Real Madrid 24/25"></textarea>
               </div>
               <div class="actions-row" style="margin-top:10px;">
                 <button class="btn btn-success" type="button" onclick="editGestaoOrder('${order.orderId}')">Editar pedido</button>
+                <button class="btn btn-danger" type="button" onclick="deleteGestaoOrder('${order.orderId}')">Excluir pedido</button>
               </div>
               ${order.note ? `<div class="small-muted" style="margin-top:10px;">Obs.: ${escapeHtml(order.note)}</div>` : ''}
               ${itemsHtml}
@@ -4367,41 +4377,79 @@ Camisa Real Madrid 24/25"></textarea>
       }).join('');
     }
 
-    function renderGestaoStock() {
+function renderGestaoStock() {
       const container = document.getElementById('gestaoStockList');
       if (!container) return;
       const search = (document.getElementById('gestao-stock-search')?.value || '').trim().toLowerCase();
-      let stock = calculateGestaoStock();
+      const stock = calculateGestaoStock();
+      const groupedMap = new Map();
+
+      stock.forEach(item => {
+        const key = String(item.productId);
+        if (!groupedMap.has(key)) {
+          groupedMap.set(key, {
+            productId: item.productId,
+            name: item.name,
+            image: getProductImageById(item.productId),
+            sizes: { P: 0, M: 0, G: 0, EG: 0, GG: 0 },
+            totalQty: 0,
+            totalInvestment: 0,
+            weightedCost: 0
+          });
+        }
+        const row = groupedMap.get(key);
+        const sizeKey = String(item.size || '').toUpperCase();
+        if (row.sizes[sizeKey] === undefined) row.sizes[sizeKey] = 0;
+        row.sizes[sizeKey] += Math.max(0, Number(item.currentQty || 0));
+        row.totalQty += Math.max(0, Number(item.currentQty || 0));
+        row.totalInvestment += Number(item.currentInvestment || 0);
+        row.weightedCost += Math.max(0, Number(item.currentQty || 0)) * Number(item.averageCost || 0);
+      });
+
+      let grouped = [...groupedMap.values()].map(item => ({
+        ...item,
+        averageCost: item.totalQty ? item.weightedCost / item.totalQty : 0
+      })).sort((a,b) => (a.name || '').localeCompare(b.name || ''));
+
       if (search) {
-        stock = stock.filter(item => (item.name || '').toLowerCase().includes(search));
+        grouped = grouped.filter(item => (item.name || '').toLowerCase().includes(search));
       }
-      if (!stock.length) {
+
+      if (!grouped.length) {
         container.innerHTML = '<div class="gestao-empty">Nenhum resultado encontrado no estoque.</div>';
         return;
       }
-      container.innerHTML = stock.map(item => `
-        <article class="gestao-list-card stock-card">
-          <img src="${escapeHtml(getProductImageById(item.productId))}" alt="${escapeHtml(item.name)}" onerror="this.src='https://via.placeholder.com/240x240?text=Camisa';" />
-          <div>
-            <div class="gestao-list-head">
-              <div>
-                <div class="gestao-list-title">${escapeHtml(item.name)}</div>
-                <div class="gestao-list-sub">Tamanho ${escapeHtml(item.size)}</div>
+
+      const sizeOrder = ['P','M','G','GG','EG'];
+      container.innerHTML = grouped.map(item => {
+        const sizeSummary = sizeOrder
+          .filter(size => Number(item.sizes[size] || 0) > 0)
+          .map(size => `<span class="badge">${size} ${item.sizes[size]}</span>`)
+          .join('');
+
+        return `
+          <article class="gestao-list-card stock-group-card">
+            <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" onerror="this.src='https://via.placeholder.com/240x240?text=Camisa';" />
+            <div>
+              <div class="gestao-list-head">
+                <div>
+                  <div class="gestao-list-title">${escapeHtml(item.name)}</div>
+                  <div class="gestao-list-sub">Saldo total: ${item.totalQty} peça(s)</div>
+                </div>
+                <span class="badge">${item.totalQty} em estoque</span>
               </div>
-              <span class="badge">Saldo: ${item.currentQty}</span>
+              <div class="stock-size-summary">${sizeSummary || '<span class="small-muted">Sem saldo por tamanho</span>'}</div>
+              <div class="product-admin-meta" style="margin-top:8px;">
+                <span class="badge">Custo médio: ${formatPrice(item.averageCost)}</span>
+                <span class="badge">Investido: ${formatPrice(item.totalInvestment)}</span>
+              </div>
             </div>
-            <div class="product-admin-meta">
-              <span class="badge">Entradas: ${item.qty}</span>
-              <span class="badge">Vendidas: ${item.soldQty}</span>
-              <span class="badge">Custo médio: ${formatPrice(item.averageCost)}</span>
-              <span class="badge">Investido: ${formatPrice(item.currentInvestment)}</span>
-            </div>
-          </div>
-        </article>
-      `).join('');
+          </article>
+        `;
+      }).join('');
     }
 
-    function updateGestaoSalePreview() {
+function updateGestaoSalePreview() {
       const box = document.getElementById('gestaoSalePreview');
       if (!box) return;
       const productId = document.getElementById('gestao-sale-product')?.value || '';
@@ -4537,7 +4585,24 @@ Camisa Real Madrid 24/25"></textarea>
       renderGestaoPendingOrder();
     }
 
-    function renderGestaoSuppliers() {
+    async function deleteGestaoOrder(orderId) {
+      const confirmDelete = confirm('Deseja excluir este pedido inteiro?');
+      if (!confirmDelete) return;
+      gestaoEntries = gestaoEntries.filter(item => String(item.orderId) !== String(orderId));
+      if (String(editingGestaoOrderId || '') === String(orderId)) {
+        cancelGestaoOrderEdit();
+      }
+      try {
+        await persistGestaoState();
+      } catch (error) {
+        console.error('Erro ao excluir pedido:', error);
+        gestaoSyncMode = 'local';
+        updateGestaoSyncUi();
+      }
+      renderGestao();
+      showMessage('gestao-entry-message', 'Pedido excluído com sucesso.', 'success');
+    }
+function renderGestaoSuppliers() {
       const container = document.getElementById('gestaoSuppliersList');
       if (!container) return;
       if (!gestaoSuppliers.length) {
@@ -4594,22 +4659,28 @@ Camisa Real Madrid 24/25"></textarea>
         showMessage('gestao-supplier-message', 'Digite o nome do fornecedor.', 'error');
         return;
       }
-      gestaoSuppliers.unshift({ id: generateClientUuid(), name, contact });
+
+      const wasEditing = !!editingGestaoSupplierId;
+      if (editingGestaoSupplierId) {
+        gestaoSuppliers = gestaoSuppliers.map(item => String(item.id) === String(editingGestaoSupplierId) ? ({ ...item, name, contact }) : item);
+      } else {
+        gestaoSuppliers.unshift({ id: generateClientUuid(), name, contact });
+      }
+
       try {
         await persistGestaoState();
       } catch (error) {
         console.error('Erro ao salvar fornecedor:', error);
         gestaoSyncMode = 'local';
         updateGestaoSyncUi();
-        showMessage('gestao-supplier-message', 'Fornecedor salvo no aparelho. Para sincronizar online, verifique as tabelas inventory_suppliers, inventory_orders e inventory_order_items no Supabase.', 'success');
       }
-      document.getElementById('gestao-supplier-name').value = '';
-      document.getElementById('gestao-supplier-contact').value = '';
+
+      cancelGestaoSupplierEdit();
       renderGestao();
-      showMessage('gestao-supplier-message', 'Fornecedor salvo com sucesso.', 'success');
+      showMessage('gestao-supplier-message', wasEditing ? 'Fornecedor atualizado com sucesso.' : 'Fornecedor salvo com sucesso.', 'success');
     }
 
-    async function deleteGestaoSupplier(id) {
+async function deleteGestaoSupplier(id) {
       const confirmDelete = confirm('Deseja excluir este fornecedor?');
       if (!confirmDelete) return;
       gestaoSuppliers = gestaoSuppliers.filter(item => String(item.id) !== String(id));
@@ -4637,11 +4708,15 @@ Camisa Real Madrid 24/25"></textarea>
       }
 
       const finalDate = date || new Date().toISOString().slice(0,10);
-      const orderId = generateClientUuid();
+      const orderId = editingGestaoOrderId || generateClientUuid();
       const orderKey = `${finalDate}__${supplierId || 'sem-fornecedor'}__${orderId}`;
 
+      if (editingGestaoOrderId) {
+        gestaoEntries = gestaoEntries.filter(item => String(item.orderId) !== String(editingGestaoOrderId));
+      }
+
       const entriesToAdd = gestaoPendingOrderItems.map((item, index) => ({
-        id: generateClientUuid(),
+        id: item.originalId || generateClientUuid(),
         orderId,
         productId: item.productId,
         size: item.size,
@@ -4655,26 +4730,22 @@ Camisa Real Madrid 24/25"></textarea>
       }));
 
       gestaoEntries = [...entriesToAdd, ...gestaoEntries];
+
       try {
         await persistGestaoState();
       } catch (error) {
-        console.error('Erro ao salvar entrada:', error);
+        console.error('Erro ao salvar pedido:', error);
         gestaoSyncMode = 'local';
         updateGestaoSyncUi();
-        showMessage('gestao-entry-message', 'Pedido salvo no aparelho. Para sincronizar online, confira inventory_orders e inventory_order_items no Supabase.', 'success');
       }
 
-      gestaoPendingOrderItems = [];
-      document.getElementById('gestao-entry-date').value = new Date().toISOString().slice(0,10);
-      document.getElementById('gestao-entry-supplier').value = '';
-      document.getElementById('gestao-entry-extra').value = '';
-      document.getElementById('gestao-entry-note').value = '';
-      resetGestaoEntryItemFields();
       renderGestao();
-      showMessage('gestao-entry-message', 'Pedido salvo com sucesso.', 'success');
+      const wasEditing = !!editingGestaoOrderId;
+      cancelGestaoOrderEdit();
+      showMessage('gestao-entry-message', wasEditing ? 'Pedido atualizado com sucesso.' : 'Pedido salvo com sucesso.', 'success');
     }
 
-    async function saveGestaoSale() {
+async function saveGestaoSale() {
       clearMessage('gestao-sale-message');
       const productId = document.getElementById('gestao-sale-product').value;
       const size = document.getElementById('gestao-sale-size').value;
