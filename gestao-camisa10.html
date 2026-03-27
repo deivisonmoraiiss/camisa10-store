@@ -223,6 +223,18 @@
     .batch-summary-list{display:grid;gap:8px;color:#e7e7e7}
 
 
+
+    .order-builder-shell{display:grid;gap:16px}
+    .order-top-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
+    .order-items-box{padding:16px;border-radius:18px;background:#101010;border:1px solid var(--line);display:grid;gap:12px}
+    .order-items-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+    .order-item-row{display:grid;grid-template-columns:minmax(0,1.35fr) 92px 92px 120px auto;gap:10px;align-items:end;padding:12px;border-radius:16px;background:#0c0c0c;border:1px solid rgba(255,255,255,.06)}
+    .order-item-mini{padding:12px;border-radius:14px;background:#0d0d0d;border:1px solid rgba(255,255,255,.06);display:grid;gap:6px}
+    .order-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .order-summary-box{padding:14px;border-radius:16px;background:#101010;border:1px solid var(--line);display:grid;gap:6px}
+    .order-summary-box span{color:var(--muted);font-size:.8rem}
+    .order-summary-box strong{color:#fff;font-size:1rem}
+
     .selector-wrapper{max-width:860px;margin:24px auto}
     .selector-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
     .selector-card{padding:24px;border-radius:24px;background:linear-gradient(180deg,#121212 0%, #101010 100%);border:1px solid var(--line-gold);display:grid;gap:12px;cursor:pointer;transition:.2s ease;text-align:left}
@@ -246,28 +258,8 @@
     .gestao-list-title{font-weight:900;color:#fff}
     .gestao-list-sub{color:var(--muted);font-size:.84rem}
 
-
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;z-index:120;padding:18px}
-    .modal-overlay.show{display:flex}
-    .modal-sheet{width:min(980px,100%);max-height:92vh;overflow:auto;background:linear-gradient(180deg,var(--panel) 0%, var(--panel-2) 100%);border:1px solid var(--line-gold);border-radius:24px;box-shadow:var(--shadow);padding:20px}
-    .modal-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap;margin-bottom:18px}
-    .modal-body{display:grid;gap:18px}
-    .modal-close{min-width:120px}
-    .sale-builder-shell{display:grid;gap:16px}
-    .sale-top-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;align-items:start}
-    .sale-items-box{padding:16px;border-radius:18px;background:#101010;border:1px solid var(--line);display:grid;gap:12px}
-    .sale-item-row{display:grid;grid-template-columns:minmax(0,1.35fr) 92px 92px 120px auto;gap:10px;align-items:end;padding:12px;border-radius:16px;background:#0c0c0c;border:1px solid rgba(255,255,255,.06)}
-    .sale-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-    .sale-summary-box{padding:14px;border-radius:16px;background:#101010;border:1px solid var(--line);display:grid;gap:6px}
-    .sale-summary-box span{color:var(--muted);font-size:.8rem}
-    .sale-summary-box strong{color:#fff;font-size:1rem}
-    .sale-card-item{padding:12px;border-radius:14px;background:#0d0d0d;border:1px solid rgba(255,255,255,.06);display:grid;gap:8px}
-    .sale-group-card{padding:14px;border-radius:18px;background:#101010;border:1px solid var(--line);display:grid;gap:10px}
-    .sale-group-items{display:grid;gap:8px}
-    .modal-items-list{display:grid;gap:10px}
-
-    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao{grid-template-columns:1fr}}
-    @media (max-width:700px){.container{width:min(94%,94%)}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:28px 72px minmax(0,1fr);padding:12px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-thumb{width:72px;height:72px}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{top:78px;padding:8px;display:grid;grid-template-columns:1fr 1fr;border-radius:18px}.module-btn{min-width:0;padding:12px 14px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
+    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid{grid-template-columns:1fr}}
+    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:28px 72px minmax(0,1fr);padding:12px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-thumb{width:72px;height:72px}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{top:78px;padding:8px;display:grid;grid-template-columns:1fr 1fr;border-radius:18px}.module-btn{min-width:0;padding:12px 14px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
   </style>
 </head>
 <body>
@@ -349,7 +341,7 @@
         <div class="module-switcher">
           <button class="module-btn active" data-module="module-loja">
             Loja
-            <small>Produtos, categorias, banners e ajustes</small>
+            <small>Produtos, lote por modelo, banners e ajustes</small>
           </button>
           <button class="module-btn" data-module="module-gestao">
             Gestão
@@ -365,7 +357,7 @@
             </div>
             <div class="module-mini-tabs">
               <span class="module-chip">Loja online</span>
-              <span class="module-chip">Cadastro rápido</span>
+              <span class="module-chip">Cadastro por modelo</span>
               <span class="module-chip">Foco no celular</span>
             </div>
           </div>
@@ -680,11 +672,11 @@
           <div class="card">
             <div class="form-header-row">
               <div>
-                <h3 class="section-title">Cadastro em lote — Sob encomenda</h3>
-                <p class="section-copy" style="margin-bottom:0;">Cadastre várias camisas de uma vez com categoria, tamanhos e imagens compartilhadas ou próprias em cada produto.</p>
+                <h3 class="section-title">Cadastro em lote — por modelo</h3>
+                <p class="section-copy" style="margin-bottom:0;">Cadastre vários modelos de camisa de uma vez, com categoria, tamanhos e imagens compartilhadas ou próprias em cada produto.</p>
               </div>
               <div class="inline-status">
-                <span class="mini-kpi"><strong id="batch-create-count">0</strong><span>Produtos preparados</span></span>
+                <span class="mini-kpi"><strong id="batch-create-count">0</strong><span>Modelos preparados</span></span>
               </div>
             </div>
 
@@ -727,7 +719,7 @@
                   </div>
 
                   <div class="helper-box helper-box-visible">
-                    Essa área define o padrão do lote inteiro. Como a maior parte vai ser sob encomenda, o tipo já fica travado assim para acelerar seu cadastro.
+                    Essa área define o padrão do lote inteiro. Aqui você cadastra só o modelo do produto. Quantidade e custo entram depois na Gestão, no pedido de entrada.
                   </div>
                 </div>
 
@@ -760,23 +752,27 @@
 
               <div class="batch-create-main">
                 <div class="mini-card">
-                  <h4>3. Monte o lote</h4>
+                  <h4>3. Monte o lote por modelo</h4>
                   <div class="field">
-                    <label for="batch-create-names">Nomes dos produtos (um por linha)</label>
+                    <label for="batch-create-names">Modelos dos produtos (um por linha)</label>
                     <textarea id="batch-create-names" placeholder="Ex:
 Camisa Flamengo 24/25
 Camisa Brasil 2026
 Camisa Real Madrid 24/25"></textarea>
                   </div>
 
+                  <div class="helper-box helper-box-visible" style="display:block; margin-top:-4px;">
+                    Exemplo de uso: digite um modelo por linha, marque os tamanhos padrão e salve. O estoque real e o custo por item você lança depois na área <strong>Gestão &gt; Pedidos / Entradas</strong>.
+                  </div>
+
                   <div class="batch-save-bar">
                     <div class="batch-create-kpi">
-                      <div class="mini-kpi"><strong id="batch-kpi-lines">0</strong><span>Linhas válidas</span></div>
+                      <div class="mini-kpi"><strong id="batch-kpi-lines">0</strong><span>Modelos digitados</span></div>
                       <div class="mini-kpi"><strong id="batch-kpi-with-shared">0</strong><span>Usando compartilhadas</span></div>
                       <div class="mini-kpi"><strong id="batch-kpi-with-own">0</strong><span>Com imagens próprias</span></div>
                     </div>
                     <div class="actions-row" style="margin-top:0;">
-                      <button class="btn btn-secondary" type="button" onclick="generateBatchCreateProducts()">Gerar cards do lote</button>
+                      <button class="btn btn-secondary" type="button" onclick="generateBatchCreateProducts()">Gerar modelos do lote</button>
                       <button class="btn btn-ghost" type="button" onclick="clearBatchCreateBuilder()">Limpar lote</button>
                     </div>
                   </div>
@@ -785,7 +781,7 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="mini-card">
                   <h4>4. Ajuste as imagens de cada produto</h4>
                   <div id="batch-create-builder" class="batch-products-builder">
-                    <div class="empty-state">Cole os nomes dos produtos e clique em “Gerar cards do lote”.</div>
+                    <div class="empty-state">Cole um modelo por linha e clique em “Gerar modelos do lote”.</div>
                   </div>
                 </div>
 
@@ -793,12 +789,12 @@ Camisa Real Madrid 24/25"></textarea>
                   <div class="batch-save-bar">
                     <div class="batch-summary-list">
                       <strong>Antes de salvar:</strong>
-                      <span>• cada produto precisa ter imagem principal própria ou compartilhada</span>
-                      <span>• os tamanhos marcados serão aplicados em todo o lote</span>
-                      <span>• a descrição padrão será repetida em todos os produtos</span>
+                      <span>• cada modelo precisa ter imagem principal própria ou compartilhada</span>
+                      <span>• os tamanhos marcados serão aplicados em todos os modelos do lote</span>
+                      <span>• a descrição padrão será repetida em todos os modelos</span>
                     </div>
                     <div class="actions-row" style="margin-top:0;">
-                      <button class="btn btn-primary" type="button" onclick="saveBatchCreateProducts()">Cadastrar lote inteiro</button>
+                      <button class="btn btn-primary" type="button" onclick="saveBatchCreateProducts()">Cadastrar modelos do lote</button>
                     </div>
                   </div>
                   <div id="batch-create-message" class="message"></div>
@@ -1015,59 +1011,115 @@ Camisa Real Madrid 24/25"></textarea>
           </section>
 
           <section id="gestao-entradas" class="gestao-subpanel">
-            <div class="grid-2-equal">
+            <div class="stack">
               <div class="card">
-                <h3 class="section-title">Lançar item do pedido</h3>
+                <h3 class="section-title">Montar pedido / entrada em lote</h3>
                 <div class="helper-box helper-box-visible" style="margin-bottom:16px;display:block;">
-                  Itens do mesmo <strong>fornecedor</strong> no mesmo <strong>dia</strong> ficam agrupados como um <strong>pedido</strong>. Os custos extras do pedido entram no valor investido.
+                  Monte o pedido uma vez, adicione vários itens e só depois salve. Assim fica organizado, limpo no celular e sem um emaranhado de informações.
                 </div>
-                <div class="field">
-                  <label for="gestao-entry-product">Produto</label>
-                  <select id="gestao-entry-product"></select>
-                </div>
-                <div class="grid-2-equal">
-                  <div class="field">
-                    <label for="gestao-entry-size">Tamanho</label>
-                    <select id="gestao-entry-size">
-                      <option value="P">P</option>
-                      <option value="M">M</option>
-                      <option value="G">G</option>
-                      <option value="EG">EG</option>
-                    </select>
+
+                <div class="order-builder-shell">
+                  <div class="order-top-grid">
+                    <div class="order-items-box">
+                      <div class="order-items-head">
+                        <strong>Dados do pedido</strong>
+                        <span class="badge">Fornecedor + data + custos extras</span>
+                      </div>
+                      <div class="grid-2-equal">
+                        <div class="field">
+                          <label for="gestao-entry-supplier">Fornecedor</label>
+                          <select id="gestao-entry-supplier"></select>
+                        </div>
+                        <div class="field">
+                          <label for="gestao-entry-date">Data do pedido</label>
+                          <input type="date" id="gestao-entry-date" />
+                        </div>
+                      </div>
+                      <div class="grid-2-equal">
+                        <div class="field">
+                          <label for="gestao-entry-extra">Custo extra do pedido</label>
+                          <input type="text" inputmode="decimal" id="gestao-entry-extra" placeholder="Frete, embalagem comprada, taxa..." />
+                        </div>
+                        <div class="field">
+                          <label for="gestao-entry-note">Observação do pedido</label>
+                          <input type="text" id="gestao-entry-note" placeholder="Ex: compra do dia / lote do fornecedor" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="order-items-box">
+                      <div class="order-items-head">
+                        <strong>Resumo do pedido</strong>
+                        <span class="badge" id="gestao-pending-count">0 item(ns)</span>
+                      </div>
+                      <div class="order-summary-grid">
+                        <div class="order-summary-box"><span>Itens</span><strong id="gestao-pending-items-total">0</strong></div>
+                        <div class="order-summary-box"><span>Peças</span><strong id="gestao-pending-pieces-total">0</strong></div>
+                        <div class="order-summary-box"><span>Produtos</span><strong id="gestao-pending-products-total">R$ 0,00</strong></div>
+                        <div class="order-summary-box"><span>Total pedido</span><strong id="gestao-pending-grand-total">R$ 0,00</strong></div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="field">
-                    <label for="gestao-entry-qty">Quantidade</label>
-                    <input type="number" id="gestao-entry-qty" min="1" placeholder="Ex: 3" />
+
+                  <div class="order-items-box">
+                    <div class="order-items-head">
+                      <strong>Adicionar item</strong>
+                      <span class="small-muted">Adicione quantos produtos quiser antes de salvar o pedido</span>
+                    </div>
+                    <div class="order-item-row">
+                      <div class="field">
+                        <label for="gestao-entry-product">Produto</label>
+                        <select id="gestao-entry-product"></select>
+                      </div>
+                      <div class="field">
+                        <label for="gestao-entry-size">Tam.</label>
+                        <select id="gestao-entry-size">
+                          <option value="P">P</option>
+                          <option value="M">M</option>
+                          <option value="G">G</option>
+                          <option value="EG">EG</option>
+                        </select>
+                      </div>
+                      <div class="field">
+                        <label for="gestao-entry-qty">Qtd.</label>
+                        <input type="number" id="gestao-entry-qty" min="1" placeholder="3" />
+                      </div>
+                      <div class="field">
+                        <label for="gestao-entry-cost">Custo un.</label>
+                        <input type="text" inputmode="decimal" id="gestao-entry-cost" placeholder="89,90" />
+                      </div>
+                      <div class="actions-row" style="margin-top:0;">
+                        <button class="btn btn-secondary" type="button" onclick="addGestaoEntryItem()">Adicionar</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="grid-2-equal">
+                    <div class="card" style="padding:16px;">
+                      <div class="order-items-head" style="margin-bottom:12px;">
+                        <strong>Itens montados</strong>
+                        <button class="btn btn-ghost" type="button" onclick="clearGestaoPendingOrder()">Limpar pedido</button>
+                      </div>
+                      <div id="gestaoPendingItemsList" class="gestao-list">
+                        <div class="gestao-empty">Nenhum item adicionado ainda.</div>
+                      </div>
+                    </div>
+
+                    <div class="card" style="padding:16px;">
+                      <div class="order-items-head" style="margin-bottom:12px;">
+                        <strong>Finalizar</strong>
+                        <span class="badge">Salva tudo de uma vez</span>
+                      </div>
+                      <div class="gestao-empty" style="padding:14px;">
+                        Quando você salvar, todos os itens entram no mesmo pedido, usando o mesmo fornecedor e a mesma data. Os custos extras entram no valor investido.
+                      </div>
+                      <div class="actions-row">
+                        <button class="btn btn-primary" type="button" onclick="saveGestaoEntry()">Salvar pedido completo</button>
+                      </div>
+                      <div id="gestao-entry-message" class="message"></div>
+                    </div>
                   </div>
                 </div>
-                <div class="grid-2-equal">
-                  <div class="field">
-                    <label for="gestao-entry-cost">Custo unitário</label>
-                    <input type="text" inputmode="decimal" id="gestao-entry-cost" placeholder="Ex: 89,90" />
-                  </div>
-                  <div class="field">
-                    <label for="gestao-entry-date">Data do pedido</label>
-                    <input type="date" id="gestao-entry-date" />
-                  </div>
-                </div>
-                <div class="field">
-                  <label for="gestao-entry-supplier">Fornecedor</label>
-                  <select id="gestao-entry-supplier"></select>
-                </div>
-                <div class="grid-2-equal">
-                  <div class="field">
-                    <label for="gestao-entry-extra">Custo extra do pedido</label>
-                    <input type="text" inputmode="decimal" id="gestao-entry-extra" placeholder="Frete, embalagem comprada, taxa..." />
-                  </div>
-                  <div class="field">
-                    <label for="gestao-entry-note">Observação do pedido</label>
-                    <input type="text" id="gestao-entry-note" placeholder="Ex: compra do dia / lote do fornecedor" />
-                  </div>
-                </div>
-                <div class="actions-row">
-                  <button class="btn btn-primary" type="button" onclick="saveGestaoEntry()">Salvar item no pedido</button>
-                </div>
-                <div id="gestao-entry-message" class="message"></div>
               </div>
 
               <div class="card">
@@ -1094,136 +1146,67 @@ Camisa Real Madrid 24/25"></textarea>
             </div>
           </section>
 
-          
-<section id="gestao-vendas" class="gestao-subpanel">
-            <div class="stack">
+          <section id="gestao-vendas" class="gestao-subpanel">
+            <div class="grid-2-equal">
               <div class="card">
-                <div class="list-header-row">
-                  <div>
-                    <h3 class="section-title" style="margin-bottom:6px;">Lançar venda profissional</h3>
-                    <div class="small-muted">Monte a venda com vários produtos, cliente, contato e custos extras. Só salva quando tudo estiver conferido.</div>
-                  </div>
-                  <button class="btn btn-secondary" type="button" onclick="clearGestaoPendingSale()">Limpar venda</button>
+                <h3 class="section-title">Lançar venda</h3>
+                <div class="field">
+                  <label for="gestao-sale-product">Produto</label>
+                  <select id="gestao-sale-product" onchange="updateGestaoSalePreview()"></select>
                 </div>
-
-                <div class="sale-builder-shell">
-                  <div class="sale-top-grid">
-                    <div class="sale-items-box">
-                      <div class="order-items-head">
-                        <strong>Dados da venda</strong>
-                        <span class="badge">Cliente + data + custos extras</span>
-                      </div>
-                      <div class="grid-2-equal">
-                        <div class="field">
-                          <label for="gestao-sale-date">Data</label>
-                          <input type="date" id="gestao-sale-date" onchange="renderGestaoPendingSale()" />
-                        </div>
-                        <div class="field">
-                          <label for="gestao-sale-client-name">Nome do cliente</label>
-                          <input type="text" id="gestao-sale-client-name" placeholder="Ex: João Pedro" oninput="renderGestaoPendingSale()" />
-                        </div>
-                      </div>
-                      <div class="grid-2-equal">
-                        <div class="field">
-                          <label for="gestao-sale-client-phone">Contato do cliente</label>
-                          <input type="text" id="gestao-sale-client-phone" placeholder="Ex: 5597..." oninput="renderGestaoPendingSale()" />
-                        </div>
-                        <div class="field">
-                          <label for="gestao-sale-packaging">Embalagem</label>
-                          <input type="text" inputmode="decimal" id="gestao-sale-packaging" placeholder="Ex: 3,50" oninput="renderGestaoPendingSale()" />
-                        </div>
-                      </div>
-                      <div class="grid-2-equal">
-                        <div class="field">
-                          <label for="gestao-sale-shipping">Frete / entrega</label>
-                          <input type="text" inputmode="decimal" id="gestao-sale-shipping" placeholder="Ex: 10,00" oninput="renderGestaoPendingSale()" />
-                        </div>
-                        <div class="field">
-                          <label for="gestao-sale-fee">Taxas</label>
-                          <input type="text" inputmode="decimal" id="gestao-sale-fee" placeholder="Ex: 4,99" oninput="renderGestaoPendingSale()" />
-                        </div>
-                      </div>
-                      <div class="field">
-                        <label for="gestao-sale-other">Outros custos</label>
-                        <input type="text" inputmode="decimal" id="gestao-sale-other" placeholder="Ex: brinde, ajuste, etc." oninput="renderGestaoPendingSale()" />
-                      </div>
-                    </div>
-
-                    <div class="sale-items-box">
-                      <div class="order-items-head">
-                        <strong>Resumo da venda</strong>
-                        <span class="badge" id="gestao-sale-pending-count">0 item(ns)</span>
-                      </div>
-                      <div class="sale-summary-grid">
-                        <div class="sale-summary-box"><span>Itens</span><strong id="gestao-sale-pending-items-total">0</strong></div>
-                        <div class="sale-summary-box"><span>Peças</span><strong id="gestao-sale-pending-pieces-total">0</strong></div>
-                        <div class="sale-summary-box"><span>Receita</span><strong id="gestao-sale-pending-revenue-total">R$ 0,00</strong></div>
-                        <div class="sale-summary-box"><span>Lucro real</span><strong id="gestao-sale-pending-profit-total">R$ 0,00</strong></div>
-                      </div>
-                      <div id="gestaoSalePreview" class="gestao-empty" style="padding:14px;">Adicione produtos para ver a prévia consolidada da venda.</div>
-                    </div>
+                <div class="grid-2-equal">
+                  <div class="field">
+                    <label for="gestao-sale-size">Tamanho</label>
+                    <select id="gestao-sale-size" onchange="updateGestaoSalePreview()">
+                      <option value="P">P</option>
+                      <option value="M">M</option>
+                      <option value="G">G</option>
+                      <option value="EG">EG</option>
+                    </select>
                   </div>
-
-                  <div class="sale-items-box">
-                    <div class="order-items-head">
-                      <strong>Adicionar produto à venda</strong>
-                      <span class="small-muted">Monte a venda com quantos produtos quiser</span>
-                    </div>
-                    <div class="sale-item-row">
-                      <div class="field">
-                        <label for="gestao-sale-product">Produto</label>
-                        <select id="gestao-sale-product" onchange="updateGestaoSaleItemPreview()"></select>
-                      </div>
-                      <div class="field">
-                        <label for="gestao-sale-size">Tam.</label>
-                        <select id="gestao-sale-size" onchange="updateGestaoSaleItemPreview()">
-                          <option value="P">P</option>
-                          <option value="M">M</option>
-                          <option value="G">G</option>
-                          <option value="EG">EG</option>
-                        </select>
-                      </div>
-                      <div class="field">
-                        <label for="gestao-sale-qty">Qtd.</label>
-                        <input type="number" id="gestao-sale-qty" min="1" value="1" placeholder="1" oninput="updateGestaoSaleItemPreview()" />
-                      </div>
-                      <div class="field">
-                        <label for="gestao-sale-price">Venda un.</label>
-                        <input type="text" inputmode="decimal" id="gestao-sale-price" placeholder="149,90" oninput="updateGestaoSaleItemPreview()" />
-                      </div>
-                      <div class="actions-row" style="margin-top:0;">
-                        <button class="btn btn-secondary" type="button" onclick="addGestaoSaleItem()">Adicionar</button>
-                      </div>
-                    </div>
-                    <div id="gestaoSaleItemPreviewBox" class="small-muted">Selecione um produto para ver o estoque disponível e o custo médio.</div>
-                  </div>
-
-                  <div class="grid-2-equal">
-                    <div class="card" style="padding:16px;">
-                      <div class="order-items-head" style="margin-bottom:12px;">
-                        <strong>Produtos da venda</strong>
-                        <button class="btn btn-ghost" type="button" onclick="clearGestaoPendingSale()">Limpar venda</button>
-                      </div>
-                      <div id="gestaoPendingSaleItemsList" class="gestao-list">
-                        <div class="gestao-empty">Nenhum produto adicionado à venda ainda.</div>
-                      </div>
-                    </div>
-
-                    <div class="card" style="padding:16px;">
-                      <div class="order-items-head" style="margin-bottom:12px;">
-                        <strong>Finalizar</strong>
-                        <span class="badge">Uma venda, vários itens</span>
-                      </div>
-                      <div class="gestao-empty" style="padding:14px;">
-                        Quando você salvar, o sistema registra uma única venda com vários itens, guarda cliente e contato no banco e baixa o estoque automático de cada produto.
-                      </div>
-                      <div class="actions-row">
-                        <button class="btn btn-primary" type="button" onclick="saveGestaoSale()">Salvar venda completa</button>
-                      </div>
-                      <div id="gestao-sale-message" class="message"></div>
-                    </div>
+                  <div class="field">
+                    <label for="gestao-sale-qty">Quantidade</label>
+                    <input type="number" id="gestao-sale-qty" min="1" value="1" placeholder="Ex: 1" oninput="updateGestaoSalePreview()" />
                   </div>
                 </div>
+                <div class="grid-2-equal">
+                  <div class="field">
+                    <label for="gestao-sale-price">Preço de venda unitário</label>
+                    <input type="text" inputmode="decimal" id="gestao-sale-price" placeholder="Ex: 149,90" oninput="updateGestaoSalePreview()" />
+                  </div>
+                  <div class="field">
+                    <label for="gestao-sale-date">Data</label>
+                    <input type="date" id="gestao-sale-date" onchange="updateGestaoSalePreview()" />
+                  </div>
+                </div>
+                <div class="grid-2-equal">
+                  <div class="field">
+                    <label for="gestao-sale-packaging">Embalagem</label>
+                    <input type="text" inputmode="decimal" id="gestao-sale-packaging" placeholder="Ex: 3,50" oninput="updateGestaoSalePreview()" />
+                  </div>
+                  <div class="field">
+                    <label for="gestao-sale-shipping">Frete / entrega</label>
+                    <input type="text" inputmode="decimal" id="gestao-sale-shipping" placeholder="Ex: 10,00" oninput="updateGestaoSalePreview()" />
+                  </div>
+                </div>
+                <div class="grid-2-equal">
+                  <div class="field">
+                    <label for="gestao-sale-fee">Taxas</label>
+                    <input type="text" inputmode="decimal" id="gestao-sale-fee" placeholder="Ex: 4,99" oninput="updateGestaoSalePreview()" />
+                  </div>
+                  <div class="field">
+                    <label for="gestao-sale-other">Outros custos</label>
+                    <input type="text" inputmode="decimal" id="gestao-sale-other" placeholder="Ex: brinde, ajuste, etc." oninput="updateGestaoSalePreview()" />
+                  </div>
+                </div>
+                <div class="preview-box">
+                  <div class="small-muted" style="margin-bottom:8px;">Prévia da venda</div>
+                  <div id="gestaoSalePreview" class="gestao-empty" style="padding:14px;">Selecione produto, tamanho e valor para calcular receita, custo extra e lucro real.</div>
+                </div>
+                <div class="actions-row">
+                  <button class="btn btn-primary" type="button" onclick="saveGestaoSale()">Salvar venda</button>
+                </div>
+                <div id="gestao-sale-message" class="message"></div>
               </div>
 
               <div class="card">
@@ -1234,7 +1217,6 @@ Camisa Real Madrid 24/25"></textarea>
               </div>
             </div>
           </section>
-
 
           <section id="gestao-fornecedores" class="gestao-subpanel">
             <div class="grid-2-equal">
@@ -1249,8 +1231,7 @@ Camisa Real Madrid 24/25"></textarea>
                   <input type="text" id="gestao-supplier-contact" placeholder="Ex: WhatsApp, Instagram ou nome do contato" />
                 </div>
                 <div class="actions-row">
-                  <button class="btn btn-primary" type="button" id="gestao-save-supplier-btn" onclick="saveGestaoSupplier()">Salvar fornecedor</button>
-                  <button class="btn btn-secondary hidden" type="button" id="gestao-cancel-supplier-btn" onclick="cancelGestaoSupplierEdit()">Cancelar edição</button>
+                  <button class="btn btn-primary" type="button" onclick="saveGestaoSupplier()">Salvar fornecedor</button>
                 </div>
                 <div id="gestao-supplier-message" class="message"></div>
               </div>
@@ -1266,21 +1247,6 @@ Camisa Real Madrid 24/25"></textarea>
       </div>
     </div>
   </div>
-
-  <div class="modal-overlay" id="gestao-modal">
-    <div class="modal-sheet">
-      <div class="modal-head">
-        <div>
-          <h3 class="section-title" id="gestao-modal-title" style="margin-bottom:6px;">Editar</h3>
-          <div class="small-muted" id="gestao-modal-subtitle">Ajuste os dados e salve.</div>
-        </div>
-        <button class="btn btn-secondary modal-close" type="button" onclick="closeGestaoModal()">Fechar</button>
-      </div>
-      <div class="modal-body" id="gestao-modal-body"></div>
-      <div id="gestao-modal-message" class="message"></div>
-    </div>
-  </div>
-
 <script>
     const SUPABASE_URL = "https://mgxyupekvuihjbzvzfmf.supabase.co";
     const SUPABASE_KEY = "sb_publishable_fSGhfKrj2NK5UHNYRGk8nw_fl4mCJ_n";
@@ -1319,6 +1285,7 @@ Camisa Real Madrid 24/25"></textarea>
     let gestaoEntries = [];
     let gestaoSales = [];
     let gestaoSyncMode = "local";
+    let gestaoPendingOrderItems = [];
 
     function showMessage(elementId, text, type = "success") {
       const el = document.getElementById(elementId);
@@ -1593,8 +1560,18 @@ Camisa Real Madrid 24/25"></textarea>
 
       if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
         localStorage.setItem("camisa10_admin_logged", "true");
-        await initializeAdmin();
         showHomeSelector();
+
+        try {
+          await initializeAdmin();
+        } catch (error) {
+          console.error("Erro ao inicializar painel após login:", error);
+          showMessage(
+            "login-message",
+            "Login feito, mas houve erro ao carregar alguns dados do painel. Verifique o console.",
+            "error"
+          );
+        }
       } else {
         showMessage("login-message", "E-mail ou senha incorretos.", "error");
       }
@@ -3458,7 +3435,7 @@ Camisa Real Madrid 24/25"></textarea>
       document.getElementById("batch-create-count").textContent = String(batchCreateProducts.length);
 
       if (!batchCreateProducts.length) {
-        builder.innerHTML = '<div class="empty-state">Cole os nomes dos produtos e clique em “Gerar cards do lote”.</div>';
+        builder.innerHTML = '<div class="empty-state">Cole um modelo por linha e clique em “Gerar modelos do lote”.</div>';
         updateBatchCreateKpis();
         return;
       }
@@ -3754,7 +3731,7 @@ Camisa Real Madrid 24/25"></textarea>
 
     function getGestaoExtraInvestedTotal() {
       const ordersExtra = gestaoEntries.reduce((sum, item) => sum + Number(item.extraCost || 0), 0);
-      const salesExtra = getGroupedGestaoSales().reduce((sum, item) => sum + Number(item.packagingCost || 0) + Number(item.shippingCost || 0) + Number(item.feeCost || 0) + Number(item.otherCost || 0), 0);
+      const salesExtra = gestaoSales.reduce((sum, item) => sum + Number(item.extraCostsTotal || 0), 0);
       return ordersExtra + salesExtra;
     }
 
@@ -4061,445 +4038,100 @@ Camisa Real Madrid 24/25"></textarea>
       }).sort((a,b)=> a.name.localeCompare(b.name) || a.size.localeCompare(b.size));
     }
 
-
-    function getGroupedGestaoSales() {
-      const saleMap = new Map();
-      gestaoSales.forEach(item => {
-        const saleId = item.saleId || item.id;
-        if (!saleMap.has(saleId)) {
-          saleMap.set(saleId, {
-            saleId,
-            date: item.date || '',
-            clientName: item.clientName || gestaoSalesMeta?.[saleId]?.clientName || '',
-            clientPhone: item.clientPhone || gestaoSalesMeta?.[saleId]?.clientPhone || '',
-            packagingCost: Number(item.packagingCost || 0),
-            shippingCost: Number(item.shippingCost || 0),
-            feeCost: Number(item.feeCost || 0),
-            otherCost: Number(item.otherCost || 0),
-            totalAmount: Number(item.totalAmount || 0),
-            profit: Number(item.profit || 0),
-            items: []
-          });
-        }
-        const sale = saleMap.get(saleId);
-        sale.items.push(item);
-      });
-      return [...saleMap.values()].sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+    function getGestaoPendingExtraCost() {
+      return normalizeMoneyInput(document.getElementById('gestao-entry-extra')?.value || '') || 0;
     }
 
-    function getGestaoSaleExtraCostsFromFields() {
-      return {
-        packagingCost: normalizeMoneyInput(document.getElementById('gestao-sale-packaging')?.value || '') || 0,
-        shippingCost: normalizeMoneyInput(document.getElementById('gestao-sale-shipping')?.value || '') || 0,
-        feeCost: normalizeMoneyInput(document.getElementById('gestao-sale-fee')?.value || '') || 0,
-        otherCost: normalizeMoneyInput(document.getElementById('gestao-sale-other')?.value || '') || 0
-      };
-    }
-
-    function resetGestaoSaleItemFields() {
-      const qty = document.getElementById('gestao-sale-qty');
-      const price = document.getElementById('gestao-sale-price');
-      const size = document.getElementById('gestao-sale-size');
-      if (qty) qty.value = '1';
-      if (price) price.value = '';
+    function resetGestaoEntryItemFields() {
+      const qty = document.getElementById('gestao-entry-qty');
+      const cost = document.getElementById('gestao-entry-cost');
+      const size = document.getElementById('gestao-entry-size');
+      if (qty) qty.value = '';
+      if (cost) cost.value = '';
       if (size) size.value = 'M';
-      updateGestaoSaleItemPreview();
     }
 
-    function clearGestaoPendingSale() {
-      gestaoPendingSaleItems = [];
-      const dateField = document.getElementById('gestao-sale-date');
-      if (dateField && !dateField.value) dateField.value = new Date().toISOString().slice(0,10);
-      ['gestao-sale-packaging','gestao-sale-shipping','gestao-sale-fee','gestao-sale-other','gestao-sale-client-name','gestao-sale-client-phone'].forEach(id=>{
-        const el=document.getElementById(id); if(el) el.value='';
-      });
-      resetGestaoSaleItemFields();
-      renderGestaoPendingSale();
-      clearMessage('gestao-sale-message');
+    function clearGestaoPendingOrder() {
+      gestaoPendingOrderItems = [];
+      resetGestaoEntryItemFields();
+      renderGestaoPendingOrder();
     }
 
-    function updateGestaoSaleItemPreview() {
-      const box = document.getElementById('gestaoSaleItemPreviewBox');
-      if (!box) return;
-      const productId = document.getElementById('gestao-sale-product')?.value || '';
-      const size = document.getElementById('gestao-sale-size')?.value || 'M';
-      const quantity = Number(document.getElementById('gestao-sale-qty')?.value || 0);
-      const salePrice = normalizeMoneyInput(document.getElementById('gestao-sale-price')?.value || '');
-      if (!productId) {
-        box.textContent = 'Selecione um produto para ver o estoque disponível e o custo médio.';
-        return;
-      }
-      const stockRow = calculateGestaoStock().find(item => String(item.productId) === String(productId) && String(item.size) === String(size));
-      const available = Number(stockRow?.currentQty || 0);
-      const avgCost = Number(stockRow?.averageCost || getAverageCostForProductSize(productId, size) || 0);
-      const revenue = !Number.isNaN(salePrice) ? Number(quantity || 0) * salePrice : 0;
-      box.innerHTML = `${escapeHtml(getProductNameById(productId))} • tam. <strong>${escapeHtml(size)}</strong> • disponível <strong>${available}</strong> peça(s) • custo médio <strong>${formatPrice(avgCost)}</strong>${revenue ? ` • receita do item <strong>${formatPrice(revenue)}</strong>` : ''}`;
-    }
-
-    function addGestaoSaleItem() {
-      clearMessage('gestao-sale-message');
-      const productId = document.getElementById('gestao-sale-product').value;
-      const size = document.getElementById('gestao-sale-size').value;
-      const quantity = Number(document.getElementById('gestao-sale-qty').value || 0);
-      const salePrice = normalizeMoneyInput(document.getElementById('gestao-sale-price').value || '');
+    function addGestaoEntryItem() {
+      clearMessage('gestao-entry-message');
+      const productId = document.getElementById('gestao-entry-product').value;
+      const size = document.getElementById('gestao-entry-size').value;
+      const quantity = Number(document.getElementById('gestao-entry-qty').value || 0);
+      const cost = normalizeMoneyInput(document.getElementById('gestao-entry-cost').value || '');
 
       if (!productId) {
-        showMessage('gestao-sale-message', 'Selecione o produto.', 'error');
+        showMessage('gestao-entry-message', 'Selecione o produto.', 'error');
         return;
       }
       if (!quantity || quantity < 1) {
-        showMessage('gestao-sale-message', 'Digite uma quantidade válida.', 'error');
+        showMessage('gestao-entry-message', 'Digite uma quantidade válida.', 'error');
         return;
       }
-      if (Number.isNaN(salePrice) || salePrice <= 0) {
-        showMessage('gestao-sale-message', 'Digite um valor de venda válido.', 'error');
-        return;
-      }
-
-      const stock = calculateGestaoStock();
-      const stockRow = stock.find(item => String(item.productId) === String(productId) && String(item.size) === String(size));
-      const available = Number(stockRow?.currentQty || 0);
-      const alreadyPending = gestaoPendingSaleItems
-        .filter(item => String(item.productId) === String(productId) && String(item.size) === String(size))
-        .reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-
-      if (quantity + alreadyPending > available) {
-        showMessage('gestao-sale-message', `Estoque insuficiente. Disponível em ${size}: ${available} peça(s). Já reservado nesta venda: ${alreadyPending}.`, 'error');
+      if (Number.isNaN(cost) || cost <= 0) {
+        showMessage('gestao-entry-message', 'Digite um custo por peça válido.', 'error');
         return;
       }
 
-      const costPrice = Number(stockRow?.averageCost || getAverageCostForProductSize(productId, size) || 0);
-      gestaoPendingSaleItems.push({
-        tempId: `sale-pending-${Date.now()}-${Math.random().toString(16).slice(2,6)}`,
-        productId, size, quantity, salePrice, costPrice
+      gestaoPendingOrderItems.push({
+        tempId: `pending-${Date.now()}-${Math.random().toString(16).slice(2,6)}`,
+        productId, size, quantity, cost
       });
-      resetGestaoSaleItemFields();
-      renderGestaoPendingSale();
-      showMessage('gestao-sale-message', 'Produto adicionado à venda.', 'success');
+      resetGestaoEntryItemFields();
+      renderGestaoPendingOrder();
+      showMessage('gestao-entry-message', 'Item adicionado ao pedido.', 'success');
     }
 
-    function removeGestaoPendingSaleItem(tempId) {
-      gestaoPendingSaleItems = gestaoPendingSaleItems.filter(item => item.tempId !== tempId);
-      renderGestaoPendingSale();
+    function removeGestaoPendingItem(tempId) {
+      gestaoPendingOrderItems = gestaoPendingOrderItems.filter(item => item.tempId !== tempId);
+      renderGestaoPendingOrder();
     }
 
-    function renderGestaoPendingSale() {
-      const list = document.getElementById('gestaoPendingSaleItemsList');
-      const count = document.getElementById('gestao-sale-pending-count');
-      const totalItems = document.getElementById('gestao-sale-pending-items-total');
-      const totalPieces = document.getElementById('gestao-sale-pending-pieces-total');
-      const revenueEl = document.getElementById('gestao-sale-pending-revenue-total');
-      const profitEl = document.getElementById('gestao-sale-pending-profit-total');
-      const previewBox = document.getElementById('gestaoSalePreview');
-      const extras = getGestaoSaleExtraCostsFromFields();
-      const extraCostsTotal = Number((extras.packagingCost + extras.shippingCost + extras.feeCost + extras.otherCost).toFixed(2));
-      const pieces = gestaoPendingSaleItems.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-      const revenue = gestaoPendingSaleItems.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.salePrice || 0)), 0);
-      const productCost = gestaoPendingSaleItems.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.costPrice || 0)), 0);
-      const profit = revenue - productCost - extraCostsTotal;
+    function renderGestaoPendingOrder() {
+      const list = document.getElementById('gestaoPendingItemsList');
+      const count = document.getElementById('gestao-pending-count');
+      const totalItems = document.getElementById('gestao-pending-items-total');
+      const totalPieces = document.getElementById('gestao-pending-pieces-total');
+      const productsTotalEl = document.getElementById('gestao-pending-products-total');
+      const grandTotalEl = document.getElementById('gestao-pending-grand-total');
+      const extraCost = getGestaoPendingExtraCost();
+      const pieces = gestaoPendingOrderItems.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+      const productsTotal = gestaoPendingOrderItems.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.cost || 0)), 0);
+      const grandTotal = productsTotal + extraCost;
 
-      if (count) count.textContent = `${gestaoPendingSaleItems.length} item(ns)`;
-      if (totalItems) totalItems.textContent = String(gestaoPendingSaleItems.length);
+      if (count) count.textContent = `${gestaoPendingOrderItems.length} item(ns)`;
+      if (totalItems) totalItems.textContent = String(gestaoPendingOrderItems.length);
       if (totalPieces) totalPieces.textContent = String(pieces);
-      if (revenueEl) revenueEl.textContent = formatPrice(revenue);
-      if (profitEl) profitEl.textContent = formatPrice(profit);
+      if (productsTotalEl) productsTotalEl.textContent = formatPrice(productsTotal);
+      if (grandTotalEl) grandTotalEl.textContent = formatPrice(grandTotal);
 
-      if (list) {
-        if (!gestaoPendingSaleItems.length) {
-          list.innerHTML = '<div class="gestao-empty">Nenhum produto adicionado à venda ainda.</div>';
-        } else {
-          list.innerHTML = gestaoPendingSaleItems.map(item => {
-            const lineTotal = Number(item.quantity || 0) * Number(item.salePrice || 0);
-            const lineProfit = lineTotal - (Number(item.quantity || 0) * Number(item.costPrice || 0));
-            return `
-              <article class="sale-card-item">
-                <div class="gestao-list-head">
-                  <div>
-                    <div class="gestao-list-title">${escapeHtml(getProductNameById(item.productId))}</div>
-                    <div class="gestao-list-sub">Tam. ${escapeHtml(item.size)} • ${item.quantity} un.</div>
-                  </div>
-                  <button class="btn btn-danger" type="button" onclick="removeGestaoPendingSaleItem('${item.tempId}')">Remover</button>
-                </div>
-                <div class="product-admin-meta">
-                  <span class="badge">Venda un.: ${formatPrice(item.salePrice)}</span>
-                  <span class="badge">Custo médio: ${formatPrice(item.costPrice)}</span>
-                  <span class="badge">Receita item: ${formatPrice(lineTotal)}</span>
-                  <span class="badge">Lucro bruto item: ${formatPrice(lineProfit)}</span>
-                </div>
-              </article>
-            `;
-          }).join('');
-        }
-      }
-
-      if (previewBox) {
-        const clientName = document.getElementById('gestao-sale-client-name')?.value?.trim() || '';
-        const clientPhone = document.getElementById('gestao-sale-client-phone')?.value?.trim() || '';
-        if (!gestaoPendingSaleItems.length) {
-          previewBox.innerHTML = 'Adicione produtos para ver a prévia consolidada da venda.';
-        } else {
-          previewBox.innerHTML = `${clientName ? `Cliente: <strong>${escapeHtml(clientName)}</strong>${clientPhone ? ` • ${escapeHtml(clientPhone)}` : ''}<br>` : ''}Itens na venda: <strong>${gestaoPendingSaleItems.length}</strong> • Peças: <strong>${pieces}</strong><br>Custo das peças: <strong>${formatPrice(productCost)}</strong><br>Custos extras: <strong>${formatPrice(extraCostsTotal)}</strong><br>Receita total: <strong>${formatPrice(revenue)}</strong><br>Lucro real estimado: <strong>${formatPrice(profit)}</strong>`;
-        }
-      }
-    }
-
-    function setGestaoSupplierForm(item = null) {
-      const nameEl = document.getElementById('gestao-supplier-name');
-      const contactEl = document.getElementById('gestao-supplier-contact');
-      const saveBtn = document.getElementById('gestao-save-supplier-btn');
-      const cancelBtn = document.getElementById('gestao-cancel-supplier-btn');
-      editingGestaoSupplierId = item?.id || null;
-      if (nameEl) nameEl.value = item?.name || '';
-      if (contactEl) contactEl.value = item?.contact || '';
-      if (saveBtn) saveBtn.textContent = editingGestaoSupplierId ? 'Atualizar fornecedor' : 'Salvar fornecedor';
-      if (cancelBtn) cancelBtn.classList.toggle('hidden', !editingGestaoSupplierId);
-    }
-
-    function startGestaoSupplierEdit(id) {
-      const supplier = gestaoSuppliers.find(item => String(item.id) === String(id));
-      if (!supplier) return;
-      setGestaoSupplierForm(supplier);
-      activateGestaoTab('gestao-fornecedores');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function cancelGestaoSupplierEdit() {
-      setGestaoSupplierForm(null);
-      clearMessage('gestao-supplier-message');
-    }
-
-    function openGestaoModal(title, subtitle, bodyHtml) {
-      const modal = document.getElementById('gestao-modal');
-      document.getElementById('gestao-modal-title').textContent = title;
-      document.getElementById('gestao-modal-subtitle').textContent = subtitle || '';
-      document.getElementById('gestao-modal-body').innerHTML = bodyHtml;
-      clearMessage('gestao-modal-message');
-      modal.classList.add('show');
-    }
-
-    function closeGestaoModal() {
-      document.getElementById('gestao-modal')?.classList.remove('show');
-      clearMessage('gestao-modal-message');
-    }
-
-    function buildOrderModal(orderId) {
-      const order = getGroupedGestaoOrders().find(item => String(item.orderId) === String(orderId));
-      if (!order) return;
-      const supplierOptions = '<option value="">Sem fornecedor</option>' + gestaoSuppliers.map(item => `<option value="${item.id}" ${String(item.id)===String(order.supplierId)?'selected':''}>${escapeHtml(item.name)}</option>`).join('');
-      const itemsHtml = order.items.map(item => `
-        <div class="sale-card-item">
-          <div class="grid-2-equal">
-            <div class="field">
-              <label>Produto</label>
-              <select data-edit-order-product="${item.id}">${allProducts.map(product => `<option value="${product.id}" ${String(product.id)===String(item.productId)?'selected':''}>${escapeHtml(product.name || 'Produto')}</option>`).join('')}</select>
-            </div>
-            <div class="field">
-              <label>Tamanho</label>
-              <select data-edit-order-size="${item.id}">
-                ${['P','M','G','EG'].map(size => `<option value="${size}" ${String(size)===String(item.size)?'selected':''}>${size}</option>`).join('')}
-              </select>
-            </div>
-          </div>
-          <div class="grid-2-equal">
-            <div class="field">
-              <label>Quantidade</label>
-              <input type="number" min="1" value="${item.quantity}" data-edit-order-qty="${item.id}" />
-            </div>
-            <div class="field">
-              <label>Custo unitário</label>
-              <input type="text" value="${String(item.cost).replace('.',',')}" data-edit-order-cost="${item.id}" />
-            </div>
-          </div>
-          <div class="actions-row" style="margin-top:0;">
-            <button class="btn btn-danger" type="button" onclick="removeItemFromOrderEdit('${order.orderId}','${item.id}')">Excluir item</button>
-          </div>
-        </div>
-      `).join('');
-      openGestaoModal('Editar pedido', 'Ajuste fornecedor, data, custos e itens do pedido.', `
-        <div class="grid-2-equal">
-          <div class="field"><label>Fornecedor</label><select id="edit-order-supplier">${supplierOptions}</select></div>
-          <div class="field"><label>Data do pedido</label><input type="date" id="edit-order-date" value="${order.date || ''}" /></div>
-        </div>
-        <div class="grid-2-equal">
-          <div class="field"><label>Custo extra</label><input type="text" id="edit-order-extra" value="${String(Number(order.extraCost||0)).replace('.',',')}" /></div>
-          <div class="field"><label>Observação</label><input type="text" id="edit-order-note" value="${escapeHtml(order.note || '')}" /></div>
-        </div>
-        <div class="modal-items-list" id="edit-order-items-list">${itemsHtml || '<div class="gestao-empty">Nenhum item neste pedido.</div>'}</div>
-        <div class="actions-row">
-          <button class="btn btn-primary" type="button" onclick="saveOrderEdit('${order.orderId}')">Salvar alterações</button>
-        </div>
-      `);
-    }
-
-    function removeItemFromOrderEdit(orderId, itemId) {
-      gestaoEntries = gestaoEntries.filter(item => String(item.id) !== String(itemId));
-      if (!gestaoEntries.some(item => String(item.orderId) === String(orderId))) {
-        closeGestaoModal();
-      } else {
-        buildOrderModal(orderId);
-      }
-    }
-
-    async function saveOrderEdit(orderId) {
-      const orderEntries = gestaoEntries.filter(item => String(item.orderId) === String(orderId));
-      if (!orderEntries.length) {
-        showMessage('gestao-modal-message', 'Esse pedido ficou sem itens. Feche a janela e confira a lista.', 'error');
+      if (!list) return;
+      if (!gestaoPendingOrderItems.length) {
+        list.innerHTML = '<div class="gestao-empty">Nenhum item adicionado ainda.</div>';
         return;
       }
-      const supplierId = document.getElementById('edit-order-supplier')?.value || '';
-      const date = document.getElementById('edit-order-date')?.value || new Date().toISOString().slice(0,10);
-      const extraCost = normalizeMoneyInput(document.getElementById('edit-order-extra')?.value || '') || 0;
-      const note = document.getElementById('edit-order-note')?.value?.trim() || '';
-      let first = true;
-      for (const entry of orderEntries) {
-        const productId = document.querySelector(`[data-edit-order-product="${entry.id}"]`)?.value || entry.productId;
-        const size = document.querySelector(`[data-edit-order-size="${entry.id}"]`)?.value || entry.size;
-        const qty = Number(document.querySelector(`[data-edit-order-qty="${entry.id}"]`)?.value || entry.quantity);
-        const cost = normalizeMoneyInput(document.querySelector(`[data-edit-order-cost="${entry.id}"]`)?.value || entry.cost);
-        if (!qty || qty < 1 || Number.isNaN(cost) || cost <= 0) {
-          showMessage('gestao-modal-message', 'Confira quantidade e custo de todos os itens.', 'error');
-          return;
-        }
-        Object.assign(entry, {
-          productId, size, quantity: qty, cost: Number(cost),
-          supplierId, date,
-          orderKey: `${date}__${supplierId || 'sem-fornecedor'}__${orderId}`,
-          extraCost: first ? extraCost : 0,
-          note: first ? note : ''
-        });
-        first = false;
-      }
-      try {
-        await persistGestaoState();
-      } catch (error) {
-        console.error('Erro ao editar pedido:', error);
-        gestaoSyncMode='local';
-        updateGestaoSyncUi();
-      }
-      closeGestaoModal();
-      renderGestao();
-    }
-
-    function buildSaleModal(saleId) {
-      const sale = getGroupedGestaoSales().find(item => String(item.saleId) === String(saleId));
-      if (!sale) return;
-      const itemsHtml = sale.items.map(item => `
-        <div class="sale-card-item">
-          <div class="grid-2-equal">
-            <div class="field">
-              <label>Produto</label>
-              <select data-edit-sale-product="${item.id}">${allProducts.map(product => `<option value="${product.id}" ${String(product.id)===String(item.productId)?'selected':''}>${escapeHtml(product.name || 'Produto')}</option>`).join('')}</select>
+      list.innerHTML = gestaoPendingOrderItems.map(item => {
+        const itemTotal = Number(item.quantity || 0) * Number(item.cost || 0);
+        return `
+          <article class="order-item-mini">
+            <div class="gestao-list-head">
+              <div>
+                <div class="gestao-list-title">${escapeHtml(getProductNameById(item.productId))}</div>
+                <div class="gestao-list-sub">Tam. ${escapeHtml(item.size)} • ${item.quantity} un.</div>
+              </div>
+              <button class="btn btn-danger" type="button" onclick="removeGestaoPendingItem('${item.tempId}')">Remover</button>
             </div>
-            <div class="field">
-              <label>Tamanho</label>
-              <select data-edit-sale-size="${item.id}">${['P','M','G','EG'].map(size => `<option value="${size}" ${String(size)===String(item.size)?'selected':''}>${size}</option>`).join('')}</select>
+            <div class="product-admin-meta">
+              <span class="badge">Custo un.: ${formatPrice(item.cost)}</span>
+              <span class="badge">Total item: ${formatPrice(itemTotal)}</span>
             </div>
-          </div>
-          <div class="grid-2-equal">
-            <div class="field"><label>Quantidade</label><input type="number" min="1" value="${item.quantity}" data-edit-sale-qty="${item.id}" /></div>
-            <div class="field"><label>Venda unitária</label><input type="text" value="${String(item.salePrice).replace('.',',')}" data-edit-sale-price="${item.id}" /></div>
-          </div>
-          <div class="actions-row" style="margin-top:0;">
-            <button class="btn btn-danger" type="button" onclick="removeItemFromSaleEdit('${sale.saleId}','${item.id}')">Excluir item</button>
-          </div>
-        </div>
-      `).join('');
-      openGestaoModal('Editar venda', 'Ajuste cliente, custos e itens da venda.', `
-        <div class="grid-2-equal">
-          <div class="field"><label>Data</label><input type="date" id="edit-sale-date" value="${sale.date || ''}" /></div>
-          <div class="field"><label>Nome do cliente</label><input type="text" id="edit-sale-client-name" value="${escapeHtml(sale.clientName || '')}" /></div>
-        </div>
-        <div class="grid-2-equal">
-          <div class="field"><label>Contato</label><input type="text" id="edit-sale-client-phone" value="${escapeHtml(sale.clientPhone || '')}" /></div>
-          <div class="field"><label>Embalagem</label><input type="text" id="edit-sale-packaging" value="${String(Number(sale.packagingCost||0)).replace('.',',')}" /></div>
-        </div>
-        <div class="grid-2-equal">
-          <div class="field"><label>Frete / entrega</label><input type="text" id="edit-sale-shipping" value="${String(Number(sale.shippingCost||0)).replace('.',',')}" /></div>
-          <div class="field"><label>Taxas</label><input type="text" id="edit-sale-fee" value="${String(Number(sale.feeCost||0)).replace('.',',')}" /></div>
-        </div>
-        <div class="field"><label>Outros custos</label><input type="text" id="edit-sale-other" value="${String(Number(sale.otherCost||0)).replace('.',',')}" /></div>
-        <div class="modal-items-list" id="edit-sale-items-list">${itemsHtml || '<div class="gestao-empty">Nenhum item nesta venda.</div>'}</div>
-        <div class="actions-row">
-          <button class="btn btn-primary" type="button" onclick="saveSaleEdit('${sale.saleId}')">Salvar alterações</button>
-        </div>
-      `);
-    }
-
-    function removeItemFromSaleEdit(saleId, itemId) {
-      gestaoSales = gestaoSales.filter(item => String(item.id) !== String(itemId));
-      if (!gestaoSales.some(item => String(item.saleId || item.id) === String(saleId))) {
-        delete gestaoSalesMeta[saleId];
-        closeGestaoModal();
-      } else {
-        buildSaleModal(saleId);
-      }
-    }
-
-    async function saveSaleEdit(saleId) {
-      const saleItems = gestaoSales.filter(item => String(item.saleId || item.id) === String(saleId));
-      if (!saleItems.length) {
-        showMessage('gestao-modal-message', 'Essa venda ficou sem itens.', 'error');
-        return;
-      }
-      const date = document.getElementById('edit-sale-date')?.value || new Date().toISOString().slice(0,10);
-      const clientName = document.getElementById('edit-sale-client-name')?.value?.trim() || '';
-      const clientPhone = document.getElementById('edit-sale-client-phone')?.value?.trim() || '';
-      const packagingCost = normalizeMoneyInput(document.getElementById('edit-sale-packaging')?.value || '') || 0;
-      const shippingCost = normalizeMoneyInput(document.getElementById('edit-sale-shipping')?.value || '') || 0;
-      const feeCost = normalizeMoneyInput(document.getElementById('edit-sale-fee')?.value || '') || 0;
-      const otherCost = normalizeMoneyInput(document.getElementById('edit-sale-other')?.value || '') || 0;
-      const extraCostsTotal = Number((packagingCost + shippingCost + feeCost + otherCost).toFixed(2));
-      const stockRows = calculateGestaoStock();
-
-      let totalAmount = 0;
-      let totalProductCost = 0;
-      let first = true;
-      for (const item of saleItems) {
-        const productId = document.querySelector(`[data-edit-sale-product="${item.id}"]`)?.value || item.productId;
-        const size = document.querySelector(`[data-edit-sale-size="${item.id}"]`)?.value || item.size;
-        const quantity = Number(document.querySelector(`[data-edit-sale-qty="${item.id}"]`)?.value || item.quantity);
-        const salePrice = normalizeMoneyInput(document.querySelector(`[data-edit-sale-price="${item.id}"]`)?.value || item.salePrice);
-        if (!quantity || quantity < 1 || Number.isNaN(salePrice) || salePrice <= 0) {
-          showMessage('gestao-modal-message', 'Confira quantidade e preço de todos os itens.', 'error');
-          return;
-        }
-        const baseStock = stockRows.find(row => String(row.productId)===String(productId) && String(row.size)===String(size));
-        const alreadyInThisSale = saleItems.filter(si => String(si.id)!==String(item.id) && String((document.querySelector(`[data-edit-sale-product="${si.id}"]`)?.value || si.productId))===String(productId) && String((document.querySelector(`[data-edit-sale-size="${si.id}"]`)?.value || si.size))===String(size)).reduce((s,si)=> s + Number(document.querySelector(`[data-edit-sale-qty="${si.id}"]`)?.value || si.quantity || 0),0);
-        const currentQtyOriginal = Number(item.quantity || 0);
-        const available = Number(baseStock?.currentQty || 0) + currentQtyOriginal;
-        if (quantity + alreadyInThisSale > available) {
-          showMessage('gestao-modal-message', `Estoque insuficiente para ${getProductNameById(productId)} ${size}. Disponível: ${available}.`, 'error');
-          return;
-        }
-        const costPrice = Number(baseStock?.averageCost || getAverageCostForProductSize(productId, size) || item.costPrice || 0);
-        totalAmount += quantity * salePrice;
-        totalProductCost += quantity * costPrice;
-        Object.assign(item, {
-          productId, size, quantity, salePrice, costPrice, date, clientName, clientPhone,
-          packagingCost: first ? packagingCost : 0,
-          shippingCost: first ? shippingCost : 0,
-          feeCost: first ? feeCost : 0,
-          otherCost: first ? otherCost : 0
-        });
-        first = false;
-      }
-      const totalProfit = Number((totalAmount - totalProductCost - extraCostsTotal).toFixed(2));
-      gestaoSalesMeta[saleId] = { clientName, clientPhone };
-      saleItems.forEach((item, idx) => {
-        item.totalAmount = idx===0 ? Number(totalAmount.toFixed(2)) : 0;
-        item.extraCostsTotal = idx===0 ? extraCostsTotal : 0;
-        item.profit = idx===0 ? totalProfit : 0;
-      });
-
-      try {
-        await persistGestaoState();
-      } catch (error) {
-        console.error('Erro ao editar venda:', error);
-        gestaoSyncMode='local';
-        updateGestaoSyncUi();
-      }
-      closeGestaoModal();
-      renderGestao();
+          </article>
+        `;
+      }).join('');
     }
 
     function renderGestaoKpis() {
@@ -4523,9 +4155,8 @@ Camisa Real Madrid 24/25"></textarea>
       const orders = getGroupedGestaoOrders();
       const lastOrder = orders[0];
       const totalPieces = gestaoEntries.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-      const groupedSales = getGroupedGestaoSales();
-      const totalRevenue = groupedSales.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0);
-      const totalProfit = groupedSales.reduce((sum, item) => sum + Number(item.profit || 0), 0);
+      const totalRevenue = gestaoSales.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0);
+      const totalProfit = gestaoSales.reduce((sum, item) => sum + Number(item.profit || 0), 0);
       const totalExtras = getGestaoExtraInvestedTotal();
       box.innerHTML = `Você já lançou <strong>${orders.length}</strong> pedido(s), com <strong>${totalPieces}</strong> peça(s) registradas. Vendas acumuladas: <strong>${formatPrice(totalRevenue)}</strong> em faturamento e <strong>${formatPrice(totalProfit)}</strong> de lucro. Custos extras lançados: <strong>${formatPrice(totalExtras)}</strong>. Último pedido: <strong>${escapeHtml(lastOrder.supplierName)}</strong> em <strong>${escapeHtml(lastOrder.date)}</strong>, com <strong>${lastOrder.items.length}</strong> item(ns).`;
     }
@@ -4542,7 +4173,6 @@ Camisa Real Madrid 24/25"></textarea>
         const totalPieces = order.items.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
         const itemsTotal = order.items.reduce((sum, item) => sum + (Number(item.cost || 0) * Number(item.quantity || 0)), 0);
         const grandTotal = itemsTotal + Number(order.extraCost || 0);
-        const contact = gestaoSuppliers.find(s => String(s.id) === String(order.supplierId))?.contact || '—';
         const itemsHtml = order.items.map(entry => `
           <div class="batch-summary" style="margin-top:10px;">
             <strong>${escapeHtml(getProductNameById(entry.productId))}</strong> • tam. ${escapeHtml(entry.size)} • ${entry.quantity} un.<br>
@@ -4550,30 +4180,22 @@ Camisa Real Madrid 24/25"></textarea>
           </div>
         `).join('');
         return `
-          <details class="order-collapsible">
-            <summary>
-              <div class="order-summary-main">
+          <article class="gestao-list-card">
+            <div class="gestao-list-head">
+              <div>
                 <div class="gestao-list-title">Pedido • ${escapeHtml(order.supplierName)}</div>
                 <div class="gestao-list-sub">${escapeHtml(order.date || '')} • ${totalPieces} peça(s) • ${order.items.length} item(ns)</div>
               </div>
-              <div class="order-summary-side">
-                <span class="badge">${formatPrice(grandTotal)}</span>
-                <span class="small-muted">Toque para ver detalhes</span>
-              </div>
-            </summary>
-            <div class="order-collapsible-body">
-              <div class="product-admin-meta">
-                <span class="badge">Produtos: ${formatPrice(itemsTotal)}</span>
-                <span class="badge">Custos extras: ${formatPrice(order.extraCost)}</span>
-                <span class="badge">Contato: ${escapeHtml(contact)}</span>
-              </div>
-              ${order.note ? `<div class="small-muted" style="margin-top:10px;">Obs.: ${escapeHtml(order.note)}</div>` : ''}
-              ${itemsHtml}
-              <div class="actions-row">
-                <button class="btn btn-secondary" type="button" onclick="buildOrderModal('${order.orderId}')">Editar pedido</button>
-              </div>
+              <span class="badge">Total pedido: ${formatPrice(grandTotal)}</span>
             </div>
-          </details>
+            <div class="product-admin-meta">
+              <span class="badge">Produtos: ${formatPrice(itemsTotal)}</span>
+              <span class="badge">Custos extras: ${formatPrice(order.extraCost)}</span>
+              <span class="badge">Contato: ${escapeHtml(gestaoSuppliers.find(s => String(s.id) === String(order.supplierId))?.contact || '—')}</span>
+            </div>
+            ${order.note ? `<div class="small-muted" style="margin-top:10px;">Obs.: ${escapeHtml(order.note)}</div>` : ''}
+            ${itemsHtml}
+          </article>
         `;
       }).join('');
     }
@@ -4633,40 +4255,27 @@ Camisa Real Madrid 24/25"></textarea>
     function renderGestaoSales() {
       const container = document.getElementById('gestaoSalesList');
       if (!container) return;
-      const sales = getGroupedGestaoSales();
-      if (!sales.length) {
+      if (!gestaoSales.length) {
         container.innerHTML = '<div class="gestao-empty">Nenhuma venda lançada ainda.</div>';
         return;
       }
-      container.innerHTML = sales.map(sale => {
-        const extraCosts = Number(sale.packagingCost || 0) + Number(sale.shippingCost || 0) + Number(sale.feeCost || 0) + Number(sale.otherCost || 0);
-        return `
-          <article class="sale-group-card">
-            <div class="gestao-list-head">
-              <div>
-                <div class="gestao-list-title">${sale.clientName ? escapeHtml(sale.clientName) : 'Venda registrada'}</div>
-                <div class="gestao-list-sub">${escapeHtml(sale.date || '')}${sale.clientPhone ? ` • ${escapeHtml(sale.clientPhone)}` : ''} • ${sale.items.length} item(ns)</div>
-              </div>
-              <span class="badge">${formatPrice(sale.totalAmount)}</span>
+      container.innerHTML = gestaoSales.map(item => `
+        <article class="gestao-list-card">
+          <div class="gestao-list-head">
+            <div>
+              <div class="gestao-list-title">${escapeHtml(getProductNameById(item.productId))}</div>
+              <div class="gestao-list-sub">${escapeHtml(item.date || '')} • tamanho ${escapeHtml(item.size)}</div>
             </div>
-            <div class="sale-group-items">
-              ${sale.items.map(item => `
-                <div class="batch-summary">
-                  <strong>${escapeHtml(getProductNameById(item.productId))}</strong> • tam. ${escapeHtml(item.size)} • ${item.quantity} un.<br>
-                  Venda un.: <strong>${formatPrice(item.salePrice)}</strong> • Receita item: <strong>${formatPrice(Number(item.salePrice || 0) * Number(item.quantity || 0))}</strong>
-                </div>
-              `).join('')}
-            </div>
-            <div class="product-admin-meta">
-              <span class="badge">Custos extras: ${formatPrice(extraCosts)}</span>
-              <span class="badge">Lucro real: ${formatPrice(sale.profit)}</span>
-            </div>
-            <div class="actions-row">
-              <button class="btn btn-secondary" type="button" onclick="buildSaleModal('${sale.saleId}')">Editar venda</button>
-            </div>
-          </article>
-        `;
-      }).join('');
+            <span class="badge">${item.quantity} un.</span>
+          </div>
+          <div class="product-admin-meta">
+            <span class="badge">Venda: ${formatPrice(item.salePrice)}</span>
+            <span class="badge">Receita: ${formatPrice(item.totalAmount)}</span>
+            <span class="badge">Custos extras: ${formatPrice(item.extraCostsTotal || 0)}</span>
+            <span class="badge">Lucro: ${formatPrice(item.profit)}</span>
+          </div>
+        </article>
+      `).join('');
     }
 
     function renderGestaoSuppliers() {
@@ -4683,10 +4292,7 @@ Camisa Real Madrid 24/25"></textarea>
               <div class="gestao-list-title">${escapeHtml(item.name)}</div>
               <div class="gestao-list-sub">${item.contact ? escapeHtml(item.contact) : 'Sem contato informado'}</div>
             </div>
-            <div class="actions-row" style="margin-top:0;">
-              <button class="btn btn-secondary" type="button" onclick="startGestaoSupplierEdit('${item.id}')">Editar</button>
-              <button class="btn btn-danger" type="button" onclick="deleteGestaoSupplier('${item.id}')">Excluir</button>
-            </div>
+            <button class="btn btn-danger" type="button" onclick="deleteGestaoSupplier('${item.id}')">Excluir</button>
           </div>
         </article>
       `).join('');
@@ -4702,7 +4308,6 @@ Camisa Real Madrid 24/25"></textarea>
       renderGestaoSales();
       renderGestaoSuppliers();
       renderGestaoPendingOrder();
-      renderGestaoPendingSale();
       updateGestaoSalePreview();
     }
 
@@ -4726,23 +4331,19 @@ Camisa Real Madrid 24/25"></textarea>
         showMessage('gestao-supplier-message', 'Digite o nome do fornecedor.', 'error');
         return;
       }
-      const isEditing = !!editingGestaoSupplierId;
-      if (isEditing) {
-        gestaoSuppliers = gestaoSuppliers.map(item => String(item.id) === String(editingGestaoSupplierId) ? ({ ...item, name, contact }) : item);
-      } else {
-        gestaoSuppliers.unshift({ id: generateClientUuid(), name, contact });
-      }
+      gestaoSuppliers.unshift({ id: `sup-${Date.now()}`, name, contact });
       try {
         await persistGestaoState();
       } catch (error) {
         console.error('Erro ao salvar fornecedor:', error);
         gestaoSyncMode = 'local';
         updateGestaoSyncUi();
-        showMessage('gestao-supplier-message', 'Fornecedor salvo no aparelho. Para sincronizar online, verifique as tabelas inventory_suppliers, inventory_orders e inventory_order_items no Supabase.', 'success');
+        showMessage('gestao-supplier-message', 'Fornecedor salvo no aparelho. Para sincronizar online, crie as tabelas inventory_suppliers e inventory_entries no Supabase.', 'success');
       }
-      cancelGestaoSupplierEdit();
+      document.getElementById('gestao-supplier-name').value = '';
+      document.getElementById('gestao-supplier-contact').value = '';
       renderGestao();
-      showMessage('gestao-supplier-message', isEditing ? 'Fornecedor atualizado com sucesso.' : 'Fornecedor salvo com sucesso.', 'success');
+      showMessage('gestao-supplier-message', 'Fornecedor salvo com sucesso.', 'success');
     }
 
     async function deleteGestaoSupplier(id) {
@@ -4750,7 +4351,6 @@ Camisa Real Madrid 24/25"></textarea>
       if (!confirmDelete) return;
       gestaoSuppliers = gestaoSuppliers.filter(item => String(item.id) !== String(id));
       gestaoEntries = gestaoEntries.map(item => String(item.supplierId) === String(id) ? ({ ...item, supplierId: '' }) : item);
-      if (String(editingGestaoSupplierId) === String(id)) cancelGestaoSupplierEdit();
       try {
         await persistGestaoState();
       } catch (error) {
@@ -4763,37 +4363,33 @@ Camisa Real Madrid 24/25"></textarea>
 
     async function saveGestaoEntry() {
       clearMessage('gestao-entry-message');
-      const productId = document.getElementById('gestao-entry-product').value;
-      const size = document.getElementById('gestao-entry-size').value;
-      const quantity = Number(document.getElementById('gestao-entry-qty').value || 0);
-      const cost = normalizeMoneyInput(document.getElementById('gestao-entry-cost').value || '');
       const date = document.getElementById('gestao-entry-date').value;
       const supplierId = document.getElementById('gestao-entry-supplier').value;
-      const extraCost = normalizeMoneyInput(document.getElementById('gestao-entry-extra').value || '') || 0;
+      const extraCost = getGestaoPendingExtraCost();
       const note = document.getElementById('gestao-entry-note').value.trim();
-      if (!productId) {
-        showMessage('gestao-entry-message', 'Selecione o produto.', 'error');
+
+      if (!gestaoPendingOrderItems.length) {
+        showMessage('gestao-entry-message', 'Adicione pelo menos um item ao pedido.', 'error');
         return;
       }
-      if (!quantity || quantity < 1) {
-        showMessage('gestao-entry-message', 'Digite uma quantidade válida.', 'error');
-        return;
-      }
-      if (Number.isNaN(cost) || cost <= 0) {
-        showMessage('gestao-entry-message', 'Digite um custo por peça válido.', 'error');
-        return;
-      }
+
       const finalDate = date || new Date().toISOString().slice(0,10);
-      const orderKey = `${finalDate}__${supplierId || 'sem-fornecedor'}`;
-      gestaoEntries.unshift({
-        id: `ent-${Date.now()}`,
-        productId, size, quantity, cost,
+      const orderKey = `${finalDate}__${supplierId || 'sem-fornecedor'}__${Date.now()}`;
+
+      const entriesToAdd = gestaoPendingOrderItems.map((item, index) => ({
+        id: `ent-${Date.now()}-${index}`,
+        productId: item.productId,
+        size: item.size,
+        quantity: Number(item.quantity || 0),
+        cost: Number(item.cost || 0),
         date: finalDate,
         supplierId: supplierId || '',
         orderKey,
-        extraCost,
-        note
-      });
+        extraCost: index === 0 ? extraCost : 0,
+        note: index === 0 ? note : ''
+      }));
+
+      gestaoEntries = [...entriesToAdd, ...gestaoEntries];
       try {
         await persistGestaoState();
       } catch (error) {
@@ -4802,69 +4398,71 @@ Camisa Real Madrid 24/25"></textarea>
         updateGestaoSyncUi();
         showMessage('gestao-entry-message', 'Pedido salvo no aparelho. Online, os custos extras e observações continuam locais nesta versão.', 'success');
       }
-      document.getElementById('gestao-entry-qty').value = '';
-      document.getElementById('gestao-entry-cost').value = '';
-      document.getElementById('gestao-entry-date').value = '';
+
+      gestaoPendingOrderItems = [];
+      document.getElementById('gestao-entry-date').value = new Date().toISOString().slice(0,10);
       document.getElementById('gestao-entry-supplier').value = '';
       document.getElementById('gestao-entry-extra').value = '';
       document.getElementById('gestao-entry-note').value = '';
+      resetGestaoEntryItemFields();
       renderGestao();
-      showMessage('gestao-entry-message', 'Item lançado no pedido com sucesso.', 'success');
+      showMessage('gestao-entry-message', 'Pedido salvo com sucesso.', 'success');
     }
 
     async function saveGestaoSale() {
       clearMessage('gestao-sale-message');
-      if (!gestaoPendingSaleItems.length) {
-        showMessage('gestao-sale-message', 'Adicione pelo menos um produto à venda.', 'error');
+      const productId = document.getElementById('gestao-sale-product').value;
+      const size = document.getElementById('gestao-sale-size').value;
+      const quantity = Number(document.getElementById('gestao-sale-qty').value || 0);
+      const salePrice = normalizeMoneyInput(document.getElementById('gestao-sale-price').value || '');
+      const date = document.getElementById('gestao-sale-date').value;
+      const packagingCost = normalizeMoneyInput(document.getElementById('gestao-sale-packaging').value || '') || 0;
+      const shippingCost = normalizeMoneyInput(document.getElementById('gestao-sale-shipping').value || '') || 0;
+      const feeCost = normalizeMoneyInput(document.getElementById('gestao-sale-fee').value || '') || 0;
+      const otherCost = normalizeMoneyInput(document.getElementById('gestao-sale-other').value || '') || 0;
+
+      if (!productId) {
+        showMessage('gestao-sale-message', 'Selecione o produto.', 'error');
+        return;
+      }
+      if (!quantity || quantity < 1) {
+        showMessage('gestao-sale-message', 'Digite uma quantidade válida.', 'error');
+        return;
+      }
+      if (Number.isNaN(salePrice) || salePrice <= 0) {
+        showMessage('gestao-sale-message', 'Digite um valor de venda válido.', 'error');
         return;
       }
 
-      const date = document.getElementById('gestao-sale-date').value || new Date().toISOString().slice(0,10);
-      const clientName = document.getElementById('gestao-sale-client-name').value.trim();
-      const clientPhone = document.getElementById('gestao-sale-client-phone').value.trim();
-      const { packagingCost, shippingCost, feeCost, otherCost } = getGestaoSaleExtraCostsFromFields();
-      const extraCostsTotal = Number((packagingCost + shippingCost + feeCost + otherCost).toFixed(2));
-      const saleId = generateClientUuid();
-
-      const stockRows = calculateGestaoStock();
-      let totalAmount = 0;
-      let totalProductCost = 0;
-
-      for (const item of gestaoPendingSaleItems) {
-        const stockRow = stockRows.find(row => String(row.productId) === String(item.productId) && String(row.size) === String(item.size));
-        const available = Number(stockRow?.currentQty || 0);
-        const alreadyPending = gestaoPendingSaleItems.filter(other => other !== item && String(other.productId) === String(item.productId) && String(other.size) === String(item.size)).reduce((sum, row) => sum + Number(row.quantity || 0), 0);
-        if (Number(item.quantity || 0) + alreadyPending > available) {
-          showMessage('gestao-sale-message', `Estoque insuficiente para ${getProductNameById(item.productId)} ${item.size}. Disponível: ${available}.`, 'error');
-          return;
-        }
-        totalAmount += Number(item.quantity || 0) * Number(item.salePrice || 0);
-        totalProductCost += Number(item.quantity || 0) * Number(item.costPrice || 0);
+      const stockRow = calculateGestaoStock().find(item => String(item.productId) === String(productId) && String(item.size) === String(size));
+      const available = Number(stockRow?.currentQty || 0);
+      if (quantity > available) {
+        showMessage('gestao-sale-message', `Estoque insuficiente. Disponível em ${size}: ${available} peça(s).`, 'error');
+        return;
       }
 
-      const profit = Number((totalAmount - totalProductCost - extraCostsTotal).toFixed(2));
-      gestaoSalesMeta[saleId] = { clientName, clientPhone };
+      const costPrice = Number(stockRow?.averageCost || getAverageCostForProductSize(productId, size) || 0);
+      const totalAmount = Number((quantity * salePrice).toFixed(2));
+      const extraCostsTotal = Number((packagingCost + shippingCost + feeCost + otherCost).toFixed(2));
+      const profit = Number((totalAmount - (quantity * costPrice) - extraCostsTotal).toFixed(2));
+      const saleId = `sale-${Date.now()}`;
 
-      gestaoPendingSaleItems.forEach((item, index) => {
-        gestaoSales.unshift({
-          id: generateClientUuid(),
-          saleId,
-          productId: item.productId,
-          size: item.size,
-          quantity: Number(item.quantity || 0),
-          salePrice: Number(item.salePrice || 0),
-          costPrice: Number(item.costPrice || 0),
-          date,
-          totalAmount: index === 0 ? Number(totalAmount.toFixed(2)) : 0,
-          packagingCost: index === 0 ? packagingCost : 0,
-          shippingCost: index === 0 ? shippingCost : 0,
-          feeCost: index === 0 ? feeCost : 0,
-          otherCost: index === 0 ? otherCost : 0,
-          extraCostsTotal: index === 0 ? extraCostsTotal : 0,
-          profit: index === 0 ? profit : 0,
-          clientName,
-          clientPhone
-        });
+      gestaoSales.unshift({
+        id: `sale-item-${Date.now()}`,
+        saleId,
+        productId,
+        size,
+        quantity,
+        salePrice,
+        costPrice,
+        date: date || new Date().toISOString().slice(0,10),
+        totalAmount,
+        packagingCost,
+        shippingCost,
+        feeCost,
+        otherCost,
+        extraCostsTotal,
+        profit
       });
 
       try {
@@ -4873,10 +4471,16 @@ Camisa Real Madrid 24/25"></textarea>
         console.error('Erro ao salvar venda:', error);
         gestaoSyncMode = 'local';
         updateGestaoSyncUi();
-        showMessage('gestao-sale-message', 'Venda salva no aparelho. Rode o SQL complementar para salvar cliente e contato no Supabase.', 'success');
+        showMessage('gestao-sale-message', 'Venda salva no aparelho. Os custos extras desta versão ficam locais para não quebrar seu banco atual.', 'success');
       }
 
-      clearGestaoPendingSale();
+      document.getElementById('gestao-sale-qty').value = '1';
+      document.getElementById('gestao-sale-price').value = '';
+      document.getElementById('gestao-sale-date').value = '';
+      document.getElementById('gestao-sale-packaging').value = '';
+      document.getElementById('gestao-sale-shipping').value = '';
+      document.getElementById('gestao-sale-fee').value = '';
+      document.getElementById('gestao-sale-other').value = '';
       renderGestao();
       showMessage('gestao-sale-message', 'Venda registrada com sucesso.', 'success');
     }
@@ -4894,8 +4498,6 @@ Camisa Real Madrid 24/25"></textarea>
         batchCategorySelect.innerHTML = '<option value="">Selecione a categoria</option>' + allCategories.map(category => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join("");
       }
       await loadGestaoState();
-      setGestaoSupplierForm(null);
-      const saleDateField = document.getElementById('gestao-sale-date'); if (saleDateField && !saleDateField.value) saleDateField.value = new Date().toISOString().slice(0,10);
       renderGestao();
       renderBatchSharedPreviews();
       renderBatchCreateProducts();
@@ -4937,16 +4539,19 @@ Camisa Real Madrid 24/25"></textarea>
       refreshBatchSizeChipStates();
       updateDraftSummary();
       updateBatchCreateKpis();
-      ['gestao-entry-extra','gestao-sale-packaging','gestao-sale-shipping','gestao-sale-fee','gestao-sale-other','gestao-sale-client-name','gestao-sale-client-phone','gestao-sale-date'].forEach(id => { document.getElementById(id)?.addEventListener('input', () => { if (id.startsWith('gestao-sale')) renderGestaoPendingSale(); else renderGestaoPendingOrder(); }); document.getElementById(id)?.addEventListener('change', () => { if (id.startsWith('gestao-sale')) renderGestaoPendingSale(); else renderGestaoPendingOrder(); }); });
       const entryDateField = document.getElementById('gestao-entry-date');
       if (entryDateField) entryDateField.value = new Date().toISOString().slice(0,10);
+      document.getElementById('gestao-entry-extra')?.addEventListener('input', renderGestaoPendingOrder);
       const saleDateField = document.getElementById('gestao-sale-date');
       if (saleDateField) saleDateField.value = new Date().toISOString().slice(0,10);
 
       if (logged) {
-        await initializeAdmin();
-        updateGestaoSaleItemPreview();
         showHomeSelector();
+        try {
+          await initializeAdmin();
+        } catch (error) {
+          console.error("Erro ao inicializar painel com sessão salva:", error);
+        }
       } else {
         showLoginScreen();
       }
