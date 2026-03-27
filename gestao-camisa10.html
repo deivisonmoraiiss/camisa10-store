@@ -223,6 +223,18 @@
     .batch-summary-list{display:grid;gap:8px;color:#e7e7e7}
 
 
+
+    .order-builder-shell{display:grid;gap:16px}
+    .order-top-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
+    .order-items-box{padding:16px;border-radius:18px;background:#101010;border:1px solid var(--line);display:grid;gap:12px}
+    .order-items-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+    .order-item-row{display:grid;grid-template-columns:minmax(0,1.35fr) 92px 92px 120px auto;gap:10px;align-items:end;padding:12px;border-radius:16px;background:#0c0c0c;border:1px solid rgba(255,255,255,.06)}
+    .order-item-mini{padding:12px;border-radius:14px;background:#0d0d0d;border:1px solid rgba(255,255,255,.06);display:grid;gap:6px}
+    .order-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .order-summary-box{padding:14px;border-radius:16px;background:#101010;border:1px solid var(--line);display:grid;gap:6px}
+    .order-summary-box span{color:var(--muted);font-size:.8rem}
+    .order-summary-box strong{color:#fff;font-size:1rem}
+
     .selector-wrapper{max-width:860px;margin:24px auto}
     .selector-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
     .selector-card{padding:24px;border-radius:24px;background:linear-gradient(180deg,#121212 0%, #101010 100%);border:1px solid var(--line-gold);display:grid;gap:12px;cursor:pointer;transition:.2s ease;text-align:left}
@@ -246,8 +258,8 @@
     .gestao-list-title{font-weight:900;color:#fff}
     .gestao-list-sub{color:var(--muted);font-size:.84rem}
 
-    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao{grid-template-columns:1fr}}
-    @media (max-width:700px){.container{width:min(94%,94%)}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:28px 72px minmax(0,1fr);padding:12px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-thumb{width:72px;height:72px}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{top:78px;padding:8px;display:grid;grid-template-columns:1fr 1fr;border-radius:18px}.module-btn{min-width:0;padding:12px 14px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
+    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid{grid-template-columns:1fr}}
+    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:28px 72px minmax(0,1fr);padding:12px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-thumb{width:72px;height:72px}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{top:78px;padding:8px;display:grid;grid-template-columns:1fr 1fr;border-radius:18px}.module-btn{min-width:0;padding:12px 14px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
   </style>
 </head>
 <body>
@@ -995,59 +1007,115 @@ Camisa Real Madrid 24/25"></textarea>
           </section>
 
           <section id="gestao-entradas" class="gestao-subpanel">
-            <div class="grid-2-equal">
+            <div class="stack">
               <div class="card">
-                <h3 class="section-title">Lançar item do pedido</h3>
+                <h3 class="section-title">Montar pedido / entrada em lote</h3>
                 <div class="helper-box helper-box-visible" style="margin-bottom:16px;display:block;">
-                  Itens do mesmo <strong>fornecedor</strong> no mesmo <strong>dia</strong> ficam agrupados como um <strong>pedido</strong>. Os custos extras do pedido entram no valor investido.
+                  Monte o pedido uma vez, adicione vários itens e só depois salve. Assim fica organizado, limpo no celular e sem um emaranhado de informações.
                 </div>
-                <div class="field">
-                  <label for="gestao-entry-product">Produto</label>
-                  <select id="gestao-entry-product"></select>
-                </div>
-                <div class="grid-2-equal">
-                  <div class="field">
-                    <label for="gestao-entry-size">Tamanho</label>
-                    <select id="gestao-entry-size">
-                      <option value="P">P</option>
-                      <option value="M">M</option>
-                      <option value="G">G</option>
-                      <option value="EG">EG</option>
-                    </select>
+
+                <div class="order-builder-shell">
+                  <div class="order-top-grid">
+                    <div class="order-items-box">
+                      <div class="order-items-head">
+                        <strong>Dados do pedido</strong>
+                        <span class="badge">Fornecedor + data + custos extras</span>
+                      </div>
+                      <div class="grid-2-equal">
+                        <div class="field">
+                          <label for="gestao-entry-supplier">Fornecedor</label>
+                          <select id="gestao-entry-supplier"></select>
+                        </div>
+                        <div class="field">
+                          <label for="gestao-entry-date">Data do pedido</label>
+                          <input type="date" id="gestao-entry-date" />
+                        </div>
+                      </div>
+                      <div class="grid-2-equal">
+                        <div class="field">
+                          <label for="gestao-entry-extra">Custo extra do pedido</label>
+                          <input type="text" inputmode="decimal" id="gestao-entry-extra" placeholder="Frete, embalagem comprada, taxa..." />
+                        </div>
+                        <div class="field">
+                          <label for="gestao-entry-note">Observação do pedido</label>
+                          <input type="text" id="gestao-entry-note" placeholder="Ex: compra do dia / lote do fornecedor" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="order-items-box">
+                      <div class="order-items-head">
+                        <strong>Resumo do pedido</strong>
+                        <span class="badge" id="gestao-pending-count">0 item(ns)</span>
+                      </div>
+                      <div class="order-summary-grid">
+                        <div class="order-summary-box"><span>Itens</span><strong id="gestao-pending-items-total">0</strong></div>
+                        <div class="order-summary-box"><span>Peças</span><strong id="gestao-pending-pieces-total">0</strong></div>
+                        <div class="order-summary-box"><span>Produtos</span><strong id="gestao-pending-products-total">R$ 0,00</strong></div>
+                        <div class="order-summary-box"><span>Total pedido</span><strong id="gestao-pending-grand-total">R$ 0,00</strong></div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="field">
-                    <label for="gestao-entry-qty">Quantidade</label>
-                    <input type="number" id="gestao-entry-qty" min="1" placeholder="Ex: 3" />
+
+                  <div class="order-items-box">
+                    <div class="order-items-head">
+                      <strong>Adicionar item</strong>
+                      <span class="small-muted">Adicione quantos produtos quiser antes de salvar o pedido</span>
+                    </div>
+                    <div class="order-item-row">
+                      <div class="field">
+                        <label for="gestao-entry-product">Produto</label>
+                        <select id="gestao-entry-product"></select>
+                      </div>
+                      <div class="field">
+                        <label for="gestao-entry-size">Tam.</label>
+                        <select id="gestao-entry-size">
+                          <option value="P">P</option>
+                          <option value="M">M</option>
+                          <option value="G">G</option>
+                          <option value="EG">EG</option>
+                        </select>
+                      </div>
+                      <div class="field">
+                        <label for="gestao-entry-qty">Qtd.</label>
+                        <input type="number" id="gestao-entry-qty" min="1" placeholder="3" />
+                      </div>
+                      <div class="field">
+                        <label for="gestao-entry-cost">Custo un.</label>
+                        <input type="text" inputmode="decimal" id="gestao-entry-cost" placeholder="89,90" />
+                      </div>
+                      <div class="actions-row" style="margin-top:0;">
+                        <button class="btn btn-secondary" type="button" onclick="addGestaoEntryItem()">Adicionar</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="grid-2-equal">
+                    <div class="card" style="padding:16px;">
+                      <div class="order-items-head" style="margin-bottom:12px;">
+                        <strong>Itens montados</strong>
+                        <button class="btn btn-ghost" type="button" onclick="clearGestaoPendingOrder()">Limpar pedido</button>
+                      </div>
+                      <div id="gestaoPendingItemsList" class="gestao-list">
+                        <div class="gestao-empty">Nenhum item adicionado ainda.</div>
+                      </div>
+                    </div>
+
+                    <div class="card" style="padding:16px;">
+                      <div class="order-items-head" style="margin-bottom:12px;">
+                        <strong>Finalizar</strong>
+                        <span class="badge">Salva tudo de uma vez</span>
+                      </div>
+                      <div class="gestao-empty" style="padding:14px;">
+                        Quando você salvar, todos os itens entram no mesmo pedido, usando o mesmo fornecedor e a mesma data. Os custos extras entram no valor investido.
+                      </div>
+                      <div class="actions-row">
+                        <button class="btn btn-primary" type="button" onclick="saveGestaoEntry()">Salvar pedido completo</button>
+                      </div>
+                      <div id="gestao-entry-message" class="message"></div>
+                    </div>
                   </div>
                 </div>
-                <div class="grid-2-equal">
-                  <div class="field">
-                    <label for="gestao-entry-cost">Custo unitário</label>
-                    <input type="text" inputmode="decimal" id="gestao-entry-cost" placeholder="Ex: 89,90" />
-                  </div>
-                  <div class="field">
-                    <label for="gestao-entry-date">Data do pedido</label>
-                    <input type="date" id="gestao-entry-date" />
-                  </div>
-                </div>
-                <div class="field">
-                  <label for="gestao-entry-supplier">Fornecedor</label>
-                  <select id="gestao-entry-supplier"></select>
-                </div>
-                <div class="grid-2-equal">
-                  <div class="field">
-                    <label for="gestao-entry-extra">Custo extra do pedido</label>
-                    <input type="text" inputmode="decimal" id="gestao-entry-extra" placeholder="Frete, embalagem comprada, taxa..." />
-                  </div>
-                  <div class="field">
-                    <label for="gestao-entry-note">Observação do pedido</label>
-                    <input type="text" id="gestao-entry-note" placeholder="Ex: compra do dia / lote do fornecedor" />
-                  </div>
-                </div>
-                <div class="actions-row">
-                  <button class="btn btn-primary" type="button" onclick="saveGestaoEntry()">Salvar item no pedido</button>
-                </div>
-                <div id="gestao-entry-message" class="message"></div>
               </div>
 
               <div class="card">
@@ -1213,6 +1281,7 @@ Camisa Real Madrid 24/25"></textarea>
     let gestaoEntries = [];
     let gestaoSales = [];
     let gestaoSyncMode = "local";
+    let gestaoPendingOrderItems = [];
 
     function showMessage(elementId, text, type = "success") {
       const el = document.getElementById(elementId);
@@ -3955,6 +4024,102 @@ Camisa Real Madrid 24/25"></textarea>
       }).sort((a,b)=> a.name.localeCompare(b.name) || a.size.localeCompare(b.size));
     }
 
+    function getGestaoPendingExtraCost() {
+      return normalizeMoneyInput(document.getElementById('gestao-entry-extra')?.value || '') || 0;
+    }
+
+    function resetGestaoEntryItemFields() {
+      const qty = document.getElementById('gestao-entry-qty');
+      const cost = document.getElementById('gestao-entry-cost');
+      const size = document.getElementById('gestao-entry-size');
+      if (qty) qty.value = '';
+      if (cost) cost.value = '';
+      if (size) size.value = 'M';
+    }
+
+    function clearGestaoPendingOrder() {
+      gestaoPendingOrderItems = [];
+      resetGestaoEntryItemFields();
+      renderGestaoPendingOrder();
+    }
+
+    function addGestaoEntryItem() {
+      clearMessage('gestao-entry-message');
+      const productId = document.getElementById('gestao-entry-product').value;
+      const size = document.getElementById('gestao-entry-size').value;
+      const quantity = Number(document.getElementById('gestao-entry-qty').value || 0);
+      const cost = normalizeMoneyInput(document.getElementById('gestao-entry-cost').value || '');
+
+      if (!productId) {
+        showMessage('gestao-entry-message', 'Selecione o produto.', 'error');
+        return;
+      }
+      if (!quantity || quantity < 1) {
+        showMessage('gestao-entry-message', 'Digite uma quantidade válida.', 'error');
+        return;
+      }
+      if (Number.isNaN(cost) || cost <= 0) {
+        showMessage('gestao-entry-message', 'Digite um custo por peça válido.', 'error');
+        return;
+      }
+
+      gestaoPendingOrderItems.push({
+        tempId: `pending-${Date.now()}-${Math.random().toString(16).slice(2,6)}`,
+        productId, size, quantity, cost
+      });
+      resetGestaoEntryItemFields();
+      renderGestaoPendingOrder();
+      showMessage('gestao-entry-message', 'Item adicionado ao pedido.', 'success');
+    }
+
+    function removeGestaoPendingItem(tempId) {
+      gestaoPendingOrderItems = gestaoPendingOrderItems.filter(item => item.tempId !== tempId);
+      renderGestaoPendingOrder();
+    }
+
+    function renderGestaoPendingOrder() {
+      const list = document.getElementById('gestaoPendingItemsList');
+      const count = document.getElementById('gestao-pending-count');
+      const totalItems = document.getElementById('gestao-pending-items-total');
+      const totalPieces = document.getElementById('gestao-pending-pieces-total');
+      const productsTotalEl = document.getElementById('gestao-pending-products-total');
+      const grandTotalEl = document.getElementById('gestao-pending-grand-total');
+      const extraCost = getGestaoPendingExtraCost();
+      const pieces = gestaoPendingOrderItems.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+      const productsTotal = gestaoPendingOrderItems.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.cost || 0)), 0);
+      const grandTotal = productsTotal + extraCost;
+
+      if (count) count.textContent = `${gestaoPendingOrderItems.length} item(ns)`;
+      if (totalItems) totalItems.textContent = String(gestaoPendingOrderItems.length);
+      if (totalPieces) totalPieces.textContent = String(pieces);
+      if (productsTotalEl) productsTotalEl.textContent = formatPrice(productsTotal);
+      if (grandTotalEl) grandTotalEl.textContent = formatPrice(grandTotal);
+
+      if (!list) return;
+      if (!gestaoPendingOrderItems.length) {
+        list.innerHTML = '<div class="gestao-empty">Nenhum item adicionado ainda.</div>';
+        return;
+      }
+      list.innerHTML = gestaoPendingOrderItems.map(item => {
+        const itemTotal = Number(item.quantity || 0) * Number(item.cost || 0);
+        return `
+          <article class="order-item-mini">
+            <div class="gestao-list-head">
+              <div>
+                <div class="gestao-list-title">${escapeHtml(getProductNameById(item.productId))}</div>
+                <div class="gestao-list-sub">Tam. ${escapeHtml(item.size)} • ${item.quantity} un.</div>
+              </div>
+              <button class="btn btn-danger" type="button" onclick="removeGestaoPendingItem('${item.tempId}')">Remover</button>
+            </div>
+            <div class="product-admin-meta">
+              <span class="badge">Custo un.: ${formatPrice(item.cost)}</span>
+              <span class="badge">Total item: ${formatPrice(itemTotal)}</span>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
     function renderGestaoKpis() {
       const totalOrders = getGroupedGestaoOrders().length;
       const totalPieces = gestaoEntries.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
@@ -4128,6 +4293,7 @@ Camisa Real Madrid 24/25"></textarea>
       renderGestaoStock();
       renderGestaoSales();
       renderGestaoSuppliers();
+      renderGestaoPendingOrder();
       updateGestaoSalePreview();
     }
 
@@ -4183,37 +4349,33 @@ Camisa Real Madrid 24/25"></textarea>
 
     async function saveGestaoEntry() {
       clearMessage('gestao-entry-message');
-      const productId = document.getElementById('gestao-entry-product').value;
-      const size = document.getElementById('gestao-entry-size').value;
-      const quantity = Number(document.getElementById('gestao-entry-qty').value || 0);
-      const cost = normalizeMoneyInput(document.getElementById('gestao-entry-cost').value || '');
       const date = document.getElementById('gestao-entry-date').value;
       const supplierId = document.getElementById('gestao-entry-supplier').value;
-      const extraCost = normalizeMoneyInput(document.getElementById('gestao-entry-extra').value || '') || 0;
+      const extraCost = getGestaoPendingExtraCost();
       const note = document.getElementById('gestao-entry-note').value.trim();
-      if (!productId) {
-        showMessage('gestao-entry-message', 'Selecione o produto.', 'error');
+
+      if (!gestaoPendingOrderItems.length) {
+        showMessage('gestao-entry-message', 'Adicione pelo menos um item ao pedido.', 'error');
         return;
       }
-      if (!quantity || quantity < 1) {
-        showMessage('gestao-entry-message', 'Digite uma quantidade válida.', 'error');
-        return;
-      }
-      if (Number.isNaN(cost) || cost <= 0) {
-        showMessage('gestao-entry-message', 'Digite um custo por peça válido.', 'error');
-        return;
-      }
+
       const finalDate = date || new Date().toISOString().slice(0,10);
-      const orderKey = `${finalDate}__${supplierId || 'sem-fornecedor'}`;
-      gestaoEntries.unshift({
-        id: `ent-${Date.now()}`,
-        productId, size, quantity, cost,
+      const orderKey = `${finalDate}__${supplierId || 'sem-fornecedor'}__${Date.now()}`;
+
+      const entriesToAdd = gestaoPendingOrderItems.map((item, index) => ({
+        id: `ent-${Date.now()}-${index}`,
+        productId: item.productId,
+        size: item.size,
+        quantity: Number(item.quantity || 0),
+        cost: Number(item.cost || 0),
         date: finalDate,
         supplierId: supplierId || '',
         orderKey,
-        extraCost,
-        note
-      });
+        extraCost: index === 0 ? extraCost : 0,
+        note: index === 0 ? note : ''
+      }));
+
+      gestaoEntries = [...entriesToAdd, ...gestaoEntries];
       try {
         await persistGestaoState();
       } catch (error) {
@@ -4222,14 +4384,15 @@ Camisa Real Madrid 24/25"></textarea>
         updateGestaoSyncUi();
         showMessage('gestao-entry-message', 'Pedido salvo no aparelho. Online, os custos extras e observações continuam locais nesta versão.', 'success');
       }
-      document.getElementById('gestao-entry-qty').value = '';
-      document.getElementById('gestao-entry-cost').value = '';
-      document.getElementById('gestao-entry-date').value = '';
+
+      gestaoPendingOrderItems = [];
+      document.getElementById('gestao-entry-date').value = new Date().toISOString().slice(0,10);
       document.getElementById('gestao-entry-supplier').value = '';
       document.getElementById('gestao-entry-extra').value = '';
       document.getElementById('gestao-entry-note').value = '';
+      resetGestaoEntryItemFields();
       renderGestao();
-      showMessage('gestao-entry-message', 'Item lançado no pedido com sucesso.', 'success');
+      showMessage('gestao-entry-message', 'Pedido salvo com sucesso.', 'success');
     }
 
     async function saveGestaoSale() {
@@ -4364,6 +4527,7 @@ Camisa Real Madrid 24/25"></textarea>
       updateBatchCreateKpis();
       const entryDateField = document.getElementById('gestao-entry-date');
       if (entryDateField) entryDateField.value = new Date().toISOString().slice(0,10);
+      document.getElementById('gestao-entry-extra')?.addEventListener('input', renderGestaoPendingOrder);
       const saleDateField = document.getElementById('gestao-sale-date');
       if (saleDateField) saleDateField.value = new Date().toISOString().slice(0,10);
 
