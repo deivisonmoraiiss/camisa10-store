@@ -1018,7 +1018,7 @@ Camisa Real Madrid 24/25"></textarea>
                 </div>
                 <div class="grid-2-equal">
                   <div class="field">
-                    <label for="gestao-entry-cost">Custo por peça</label>
+                    <label for="gestao-entry-cost">Custo unitário</label>
                     <input type="text" inputmode="decimal" id="gestao-entry-cost" placeholder="Ex: 89,90" />
                   </div>
                   <div class="field">
@@ -1029,10 +1029,6 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="field">
                   <label for="gestao-entry-supplier">Fornecedor</label>
                   <select id="gestao-entry-supplier"></select>
-                </div>
-                <div class="field">
-                  <label for="gestao-entry-note">Observação</label>
-                  <textarea id="gestao-entry-note" placeholder="Ex: lote sob encomenda, compra promocional, reposição..."></textarea>
                 </div>
                 <div class="actions-row">
                   <button class="btn btn-primary" type="button" onclick="saveGestaoEntry()">Salvar entrada</button>
@@ -1054,7 +1050,7 @@ Camisa Real Madrid 24/25"></textarea>
               <div class="list-header-row">
                 <div>
                   <h3 class="section-title" style="margin-bottom:6px;">Saldo de estoque</h3>
-                  <div class="small-muted">Calculado a partir das entradas lançadas aqui na gestão.</div>
+                  <div class="small-muted">Calculado a partir das entradas lançadas aqui na gestão, com custo médio automático.</div>
                 </div>
                 <button class="btn btn-secondary" type="button" onclick="renderGestao()">Atualizar</button>
               </div>
@@ -1073,8 +1069,8 @@ Camisa Real Madrid 24/25"></textarea>
                   <input type="text" id="gestao-supplier-name" placeholder="Ex: Fornecedor Rio" />
                 </div>
                 <div class="field">
-                  <label for="gestao-supplier-note">Observação</label>
-                  <textarea id="gestao-supplier-note" placeholder="Ex: trabalha mais com sob encomenda, entrega em 15 dias..."></textarea>
+                  <label for="gestao-supplier-contact">Contato</label>
+                  <input type="text" id="gestao-supplier-contact" placeholder="Ex: WhatsApp, Instagram ou nome do contato" />
                 </div>
                 <div class="actions-row">
                   <button class="btn btn-primary" type="button" onclick="saveGestaoSupplier()">Salvar fornecedor</button>
@@ -3536,15 +3532,14 @@ Camisa Real Madrid 24/25"></textarea>
     async function loadGestaoStateFromSupabase() {
       const { data: suppliers, error: supplierError } = await supabaseClient
         .from(GESTAO_SUPPLIERS_TABLE)
-        .select('id, name, note, created_at')
+        .select('id, name, contact, created_at')
         .order('created_at', { ascending: false });
 
       if (supplierError) throw supplierError;
 
       const { data: entries, error: entryError } = await supabaseClient
         .from(GESTAO_ENTRIES_TABLE)
-        .select('id, product_id, size, quantity, cost, entry_date, supplier_id, note, created_at')
-        .order('entry_date', { ascending: false })
+        .select('id, product_id, size, quantity, cost_price, supplier_id, created_at')
         .order('created_at', { ascending: false });
 
       if (entryError) throw entryError;
@@ -3552,7 +3547,7 @@ Camisa Real Madrid 24/25"></textarea>
       gestaoSuppliers = (suppliers || []).map(item => ({
         id: item.id,
         name: item.name,
-        note: item.note || ''
+        contact: item.contact || ''
       }));
 
       gestaoEntries = (entries || []).map(item => ({
@@ -3560,10 +3555,9 @@ Camisa Real Madrid 24/25"></textarea>
         productId: item.product_id,
         size: item.size || 'M',
         quantity: Number(item.quantity || 0),
-        cost: Number(item.cost || 0),
-        date: item.entry_date || '',
-        supplierId: item.supplier_id || '',
-        note: item.note || ''
+        cost: Number(item.cost_price || 0),
+        date: item.created_at ? String(item.created_at).slice(0,10) : '',
+        supplierId: item.supplier_id || ''
       }));
 
       localStorage.setItem(GESTAO_SUPPLIERS_KEY, JSON.stringify(gestaoSuppliers));
@@ -3581,8 +3575,20 @@ Camisa Real Madrid 24/25"></textarea>
       }
 
       try {
-        gestaoSuppliers = JSON.parse(localStorage.getItem(GESTAO_SUPPLIERS_KEY) || '[]');
-        gestaoEntries = JSON.parse(localStorage.getItem(GESTAO_ENTRIES_KEY) || '[]');
+        gestaoSuppliers = JSON.parse(localStorage.getItem(GESTAO_SUPPLIERS_KEY) || '[]').map(item => ({
+          id: item.id,
+          name: item.name,
+          contact: item.contact || item.note || ''
+        }));
+        gestaoEntries = JSON.parse(localStorage.getItem(GESTAO_ENTRIES_KEY) || '[]').map(item => ({
+          id: item.id,
+          productId: item.productId,
+          size: item.size || 'M',
+          quantity: Number(item.quantity || 0),
+          cost: Number(item.cost || item.cost_price || 0),
+          date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
+          supplierId: item.supplierId || item.supplier_id || ''
+        }));
       } catch (error) {
         gestaoSuppliers = [];
         gestaoEntries = [];
@@ -3607,7 +3613,7 @@ Camisa Real Madrid 24/25"></textarea>
       const payload = gestaoSuppliers.map(item => ({
         id: item.id,
         name: item.name,
-        note: item.note || ''
+        contact: item.contact || ''
       }));
 
       const { error: deleteError } = await supabaseClient
@@ -3632,10 +3638,9 @@ Camisa Real Madrid 24/25"></textarea>
         product_id: item.productId,
         size: item.size || 'M',
         quantity: Number(item.quantity || 0),
-        cost: Number(item.cost || 0),
-        entry_date: item.date || null,
-        supplier_id: item.supplierId || null,
-        note: item.note || ''
+        cost_price: Number(item.cost || 0),
+        created_at: item.date ? `${item.date}T12:00:00` : new Date().toISOString(),
+        supplier_id: item.supplierId || null
       }));
 
       const { error: deleteError } = await supabaseClient
@@ -3741,8 +3746,7 @@ Camisa Real Madrid 24/25"></textarea>
             <span class="badge">Custo: ${formatPrice(entry.cost)}</span>
             <span class="badge">Total: ${formatPrice(Number(entry.cost || 0) * Number(entry.quantity || 0))}</span>
           </div>
-          ${entry.note ? `<div class="small-muted">${escapeHtml(entry.note)}</div>` : ''}
-        </article>
+                  </article>
       `).join('');
     }
 
@@ -3783,7 +3787,7 @@ Camisa Real Madrid 24/25"></textarea>
           <div class="gestao-list-head">
             <div>
               <div class="gestao-list-title">${escapeHtml(item.name)}</div>
-              <div class="gestao-list-sub">${item.note ? escapeHtml(item.note) : 'Sem observação'}</div>
+              <div class="gestao-list-sub">${item.contact ? escapeHtml(item.contact) : 'Sem contato informado'}</div>
             </div>
             <button class="btn btn-danger" type="button" onclick="deleteGestaoSupplier('${item.id}')">Excluir</button>
           </div>
@@ -3816,12 +3820,12 @@ Camisa Real Madrid 24/25"></textarea>
     async function saveGestaoSupplier() {
       clearMessage('gestao-supplier-message');
       const name = document.getElementById('gestao-supplier-name').value.trim();
-      const note = document.getElementById('gestao-supplier-note').value.trim();
+      const contact = document.getElementById('gestao-supplier-contact').value.trim();
       if (!name) {
         showMessage('gestao-supplier-message', 'Digite o nome do fornecedor.', 'error');
         return;
       }
-      gestaoSuppliers.unshift({ id: `sup-${Date.now()}`, name, note });
+      gestaoSuppliers.unshift({ id: `sup-${Date.now()}`, name, contact });
       try {
         await persistGestaoState();
       } catch (error) {
@@ -3831,7 +3835,7 @@ Camisa Real Madrid 24/25"></textarea>
         showMessage('gestao-supplier-message', 'Fornecedor salvo no aparelho. Para sincronizar online, crie as tabelas inventory_suppliers e inventory_entries no Supabase.', 'success');
       }
       document.getElementById('gestao-supplier-name').value = '';
-      document.getElementById('gestao-supplier-note').value = '';
+      document.getElementById('gestao-supplier-contact').value = '';
       renderGestao();
       showMessage('gestao-supplier-message', 'Fornecedor salvo com sucesso.', 'success');
     }
@@ -3859,8 +3863,7 @@ Camisa Real Madrid 24/25"></textarea>
       const cost = normalizeMoneyInput(document.getElementById('gestao-entry-cost').value || '');
       const date = document.getElementById('gestao-entry-date').value;
       const supplierId = document.getElementById('gestao-entry-supplier').value;
-      const note = document.getElementById('gestao-entry-note').value.trim();
-      if (!productId) {
+            if (!productId) {
         showMessage('gestao-entry-message', 'Selecione o produto.', 'error');
         return;
       }
@@ -3869,15 +3872,14 @@ Camisa Real Madrid 24/25"></textarea>
         return;
       }
       if (Number.isNaN(cost) || cost <= 0) {
-        showMessage('gestao-entry-message', 'Digite um custo válido.', 'error');
+        showMessage('gestao-entry-message', 'Digite um custo por peça válido.', 'error');
         return;
       }
       gestaoEntries.unshift({
         id: `ent-${Date.now()}`,
         productId, size, quantity, cost,
         date: date || new Date().toISOString().slice(0,10),
-        supplierId: supplierId || '',
-        note
+        supplierId: supplierId || ''
       });
       try {
         await persistGestaoState();
@@ -3891,8 +3893,7 @@ Camisa Real Madrid 24/25"></textarea>
       document.getElementById('gestao-entry-cost').value = '';
       document.getElementById('gestao-entry-date').value = '';
       document.getElementById('gestao-entry-supplier').value = '';
-      document.getElementById('gestao-entry-note').value = '';
-      renderGestao();
+            renderGestao();
       showMessage('gestao-entry-message', 'Entrada registrada com sucesso.', 'success');
     }
 
