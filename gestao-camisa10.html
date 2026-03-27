@@ -946,6 +946,7 @@ Camisa Real Madrid 24/25"></textarea>
             <button class="gestao-subtab active" type="button" data-gestao-tab="gestao-dashboard">Resumo</button>
             <button class="gestao-subtab" type="button" data-gestao-tab="gestao-entradas">Entradas</button>
             <button class="gestao-subtab" type="button" data-gestao-tab="gestao-estoque">Estoque</button>
+            <button class="gestao-subtab" type="button" data-gestao-tab="gestao-vendas">Vendas</button>
             <button class="gestao-subtab" type="button" data-gestao-tab="gestao-fornecedores">Fornecedores</button>
           </div>
 
@@ -971,9 +972,9 @@ Camisa Real Madrid 24/25"></textarea>
               </div>
               <div class="gestao-card">
                 <div class="gestao-icon">4</div>
-                <strong>Próximo passo</strong>
-                <p>Na próxima evolução, entraremos com vendas, baixa automática e lucro real.</p>
-                <span class="badge">Próxima etapa</span>
+                <strong>Vendas</strong>
+                <p>Registre a venda, baixe o estoque automaticamente e acompanhe faturamento e lucro estimado.</p>
+                <span class="badge">Já ativo</span>
               </div>
             </div>
 
@@ -986,7 +987,7 @@ Camisa Real Madrid 24/25"></textarea>
                 <h3 class="section-title">Atalhos</h3>
                 <div class="actions-row">
                   <button class="btn btn-primary" type="button" onclick="activateGestaoTab('gestao-entradas')">Lançar entrada</button>
-                  <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-fornecedores')">Cadastrar fornecedor</button>
+                  <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-vendas')">Lançar venda</button>
                   <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-estoque')">Ver estoque</button>
                 </div>
               </div>
@@ -1060,6 +1061,58 @@ Camisa Real Madrid 24/25"></textarea>
             </div>
           </section>
 
+          <section id="gestao-vendas" class="gestao-subpanel">
+            <div class="grid-2-equal">
+              <div class="card">
+                <h3 class="section-title">Lançar venda</h3>
+                <div class="field">
+                  <label for="gestao-sale-product">Produto</label>
+                  <select id="gestao-sale-product" onchange="updateGestaoSalePreview()"></select>
+                </div>
+                <div class="grid-2-equal">
+                  <div class="field">
+                    <label for="gestao-sale-size">Tamanho</label>
+                    <select id="gestao-sale-size" onchange="updateGestaoSalePreview()">
+                      <option value="P">P</option>
+                      <option value="M">M</option>
+                      <option value="G">G</option>
+                      <option value="EG">EG</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="gestao-sale-qty">Quantidade</label>
+                    <input type="number" id="gestao-sale-qty" min="1" value="1" placeholder="Ex: 1" oninput="updateGestaoSalePreview()" />
+                  </div>
+                </div>
+                <div class="grid-2-equal">
+                  <div class="field">
+                    <label for="gestao-sale-price">Preço de venda unitário</label>
+                    <input type="text" inputmode="decimal" id="gestao-sale-price" placeholder="Ex: 149,90" oninput="updateGestaoSalePreview()" />
+                  </div>
+                  <div class="field">
+                    <label for="gestao-sale-date">Data</label>
+                    <input type="date" id="gestao-sale-date" onchange="updateGestaoSalePreview()" />
+                  </div>
+                </div>
+                <div class="preview-box">
+                  <div class="small-muted" style="margin-bottom:8px;">Prévia da venda</div>
+                  <div id="gestaoSalePreview" class="gestao-empty" style="padding:14px;">Selecione produto, tamanho e valor para calcular receita e lucro estimado.</div>
+                </div>
+                <div class="actions-row">
+                  <button class="btn btn-primary" type="button" onclick="saveGestaoSale()">Salvar venda</button>
+                </div>
+                <div id="gestao-sale-message" class="message"></div>
+              </div>
+
+              <div class="card">
+                <h3 class="section-title">Últimas vendas</h3>
+                <div id="gestaoSalesList" class="gestao-list">
+                  <div class="gestao-empty">Nenhuma venda lançada ainda.</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
           <section id="gestao-fornecedores" class="gestao-subpanel">
             <div class="grid-2-equal">
               <div class="card">
@@ -1118,10 +1171,14 @@ Camisa Real Madrid 24/25"></textarea>
     let batchCreateSharedExtraFiles = [];
     const GESTAO_SUPPLIERS_KEY = "camisa10_gestao_suppliers_v1";
     const GESTAO_ENTRIES_KEY = "camisa10_gestao_entries_v1";
+    const GESTAO_SALES_KEY = "camisa10_gestao_sales_v1";
     const GESTAO_SUPPLIERS_TABLE = "inventory_suppliers";
     const GESTAO_ENTRIES_TABLE = "inventory_entries";
+    const GESTAO_SALES_TABLE = "sales";
+    const GESTAO_SALE_ITEMS_TABLE = "sale_items";
     let gestaoSuppliers = [];
     let gestaoEntries = [];
+    let gestaoSales = [];
     let gestaoSyncMode = "local";
 
     function showMessage(elementId, text, type = "success") {
@@ -3544,6 +3601,13 @@ Camisa Real Madrid 24/25"></textarea>
 
       if (entryError) throw entryError;
 
+      const { data: saleItems, error: salesError } = await supabaseClient
+        .from(GESTAO_SALE_ITEMS_TABLE)
+        .select('id, sale_id, product_id, quantity, sale_price, cost_price, size, sales(total_amount, profit, created_at)')
+        .order('id', { ascending: false });
+
+      if (salesError) throw salesError;
+
       gestaoSuppliers = (suppliers || []).map(item => ({
         id: item.id,
         name: item.name,
@@ -3560,8 +3624,22 @@ Camisa Real Madrid 24/25"></textarea>
         supplierId: item.supplier_id || ''
       }));
 
+      gestaoSales = (saleItems || []).map(item => ({
+        id: item.id,
+        saleId: item.sale_id,
+        productId: item.product_id,
+        size: item.size || 'M',
+        quantity: Number(item.quantity || 0),
+        salePrice: Number(item.sale_price || 0),
+        costPrice: Number(item.cost_price || 0),
+        date: item.sales?.created_at ? String(item.sales.created_at).slice(0,10) : '',
+        totalAmount: Number(item.sales?.total_amount || (Number(item.quantity || 0) * Number(item.sale_price || 0))),
+        profit: Number(item.sales?.profit || ((Number(item.sale_price || 0) - Number(item.cost_price || 0)) * Number(item.quantity || 0)))
+      }));
+
       localStorage.setItem(GESTAO_SUPPLIERS_KEY, JSON.stringify(gestaoSuppliers));
       localStorage.setItem(GESTAO_ENTRIES_KEY, JSON.stringify(gestaoEntries));
+      localStorage.setItem(GESTAO_SALES_KEY, JSON.stringify(gestaoSales));
       gestaoSyncMode = 'online';
       updateGestaoSyncUi();
     }
@@ -3589,9 +3667,22 @@ Camisa Real Madrid 24/25"></textarea>
           date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
           supplierId: item.supplierId || item.supplier_id || ''
         }));
+        gestaoSales = JSON.parse(localStorage.getItem(GESTAO_SALES_KEY) || '[]').map(item => ({
+          id: item.id,
+          saleId: item.saleId || item.sale_id || item.id,
+          productId: item.productId || item.product_id,
+          size: item.size || 'M',
+          quantity: Number(item.quantity || 0),
+          salePrice: Number(item.salePrice || item.sale_price || 0),
+          costPrice: Number(item.costPrice || item.cost_price || 0),
+          date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
+          totalAmount: Number(item.totalAmount || item.total_amount || ((Number(item.quantity || 0) * Number(item.salePrice || item.sale_price || 0)))),
+          profit: Number(item.profit || ((Number(item.salePrice || item.sale_price || 0) - Number(item.costPrice || item.cost_price || 0)) * Number(item.quantity || 0)))
+        }));
       } catch (error) {
         gestaoSuppliers = [];
         gestaoEntries = [];
+        gestaoSales = [];
       }
       gestaoSyncMode = 'local';
       updateGestaoSyncUi();
@@ -3600,12 +3691,14 @@ Camisa Real Madrid 24/25"></textarea>
     async function persistGestaoState() {
       localStorage.setItem(GESTAO_SUPPLIERS_KEY, JSON.stringify(gestaoSuppliers));
       localStorage.setItem(GESTAO_ENTRIES_KEY, JSON.stringify(gestaoEntries));
+      localStorage.setItem(GESTAO_SALES_KEY, JSON.stringify(gestaoSales));
 
       if (gestaoSyncMode !== 'online') return;
 
       await Promise.all([
         syncGestaoSuppliersToSupabase(),
-        syncGestaoEntriesToSupabase()
+        syncGestaoEntriesToSupabase(),
+        syncGestaoSalesToSupabase()
       ]);
     }
 
@@ -3659,11 +3752,67 @@ Camisa Real Madrid 24/25"></textarea>
       if (error) throw error;
     }
 
+    async function syncGestaoSalesToSupabase() {
+      const saleIds = [...new Set(gestaoSales.map(item => item.saleId || item.id))];
+
+      const { error: deleteItemsError } = await supabaseClient
+        .from(GESTAO_SALE_ITEMS_TABLE)
+        .delete()
+        .not('id', 'is', null);
+      if (deleteItemsError) throw deleteItemsError;
+
+      const { error: deleteSalesError } = await supabaseClient
+        .from(GESTAO_SALES_TABLE)
+        .delete()
+        .not('id', 'is', null);
+      if (deleteSalesError) throw deleteSalesError;
+
+      if (!saleIds.length) return;
+
+      const salesPayload = saleIds.map(saleId => {
+        const item = gestaoSales.find(row => (row.saleId || row.id) === saleId);
+        return {
+          id: saleId,
+          total_amount: Number(item?.totalAmount || 0),
+          profit: Number(item?.profit || 0),
+          created_at: item?.date ? `${item.date}T12:00:00` : new Date().toISOString()
+        };
+      });
+
+      const { error: salesInsertError } = await supabaseClient
+        .from(GESTAO_SALES_TABLE)
+        .insert(salesPayload);
+      if (salesInsertError) throw salesInsertError;
+
+      const itemsPayload = gestaoSales.map(item => ({
+        id: item.id,
+        sale_id: item.saleId || item.id,
+        product_id: item.productId,
+        quantity: Number(item.quantity || 0),
+        sale_price: Number(item.salePrice || 0),
+        cost_price: Number(item.costPrice || 0),
+        size: item.size || 'M'
+      }));
+
+      const { error: itemsInsertError } = await supabaseClient
+        .from(GESTAO_SALE_ITEMS_TABLE)
+        .insert(itemsPayload);
+      if (itemsInsertError) throw itemsInsertError;
+    }
+
     function populateGestaoProductOptions() {
       const select = document.getElementById('gestao-entry-product');
-      if (!select) return;
+      const saleSelect = document.getElementById('gestao-sale-product');
       const options = allProducts.map(product => `<option value="${product.id}">${escapeHtml(product.name || 'Produto')}</option>`).join('');
-      select.innerHTML = options || '<option value="">Nenhum produto cadastrado</option>';
+      if (select) select.innerHTML = options || '<option value="">Nenhum produto cadastrado</option>';
+      if (saleSelect) saleSelect.innerHTML = options || '<option value="">Nenhum produto cadastrado</option>';
+    }
+
+    function getAverageCostForProductSize(productId, size) {
+      const relevant = gestaoEntries.filter(item => String(item.productId) === String(productId) && String(item.size) === String(size));
+      const totalQty = relevant.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+      const totalCost = relevant.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.cost || 0)), 0);
+      return totalQty ? (totalCost / totalQty) : 0;
     }
 
     function populateGestaoSupplierOptions() {
@@ -3693,20 +3842,42 @@ Camisa Real Madrid 24/25"></textarea>
             name: getProductNameById(entry.productId),
             size: entry.size,
             qty: 0,
-            totalCost: 0
+            totalCost: 0,
+            soldQty: 0
           });
         }
         const row = map.get(key);
         row.qty += Number(entry.quantity || 0);
         row.totalCost += Number(entry.quantity || 0) * Number(entry.cost || 0);
       });
-      return [...map.values()].map(item => ({ ...item, averageCost: item.qty ? item.totalCost / item.qty : 0 })).sort((a,b)=> a.name.localeCompare(b.name) || a.size.localeCompare(b.size));
+      gestaoSales.forEach(sale => {
+        const key = `${sale.productId}__${sale.size}`;
+        if (!map.has(key)) {
+          map.set(key, {
+            key,
+            productId: sale.productId,
+            name: getProductNameById(sale.productId),
+            size: sale.size,
+            qty: 0,
+            totalCost: 0,
+            soldQty: 0
+          });
+        }
+        const row = map.get(key);
+        row.soldQty += Number(sale.quantity || 0);
+      });
+      return [...map.values()].map(item => {
+        const averageCost = item.qty ? item.totalCost / item.qty : 0;
+        const currentQty = item.qty - item.soldQty;
+        return { ...item, averageCost, currentQty, currentInvestment: Math.max(0, currentQty) * averageCost };
+      }).sort((a,b)=> a.name.localeCompare(b.name) || a.size.localeCompare(b.size));
     }
 
     function renderGestaoKpis() {
       const totalEntries = gestaoEntries.length;
       const totalPieces = gestaoEntries.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-      const totalInvested = gestaoEntries.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.cost || 0)), 0);
+      const stock = calculateGestaoStock();
+      const totalInvested = stock.reduce((sum, item) => sum + Number(item.currentInvestment || 0), 0);
       document.getElementById('gestaoKpiEntradas').textContent = String(totalEntries);
       document.getElementById('gestaoKpiPecas').textContent = String(totalPieces);
       document.getElementById('gestaoKpiInvestido').textContent = formatPrice(totalInvested);
@@ -3722,8 +3893,9 @@ Camisa Real Madrid 24/25"></textarea>
       }
       const last = gestaoEntries[0];
       const totalPieces = gestaoEntries.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-      const totalInvested = gestaoEntries.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.cost || 0)), 0);
-      box.innerHTML = `Você já lançou <strong>${gestaoEntries.length}</strong> entrada(s), com <strong>${totalPieces}</strong> peça(s) registradas e <strong>${formatPrice(totalInvested)}</strong> investidos. Última entrada: <strong>${escapeHtml(getProductNameById(last.productId))}</strong>, tamanho <strong>${escapeHtml(last.size)}</strong>, ${last.quantity} peça(s).`;
+      const totalRevenue = gestaoSales.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0);
+      const totalProfit = gestaoSales.reduce((sum, item) => sum + Number(item.profit || 0), 0);
+      box.innerHTML = `Você já lançou <strong>${gestaoEntries.length}</strong> entrada(s), com <strong>${totalPieces}</strong> peça(s) registradas. Vendas acumuladas: <strong>${formatPrice(totalRevenue)}</strong> em faturamento e <strong>${formatPrice(totalProfit)}</strong> de lucro estimado. Última entrada: <strong>${escapeHtml(getProductNameById(last.productId))}</strong>, tamanho <strong>${escapeHtml(last.size)}</strong>, ${last.quantity} peça(s).`;
     }
 
     function renderGestaoEntries() {
@@ -3765,11 +3937,57 @@ Camisa Real Madrid 24/25"></textarea>
               <div class="gestao-list-title">${escapeHtml(item.name)}</div>
               <div class="gestao-list-sub">Tamanho ${escapeHtml(item.size)}</div>
             </div>
-            <span class="badge">Saldo: ${item.qty}</span>
+            <span class="badge">Saldo: ${item.currentQty}</span>
           </div>
           <div class="product-admin-meta">
+            <span class="badge">Entradas: ${item.qty}</span>
+            <span class="badge">Vendidas: ${item.soldQty}</span>
             <span class="badge">Custo médio: ${formatPrice(item.averageCost)}</span>
-            <span class="badge">Investido: ${formatPrice(item.totalCost)}</span>
+            <span class="badge">Investido: ${formatPrice(item.currentInvestment)}</span>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function updateGestaoSalePreview() {
+      const box = document.getElementById('gestaoSalePreview');
+      if (!box) return;
+      const productId = document.getElementById('gestao-sale-product')?.value || '';
+      const size = document.getElementById('gestao-sale-size')?.value || 'M';
+      const quantity = Number(document.getElementById('gestao-sale-qty')?.value || 0);
+      const salePrice = normalizeMoneyInput(document.getElementById('gestao-sale-price')?.value || '');
+      if (!productId) {
+        box.innerHTML = 'Selecione produto, tamanho e valor para calcular receita e lucro estimado.';
+        return;
+      }
+      const stockRow = calculateGestaoStock().find(item => String(item.productId) === String(productId) && String(item.size) === String(size));
+      const available = Number(stockRow?.currentQty || 0);
+      const avgCost = Number(stockRow?.averageCost || getAverageCostForProductSize(productId, size) || 0);
+      const revenue = !Number.isNaN(salePrice) ? Number(quantity || 0) * salePrice : 0;
+      const estimatedProfit = !Number.isNaN(salePrice) ? Number(quantity || 0) * (salePrice - avgCost) : 0;
+      box.innerHTML = `${escapeHtml(getProductNameById(productId))} • tamanho <strong>${escapeHtml(size)}</strong><br>Disponível agora: <strong>${available}</strong> peça(s)<br>Custo médio: <strong>${formatPrice(avgCost)}</strong><br>Receita prevista: <strong>${formatPrice(revenue)}</strong><br>Lucro estimado: <strong>${formatPrice(estimatedProfit)}</strong>`;
+    }
+
+    function renderGestaoSales() {
+      const container = document.getElementById('gestaoSalesList');
+      if (!container) return;
+      if (!gestaoSales.length) {
+        container.innerHTML = '<div class="gestao-empty">Nenhuma venda lançada ainda.</div>';
+        return;
+      }
+      container.innerHTML = gestaoSales.map(item => `
+        <article class="gestao-list-card">
+          <div class="gestao-list-head">
+            <div>
+              <div class="gestao-list-title">${escapeHtml(getProductNameById(item.productId))}</div>
+              <div class="gestao-list-sub">${escapeHtml(item.date || '')} • tamanho ${escapeHtml(item.size)}</div>
+            </div>
+            <span class="badge">${item.quantity} un.</span>
+          </div>
+          <div class="product-admin-meta">
+            <span class="badge">Venda: ${formatPrice(item.salePrice)}</span>
+            <span class="badge">Receita: ${formatPrice(item.totalAmount)}</span>
+            <span class="badge">Lucro: ${formatPrice(item.profit)}</span>
           </div>
         </article>
       `).join('');
@@ -3802,7 +4020,9 @@ Camisa Real Madrid 24/25"></textarea>
       renderGestaoSummary();
       renderGestaoEntries();
       renderGestaoStock();
+      renderGestaoSales();
       renderGestaoSuppliers();
+      updateGestaoSalePreview();
     }
 
     function activateGestaoTab(targetId) {
@@ -3895,6 +4115,68 @@ Camisa Real Madrid 24/25"></textarea>
       document.getElementById('gestao-entry-supplier').value = '';
             renderGestao();
       showMessage('gestao-entry-message', 'Entrada registrada com sucesso.', 'success');
+    }
+
+    async function saveGestaoSale() {
+      clearMessage('gestao-sale-message');
+      const productId = document.getElementById('gestao-sale-product').value;
+      const size = document.getElementById('gestao-sale-size').value;
+      const quantity = Number(document.getElementById('gestao-sale-qty').value || 0);
+      const salePrice = normalizeMoneyInput(document.getElementById('gestao-sale-price').value || '');
+      const date = document.getElementById('gestao-sale-date').value;
+
+      if (!productId) {
+        showMessage('gestao-sale-message', 'Selecione o produto.', 'error');
+        return;
+      }
+      if (!quantity || quantity < 1) {
+        showMessage('gestao-sale-message', 'Digite uma quantidade válida.', 'error');
+        return;
+      }
+      if (Number.isNaN(salePrice) || salePrice <= 0) {
+        showMessage('gestao-sale-message', 'Digite um valor de venda válido.', 'error');
+        return;
+      }
+
+      const stockRow = calculateGestaoStock().find(item => String(item.productId) === String(productId) && String(item.size) === String(size));
+      const available = Number(stockRow?.currentQty || 0);
+      if (quantity > available) {
+        showMessage('gestao-sale-message', `Estoque insuficiente. Disponível em ${size}: ${available} peça(s).`, 'error');
+        return;
+      }
+
+      const costPrice = Number(stockRow?.averageCost || getAverageCostForProductSize(productId, size) || 0);
+      const totalAmount = Number((quantity * salePrice).toFixed(2));
+      const profit = Number((quantity * (salePrice - costPrice)).toFixed(2));
+      const saleId = `sale-${Date.now()}`;
+
+      gestaoSales.unshift({
+        id: `sale-item-${Date.now()}`,
+        saleId,
+        productId,
+        size,
+        quantity,
+        salePrice,
+        costPrice,
+        date: date || new Date().toISOString().slice(0,10),
+        totalAmount,
+        profit
+      });
+
+      try {
+        await persistGestaoState();
+      } catch (error) {
+        console.error('Erro ao salvar venda:', error);
+        gestaoSyncMode = 'local';
+        updateGestaoSyncUi();
+        showMessage('gestao-sale-message', 'Venda salva no aparelho. Para sincronizar online, confirme as tabelas sales e sale_items no Supabase.', 'success');
+      }
+
+      document.getElementById('gestao-sale-qty').value = '1';
+      document.getElementById('gestao-sale-price').value = '';
+      document.getElementById('gestao-sale-date').value = '';
+      renderGestao();
+      showMessage('gestao-sale-message', 'Venda registrada com sucesso.', 'success');
     }
 
     async function initializeAdmin() {
