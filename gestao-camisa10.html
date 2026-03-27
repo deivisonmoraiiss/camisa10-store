@@ -341,7 +341,7 @@
         <div class="module-switcher">
           <button class="module-btn active" data-module="module-loja">
             Loja
-            <small>Produtos, categorias, banners e ajustes</small>
+            <small>Produtos, lote por modelo, banners e ajustes</small>
           </button>
           <button class="module-btn" data-module="module-gestao">
             Gestão
@@ -357,7 +357,7 @@
             </div>
             <div class="module-mini-tabs">
               <span class="module-chip">Loja online</span>
-              <span class="module-chip">Cadastro rápido</span>
+              <span class="module-chip">Cadastro por modelo</span>
               <span class="module-chip">Foco no celular</span>
             </div>
           </div>
@@ -672,11 +672,11 @@
           <div class="card">
             <div class="form-header-row">
               <div>
-                <h3 class="section-title">Cadastro em lote — Sob encomenda</h3>
-                <p class="section-copy" style="margin-bottom:0;">Cadastre várias camisas de uma vez com categoria, tamanhos e imagens compartilhadas ou próprias em cada produto.</p>
+                <h3 class="section-title">Cadastro em lote — por modelo</h3>
+                <p class="section-copy" style="margin-bottom:0;">Cadastre vários modelos de camisa de uma vez, com categoria, tamanhos e imagens compartilhadas ou próprias em cada produto.</p>
               </div>
               <div class="inline-status">
-                <span class="mini-kpi"><strong id="batch-create-count">0</strong><span>Produtos preparados</span></span>
+                <span class="mini-kpi"><strong id="batch-create-count">0</strong><span>Modelos preparados</span></span>
               </div>
             </div>
 
@@ -719,7 +719,7 @@
                   </div>
 
                   <div class="helper-box helper-box-visible">
-                    Essa área define o padrão do lote inteiro. Como a maior parte vai ser sob encomenda, o tipo já fica travado assim para acelerar seu cadastro.
+                    Essa área define o padrão do lote inteiro. Aqui você cadastra só o modelo do produto. Quantidade e custo entram depois na Gestão, no pedido de entrada.
                   </div>
                 </div>
 
@@ -752,23 +752,27 @@
 
               <div class="batch-create-main">
                 <div class="mini-card">
-                  <h4>3. Monte o lote</h4>
+                  <h4>3. Monte o lote por modelo</h4>
                   <div class="field">
-                    <label for="batch-create-names">Nomes dos produtos (um por linha)</label>
+                    <label for="batch-create-names">Modelos dos produtos (um por linha)</label>
                     <textarea id="batch-create-names" placeholder="Ex:
 Camisa Flamengo 24/25
 Camisa Brasil 2026
 Camisa Real Madrid 24/25"></textarea>
                   </div>
 
+                  <div class="helper-box helper-box-visible" style="display:block; margin-top:-4px;">
+                    Exemplo de uso: digite um modelo por linha, marque os tamanhos padrão e salve. O estoque real e o custo por item você lança depois na área <strong>Gestão &gt; Pedidos / Entradas</strong>.
+                  </div>
+
                   <div class="batch-save-bar">
                     <div class="batch-create-kpi">
-                      <div class="mini-kpi"><strong id="batch-kpi-lines">0</strong><span>Linhas válidas</span></div>
+                      <div class="mini-kpi"><strong id="batch-kpi-lines">0</strong><span>Modelos digitados</span></div>
                       <div class="mini-kpi"><strong id="batch-kpi-with-shared">0</strong><span>Usando compartilhadas</span></div>
                       <div class="mini-kpi"><strong id="batch-kpi-with-own">0</strong><span>Com imagens próprias</span></div>
                     </div>
                     <div class="actions-row" style="margin-top:0;">
-                      <button class="btn btn-secondary" type="button" onclick="generateBatchCreateProducts()">Gerar cards do lote</button>
+                      <button class="btn btn-secondary" type="button" onclick="generateBatchCreateProducts()">Gerar modelos do lote</button>
                       <button class="btn btn-ghost" type="button" onclick="clearBatchCreateBuilder()">Limpar lote</button>
                     </div>
                   </div>
@@ -777,7 +781,7 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="mini-card">
                   <h4>4. Ajuste as imagens de cada produto</h4>
                   <div id="batch-create-builder" class="batch-products-builder">
-                    <div class="empty-state">Cole os nomes dos produtos e clique em “Gerar cards do lote”.</div>
+                    <div class="empty-state">Cole um modelo por linha e clique em “Gerar modelos do lote”.</div>
                   </div>
                 </div>
 
@@ -785,12 +789,12 @@ Camisa Real Madrid 24/25"></textarea>
                   <div class="batch-save-bar">
                     <div class="batch-summary-list">
                       <strong>Antes de salvar:</strong>
-                      <span>• cada produto precisa ter imagem principal própria ou compartilhada</span>
-                      <span>• os tamanhos marcados serão aplicados em todo o lote</span>
-                      <span>• a descrição padrão será repetida em todos os produtos</span>
+                      <span>• cada modelo precisa ter imagem principal própria ou compartilhada</span>
+                      <span>• os tamanhos marcados serão aplicados em todos os modelos do lote</span>
+                      <span>• a descrição padrão será repetida em todos os modelos</span>
                     </div>
                     <div class="actions-row" style="margin-top:0;">
-                      <button class="btn btn-primary" type="button" onclick="saveBatchCreateProducts()">Cadastrar lote inteiro</button>
+                      <button class="btn btn-primary" type="button" onclick="saveBatchCreateProducts()">Cadastrar modelos do lote</button>
                     </div>
                   </div>
                   <div id="batch-create-message" class="message"></div>
@@ -3421,7 +3425,7 @@ Camisa Real Madrid 24/25"></textarea>
       document.getElementById("batch-create-count").textContent = String(batchCreateProducts.length);
 
       if (!batchCreateProducts.length) {
-        builder.innerHTML = '<div class="empty-state">Cole os nomes dos produtos e clique em “Gerar cards do lote”.</div>';
+        builder.innerHTML = '<div class="empty-state">Cole um modelo por linha e clique em “Gerar modelos do lote”.</div>';
         updateBatchCreateKpis();
         return;
       }
