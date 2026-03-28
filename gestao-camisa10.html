@@ -493,13 +493,6 @@
                 </div>
               </div>
 
-              <div class="field">
-                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
-                  <input type="checkbox" id="product-home-encomenda-featured" style="width:auto; accent-color:#d4af37;" />
-                  <span>Destacar na Home em "Sob encomenda"</span>
-                </label>
-                <div class="small-muted">Use só para escolher quais camisas sob encomenda aparecem primeiro naquela faixa da Home.</div>
-              </div>
 
               <div class="field">
                 <label for="product-description">Descrição</label>
@@ -575,7 +568,7 @@
               </div>
 
               <div class="helper-box helper-box-visible">
-                Revise os dados acima. Atalho: <strong>Ctrl + S</strong> para salvar mais rápido. O campo <strong>Destacar na Home em Sob encomenda</strong> é separado de <strong>Mais procuradas</strong>.
+                Revise os dados acima. Atalho: <strong>Ctrl + S</strong> para salvar mais rápido.
               </div>
             </div>
 
@@ -1606,8 +1599,6 @@ Camisa Real Madrid 24/25"></textarea>
       document.getElementById("product-category").value = "";
       document.getElementById("product-description").value = "";
       document.getElementById("product-featured").checked = false;
-      const homeEncomendaFeaturedCheck = document.getElementById("product-home-encomenda-featured");
-      if (homeEncomendaFeaturedCheck) homeEncomendaFeaturedCheck.checked = false;
       const visibleCheck = document.getElementById("product-visible");
       if (visibleCheck) visibleCheck.checked = true;
       document.getElementById("product-badge-type").value = "";
@@ -2263,7 +2254,6 @@ Camisa Real Madrid 24/25"></textarea>
           short_description,
           is_featured,
           is_visible,
-          home_encomenda_featured,
           badge_type,
           sale_type,
           category_id,
@@ -2315,7 +2305,6 @@ Camisa Real Madrid 24/25"></textarea>
           ? '<span class="badge">Visível</span>'
           : '<span class="badge" style="background:rgba(217,83,79,.16);color:#ffd2d0;border-color:rgba(217,83,79,.28);">Oculto</span>';
         const featuredBadge = product.is_featured ? '<span class="badge-featured">Mais procuradas</span>' : '';
-        const homeEncomendaBadge = product.home_encomenda_featured ? '<span class="badge-featured" style="background:#25d366;color:#08140d;">Sob encomenda Home</span>' : '';
         const badgeType = product.badge_type ? `<span class="badge">${formatBadgeLabel(product.badge_type)}</span>` : '';
         const sizesHtml = sizes.length
           ? sizes.map(size => `<span class="badge">${size}</span>`).join("")
@@ -2347,7 +2336,7 @@ Camisa Real Madrid 24/25"></textarea>
             <div class="product-admin-content">
               <div class="product-admin-top">
                 <div>
-                  <div class="product-admin-title">${product.name || "-"} ${featuredBadge}${homeEncomendaBadge}</div>
+                  <div class="product-admin-title">${product.name || "-"} ${featuredBadge}</div>
                   <div class="product-admin-sub">Slug: ${product.slug || "-"}</div>
                 </div>
                 <div class="product-admin-price">
@@ -2452,7 +2441,6 @@ Camisa Real Madrid 24/25"></textarea>
       const category_id = document.getElementById("product-category").value;
       const description = document.getElementById("product-description").value.trim();
       const featured = document.getElementById("product-featured").checked;
-      const home_encomenda_featured = document.getElementById("product-home-encomenda-featured") ? document.getElementById("product-home-encomenda-featured").checked : false;
       const is_visible = document.getElementById("product-visible") ? document.getElementById("product-visible").checked : true;
       const badge_type = document.getElementById("product-badge-type").value;
       const sale_type = document.getElementById("product-sale-type").value || "pronta_entrega";
@@ -2486,7 +2474,6 @@ Camisa Real Madrid 24/25"></textarea>
         short_description: description,
         is_featured: featured,
         is_visible,
-        home_encomenda_featured,
         badge_type: badge_type || null,
         sale_type
       };
@@ -2594,7 +2581,6 @@ Camisa Real Madrid 24/25"></textarea>
       document.getElementById("product-description").value = data.short_description || "";
       document.getElementById("product-slug-preview").value = data.slug || "";
       document.getElementById("product-featured").checked = !!data.is_featured;
-      if (document.getElementById("product-home-encomenda-featured")) document.getElementById("product-home-encomenda-featured").checked = !!data.home_encomenda_featured;
       if (document.getElementById("product-visible")) document.getElementById("product-visible").checked = data.is_visible !== false;
       document.getElementById("product-badge-type").value = data.badge_type || "";
       document.getElementById("product-sale-type").value = data.sale_type || "pronta_entrega";
