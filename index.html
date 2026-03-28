@@ -1679,6 +1679,7 @@
     let allProducts = [];
     let allCategories = [];
     let activeCategory = "all";
+    let activeCategoryId = "";
     let searchTerm = "";
     let siteSettings = null;
     let heroSlides = [];
@@ -1807,20 +1808,22 @@
       return `produto.html?id=${encodeURIComponent(product.id)}`;
     }
 
-    function getCategoryButtonHTML(slug, name, kind = "chip") {
+    function getCategoryButtonHTML(slug, name, categoryId = "", kind = "chip") {
       const active = slug === activeCategory ? "active" : "";
+      const safeCategoryId = String(categoryId || "").replace(/'/g, "\\'");
       if (kind === "drawer") {
-        return `<button class="drawer-category-btn ${active}" type="button" onclick="setCategory('${slug}')">${name}</button>`;
+        return `<button class="drawer-category-btn ${active}" type="button" onclick="setCategory('${slug}', '${safeCategoryId}')">${name}</button>`;
       }
-      return `<button class="category-chip ${active}" type="button" onclick="setCategory('${slug}')">${name}</button>`;
+      return `<button class="category-chip ${active}" type="button" onclick="setCategory('${slug}', '${safeCategoryId}')">${name}</button>`;
     }
 
     function renderCategoryButtons() {
       const categories = [
-        { slug: "all", name: "Todas" },
+        { slug: "all", name: "Todas", id: "" },
         ...allCategories.map(cat => ({
           slug: normalizeCategorySlug(cat.name),
-          name: cat.name
+          name: cat.name,
+          id: cat.id || ""
         }))
       ];
 
@@ -1830,19 +1833,19 @@
       const drawerButtons = document.getElementById("drawerCategories");
 
       if (desktopRail) {
-        desktopRail.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name)).join("");
+        desktopRail.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, cat.id || "")).join("");
       }
 
       if (heroButtons) {
-        heroButtons.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name)).join("");
+        heroButtons.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, cat.id || "")).join("");
       }
 
       if (catalogButtons) {
-        catalogButtons.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name)).join("");
+        catalogButtons.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, cat.id || "")).join("");
       }
 
       if (drawerButtons) {
-        drawerButtons.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, "drawer")).join("");
+        drawerButtons.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, cat.id || "", "drawer")).join("");
       }
     }
 
@@ -1851,8 +1854,12 @@
         const title = String(product.name || product.title || "").toLowerCase();
         const categoryName = normalizeCategoryName(product);
         const categorySlug = normalizeCategorySlug(categoryName);
+        const productCategoryId = String(product.category_id || product.categories?.id || "");
 
-        const categoryMatches = activeCategory === "all" || categorySlug === activeCategory;
+        const categoryMatches = activeCategory === "all"
+          || (activeCategoryId && productCategoryId === String(activeCategoryId))
+          || (!activeCategoryId && categorySlug === activeCategory);
+
         const searchMatches = !searchTerm || title.includes(searchTerm);
 
         return categoryMatches && searchMatches;
@@ -1950,10 +1957,59 @@
     function renderProducts() {
       const prontaGrid = document.getElementById("grid-pronta");
       const encomendaGrid = document.getElementById("grid-encomenda");
+      const encomendaWrap = document.getElementById("encomenda-wrap");
+      const prontaTitle = document.getElementById("pronta-section-title");
+      const prontaSubtitle = document.getElementById("pronta-section-subtitle");
       const filtered = getFilteredProducts();
 
       const pronta = filtered.filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega");
-      const encomenda = filtered.filter(product => product.sale_type === "sob_encomenda");
+      const encomenda = filtered
+        .filter(product => product.sale_type === "sob_encomenda")
+        .sort((a, b) => {
+          const aPriority = a.priority_encomenda ?? 9999;
+          const bPriority = b.priority_encomenda ?? 9999;
+          if (aPriority !== bPriority) return aPriority - bPriority;
+
+          const aDate = new Date(a.created_at || 0).getTime();
+          const bDate = new Date(b.created_at || 0).getTime();
+          return bDate - aDate;
+        });
+
+      const usingFilterView = activeCategory !== "all" || !!searchTerm;
+
+      if (usingFilterView) {
+        const allFilteredSorted = [...filtered].sort((a, b) => {
+          const aIsPronta = (a.sale_type || "pronta_entrega") === "pronta_entrega";
+          const bIsPronta = (b.sale_type || "pronta_entrega") === "pronta_entrega";
+
+          if (aIsPronta !== bIsPronta) return aIsPronta ? -1 : 1;
+
+          const aPriority = a.sale_type === "sob_encomenda" ? (a.priority_encomenda ?? 9999) : 0;
+          const bPriority = b.sale_type === "sob_encomenda" ? (b.priority_encomenda ?? 9999) : 0;
+          if (aPriority !== bPriority) return aPriority - bPriority;
+
+          const aDate = new Date(a.created_at || 0).getTime();
+          const bDate = new Date(b.created_at || 0).getTime();
+          return bDate - aDate;
+        });
+
+        if (prontaTitle) prontaTitle.textContent = "Resultados da categoria";
+        if (prontaSubtitle) prontaSubtitle.textContent = "Todos os produtos desta categoria aparecem juntos aqui, sem separar por tipo de venda.";
+        if (encomendaWrap) encomendaWrap.style.display = "none";
+
+        if (prontaGrid) {
+          prontaGrid.innerHTML = allFilteredSorted.length
+            ? allFilteredSorted.map(product => buildProductCard(product)).join("")
+            : `<div class="state-box">Nenhum produto encontrado com esse filtro.</div>`;
+        }
+
+        if (encomendaGrid) encomendaGrid.innerHTML = "";
+        return;
+      }
+
+      if (prontaTitle) prontaTitle.textContent = "🔥 Pronta entrega";
+      if (prontaSubtitle) prontaSubtitle.textContent = "Camisas disponíveis para pedido imediato.";
+      if (encomendaWrap) encomendaWrap.style.display = "";
 
       if (prontaGrid) {
         prontaGrid.innerHTML = pronta.length
@@ -1982,8 +2038,9 @@
       renderProducts();
     }
 
-    function setCategory(slug) {
+    function setCategory(slug, categoryId = "") {
       activeCategory = slug || "all";
+      activeCategoryId = categoryId || "";
       renderCategoryButtons();
       renderProducts();
       closeMobileDrawer();
