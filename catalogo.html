@@ -795,14 +795,21 @@
         .from("products")
         .select(`
           id,
-          slug,
           name,
+          slug,
           price,
           old_price,
           image_url,
-          sale_type,
+          description,
+          featured,
           badge_type,
-          created_at
+          sale_type,
+          category_id,
+          created_at,
+          categories (
+            id,
+            name
+          )
         `)
         .order("created_at", { ascending: false });
 
