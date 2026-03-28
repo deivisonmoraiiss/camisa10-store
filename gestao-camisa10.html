@@ -493,6 +493,11 @@
                 </div>
               </div>
 
+              <div class="field">
+                <label for="priority_encomenda">Ordem no “Sob encomenda”</label>
+                <input type="number" id="priority_encomenda" min="1" step="1" placeholder="Ex: 1, 2, 3..." />
+                <div class="small-muted">Use só para escolher quais camisas sob encomenda aparecem primeiro naquela parte final da Home. Número menor aparece antes.</div>
+              </div>
 
               <div class="field">
                 <label for="product-description">Descrição</label>
@@ -1598,6 +1603,7 @@ Camisa Real Madrid 24/25"></textarea>
       document.getElementById("product-slug-preview").value = "";
       document.getElementById("product-category").value = "";
       document.getElementById("product-description").value = "";
+      document.getElementById("priority_encomenda").value = "";
       document.getElementById("product-featured").checked = false;
       const visibleCheck = document.getElementById("product-visible");
       if (visibleCheck) visibleCheck.checked = true;
@@ -2021,12 +2027,21 @@ Camisa Real Madrid 24/25"></textarea>
       const categoryFilter = document.getElementById("product-filter-category")?.value || "";
       const saleTypeFilter = document.getElementById("product-filter-sale-type")?.value || "";
 
-      return allProducts.filter(product => {
-        const matchName = !term || (product.name || "").toLowerCase().includes(term);
-        const matchCategory = !categoryFilter || String(product.category_id) === String(categoryFilter);
-        const matchSaleType = !saleTypeFilter || (product.sale_type || "pronta_entrega") === saleTypeFilter;
-        return matchName && matchCategory && matchSaleType;
-      });
+      return allProducts
+        .filter(product => {
+          const matchName = !term || (product.name || "").toLowerCase().includes(term);
+          const matchCategory = !categoryFilter || String(product.category_id) === String(categoryFilter);
+          const matchSaleType = !saleTypeFilter || (product.sale_type || "pronta_entrega") === saleTypeFilter;
+          return matchName && matchCategory && matchSaleType;
+        })
+        .sort((a, b) => {
+          const aPriority = a.sale_type === "sob_encomenda" && a.priority_encomenda ? Number(a.priority_encomenda) : 999999;
+          const bPriority = b.sale_type === "sob_encomenda" && b.priority_encomenda ? Number(b.priority_encomenda) : 999999;
+          if (aPriority !== bPriority) return aPriority - bPriority;
+          const aDate = new Date(a.created_at || 0).getTime();
+          const bDate = new Date(b.created_at || 0).getTime();
+          return bDate - aDate;
+        });
     }
 
     function getTargetProducts(targetMode = "selected") {
@@ -2252,6 +2267,7 @@ Camisa Real Madrid 24/25"></textarea>
           old_price,
           image_url,
           short_description,
+          priority_encomenda,
           is_featured,
           is_visible,
           badge_type,
@@ -2305,6 +2321,9 @@ Camisa Real Madrid 24/25"></textarea>
           ? '<span class="badge">Visível</span>'
           : '<span class="badge" style="background:rgba(217,83,79,.16);color:#ffd2d0;border-color:rgba(217,83,79,.28);">Oculto</span>';
         const featuredBadge = product.is_featured ? '<span class="badge-featured">Mais procuradas</span>' : '';
+        const encomendaOrderBadge = product.sale_type === "sob_encomenda" && product.priority_encomenda
+          ? `<span class="badge">Home sob encomenda: ${product.priority_encomenda}</span>`
+          : '';
         const badgeType = product.badge_type ? `<span class="badge">${formatBadgeLabel(product.badge_type)}</span>` : '';
         const sizesHtml = sizes.length
           ? sizes.map(size => `<span class="badge">${size}</span>`).join("")
@@ -2352,6 +2371,7 @@ Camisa Real Madrid 24/25"></textarea>
                 <span class="badge">${saleType}</span>
                 ${visibleBadge}
                 ${badgeType}
+                ${encomendaOrderBadge}
               </div>
 
               <div class="product-admin-meta">
@@ -2440,6 +2460,7 @@ Camisa Real Madrid 24/25"></textarea>
       let image_url = document.getElementById("product-image").value.trim();
       const category_id = document.getElementById("product-category").value;
       const description = document.getElementById("product-description").value.trim();
+      const priority_encomenda_raw = document.getElementById("priority_encomenda").value.trim();
       const featured = document.getElementById("product-featured").checked;
       const is_visible = document.getElementById("product-visible") ? document.getElementById("product-visible").checked : true;
       const badge_type = document.getElementById("product-badge-type").value;
@@ -2472,6 +2493,7 @@ Camisa Real Madrid 24/25"></textarea>
         image_url,
         category_id,
         short_description: description,
+        priority_encomenda: priority_encomenda_raw ? Number(priority_encomenda_raw) : null,
         is_featured: featured,
         is_visible,
         badge_type: badge_type || null,
@@ -2579,6 +2601,7 @@ Camisa Real Madrid 24/25"></textarea>
       document.getElementById("product-old-price").value = data.old_price || "";
       document.getElementById("product-image").value = data.image_url || "";
       document.getElementById("product-description").value = data.short_description || "";
+      document.getElementById("priority_encomenda").value = data.priority_encomenda || "";
       document.getElementById("product-slug-preview").value = data.slug || "";
       document.getElementById("product-featured").checked = !!data.is_featured;
       if (document.getElementById("product-visible")) document.getElementById("product-visible").checked = data.is_visible !== false;
@@ -2653,6 +2676,7 @@ Camisa Real Madrid 24/25"></textarea>
         old_price: product.old_price,
         image_url: product.image_url,
         short_description: product.short_description,
+        priority_encomenda: product.priority_encomenda || null,
         is_featured: false,
         is_visible: product.is_visible !== false,
         badge_type: product.badge_type,
