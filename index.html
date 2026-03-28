@@ -501,48 +501,6 @@
       gap: 18px;
     }
 
-.encomenda-wrap {
-      margin-top: 26px;
-    }
-
-    .products-grid.encomenda-carousel {
-      display: grid;
-      grid-auto-flow: column;
-      grid-template-rows: repeat(3, minmax(0, 1fr));
-      grid-auto-columns: calc((100% - 72px) / 5);
-      gap: 18px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      scroll-snap-type: x proximity;
-      padding-bottom: 10px;
-      align-items: stretch;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(212,175,55,0.35) rgba(255,255,255,0.04);
-    }
-
-    .products-grid.encomenda-carousel::-webkit-scrollbar {
-      height: 10px;
-    }
-
-    
-
-    .products-grid.encomenda-carousel .product-card {
-      scroll-snap-align: start;
-      height: 100%;
-    }
-
-    .catalog-full-cta-wrap {
-      margin-top: 18px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .catalog-full-cta {
-      min-width: 260px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
     .product-card {
       background: linear-gradient(180deg, #141414 0%, #101010 100%);
       border: 1px solid var(--line);
@@ -1095,12 +1053,6 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .products-grid.encomenda-carousel {
-        grid-auto-columns: calc((100% - 18px) / 2.35);
-        grid-template-rows: repeat(3, minmax(0, 1fr));
-        gap: 12px;
-      }
-
       .catalog-shell {
         padding: 18px;
       }
@@ -1222,17 +1174,6 @@
       .featured-grid,
       .products-grid {
         gap: 12px;
-      }
-
-      .products-grid.encomenda-carousel {
-        grid-auto-columns: calc((100% - 12px) / 2.15);
-        gap: 10px;
-        padding-bottom: 8px;
-      }
-
-      .catalog-full-cta {
-        width: 100%;
-        min-width: 0;
       }
 
       .product-card {
@@ -1585,20 +1526,16 @@
             </div>
           </div>
 
-          <div class="encomenda-wrap">
+          <div style="margin-top:26px;">
             <div class="section-head" style="margin-bottom:12px;">
               <div>
                 <h3 class="section-title" style="font-size:1.4rem;">🛒 Sob encomenda</h3>
-                <p class="section-subtitle">Até 15 camisas aparecem de uma vez. Deslize para o lado e veja mais modelos.</p>
+                <p class="section-subtitle">Modelos que você pode pedir pelo WhatsApp.</p>
               </div>
             </div>
 
-            <div class="products-grid encomenda-carousel" id="grid-encomenda">
+            <div class="products-grid" id="grid-encomenda">
               <div class="state-box">Carregando produtos...</div>
-            </div>
-
-            <div class="catalog-full-cta-wrap">
-              <a href="catalogo.html" class="btn btn-primary catalog-full-cta">Ver catálogo completo</a>
             </div>
           </div>
 
