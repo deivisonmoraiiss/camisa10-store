@@ -504,68 +504,6 @@
       filter: drop-shadow(0 2px 6px rgba(0,0,0,0.18));
     }
 
-    .quick-mobile-bar {
-      position: fixed;
-      left: 12px;
-      right: 12px;
-      bottom: 84px;
-      z-index: 130;
-      opacity: 0;
-      transform: translateY(18px);
-      pointer-events: none;
-      transition: 0.22s ease;
-      display: none;
-    }
-
-    .quick-mobile-bar.show {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-
-    .quick-mobile-card {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
-      padding: 10px;
-      border-radius: 18px;
-      background: rgba(7,7,7,0.94);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(212,175,55,0.18);
-      box-shadow: 0 18px 36px rgba(0,0,0,0.32);
-    }
-
-    .quick-mobile-input {
-      width: 100%;
-      min-width: 0;
-      height: 46px;
-      padding: 0 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: #101010;
-      color: #fff;
-      outline: none;
-      font-size: 15px;
-    }
-
-    .quick-mobile-input:focus {
-      border-color: rgba(212,175,55,0.45);
-      box-shadow: 0 0 0 3px rgba(212,175,55,0.08);
-    }
-
-    .quick-top-btn {
-      height: 46px;
-      padding: 0 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(212,175,55,0.18);
-      background: linear-gradient(135deg, #e0bd49, #f4d76d);
-      color: #111;
-      font-weight: 900;
-      font-size: 13px;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-
     @media (max-width: 1100px) {
       .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .footer-grid { grid-template-columns: 1fr; }
@@ -638,36 +576,6 @@
       .hero-count { font-size: 11px; padding: 8px 12px; }
       .search-card { border-radius: 18px; }
       .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .quick-mobile-bar { display: block; }
-    }
-
-    @media (max-width: 560px) {
-      .container { padding: 0 16px; }
-      .mobile-topbar-inner { min-height: 70px; }
-      .brand-logo, .brand-logo-fallback { width: 46px; height: 46px; }
-      .hero-card { padding: 14px; margin-bottom: 12px; }
-      .hero-copy p { display: none; }
-      .hero-row { align-items: center; }
-      .search-card { padding: 12px; gap: 10px; margin-bottom: 12px; }
-      .search-icon { width: 42px; height: 42px; border-radius: 12px; font-size: 0.9rem; }
-      .search-label { margin-bottom: 6px; font-size: 12px; }
-      .search-input { height: 48px; font-size: 15px; border-radius: 14px; }
-      .product-grid { gap: 10px; }
-      .product-card { border-radius: 18px; }
-      .product-card-content { padding: 10px; gap: 7px; }
-      .product-card-content h3 { min-height: auto; font-size: 14px; }
-      .sale-type-badge { padding: 5px 8px; font-size: 10px; }
-      .product-price { font-size: 17px; }
-      .product-old-price { font-size: 11px; }
-      .product-btn { padding: 11px 10px; font-size: 13px; border-radius: 10px; }
-      .whatsapp-float { width: 56px; height: 56px; right: 14px; bottom: 14px; }
-      .whatsapp-float img { width: 26px; height: 26px; }
-      .back-to-top-btn { width: 50px; height: 50px; right: 14px; bottom: 80px; font-size: 20px; }
-      .brand-logo, .brand-logo-fallback { width: 46px; height: 46px; }
-      .quick-mobile-bar { left: 10px; right: 10px; bottom: 78px; }
-      .quick-mobile-card { padding: 8px; gap: 8px; }
-      .quick-mobile-input { height: 42px; font-size: 14px; }
-      .quick-top-btn { height: 42px; font-size: 12px; padding: 0 12px; }
     }
   </style>
 </head>
@@ -728,6 +636,14 @@
           </div>
         </div>
 
+        
+        <div class="category-buttons" style="display:flex; gap:8px; overflow:auto; margin-bottom:12px;">
+          <button class="cat-btn btn-secondary" data-cat="brasileirao">Brasileirão</button>
+          <button class="cat-btn btn-secondary" data-cat="selecao">Seleções</button>
+          <button class="cat-btn btn-secondary" data-cat="internacional">Times Internacionais</button>
+          <button class="cat-btn btn-secondary" data-cat="feminina">Femininas</button>
+        </div>
+
         <div id="catalog-grid" class="product-grid">
           <div class="loading-box">Carregando catálogo...</div>
         </div>
@@ -771,12 +687,6 @@
       © 2026 Camisa 10 Store. Todos os direitos reservados.
     </div>
   </footer>
-
-  <div id="quick-mobile-bar" class="quick-mobile-bar" aria-hidden="true">
-    <div class="quick-mobile-card">
-      <input type="text" id="quick-search-input" class="quick-mobile-input" placeholder="Buscar time..." />
-      <button type="button" id="back-to-top-btn" class="quick-top-btn">Topo ↑</button>
-    </div>
   </div>
 
   <button id="backToTop" class="back-to-top-btn" type="button" aria-label="Voltar ao topo" title="Voltar ao topo">
@@ -805,6 +715,7 @@
     let isLoadingMore = false;
     let observer = null;
     let lastScrollY = 0;
+const backToTopBtn = document.getElementById("backToTop");
 
     function formatPrice(value) {
       return Number(value || 0).toLocaleString("pt-BR", {
@@ -906,148 +817,7 @@
 
     function syncSearchInputs(source = "top") {
       const topInput = document.getElementById("search-input");
-      const quickInput = document.getElementById("quick-search-input");
-      if (!topInput || !quickInput) return;
-
-      if (source === "quick") {
-        topInput.value = quickInput.value;
-      } else {
-        quickInput.value = topInput.value;
-      }
-    }
-
-    function applyFilters(resetVisible = true) {
-      const searchTerm = document.getElementById("search-input").value.trim().toLowerCase();
-
-      if (resetVisible) {
-        visibleProducts = PRODUCTS_PER_LOAD;
-      }
-
-      filteredProducts = allProducts.filter(product => !searchTerm || product.team_name.includes(searchTerm));
-      renderProducts(filteredProducts);
-    }
-
-    function loadMoreProducts() {
-      if (isLoadingMore) return;
-      if (visibleProducts >= filteredProducts.length) return;
-
-      isLoadingMore = true;
-      const loadingMore = document.getElementById("loading-more");
-      loadingMore.style.display = "block";
-
-      setTimeout(() => {
-        visibleProducts += PRODUCTS_PER_LOAD;
-        renderProducts(filteredProducts);
-        isLoadingMore = false;
-
-        if (visibleProducts < filteredProducts.length) {
-          loadingMore.style.display = "block";
-        } else {
-          loadingMore.style.display = "none";
-        }
-      }, 250);
-    }
-
-    function setupInfiniteScroll() {
-      const sentinel = document.getElementById("load-more-sentinel");
-      if (!sentinel) return;
-
-      if (observer) {
-        observer.disconnect();
-      }
-
-      observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            loadMoreProducts();
-          }
-        });
-      }, {
-        root: null,
-        rootMargin: "220px 0px",
-        threshold: 0
-      });
-
-      observer.observe(sentinel);
-    }
-
-    function handleScrollUI() {
-      const quickBar = document.getElementById("quick-mobile-bar");
-      if (!quickBar || window.innerWidth > 860) return;
-
-      const currentY = window.scrollY || 0;
-      const isGoingUp = currentY < lastScrollY - 8;
-      const isFarFromTop = currentY > 260;
-
-      if (isGoingUp && isFarFromTop) {
-        quickBar.classList.add("show");
-        quickBar.setAttribute("aria-hidden", "false");
-      } else if (currentY < 140 || currentY > lastScrollY + 18) {
-        quickBar.classList.remove("show");
-        quickBar.setAttribute("aria-hidden", "true");
-      }
-
-      lastScrollY = currentY;
-    }
-
-    async function loadProducts() {
-      const grid = document.getElementById("catalog-grid");
-      grid.innerHTML = `<div class="loading-box">Carregando catálogo...</div>`;
-
-      const { data, error } = await supabaseClient
-        .from("products")
-        .select(`
-          id,
-          name,
-          slug,
-          price,
-          old_price,
-          image_url,
-          description,
-          featured,
-          badge_type,
-          sale_type,
-          category_id,
-          created_at,
-          categories (
-            id,
-            name
-          )
-        `)
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.error("Erro ao carregar produtos:", error);
-        grid.innerHTML = `
-          <div class="empty-box">
-            <strong>Não foi possível carregar o catálogo</strong>
-            Tente novamente em instantes.
-          </div>
-        `;
-        updateProductCount(0);
-        return;
-      }
-
-      allProducts = (data || []).map(normalizeProduct);
-      filteredProducts = [...allProducts];
-      visibleProducts = PRODUCTS_PER_LOAD;
-      renderProducts(filteredProducts);
-      setupInfiniteScroll();
-    }
-
-    function setupEvents() {
-      const topInput = document.getElementById("search-input");
-      const quickInput = document.getElementById("quick-search-input");
-      const topBtn = document.getElementById("back-to-top-btn");
-
-      topInput.addEventListener("input", () => {
-        syncSearchInputs("top");
-        applyFilters(true);
-      });
-
-      quickInput.addEventListener("input", () => {
-        syncSearchInputs("quick");
-        applyFilters(true);
+              applyFilters(true);
       });
 
       topBtn.addEventListener("click", () => {
@@ -1059,7 +829,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-      setupEvents();
+      setupEvents(); setupBackToTop();
       syncSearchInputs("top");
       await loadProducts();
       handleScrollUI();
