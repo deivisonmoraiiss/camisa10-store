@@ -1104,9 +1104,13 @@
       }
 
       .products-grid.encomenda-carousel {
-        grid-auto-columns: calc((100% - 18px) / 2.35);
-        grid-template-rows: repeat(3, minmax(0, 1fr));
+        grid-auto-flow: column;
+        grid-template-rows: 1fr;
+        grid-auto-columns: calc((100% - 14px) / 2.2);
         gap: 12px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        align-items: stretch;
       }
 
       .catalog-shell {
@@ -1233,9 +1237,13 @@
       }
 
       .products-grid.encomenda-carousel {
-        grid-auto-columns: calc((100% - 12px) / 2.15);
+        grid-auto-flow: column;
+        grid-template-rows: 1fr;
+        grid-auto-columns: calc((100% - 10px) / 2.1);
         gap: 10px;
         padding-bottom: 8px;
+        overflow-x: auto;
+        overflow-y: hidden;
       }
 
       .catalog-full-cta {
