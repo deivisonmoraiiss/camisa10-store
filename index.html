@@ -515,24 +515,17 @@
       overflow-x: auto;
       overflow-y: hidden;
       scroll-snap-type: x proximity;
-      padding: 0 10px 10px 0;
+      padding: 0 22px 10px 0;
       align-items: stretch;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(212,175,55,0.35) rgba(255,255,255,0.04);
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      position: relative;
     }
 
     .products-grid.encomenda-carousel::-webkit-scrollbar {
-      height: 10px;
-    }
-
-    .products-grid.encomenda-carousel::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.04);
-      border-radius: 999px;
-    }
-
-    .products-grid.encomenda-carousel::-webkit-scrollbar-thumb {
-      background: rgba(212,175,55,0.35);
-      border-radius: 999px;
+      display: none;
+      width: 0;
+      height: 0;
     }
 
     .products-grid.encomenda-carousel .product-card {
@@ -554,8 +547,24 @@
     }
 
     @media (min-width: 861px) {
+      .encomenda-wrap {
+        position: relative;
+      }
+
       .products-grid.encomenda-carousel {
         padding-right: 22px;
+      }
+
+      .encomenda-wrap::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 86px;
+        bottom: 66px;
+        width: 22px;
+        background: #0d0d0d;
+        pointer-events: none;
+        z-index: 2;
       }
     }
 
@@ -619,15 +628,15 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 8px 12px;
+      padding: 7px 11px;
       border-radius: 999px;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 800;
       letter-spacing: 0.02em;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.24);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.10);
       line-height: 1;
       white-space: nowrap;
     }
@@ -643,18 +652,18 @@
     }
 
     .product-badge.destaque {
-      background: linear-gradient(135deg, rgba(212,175,55,0.95), rgba(244,211,94,0.88));
+      background: linear-gradient(135deg, rgba(212,175,55,0.82), rgba(244,211,94,0.72));
       color: #141414;
-      border-color: rgba(255,255,255,0.14);
+      border-color: rgba(255,255,255,0.12);
     }
 
     .product-badge.mais-vendida {
-      background: linear-gradient(135deg, rgba(255,116,82,0.94), rgba(255,77,79,0.88));
+      background: linear-gradient(135deg, rgba(255,116,82,0.78), rgba(255,77,79,0.70));
       color: #fff;
     }
 
     .product-badge.novo {
-      background: linear-gradient(135deg, rgba(36,191,120,0.95), rgba(60,223,145,0.86));
+      background: linear-gradient(135deg, rgba(36,191,120,0.80), rgba(60,223,145,0.70));
       color: #08140d;
     }
 
@@ -662,18 +671,18 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 8px 12px;
+      padding: 7px 11px;
       border-radius: 999px;
       font-size: 0.74rem;
       font-weight: 800;
       letter-spacing: 0.02em;
       line-height: 1;
       color: #f4d35e;
-      background: rgba(8,8,8,0.76);
-      border: 1px solid rgba(244,211,94,0.22);
-      box-shadow: 0 10px 24px rgba(0,0,0,0.28);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(8,8,8,0.56);
+      border: 1px solid rgba(244,211,94,0.20);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       white-space: nowrap;
     }
 
@@ -1114,11 +1123,12 @@
       .products-grid.encomenda-carousel {
         grid-auto-flow: column;
         grid-template-rows: 1fr;
-        grid-auto-columns: calc((100% - 14px) / 2.2);
+        grid-auto-columns: 44vw;
         gap: 12px;
         overflow-x: auto;
         overflow-y: hidden;
         align-items: stretch;
+        padding-right: 18px;
       }
 
       .catalog-shell {
@@ -1247,9 +1257,10 @@
       .products-grid.encomenda-carousel {
         grid-auto-flow: column;
         grid-template-rows: 1fr;
-        grid-auto-columns: calc((100% - 10px) / 2.1);
+        grid-auto-columns: 46vw;
         gap: 10px;
         padding-bottom: 8px;
+        padding-right: 16px;
         overflow-x: auto;
         overflow-y: hidden;
       }
