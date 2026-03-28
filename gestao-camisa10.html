@@ -737,6 +737,17 @@
                     </label>
                   </div>
 
+                  <div class="grid-2-equal">
+                    <div class="field">
+                      <label for="batch-create-price">Preço padrão</label>
+                      <input type="number" id="batch-create-price" step="0.01" placeholder="Ex: 129.90" oninput="renderBatchCreateProducts()" />
+                    </div>
+                    <div class="field">
+                      <label for="batch-create-old-price">Preço antigo padrão</label>
+                      <input type="number" id="batch-create-old-price" step="0.01" placeholder="Ex: 179.90" oninput="renderBatchCreateProducts()" />
+                    </div>
+                  </div>
+
                   <div class="field">
                     <label for="batch-create-description">Descrição padrão</label>
                     <textarea id="batch-create-description" placeholder="Texto que será usado em todos os produtos do lote"></textarea>
@@ -753,7 +764,7 @@
                   </div>
 
                   <div class="helper-box helper-box-visible">
-                    Essa área define o padrão do lote inteiro. Aqui você cadastra só o modelo do produto. Quantidade e custo entram depois na Gestão, no pedido de entrada.
+                    Essa área define o padrão do lote inteiro. Aqui você cadastra o modelo, o preço de venda e o preço antigo padrão. Quantidade e custo entram depois na Gestão, no pedido de entrada.
                   </div>
                 </div>
 
@@ -3600,6 +3611,14 @@ Camisa Real Madrid 24/25"></textarea>
                   <span class="batch-chip">${hasOwnMain ? "Principal própria" : item.useSharedImages ? "Principal compartilhada" : "Sem principal"}</span>
                   <span class="batch-chip">${hasOwnExtras ? `${item.extraFiles.length} extra(s) própria(s)` : "Sem extras próprias"}</span>
                   <span class="batch-chip">${item.useSharedImages ? `${batchCreateSharedExtraFiles.length} extra(s) compartilhada(s)` : "Sem compartilhadas"}</span>
+                  <span class="batch-chip">Preço: ${(() => {
+                    const price = document.getElementById("batch-create-price")?.value?.trim() || "";
+                    return price ? formatPrice(price) : "não definido";
+                  })()}</span>
+                  <span class="batch-chip">Preço antigo: ${(() => {
+                    const oldPrice = document.getElementById("batch-create-old-price")?.value?.trim() || "";
+                    return oldPrice ? formatPrice(oldPrice) : "não definido";
+                  })()}</span>
                 </div>
                 <div id="batch-item-gallery-preview-${index}" class="batch-item-gallery-preview" style="margin-top:12px;"></div>
               </div>
@@ -3696,6 +3715,8 @@ Camisa Real Madrid 24/25"></textarea>
       clearMessage("batch-create-message");
       const categoryId = document.getElementById("batch-create-category")?.value || "";
       const description = document.getElementById("batch-create-description")?.value?.trim() || "";
+      const batchPriceRaw = document.getElementById("batch-create-price")?.value?.trim() || "";
+      const batchOldPriceRaw = document.getElementById("batch-create-old-price")?.value?.trim() || "";
       const sizes = getBatchCreateSelectedSizes();
       const isVisible = !!document.getElementById("batch-create-visible")?.checked;
 
@@ -3705,6 +3726,10 @@ Camisa Real Madrid 24/25"></textarea>
       }
       if (!categoryId) {
         showMessage("batch-create-message", "Selecione a categoria do lote.", "error");
+        return;
+      }
+      if (!batchPriceRaw || Number.isNaN(Number(batchPriceRaw)) || Number(batchPriceRaw) <= 0) {
+        showMessage("batch-create-message", "Digite o preço padrão do lote.", "error");
         return;
       }
       if (!sizes.length) {
@@ -3733,8 +3758,8 @@ Camisa Real Madrid 24/25"></textarea>
           const payload = {
             name,
             slug: `${slugBase}-${Date.now()}-${index + 1}`,
-            price: null,
-            old_price: null,
+            price: Number(batchPriceRaw),
+            old_price: batchOldPriceRaw ? Number(batchOldPriceRaw) : null,
             image_url: mainImageUrl,
             short_description: description,
             is_featured: false,
@@ -3775,6 +3800,8 @@ Camisa Real Madrid 24/25"></textarea>
         batchCreateSharedExtraFiles = [];
         document.getElementById("batch-create-names").value = "";
         document.getElementById("batch-create-description").value = "";
+        document.getElementById("batch-create-price").value = "";
+        document.getElementById("batch-create-old-price").value = "";
         document.getElementById("batch-shared-main-file").value = "";
         document.getElementById("batch-shared-main-url").value = "";
         document.getElementById("batch-shared-extra-files").value = "";
