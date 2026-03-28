@@ -794,7 +794,7 @@
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
   </a>
 
-  <script>
+    <script>
     const SUPABASE_URL = "https://mgxyupekvuihjbzvzfmf.supabase.co";
     const SUPABASE_KEY = "sb_publishable_fSGhfKrj2NK5UHNYRGk8nw_fl4mCJ_n";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -805,7 +805,6 @@
     const PRODUCTS_PER_LOAD = 12;
     let isLoadingMore = false;
     let observer = null;
-    let lastScrollY = 0;
 
     function formatPrice(value) {
       return Number(value || 0).toLocaleString("pt-BR", {
@@ -852,7 +851,7 @@
 
           <img
             src="${product.image_url || 'https://via.placeholder.com/600x600?text=Sem+Imagem'}"
-            alt="${product.name || 'Produto'}"
+            alt="${product.name || "Produto"}"
             class="product-card-image"
             onerror="this.src='https://via.placeholder.com/600x600?text=Imagem';"
           />
@@ -899,13 +898,8 @@
       const productsToShow = products.slice(0, visibleProducts);
       grid.innerHTML = productsToShow.map(createProductCard).join("");
       updateProductCount(products.length);
-
-      if (productsToShow.length >= products.length) {
-        loadingMore.style.display = "none";
-      }
+      loadingMore.style.display = productsToShow.length < products.length ? "block" : "none";
     }
-    }
-
 
     function setActiveCategoryButton(activeButton = null) {
       document.querySelectorAll(".cat-btn").forEach(btn => {
@@ -927,14 +921,34 @@
       });
     }
 
+    function getCategoryKeywords() {
+      const activeBtn = document.querySelector(".cat-btn.active");
+      if (!activeBtn) return [];
+      return (activeBtn.dataset.search || "")
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(Boolean);
+    }
+
+    function productMatchesCategory(product, keywords) {
+      if (!keywords.length) return true;
+      return keywords.some(keyword => product.team_name.includes(keyword));
+    }
+
     function applyFilters(resetVisible = true) {
       const searchTerm = document.getElementById("search-input").value.trim().toLowerCase();
+      const categoryKeywords = getCategoryKeywords();
 
       if (resetVisible) {
         visibleProducts = PRODUCTS_PER_LOAD;
       }
 
-      filteredProducts = allProducts.filter(product => !searchTerm || product.team_name.includes(searchTerm));
+      filteredProducts = allProducts.filter(product => {
+        const matchesSearch = !searchTerm || product.team_name.includes(searchTerm);
+        const matchesCategory = productMatchesCategory(product, categoryKeywords);
+        return matchesSearch && matchesCategory;
+      });
+
       renderProducts(filteredProducts);
     }
 
@@ -943,29 +957,18 @@
       if (visibleProducts >= filteredProducts.length) return;
 
       isLoadingMore = true;
-      const loadingMore = document.getElementById("loading-more");
-      loadingMore.style.display = "block";
-
       setTimeout(() => {
         visibleProducts += PRODUCTS_PER_LOAD;
         renderProducts(filteredProducts);
         isLoadingMore = false;
-
-        if (visibleProducts < filteredProducts.length) {
-          loadingMore.style.display = "block";
-        } else {
-          loadingMore.style.display = "none";
-        }
-      }, 250);
+      }, 180);
     }
 
     function setupInfiniteScroll() {
       const sentinel = document.getElementById("load-more-sentinel");
       if (!sentinel) return;
 
-      if (observer) {
-        observer.disconnect();
-      }
+      if (observer) observer.disconnect();
 
       observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -980,9 +983,6 @@
       });
 
       observer.observe(sentinel);
-    }
-
-      lastScrollY = currentY;
     }
 
     async function loadProducts() {
@@ -1032,7 +1032,6 @@
 
     function setupEvents() {
       const topInput = document.getElementById("search-input");
-      const topBtn = document.getElementById("back-to-top-btn"); // ignored if absent
 
       topInput.addEventListener("input", () => {
         setActiveCategoryButton(null);
@@ -1041,18 +1040,14 @@
 
       document.querySelectorAll(".cat-btn").forEach(btn => {
         btn.addEventListener("click", () => {
-          const term = btn.dataset.search || "";
-          document.getElementById("search-input").value = term;
-          setActiveCategoryButton(btn);
+          const alreadyActive = btn.classList.contains("active");
+          setActiveCategoryButton(alreadyActive ? null : btn);
+          if (!alreadyActive) {
+            document.getElementById("search-input").value = "";
+          }
           applyFilters(true);
         });
       });
-
-      if (topBtn) {
-        topBtn.addEventListener("click", () => {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-      }
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
@@ -1061,5 +1056,6 @@
       await loadProducts();
     });
   </script>
+
 </body>
 </html>
