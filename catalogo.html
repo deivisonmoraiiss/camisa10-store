@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -353,6 +354,10 @@
     }
 
     .sale-type-badge {
+      background: linear-gradient(135deg, rgba(212,175,55,0.18), rgba(212,175,55,0.08));
+      border: 1px solid rgba(212,175,55,0.35);
+      color: #f4d76d;
+      box-shadow: 0 6px 14px rgba(212,175,55,0.12);
       display: inline-block;
       width: fit-content;
       padding: 6px 10px;
@@ -659,7 +664,11 @@
       .product-card { border-radius: 18px; }
       .product-card-content { padding: 10px; gap: 7px; }
       .product-card-content h3 { min-height: auto; font-size: 14px; }
-      .sale-type-badge { padding: 5px 8px; font-size: 10px; }
+      .sale-type-badge {
+      background: linear-gradient(135deg, rgba(212,175,55,0.18), rgba(212,175,55,0.08));
+      border: 1px solid rgba(212,175,55,0.35);
+      color: #f4d76d;
+      box-shadow: 0 6px 14px rgba(212,175,55,0.12); padding: 5px 8px; font-size: 10px; }
       .product-price { font-size: 17px; }
       .product-old-price { font-size: 11px; }
       .product-btn { padding: 11px 10px; font-size: 13px; border-radius: 10px; }
@@ -849,12 +858,14 @@
         <article class="product-card">
           ${badgeLabel ? `<span class="product-badge ${product.badge_type}">${badgeLabel}</span>` : ""}
 
+          <a href="${getProductLink(product)}">
           <img
             src="${product.image_url || 'https://via.placeholder.com/600x600?text=Sem+Imagem'}"
             alt="${product.name || "Produto"}"
             class="product-card-image"
             onerror="this.src='https://via.placeholder.com/600x600?text=Imagem';"
           />
+          </a>
 
           <div class="product-card-content">
             <div class="product-top-tags">
