@@ -517,22 +517,11 @@
       scroll-snap-type: x proximity;
       padding: 0 10px 10px 0;
       align-items: stretch;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(212,175,55,0.35) rgba(255,255,255,0.04);
+      scrollbar-width: none;
     }
 
     .products-grid.encomenda-carousel::-webkit-scrollbar {
-      height: 10px;
-    }
-
-    .products-grid.encomenda-carousel::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.04);
-      border-radius: 999px;
-    }
-
-    .products-grid.encomenda-carousel::-webkit-scrollbar-thumb {
-      background: rgba(212,175,55,0.35);
-      border-radius: 999px;
+      display: none;
     }
 
     .products-grid.encomenda-carousel .product-card {
