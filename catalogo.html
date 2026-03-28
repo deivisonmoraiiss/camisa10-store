@@ -480,6 +480,71 @@
       text-align: center;
     }
 
+    
+    .category-buttons {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 2px 2px 8px;
+      margin-bottom: 14px;
+    }
+
+    .category-buttons::-webkit-scrollbar { display: none; }
+
+    .cat-btn {
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(212,175,55,0.24);
+      background: linear-gradient(135deg, rgba(224,189,73,0.18), rgba(244,215,109,0.10));
+      color: #f3d77d;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .cat-btn:hover,
+    .cat-btn.active {
+      background: linear-gradient(135deg, #e0bd49, #f4d76d);
+      color: #111;
+      border-color: transparent;
+      box-shadow: 0 10px 24px rgba(212,175,55,0.22);
+      transform: translateY(-1px);
+    }
+
+    .back-to-top-btn {
+      position: fixed;
+      right: 18px;
+      bottom: 92px;
+      width: 54px;
+      height: 54px;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #e0bd49, #f4d76d);
+      color: #111;
+      font-size: 22px;
+      font-weight: 900;
+      box-shadow: 0 14px 28px rgba(212,175,55,0.28);
+      z-index: 119;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: 0.22s ease;
+    }
+
+    .back-to-top-btn.show {
+      display: inline-flex;
+    }
+
+    .back-to-top-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 34px rgba(212,175,55,0.34);
+    }
+
     .whatsapp-float {
       position: fixed;
       right: 18px;
@@ -576,6 +641,34 @@
       .hero-count { font-size: 11px; padding: 8px 12px; }
       .search-card { border-radius: 18px; }
       .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .quick-mobile-bar { display: block; }
+    }
+
+    @media (max-width: 560px) {
+      .container { padding: 0 16px; }
+      .mobile-topbar-inner { min-height: 70px; }
+      .brand-logo, .brand-logo-fallback { width: 46px; height: 46px; }
+      .hero-card { padding: 14px; margin-bottom: 12px; }
+      .hero-copy p { display: none; }
+      .hero-row { align-items: center; }
+      .search-card { padding: 12px; gap: 10px; margin-bottom: 12px; }
+      .search-icon { width: 42px; height: 42px; border-radius: 12px; font-size: 0.9rem; }
+      .search-label { margin-bottom: 6px; font-size: 12px; }
+      .search-input { height: 48px; font-size: 15px; border-radius: 14px; }
+      .product-grid { gap: 10px; }
+      .product-card { border-radius: 18px; }
+      .product-card-content { padding: 10px; gap: 7px; }
+      .product-card-content h3 { min-height: auto; font-size: 14px; }
+      .sale-type-badge { padding: 5px 8px; font-size: 10px; }
+      .product-price { font-size: 17px; }
+      .product-old-price { font-size: 11px; }
+      .product-btn { padding: 11px 10px; font-size: 13px; border-radius: 10px; }
+      .whatsapp-float { width: 56px; height: 56px; right: 14px; bottom: 14px; }
+      .whatsapp-float img { width: 26px; height: 26px; }
+      .back-to-top-btn { width: 50px; height: 50px; right: 14px; bottom: 80px; font-size: 20px; }
+      .brand-logo, .brand-logo-fallback { width: 46px; height: 46px; }
+      .category-buttons { gap: 8px; margin-bottom: 12px; }
+      .cat-btn { min-height: 38px; padding: 0 14px; font-size: 12px; }
     }
   </style>
 </head>
@@ -636,12 +729,11 @@
           </div>
         </div>
 
-        
-        <div class="category-buttons" style="display:flex; gap:8px; overflow:auto; margin-bottom:12px;">
-          <button class="cat-btn btn-secondary" data-cat="brasileirao">Brasileirão</button>
-          <button class="cat-btn btn-secondary" data-cat="selecao">Seleções</button>
-          <button class="cat-btn btn-secondary" data-cat="internacional">Times Internacionais</button>
-          <button class="cat-btn btn-secondary" data-cat="feminina">Femininas</button>
+        <div class="category-buttons" id="category-buttons">
+          <button type="button" class="cat-btn" data-search="flamengo palmeiras corinthians sao paulo vasco botafogo gremio internacional cruzeiro atletico bahia santos brasileirao">Brasileirão</button>
+          <button type="button" class="cat-btn" data-search="brasil argentina franca portugal inglaterra selecao seleções">Seleções</button>
+          <button type="button" class="cat-btn" data-search="real madrid barcelona city united arsenal liverpool bayern psg juventus milan inter internacional">Times Internacionais</button>
+          <button type="button" class="cat-btn" data-search="feminina feminino women fem">Femininas</button>
         </div>
 
         <div id="catalog-grid" class="product-grid">
@@ -678,7 +770,7 @@
         <h4>Atendimento</h4>
         <div class="footer-links">
           <a href="https://wa.me/5597981098445" target="_blank">WhatsApp</a>
-          <a href="gestao-camisa10.html">Área administrativa</a>
+         
         </div>
       </div>
     </div>
@@ -687,7 +779,6 @@
       © 2026 Camisa 10 Store. Todos os direitos reservados.
     </div>
   </footer>
-  </div>
 
   <button id="backToTop" class="back-to-top-btn" type="button" aria-label="Voltar ao topo" title="Voltar ao topo">
     ↑
@@ -715,7 +806,6 @@
     let isLoadingMore = false;
     let observer = null;
     let lastScrollY = 0;
-const backToTopBtn = document.getElementById("backToTop");
 
     function formatPrice(value) {
       return Number(value || 0).toLocaleString("pt-BR", {
@@ -814,25 +904,161 @@ const backToTopBtn = document.getElementById("backToTop");
         loadingMore.style.display = "none";
       }
     }
+    }
 
-    function syncSearchInputs(source = "top") {
-      const topInput = document.getElementById("search-input");
-              applyFilters(true);
+
+    function setActiveCategoryButton(activeButton = null) {
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        btn.classList.toggle("active", btn === activeButton);
       });
+    }
 
-      topBtn.addEventListener("click", () => {
+    function setupBackToTop() {
+      const btn = document.getElementById("backToTop");
+      if (!btn) return;
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) btn.classList.add("show");
+        else btn.classList.remove("show");
+      }, { passive: true });
+
+      btn.addEventListener("click", () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
+    }
 
-      window.addEventListener("scroll", handleScrollUI, { passive: true });
-      window.addEventListener("resize", handleScrollUI);
+    function applyFilters(resetVisible = true) {
+      const searchTerm = document.getElementById("search-input").value.trim().toLowerCase();
+
+      if (resetVisible) {
+        visibleProducts = PRODUCTS_PER_LOAD;
+      }
+
+      filteredProducts = allProducts.filter(product => !searchTerm || product.team_name.includes(searchTerm));
+      renderProducts(filteredProducts);
+    }
+
+    function loadMoreProducts() {
+      if (isLoadingMore) return;
+      if (visibleProducts >= filteredProducts.length) return;
+
+      isLoadingMore = true;
+      const loadingMore = document.getElementById("loading-more");
+      loadingMore.style.display = "block";
+
+      setTimeout(() => {
+        visibleProducts += PRODUCTS_PER_LOAD;
+        renderProducts(filteredProducts);
+        isLoadingMore = false;
+
+        if (visibleProducts < filteredProducts.length) {
+          loadingMore.style.display = "block";
+        } else {
+          loadingMore.style.display = "none";
+        }
+      }, 250);
+    }
+
+    function setupInfiniteScroll() {
+      const sentinel = document.getElementById("load-more-sentinel");
+      if (!sentinel) return;
+
+      if (observer) {
+        observer.disconnect();
+      }
+
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            loadMoreProducts();
+          }
+        });
+      }, {
+        root: null,
+        rootMargin: "220px 0px",
+        threshold: 0
+      });
+
+      observer.observe(sentinel);
+    }
+
+      lastScrollY = currentY;
+    }
+
+    async function loadProducts() {
+      const grid = document.getElementById("catalog-grid");
+      grid.innerHTML = `<div class="loading-box">Carregando catálogo...</div>`;
+
+      const { data, error } = await supabaseClient
+        .from("products")
+        .select(`
+          id,
+          name,
+          slug,
+          price,
+          old_price,
+          image_url,
+          description,
+          featured,
+          badge_type,
+          sale_type,
+          category_id,
+          created_at,
+          categories (
+            id,
+            name
+          )
+        `)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Erro ao carregar produtos:", error);
+        grid.innerHTML = `
+          <div class="empty-box">
+            <strong>Não foi possível carregar o catálogo</strong>
+            Tente novamente em instantes.
+          </div>
+        `;
+        updateProductCount(0);
+        return;
+      }
+
+      allProducts = (data || []).map(normalizeProduct);
+      filteredProducts = [...allProducts];
+      visibleProducts = PRODUCTS_PER_LOAD;
+      renderProducts(filteredProducts);
+      setupInfiniteScroll();
+    }
+
+    function setupEvents() {
+      const topInput = document.getElementById("search-input");
+      const topBtn = document.getElementById("back-to-top-btn"); // ignored if absent
+
+      topInput.addEventListener("input", () => {
+        setActiveCategoryButton(null);
+        applyFilters(true);
+      });
+
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const term = btn.dataset.search || "";
+          document.getElementById("search-input").value = term;
+          setActiveCategoryButton(btn);
+          applyFilters(true);
+        });
+      });
+
+      if (topBtn) {
+        topBtn.addEventListener("click", () => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-      setupEvents(); setupBackToTop();
-      syncSearchInputs("top");
+      setupEvents();
+      setupBackToTop();
       await loadProducts();
-      handleScrollUI();
     });
   </script>
 </body>
