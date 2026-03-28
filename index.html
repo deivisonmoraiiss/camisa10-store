@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1106,11 +1107,12 @@
       .products-grid.encomenda-carousel {
         grid-auto-flow: column;
         grid-template-rows: 1fr;
-        grid-auto-columns: calc((100% - 14px) / 2.2);
+        grid-auto-columns: 44vw;
         gap: 12px;
         overflow-x: auto;
         overflow-y: hidden;
         align-items: stretch;
+        padding-right: 18px;
       }
 
       .catalog-shell {
@@ -1239,9 +1241,10 @@
       .products-grid.encomenda-carousel {
         grid-auto-flow: column;
         grid-template-rows: 1fr;
-        grid-auto-columns: calc((100% - 10px) / 2.1);
+        grid-auto-columns: 46vw;
         gap: 10px;
         padding-bottom: 8px;
+        padding-right: 16px;
         overflow-x: auto;
         overflow-y: hidden;
       }
@@ -1605,7 +1608,7 @@
             <div class="section-head" style="margin-bottom:12px;">
               <div>
                 <h3 class="section-title" style="font-size:1.4rem;">🛒 Sob encomenda</h3>
-                <p class="section-subtitle">Até 15 camisas aparecem de uma vez. Deslize para o lado e veja mais modelos.</p>
+                <p class="section-subtitle">Deslize para o lado para ver mais modelos. A próxima camisa já aparece na lateral para indicar que tem mais.</p>
               </div>
             </div>
 
@@ -1952,7 +1955,17 @@
       const filtered = getFilteredProducts();
 
       const pronta = filtered.filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega");
-      const encomenda = filtered.filter(product => product.sale_type === "sob_encomenda");
+      const encomenda = filtered
+        .filter(product => product.sale_type === "sob_encomenda")
+        .sort((a, b) => {
+          const aPriority = a.priority_encomenda ?? 9999;
+          const bPriority = b.priority_encomenda ?? 9999;
+          if (aPriority !== bPriority) return aPriority - bPriority;
+
+          const aDate = new Date(a.created_at || 0).getTime();
+          const bDate = new Date(b.created_at || 0).getTime();
+          return bDate - aDate;
+        });
 
       if (prontaGrid) {
         prontaGrid.innerHTML = pronta.length
@@ -2247,6 +2260,7 @@
           featured,
           badge_type,
           sale_type,
+          priority_encomenda,
           category_id,
           created_at,
           categories (
