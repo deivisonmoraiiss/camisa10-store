@@ -4,60 +4,96 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Catálogo | Camisa 10 Store</title>
-  <meta name="description" content="Confira o catálogo completo da Camisa 10 Store com filtros por busca, categoria, tipo de venda e faixa de preço." />
-
+  <meta name="description" content="Confira o catálogo completo da Camisa 10 Store e encontre sua camisa pelo nome do time." />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #090909;
-      --bg-soft: #111111;
-      --card: #151515;
-      --card-2: #1b1b1b;
-      --border: rgba(212, 175, 55, 0.18);
-      --border-soft: rgba(255,255,255,0.08);
+      --bg: #050505;
+      --bg-soft: #0c0c0c;
+      --card: #121212;
+      --card-2: #181818;
+      --text: #f5f5f5;
+      --muted: #b9b9b9;
+      --line: rgba(255,255,255,0.08);
+      --line-strong: rgba(212,175,55,0.18);
       --gold: #d4af37;
-      --gold-dark: #b89322;
-      --text: #ffffff;
-      --muted: #bdbdbd;
+      --gold-2: #f0cf63;
       --green: #25d366;
-      --danger: #ff7171;
-      --container: 1240px;
-      --shadow: 0 16px 36px rgba(0,0,0,0.22);
+      --shadow: 0 14px 34px rgba(0,0,0,0.28);
+      --shadow-strong: 0 22px 56px rgba(0,0,0,0.38);
+      --container: 1180px;
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
     }
 
     html { scroll-behavior: smooth; }
-
     body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(180deg, #040404 0%, #0b0b0b 100%);
+      font-family: "Inter", Arial, Helvetica, sans-serif;
       color: var(--text);
-      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(212,175,55,0.07), transparent 26%),
+        linear-gradient(180deg, #050505 0%, #0b0b0b 100%);
     }
 
-    a { text-decoration: none; color: inherit; }
+    a { color: inherit; text-decoration: none; }
     img { max-width: 100%; display: block; }
+    button, input { font-family: inherit; }
 
     .container {
-      width: min(var(--container), 92%);
+      width: 100%;
+      max-width: var(--container);
       margin: 0 auto;
+      padding: 0 18px;
     }
 
-    .topbar {
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.22s ease;
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #e0bd49, #f4d76d);
+      color: #101010;
+      box-shadow: 0 14px 30px rgba(212,175,55,0.24);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .btn-primary:hover,
+    .btn-secondary:hover,
+    .product-card:hover { transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      border-color: rgba(255,255,255,0.10);
+    }
+
+    .header {
       position: sticky;
       top: 0;
-      z-index: 80;
-      background: rgba(0, 0, 0, 0.76);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      background: rgba(7,7,7,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
     }
 
-    .topbar-inner {
-      width: min(var(--container), 92%);
-      margin: 0 auto;
-      min-height: 76px;
+    .header-inner {
+      min-height: 82px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -65,299 +101,58 @@
     }
 
     .brand {
-      color: var(--gold);
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: 0.6px;
-      white-space: nowrap;
-    }
-
-    .nav {
       display: flex;
       align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .nav a {
-      color: #f4f4f4;
-      font-size: 14px;
-      transition: 0.2s ease;
-    }
-
-    .nav a:hover,
-    .nav a.active {
-      color: var(--gold);
-    }
-
-    .mobile-topbar {
-      display: none;
-    }
-
-    .mobile-topbar-inner {
-      width: min(var(--container), 92%);
-      margin: 0 auto;
-      min-height: 68px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
       gap: 12px;
+      min-width: 0;
     }
 
-    .mobile-back,
-    .mobile-filter-toggle {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      border: 1px solid var(--border-soft);
-      background: rgba(255,255,255,0.03);
-      color: #fff;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      font-weight: 800;
+    .brand-logo,
+    .brand-logo-fallback {
+      width: 50px;
+      height: 50px;
+      border-radius: 999px;
       flex-shrink: 0;
     }
 
-    .mobile-topbar-center {
-      min-width: 0;
-      flex: 1;
-      text-align: center;
+    .brand-logo {
+      object-fit: cover;
+      border: 1px solid rgba(212,175,55,0.35);
+      background: #111;
     }
 
-    .mobile-topbar-center strong {
-      display: block;
+    .brand-logo-fallback {
+      background: linear-gradient(135deg, var(--gold), #9a7a18);
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 800;
       color: #fff;
-      font-size: 15px;
-      line-height: 1.1;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .mobile-topbar-center span {
-      display: block;
+    .brand-subtitle {
+      font-size: 0.82rem;
       color: var(--muted);
-      font-size: 11px;
-      margin-top: 3px;
     }
 
-    .page-hero {
-      padding: 42px 0 18px;
-    }
-
-    .page-hero-card {
-      background:
-        radial-gradient(circle at top right, rgba(212,175,55,0.14), transparent 35%),
-        linear-gradient(180deg, #131313 0%, #0c0c0c 100%);
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      padding: 32px;
-      box-shadow: var(--shadow);
-    }
-
-    .page-hero h1 {
-      font-size: 40px;
-      line-height: 1.05;
-      color: #fff;
-      margin-bottom: 12px;
-    }
-
-    .page-hero p {
-      color: #dddddd;
-      font-size: 16px;
-      line-height: 1.7;
-      max-width: 760px;
-    }
-
-    .quick-categories {
-      padding: 0 0 18px;
-    }
-
-    .quick-categories-wrap {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      scrollbar-width: none;
-      padding: 2px 2px 6px;
-    }
-
-    .quick-categories-wrap::-webkit-scrollbar { display: none; }
-
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 42px;
-      padding: 0 16px;
-      border-radius: 999px;
-      border: 1px solid var(--border-soft);
-      background: rgba(255,255,255,0.03);
-      color: #f3f3f3;
-      font-size: 14px;
-      font-weight: 700;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-
-    .chip:hover {
-      transform: translateY(-1px);
-      border-color: rgba(212,175,55,0.28);
-    }
-
-    .chip.active {
-      background: var(--gold);
-      color: #111;
-      border-color: var(--gold);
-      box-shadow: 0 8px 20px rgba(212,175,55,0.18);
-    }
-
-    .filters-section {
-      padding: 6px 0 18px;
-    }
-
-    .filters-card {
-      background: linear-gradient(180deg, #151515 0%, #101010 100%);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 22px;
-      box-shadow: 0 10px 26px rgba(0,0,0,0.16);
-    }
-
-    .mobile-primary-filter {
-      display: none;
-    }
-
-    .mobile-search-card {
-      display: none;
-    }
-
-    .filters-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
-
-    .filters-title h2 {
-      font-size: 22px;
-      color: var(--gold);
-    }
-
-    .filters-title p {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .filters-grid {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 14px;
-      align-items: end;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .field label {
-      color: #f4f4f4;
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    .field input,
-    .field select {
-      width: 100%;
-      padding: 14px;
-      border-radius: 14px;
-      border: 1px solid #2d2d2d;
-      background: #101010;
-      color: #fff;
-      outline: none;
-      font-size: 15px;
-      min-height: 50px;
-    }
-
-    .field input:focus,
-    .field select:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.15);
-    }
-
-    .filters-actions {
-      display: flex;
-      gap: 10px;
-      grid-column: span 5;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      border: none;
-      cursor: pointer;
-      border-radius: 14px;
-      padding: 14px 18px;
-      font-size: 15px;
-      font-weight: bold;
-      transition: 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 50px;
-    }
-
-    .btn-primary {
-      background: var(--gold);
-      color: #111;
-    }
-
-    .btn-primary:hover {
-      background: var(--gold-dark);
-      transform: translateY(-1px);
-    }
-
-    .btn-secondary {
-      background: #1c1c1c;
-      color: #fff;
-      border: 1px solid var(--border-soft);
-    }
-
-    .btn-secondary:hover {
-      transform: translateY(-1px);
-      border-color: rgba(212,175,55,0.26);
-    }
-
-    .catalog-section {
-      padding: 8px 0 34px;
-    }
-
-    .catalog-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 16px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
-
-    .catalog-header h2 {
-      font-size: 30px;
-      color: var(--gold);
-    }
-
-    .catalog-header p {
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .catalog-meta {
+    .nav {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -365,17 +160,137 @@
       justify-content: flex-end;
     }
 
-    .product-count,
-    .active-filters-badge {
-      color: #e2e2e2;
-      font-size: 14px;
-      background: rgba(212, 175, 55, 0.08);
-      border: 1px solid rgba(212, 175, 55, 0.16);
+    .nav a {
+      color: #eaeaea;
+      font-size: 0.94rem;
+      font-weight: 600;
       padding: 10px 14px;
       border-radius: 999px;
+      transition: 0.2s ease;
     }
 
-    .active-filters-badge.hidden { display: none; }
+    .nav a:hover {
+      background: rgba(255,255,255,0.06);
+    }
+
+    .nav a.active {
+      color: var(--gold-2);
+    }
+
+    .nav-back {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .mobile-topbar { display: none; }
+
+    .catalog-shell {
+      padding: 22px 0 34px;
+    }
+
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 30px;
+      border: 1px solid rgba(212,175,55,0.18);
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,0.12), transparent 28%),
+        linear-gradient(180deg, #151515 0%, #0d0d0d 100%);
+      box-shadow: var(--shadow);
+      padding: 26px;
+      margin-bottom: 18px;
+    }
+
+    .hero-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(1.9rem, 3.6vw, 2.6rem);
+      line-height: 1.05;
+      color: var(--gold);
+      margin-bottom: 8px;
+      font-weight: 900;
+    }
+
+    .hero-copy p {
+      color: #dfdfdf;
+      line-height: 1.7;
+      font-size: 0.98rem;
+      max-width: 620px;
+    }
+
+    .hero-count {
+      color: #e2e2e2;
+      font-size: 14px;
+      background: rgba(212,175,55,0.08);
+      border: 1px solid rgba(212,175,55,0.16);
+      padding: 10px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .search-card {
+      background: linear-gradient(180deg, #141414 0%, #101010 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .search-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(212,175,55,0.10);
+      border: 1px solid rgba(212,175,55,0.18);
+      color: var(--gold-2);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .search-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .search-label {
+      display: block;
+      color: #f4f4f4;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 54px;
+      padding: 0 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: #111;
+      color: #fff;
+      outline: none;
+      transition: 0.2s ease;
+      font-size: 0.98rem;
+    }
+
+    .search-input:focus {
+      border-color: rgba(212,175,55,0.45);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.08);
+    }
 
     .product-grid {
       display: grid;
@@ -384,36 +299,31 @@
     }
 
     .product-card {
-      background: linear-gradient(180deg, #151515 0%, #101010 100%);
-      border: 1px solid var(--border);
-      border-radius: 20px;
+      background: linear-gradient(180deg, #141414 0%, #101010 100%);
+      border: 1px solid var(--line);
+      border-radius: 22px;
       overflow: hidden;
-      transition: 0.22s ease;
-      box-shadow: 0 10px 26px rgba(0,0,0,0.18);
-      height: 100%;
+      box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
+      transition: 0.22s ease;
       position: relative;
-    }
-
-    .product-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(212, 175, 55, 0.34);
     }
 
     .product-badge {
       position: absolute;
-      top: 12px;
-      left: 12px;
+      top: 10px;
+      left: 10px;
       z-index: 2;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 7px 10px;
+      padding: 6px 9px;
       border-radius: 999px;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 800;
-      box-shadow: 0 12px 20px rgba(0,0,0,0.18);
+      box-shadow: 0 10px 18px rgba(0,0,0,0.18);
+      backdrop-filter: blur(6px);
     }
 
     .product-badge.destaque { background: var(--gold); color: #111; }
@@ -428,10 +338,10 @@
     }
 
     .product-card-content {
-      padding: 16px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 9px;
       flex: 1;
     }
 
@@ -442,39 +352,29 @@
       flex-wrap: wrap;
     }
 
-    .product-category-badge,
     .sale-type-badge {
       display: inline-block;
       width: fit-content;
-      padding: 7px 11px;
+      padding: 6px 10px;
       border-radius: 999px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .product-category-badge {
-      background: rgba(212, 175, 55, 0.12);
-      border: 1px solid rgba(212, 175, 55, 0.2);
-      color: #f0db93;
-    }
-
-    .sale-type-badge {
+      font-size: 11px;
+      font-weight: 700;
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.08);
       color: #e9e9e9;
     }
 
     .product-card-content h3 {
-      font-size: 18px;
+      font-size: 17px;
       color: #fff;
       line-height: 1.35;
-      min-height: 48px;
+      min-height: 46px;
     }
 
     .product-price-wrap {
       display: flex;
       align-items: baseline;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
@@ -487,7 +387,7 @@
     .product-old-price {
       color: #8f8f8f;
       text-decoration: line-through;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .product-btn {
@@ -499,24 +399,25 @@
       text-align: center;
       background: var(--gold);
       color: #111;
-      padding: 13px 14px;
+      padding: 12px 14px;
       border-radius: 12px;
       font-weight: bold;
       transition: 0.2s ease;
+      font-size: 14px;
     }
 
-    .product-btn:hover {
-      background: var(--gold-dark);
-    }
+    .product-btn:hover { background: var(--gold-2); }
 
     .loading-box,
-    .empty-box {
+    .empty-box,
+    .loading-more {
       background: #121212;
-      border: 1px solid var(--border);
+      border: 1px solid rgba(212,175,55,0.14);
       border-radius: 18px;
-      padding: 22px;
+      padding: 20px;
       color: var(--muted);
       text-align: center;
+      grid-column: 1 / -1;
     }
 
     .empty-box strong {
@@ -526,46 +427,56 @@
       font-size: 18px;
     }
 
+    .load-more-sentinel {
+      height: 1px;
+      margin-top: 8px;
+    }
+
     .footer {
       margin-top: 24px;
-      border-top: 1px solid var(--border);
-      padding: 34px 0 40px;
-      background: rgba(0,0,0,0.12);
+      border-top: 1px solid var(--line);
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,0.08), transparent 28%),
+        rgba(0,0,0,0.18);
     }
 
     .footer-grid {
-      width: min(var(--container), 92%);
-      margin: 0 auto;
+      padding: 36px 0;
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr 0.8fr;
-      gap: 20px;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 28px;
     }
 
-    .footer h3 {
+    .footer-brand-title {
+      font-size: 1.12rem;
+      font-weight: 800;
+      margin-bottom: 8px;
       color: var(--gold);
-      font-size: 20px;
-      margin-bottom: 12px;
     }
 
-    .footer p,
-    .footer a {
-      color: #d3d3d3;
-      line-height: 1.7;
-      font-size: 14px;
+    .footer-text,
+    .footer-links a {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .footer-col h4 {
+      font-size: 0.96rem;
+      margin-bottom: 12px;
+      color: #fff;
     }
 
     .footer-links {
-      display: grid;
-      gap: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .footer-bottom {
-      width: min(var(--container), 92%);
-      margin: 24px auto 0;
-      padding-top: 18px;
-      border-top: 1px solid rgba(212,175,55,0.12);
-      color: #9f9f9f;
-      font-size: 13px;
+      border-top: 1px solid var(--line);
+      padding: 18px 0 28px;
+      color: #8f8f8f;
+      font-size: 0.92rem;
       text-align: center;
     }
 
@@ -573,256 +484,207 @@
       position: fixed;
       right: 18px;
       bottom: 18px;
-      width: 62px;
-      height: 62px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
-      background: var(--green);
-      color: white;
+      background: linear-gradient(135deg, #27d367, #17b857);
+      border: 1px solid rgba(255,255,255,0.2);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
-      box-shadow: 0 12px 24px rgba(0,0,0,0.25);
-      z-index: 60;
+      box-shadow: 0 14px 28px rgba(0,0,0,0.28);
+      z-index: 120;
       transition: 0.2s ease;
     }
 
-    .whatsapp-float:hover {
-      transform: translateY(-2px) scale(1.03);
+    .whatsapp-float img {
+      width: 29px;
+      height: 29px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.18));
     }
 
-    @media (max-width: 1180px) {
-      .filters-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
+    .quick-mobile-bar {
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: 84px;
+      z-index: 130;
+      opacity: 0;
+      transform: translateY(18px);
+      pointer-events: none;
+      transition: 0.22s ease;
+      display: none;
+    }
 
-      .filters-actions {
-        grid-column: span 3;
-      }
+    .quick-mobile-bar.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
 
-      .product-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
+    .quick-mobile-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 18px;
+      background: rgba(7,7,7,0.94);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(212,175,55,0.18);
+      box-shadow: 0 18px 36px rgba(0,0,0,0.32);
+    }
 
-      .footer-grid {
-        grid-template-columns: 1fr;
-      }
+    .quick-mobile-input {
+      width: 100%;
+      min-width: 0;
+      height: 46px;
+      padding: 0 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: #101010;
+      color: #fff;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .quick-mobile-input:focus {
+      border-color: rgba(212,175,55,0.45);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.08);
+    }
+
+    .quick-top-btn {
+      height: 46px;
+      padding: 0 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(212,175,55,0.18);
+      background: linear-gradient(135deg, #e0bd49, #f4d76d);
+      color: #111;
+      font-weight: 900;
+      font-size: 13px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    @media (max-width: 1100px) {
+      .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .footer-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 860px) {
-      .topbar-inner {
-        padding: 14px 0;
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .nav {
-        justify-content: flex-start;
-      }
-
-      .filters-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .filters-actions {
-        grid-column: span 2;
-      }
-
-      .product-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .page-hero h1 {
-        font-size: 32px;
-      }
-
-      .catalog-header h2 {
-        font-size: 27px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .topbar {
-        display: none;
-      }
-
+      .header { display: none; }
       .mobile-topbar {
         display: block;
         position: sticky;
         top: 0;
-        z-index: 90;
-        background: rgba(0, 0, 0, 0.82);
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid var(--border);
+        z-index: 150;
+        background: rgba(7,7,7,0.94);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--line);
       }
 
-      .page-hero,
-      .quick-categories,
-      .filters-title p,
-      .catalog-header p,
-      .filters-section {
-        display: none;
-      }
-
-      .mobile-search-card {
-        display: block;
-        padding: 14px 0 8px;
-      }
-
-      .mobile-primary-filter {
-        display: block;
-      }
-
-      .mobile-search-card .filters-card {
-        padding: 14px;
-        border-radius: 18px;
-      }
-
-      .mobile-search-card .field input,
-      .mobile-primary-filter select {
-        min-height: 52px;
-        font-size: 16px;
-      }
-
-      .catalog-section {
-        padding-top: 8px;
-      }
-
-      .catalog-header {
-        margin-bottom: 14px;
-      }
-
-      .catalog-header h2 {
-        font-size: 22px;
-      }
-
-      .catalog-meta {
-        justify-content: flex-start;
-      }
-
-      .product-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      .mobile-topbar-inner {
+        min-height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         gap: 12px;
       }
 
-      .product-card {
-        border-radius: 16px;
+      .mobile-back-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.03);
+        color: #fff;
+        font-size: 1.5rem;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
       }
 
-      .product-card-content {
-        padding: 12px;
-        gap: 8px;
+      .mobile-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+        flex: 1;
       }
 
-      .product-card-content h3 {
-        min-height: auto;
-        font-size: 15px;
+      .mobile-brand-title {
+        font-size: 0.98rem;
+        font-weight: 800;
+        color: #fff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
-      .product-price {
-        font-size: 18px;
+      .mobile-brand-subtitle {
+        font-size: 0.78rem;
+        color: var(--muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
-      .product-old-price {
-        font-size: 12px;
-      }
-
-      .product-btn {
-        padding: 12px;
-        font-size: 14px;
-      }
-
-      .product-category-badge,
-      .sale-type-badge,
-      .product-count,
-      .active-filters-badge {
-        font-size: 11px;
-      }
-
-      .filters-section.open {
-        display: block;
-        padding: 0 0 12px;
-      }
-
-      .filters-section.open .filters-card {
-        border-radius: 18px;
-        padding: 16px;
-      }
-
-      .filters-section.open .filters-title {
-        margin-bottom: 12px;
-      }
-
-      .filters-section.open .filters-title p {
-        display: block;
-      }
-
-      .filters-section.open .filters-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .filters-section.open .filters-actions {
-        grid-column: span 1;
-      }
-
-      .footer {
-        margin-top: 18px;
-      }
+      .catalog-shell { padding-top: 16px; }
+      .hero-card { padding: 18px; border-radius: 22px; }
+      .hero-copy h1 { font-size: 1.55rem; margin-bottom: 4px; }
+      .hero-copy p { font-size: 0.9rem; line-height: 1.55; }
+      .hero-count { font-size: 11px; padding: 8px 12px; }
+      .search-card { border-radius: 18px; }
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .quick-mobile-bar { display: block; }
     }
 
-    @media (max-width: 420px) {
-      .container,
-      .mobile-topbar-inner,
-      .topbar-inner,
-      .footer-grid,
-      .footer-bottom {
-        width: min(var(--container), 94%);
-      }
-
-      .product-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-      }
-
-      .product-badge {
-        top: 8px;
-        left: 8px;
-        font-size: 10px;
-        padding: 6px 8px;
-      }
-
-      .product-card-content {
-        padding: 10px;
-      }
-
-      .product-card-content h3 {
-        font-size: 14px;
-      }
-
-      .product-btn {
-        font-size: 13px;
-      }
+    @media (max-width: 560px) {
+      .container { padding: 0 16px; }
+      .mobile-topbar-inner { min-height: 70px; }
+      .brand-logo, .brand-logo-fallback { width: 46px; height: 46px; }
+      .hero-card { padding: 14px; margin-bottom: 12px; }
+      .hero-copy p { display: none; }
+      .hero-row { align-items: center; }
+      .search-card { padding: 12px; gap: 10px; margin-bottom: 12px; }
+      .search-icon { width: 42px; height: 42px; border-radius: 12px; font-size: 0.9rem; }
+      .search-label { margin-bottom: 6px; font-size: 12px; }
+      .search-input { height: 48px; font-size: 15px; border-radius: 14px; }
+      .product-grid { gap: 10px; }
+      .product-card { border-radius: 18px; }
+      .product-card-content { padding: 10px; gap: 7px; }
+      .product-card-content h3 { min-height: auto; font-size: 14px; }
+      .sale-type-badge { padding: 5px 8px; font-size: 10px; }
+      .product-price { font-size: 17px; }
+      .product-old-price { font-size: 11px; }
+      .product-btn { padding: 11px 10px; font-size: 13px; border-radius: 10px; }
+      .whatsapp-float { width: 56px; height: 56px; right: 14px; bottom: 14px; }
+      .whatsapp-float img { width: 26px; height: 26px; }
+      .back-to-top-btn { width: 50px; height: 50px; right: 14px; bottom: 80px; font-size: 20px; }
+      .brand-logo, .brand-logo-fallback { width: 46px; height: 46px; }
+      .quick-mobile-bar { left: 10px; right: 10px; bottom: 78px; }
+      .quick-mobile-card { padding: 8px; gap: 8px; }
+      .quick-mobile-input { height: 42px; font-size: 14px; }
+      .quick-top-btn { height: 42px; font-size: 12px; padding: 0 12px; }
     }
   </style>
 </head>
 <body>
-  <header class="mobile-topbar">
-    <div class="mobile-topbar-inner">
-      <a href="index.html" class="mobile-back" aria-label="Voltar">←</a>
-      <div class="mobile-topbar-center">
-        <strong>Catálogo</strong>
-        <span>Camisa 10 Store</span>
-      </div>
-      <button class="mobile-filter-toggle" id="mobile-filter-toggle" type="button" aria-label="Abrir filtros">☰</button>
-    </div>
-  </header>
-
-  <header class="topbar">
-    <div class="topbar-inner">
-      <a href="index.html" class="brand">Camisa 10 Store</a>
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand">
+        <img src="logo.jpg" class="brand-logo" alt="Logo Camisa 10 Store" onerror="this.style.display='none';document.getElementById('logoFallbackDesktop').style.display='flex';" />
+        <div id="logoFallbackDesktop" class="brand-logo-fallback" style="display:none;">10</div>
+        <div class="brand-text">
+          <span class="brand-title">Camisa 10 Store</span>
+          <span class="brand-subtitle">Protagonismo começa no Manto</span>
+        </div>
+      </a>
 
       <nav class="nav">
-        <a href="index.html">Início</a>
+        <a href="index.html" class="nav-back">← Voltar</a>
         <a href="catalogo.html" class="active">Catálogo</a>
         <a href="guia-tamanhos.html">Guia de Tamanhos</a>
         <a href="porque-comprar.html">Por que comprar</a>
@@ -830,142 +692,64 @@
     </div>
   </header>
 
+  <section class="mobile-topbar">
+    <div class="container mobile-topbar-inner">
+      <a href="index.html" class="mobile-back-btn" aria-label="Voltar para a Home">←</a>
+
+      <a href="index.html" class="mobile-brand">
+        <img src="logo.jpg" class="brand-logo" alt="Logo Camisa 10 Store" onerror="this.style.display='none';document.getElementById('logoFallbackMobile').style.display='flex';" />
+        <div id="logoFallbackMobile" class="brand-logo-fallback" style="display:none;">10</div>
+        <div class="brand-text">
+          <div class="mobile-brand-title">Catálogo Camisa 10 Store</div>
+          <div class="mobile-brand-subtitle">Deslize e encontre seu time</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
   <main>
-    <section class="mobile-search-card">
+    <section class="catalog-shell">
       <div class="container">
-        <div class="filters-card">
-          <div class="field">
-            <label for="search-input-mobile">Buscar camisa</label>
-            <input type="text" id="search-input-mobile" placeholder="Ex: Flamengo, Real Madrid..." />
-          </div>
-
-          <div class="field mobile-primary-filter" style="margin-top:12px;">
-            <label for="category-filter-mobile">Categoria</label>
-            <select id="category-filter-mobile">
-              <option value="">Todas as categorias</option>
-            </select>
+        <div class="hero-card">
+          <div class="hero-row">
+            <div class="hero-copy">
+              <h1>Catálogo completo</h1>
+              <p>Encontre sua camisa pelo nome do time e role sem travar no celular.</p>
+            </div>
+            <div id="product-count" class="hero-count">Carregando produtos...</div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <section class="page-hero">
-      <div class="container">
-        <div class="page-hero-card">
-          <h1>Catálogo completo da Camisa 10 Store</h1>
-          <p>
-            Explore todas as camisas cadastradas na loja, filtre por categoria, tipo de venda,
-            faixa de preço e ordenação para encontrar mais rápido o modelo ideal.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="quick-categories">
-      <div class="container">
-        <div id="quick-categories-wrap" class="quick-categories-wrap">
-          <button class="chip active" type="button" data-category="">Todas</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="filters-section">
-      <div class="container">
-        <div class="filters-card">
-          <div class="filters-title">
-            <div>
-              <h2>Mais filtros</h2>
-              <p>Use os filtros abaixo para refinar o catálogo sem poluir a tela no celular.</p>
-            </div>
-            <button class="btn btn-secondary" id="close-filters-btn" type="button">Fechar</button>
-          </div>
-
-          <div class="filters-grid">
-            <div class="field">
-              <label for="search-input">Buscar produto</label>
-              <input type="text" id="search-input" placeholder="Digite o nome da camisa..." />
-            </div>
-
-            <div class="field">
-              <label for="category-filter">Categoria</label>
-              <select id="category-filter">
-                <option value="">Todas as categorias</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="sale-type-filter">Tipo de venda</label>
-              <select id="sale-type-filter">
-                <option value="">Todos</option>
-                <option value="pronta_entrega">Pronta entrega</option>
-                <option value="sob_encomenda">Sob encomenda</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="price-filter">Faixa de preço</label>
-              <select id="price-filter">
-                <option value="">Todos os preços</option>
-                <option value="0-99">Até R$ 99</option>
-                <option value="100-149">R$ 100 a R$ 149</option>
-                <option value="150-199">R$ 150 a R$ 199</option>
-                <option value="200-9999">Acima de R$ 200</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="sort-filter">Ordenar por</label>
-              <select id="sort-filter">
-                <option value="recentes">Mais recentes</option>
-                <option value="menor-preco">Menor preço</option>
-                <option value="maior-preco">Maior preço</option>
-                <option value="nome-az">Nome A-Z</option>
-                <option value="nome-za">Nome Z-A</option>
-              </select>
-            </div>
-
-            <div class="filters-actions">
-              <button class="btn btn-primary" id="clear-filters-btn" type="button">Limpar filtros</button>
-              <a class="btn btn-secondary" href="index.html#catalogo">Voltar para Home</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="catalog-section">
-      <div class="container">
-        <div class="catalog-header">
-          <div>
-            <h2>Produtos disponíveis</h2>
-            <p>Todos os produtos cadastrados aparecem aqui automaticamente.</p>
-          </div>
-
-          <div class="catalog-meta">
-            <div id="active-filters-badge" class="active-filters-badge hidden">Filtros ativos</div>
-            <div id="product-count" class="product-count">Carregando produtos...</div>
+        <div class="search-card" id="top-search-card">
+          <div class="search-icon">⌕</div>
+          <div class="search-content">
+            <label class="search-label" for="search-input">Buscar pelo nome do time</label>
+            <input type="text" id="search-input" class="search-input" placeholder="Ex: Flamengo, Real Madrid, Brasil..." />
           </div>
         </div>
 
         <div id="catalog-grid" class="product-grid">
-          <div class="loading-box" style="grid-column: 1 / -1;">Carregando catálogo...</div>
+          <div class="loading-box">Carregando catálogo...</div>
         </div>
+
+        <div id="loading-more" class="loading-more" style="display:none; margin-top:14px;">Carregando mais camisas...</div>
+        <div id="load-more-sentinel" class="load-more-sentinel"></div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <div class="footer-grid">
+    <div class="container footer-grid">
       <div>
-        <h3>Camisa 10 Store</h3>
-        <p>
+        <div class="footer-brand-title">Camisa 10 Store</div>
+        <p class="footer-text">
           Loja especializada em camisas de time, com catálogo dinâmico,
           páginas individuais de produto e atendimento direto pelo WhatsApp.
         </p>
       </div>
 
-      <div>
-        <h3>Navegação</h3>
+      <div class="footer-col">
+        <h4>Navegação</h4>
         <div class="footer-links">
           <a href="index.html">Início</a>
           <a href="catalogo.html">Catálogo</a>
@@ -974,8 +758,8 @@
         </div>
       </div>
 
-      <div>
-        <h3>Atendimento</h3>
+      <div class="footer-col">
+        <h4>Atendimento</h4>
         <div class="footer-links">
           <a href="https://wa.me/5597981098445" target="_blank">WhatsApp</a>
           <a href="gestao-camisa10.html">Área administrativa</a>
@@ -983,10 +767,21 @@
       </div>
     </div>
 
-    <div class="footer-bottom">
+    <div class="container footer-bottom">
       © 2026 Camisa 10 Store. Todos os direitos reservados.
     </div>
   </footer>
+
+  <div id="quick-mobile-bar" class="quick-mobile-bar" aria-hidden="true">
+    <div class="quick-mobile-card">
+      <input type="text" id="quick-search-input" class="quick-mobile-input" placeholder="Buscar time..." />
+      <button type="button" id="back-to-top-btn" class="quick-top-btn">Topo ↑</button>
+    </div>
+  </div>
+
+  <button id="backToTop" class="back-to-top-btn" type="button" aria-label="Voltar ao topo" title="Voltar ao topo">
+    ↑
+  </button>
 
   <a
     class="whatsapp-float"
@@ -994,7 +789,9 @@
     target="_blank"
     aria-label="Falar no WhatsApp"
     title="Falar no WhatsApp"
-  >☎</a>
+  >
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+  </a>
 
   <script>
     const SUPABASE_URL = "https://mgxyupekvuihjbzvzfmf.supabase.co";
@@ -1002,17 +799,18 @@
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let allProducts = [];
-    let allCategories = [];
+    let filteredProducts = [];
+    let visibleProducts = 12;
+    const PRODUCTS_PER_LOAD = 12;
+    let isLoadingMore = false;
+    let observer = null;
+    let lastScrollY = 0;
 
     function formatPrice(value) {
       return Number(value || 0).toLocaleString("pt-BR", {
         style: "currency",
         currency: "BRL"
       });
-    }
-
-    function getCategoryName(product) {
-      return product.categories?.name || product.category_name || product.category || "Sem categoria";
     }
 
     function getSaleTypeLabel(saleType) {
@@ -1036,8 +834,8 @@
     function normalizeProduct(product) {
       return {
         ...product,
-        category_name: getCategoryName(product),
         numeric_price: Number(product.price || 0),
+        team_name: (product.name || "").toLowerCase().trim(),
         sale_type: product.sale_type || "pronta_entrega"
       };
     }
@@ -1060,7 +858,6 @@
 
           <div class="product-card-content">
             <div class="product-top-tags">
-              <span class="product-category-badge">${product.category_name}</span>
               <span class="sale-type-badge">${getSaleTypeLabel(product.sale_type)}</span>
             </div>
 
@@ -1082,216 +879,149 @@
       countEl.textContent = total === 1 ? "1 produto encontrado" : `${total} produtos encontrados`;
     }
 
-    function updateActiveFiltersBadge(activeCount) {
-      const badge = document.getElementById("active-filters-badge");
-
-      if (!activeCount) {
-        badge.classList.add("hidden");
-        badge.textContent = "";
-        return;
-      }
-
-      badge.classList.remove("hidden");
-      badge.textContent = activeCount === 1 ? "1 filtro ativo" : `${activeCount} filtros ativos`;
-    }
-
     function renderProducts(products) {
       const grid = document.getElementById("catalog-grid");
+      const loadingMore = document.getElementById("loading-more");
 
-      if (!products || !products.length) {
+      if (!products.length) {
         grid.innerHTML = `
-          <div class="empty-box" style="grid-column: 1 / -1;">
+          <div class="empty-box">
             <strong>Nenhum produto encontrado</strong>
-            Tente mudar os filtros para ver mais camisas do catálogo.
+            Tente buscar por outro time.
           </div>
         `;
         updateProductCount(0);
+        loadingMore.style.display = "none";
         return;
       }
 
-      grid.innerHTML = products.map(createProductCard).join("");
+      const productsToShow = products.slice(0, visibleProducts);
+      grid.innerHTML = productsToShow.map(createProductCard).join("");
       updateProductCount(products.length);
+
+      if (productsToShow.length >= products.length) {
+        loadingMore.style.display = "none";
+      }
     }
 
-    function populateCategoryFilter(categories) {
-      const select = document.getElementById("category-filter");
-      const mobileSelect = document.getElementById("category-filter-mobile");
-      select.innerHTML = `<option value="">Todas as categorias</option>`;
-      if (mobileSelect) {
-        mobileSelect.innerHTML = `<option value="">Todas as categorias</option>`;
+    function syncSearchInputs(source = "top") {
+      const topInput = document.getElementById("search-input");
+      const quickInput = document.getElementById("quick-search-input");
+      if (!topInput || !quickInput) return;
+
+      if (source === "quick") {
+        topInput.value = quickInput.value;
+      } else {
+        quickInput.value = topInput.value;
+      }
+    }
+
+    function applyFilters(resetVisible = true) {
+      const searchTerm = document.getElementById("search-input").value.trim().toLowerCase();
+
+      if (resetVisible) {
+        visibleProducts = PRODUCTS_PER_LOAD;
       }
 
-      categories.forEach(category => {
-        const option = document.createElement("option");
-        option.value = category.id;
-        option.textContent = category.name;
-        select.appendChild(option);
+      filteredProducts = allProducts.filter(product => !searchTerm || product.team_name.includes(searchTerm));
+      renderProducts(filteredProducts);
+    }
 
-        if (mobileSelect) {
-          const mobileOption = document.createElement("option");
-          mobileOption.value = category.id;
-          mobileOption.textContent = category.name;
-          mobileSelect.appendChild(mobileOption);
+    function loadMoreProducts() {
+      if (isLoadingMore) return;
+      if (visibleProducts >= filteredProducts.length) return;
+
+      isLoadingMore = true;
+      const loadingMore = document.getElementById("loading-more");
+      loadingMore.style.display = "block";
+
+      setTimeout(() => {
+        visibleProducts += PRODUCTS_PER_LOAD;
+        renderProducts(filteredProducts);
+        isLoadingMore = false;
+
+        if (visibleProducts < filteredProducts.length) {
+          loadingMore.style.display = "block";
+        } else {
+          loadingMore.style.display = "none";
         }
-      });
+      }, 250);
     }
 
-    function populateQuickCategories(categories) {
-      const wrap = document.getElementById("quick-categories-wrap");
-      wrap.innerHTML = `<button class="chip active" type="button" data-category="">Todas</button>`;
+    function setupInfiniteScroll() {
+      const sentinel = document.getElementById("load-more-sentinel");
+      if (!sentinel) return;
 
-      categories.forEach(category => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "chip";
-        button.dataset.category = category.id;
-        button.textContent = category.name;
-        wrap.appendChild(button);
-      });
-    }
-
-    function syncCategoryChip(categoryId) {
-      document.querySelectorAll("#quick-categories-wrap .chip").forEach(chip => {
-        chip.classList.toggle("active", String(chip.dataset.category || "") === String(categoryId || ""));
-      });
-    }
-
-    function parsePriceRange(value) {
-      if (!value) return null;
-      const [min, max] = value.split("-").map(Number);
-      return { min: Number.isFinite(min) ? min : 0, max: Number.isFinite(max) ? max : Number.MAX_SAFE_INTEGER };
-    }
-
-    function getActiveFiltersCount(filters) {
-      let count = 0;
-      if (filters.searchTerm) count++;
-      if (filters.selectedCategory) count++;
-      if (filters.saleType) count++;
-      if (filters.priceRange) count++;
-      if (filters.sortBy !== "recentes") count++;
-      return count;
-    }
-
-    function syncMobileDesktopFilters(source = "desktop") {
-      const desktopSearch = document.getElementById("search-input");
-      const mobileSearch = document.getElementById("search-input-mobile");
-      const desktopCategory = document.getElementById("category-filter");
-      const mobileCategory = document.getElementById("category-filter-mobile");
-
-      if (source === "mobile") {
-        if (desktopSearch && mobileSearch) desktopSearch.value = mobileSearch.value;
-        if (desktopCategory && mobileCategory) desktopCategory.value = mobileCategory.value;
-      } else {
-        if (desktopSearch && mobileSearch) mobileSearch.value = desktopSearch.value;
-        if (desktopCategory && mobileCategory) mobileCategory.value = desktopCategory.value;
-      }
-    }
-
-    function toggleMobileFilters(forceOpen = null) {
-      const section = document.querySelector(".filters-section");
-      if (!section) return;
-
-      const shouldOpen = forceOpen === null ? !section.classList.contains("open") : forceOpen;
-      section.classList.toggle("open", shouldOpen);
-    }
-
-    function getCurrentFilters() {
-      return {
-        searchTerm: document.getElementById("search-input").value.trim().toLowerCase(),
-        selectedCategory: document.getElementById("category-filter").value,
-        saleType: document.getElementById("sale-type-filter").value,
-        priceRange: parsePriceRange(document.getElementById("price-filter").value),
-        sortBy: document.getElementById("sort-filter").value
-      };
-    }
-
-    function sortProducts(products, sortBy) {
-      const sorted = [...products];
-
-      if (sortBy === "menor-preco") {
-        sorted.sort((a, b) => a.numeric_price - b.numeric_price);
-      } else if (sortBy === "maior-preco") {
-        sorted.sort((a, b) => b.numeric_price - a.numeric_price);
-      } else if (sortBy === "nome-az") {
-        sorted.sort((a, b) => (a.name || "").localeCompare(b.name || "", "pt-BR"));
-      } else if (sortBy === "nome-za") {
-        sorted.sort((a, b) => (b.name || "").localeCompare(a.name || "", "pt-BR"));
-      } else {
-        sorted.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+      if (observer) {
+        observer.disconnect();
       }
 
-      return sorted;
-    }
-
-    function applyFilters() {
-      const filters = getCurrentFilters();
-
-      let filtered = allProducts.filter(product => {
-        const matchesName = !filters.searchTerm || (product.name || "").toLowerCase().includes(filters.searchTerm);
-        const matchesCategory = !filters.selectedCategory || String(product.category_id) === String(filters.selectedCategory);
-        const matchesSaleType = !filters.saleType || product.sale_type === filters.saleType;
-        const matchesPrice = !filters.priceRange || (
-          product.numeric_price >= filters.priceRange.min && product.numeric_price <= filters.priceRange.max
-        );
-
-        return matchesName && matchesCategory && matchesSaleType && matchesPrice;
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            loadMoreProducts();
+          }
+        });
+      }, {
+        root: null,
+        rootMargin: "220px 0px",
+        threshold: 0
       });
 
-      filtered = sortProducts(filtered, filters.sortBy);
-      renderProducts(filtered);
-      updateActiveFiltersBadge(getActiveFiltersCount(filters));
-      syncCategoryChip(filters.selectedCategory);
+      observer.observe(sentinel);
     }
 
-    async function loadCategories() {
-      const { data, error } = await supabaseClient
-        .from("categories")
-        .select("id, name")
-        .order("name", { ascending: true });
+    function handleScrollUI() {
+      const quickBar = document.getElementById("quick-mobile-bar");
+      if (!quickBar || window.innerWidth > 860) return;
 
-      if (error) {
-        console.error("Erro ao carregar categorias:", error);
-        allCategories = [];
-        populateCategoryFilter([]);
-        populateQuickCategories([]);
-        return;
+      const currentY = window.scrollY || 0;
+      const isGoingUp = currentY < lastScrollY - 8;
+      const isFarFromTop = currentY > 260;
+
+      if (isGoingUp && isFarFromTop) {
+        quickBar.classList.add("show");
+        quickBar.setAttribute("aria-hidden", "false");
+      } else if (currentY < 140 || currentY > lastScrollY + 18) {
+        quickBar.classList.remove("show");
+        quickBar.setAttribute("aria-hidden", "true");
       }
 
-      allCategories = data || [];
-      populateCategoryFilter(allCategories);
-      populateQuickCategories(allCategories);
-      syncMobileDesktopFilters("desktop");
+      lastScrollY = currentY;
     }
 
     async function loadProducts() {
       const grid = document.getElementById("catalog-grid");
-      grid.innerHTML = `<div class="loading-box" style="grid-column: 1 / -1;">Carregando catálogo...</div>`;
+      grid.innerHTML = `<div class="loading-box">Carregando catálogo...</div>`;
 
       const { data, error } = await supabaseClient
         .from("products")
         .select(`
           id,
-          slug,
           name,
+          slug,
           price,
           old_price,
           image_url,
-          category_id,
-          sale_type,
+          description,
+          featured,
           badge_type,
+          sale_type,
+          category_id,
           created_at,
           categories (
             id,
             name
           )
-        `);
+        `)
+        .order("created_at", { ascending: false });
 
       if (error) {
         console.error("Erro ao carregar produtos:", error);
         grid.innerHTML = `
-          <div class="empty-box" style="grid-column: 1 / -1;">
+          <div class="empty-box">
             <strong>Não foi possível carregar o catálogo</strong>
-            Verifique a conexão com o Supabase e tente novamente.
+            Tente novamente em instantes.
           </div>
         `;
         updateProductCount(0);
@@ -1299,63 +1029,40 @@
       }
 
       allProducts = (data || []).map(normalizeProduct);
-      syncMobileDesktopFilters("desktop");
-      applyFilters();
-    }
-
-    function clearFilters() {
-      document.getElementById("search-input").value = "";
-      document.getElementById("category-filter").value = "";
-      document.getElementById("sale-type-filter").value = "";
-      document.getElementById("price-filter").value = "";
-      document.getElementById("sort-filter").value = "recentes";
-      syncMobileDesktopFilters("desktop");
-      applyFilters();
-      toggleMobileFilters(false);
+      filteredProducts = [...allProducts];
+      visibleProducts = PRODUCTS_PER_LOAD;
+      renderProducts(filteredProducts);
+      setupInfiniteScroll();
     }
 
     function setupEvents() {
-      document.getElementById("search-input").addEventListener("input", () => {
-        syncMobileDesktopFilters("desktop");
-        applyFilters();
+      const topInput = document.getElementById("search-input");
+      const quickInput = document.getElementById("quick-search-input");
+      const topBtn = document.getElementById("back-to-top-btn");
+
+      topInput.addEventListener("input", () => {
+        syncSearchInputs("top");
+        applyFilters(true);
       });
 
-      document.getElementById("search-input-mobile").addEventListener("input", () => {
-        syncMobileDesktopFilters("mobile");
-        applyFilters();
+      quickInput.addEventListener("input", () => {
+        syncSearchInputs("quick");
+        applyFilters(true);
       });
 
-      document.getElementById("category-filter").addEventListener("change", () => {
-        syncMobileDesktopFilters("desktop");
-        applyFilters();
+      topBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
       });
 
-      document.getElementById("category-filter-mobile").addEventListener("change", () => {
-        syncMobileDesktopFilters("mobile");
-        applyFilters();
-      });
-
-      document.getElementById("sale-type-filter").addEventListener("change", applyFilters);
-      document.getElementById("price-filter").addEventListener("change", applyFilters);
-      document.getElementById("sort-filter").addEventListener("change", applyFilters);
-      document.getElementById("clear-filters-btn").addEventListener("click", clearFilters);
-      document.getElementById("mobile-filter-toggle").addEventListener("click", () => toggleMobileFilters());
-      document.getElementById("close-filters-btn").addEventListener("click", () => toggleMobileFilters(false));
-
-      document.getElementById("quick-categories-wrap").addEventListener("click", (event) => {
-        const chip = event.target.closest(".chip");
-        if (!chip) return;
-
-        document.getElementById("category-filter").value = chip.dataset.category || "";
-        syncMobileDesktopFilters("desktop");
-        applyFilters();
-      });
+      window.addEventListener("scroll", handleScrollUI, { passive: true });
+      window.addEventListener("resize", handleScrollUI);
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
       setupEvents();
-      await loadCategories();
+      syncSearchInputs("top");
       await loadProducts();
+      handleScrollUI();
     });
   </script>
 </body>
