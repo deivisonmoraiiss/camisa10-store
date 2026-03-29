@@ -43,8 +43,6 @@
     .field input,.field textarea,.field select{
       width:100%;padding:14px 14px;border-radius:14px;border:1px solid #2d2d2d;background:#101010;color:#fff;outline:none;font-size:.96rem
     }
-    .money-input{letter-spacing:.01em}
-
     .field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(212,175,55,.55);box-shadow:0 0 0 3px rgba(212,175,55,.12)}
     .field textarea{min-height:110px;resize:vertical}
     .btn{border:none;border-radius:14px;padding:13px 18px;cursor:pointer;font-weight:800;transition:.2s ease;font-size:.92rem}
@@ -86,6 +84,12 @@
     .gestao-card p{color:var(--muted);font-size:.9rem;line-height:1.55}
     .gestao-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.22);color:var(--gold-2);font-weight:900}
     .mobile-shortcut-row{display:none}
+    .focus-shortcuts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 18px}
+    .focus-shortcut{padding:16px 18px;border-radius:18px;background:linear-gradient(180deg,#121212 0%, #0f0f0f 100%);border:1px solid var(--line);display:grid;gap:6px}
+    .focus-shortcut strong{font-size:1rem;color:#fff}
+    .focus-shortcut span{color:var(--muted);font-size:.84rem;line-height:1.45}
+    .focus-shortcut .btn{margin-top:6px}
+    .order-summary-box.highlight strong{color:var(--gold-2)}
 
     .tab-btn{border:none;background:#171717;color:#f1f1f1;border:1px solid var(--line);padding:11px 16px;border-radius:999px;font-weight:800;cursor:pointer;transition:.2s ease}
     .tab-btn.active{background:var(--gold);color:#111;border-color:var(--gold)}
@@ -236,9 +240,85 @@
     .order-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
     .order-summary-box{padding:14px;border-radius:16px;background:#101010;border:1px solid var(--line);display:grid;gap:6px}
     .order-summary-box span{color:var(--muted);font-size:.8rem}
-    .order-summary-box strong{color:#fff;font-size:1rem}
+    
+.order-summary-box strong{color:#fff;font-size:1rem}
 
-    .selector-wrapper{max-width:860px;margin:24px auto}
+    .product-form-card{
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,.10), transparent 28%),
+        linear-gradient(180deg,var(--panel) 0%, var(--panel-2) 100%);
+      border-color: rgba(212,175,55,.24);
+    }
+    .product-list-card,
+    .order-entry-card,
+    .sale-form-card,
+    .finance-highlight-card{
+      background:
+        linear-gradient(180deg, rgba(18,18,18,.98) 0%, rgba(12,12,12,.98) 100%);
+    }
+    .product-flow-strip{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:10px;
+      margin:2px 0 18px;
+    }
+    .product-flow-pill{
+      display:grid;
+      gap:4px;
+      padding:12px 14px;
+      border-radius:16px;
+      background:#101010;
+      border:1px solid rgba(255,255,255,.06);
+    }
+    .product-flow-pill strong{font-size:.86rem;color:#fff}
+    .product-flow-pill span{font-size:.78rem;color:var(--muted);line-height:1.45}
+    .product-step{
+      display:none;
+      padding:18px;
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border:1px solid rgba(255,255,255,.06);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.02);
+    }
+    .product-step.active{display:block}
+    .product-step + .product-step{margin-top:0}
+    .product-step .grid-2-equal{gap:14px}
+    .product-step .field:last-child{margin-bottom:0}
+    .step-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:18px;
+      padding-top:16px;
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+    .order-entry-card .order-top-grid,
+    .sale-form-card .grid-2-equal{
+      gap:14px;
+    }
+    .order-entry-card .order-items-box{
+      background:linear-gradient(180deg,#111 0%, #0d0d0d 100%);
+    }
+    .finance-highlight-card{
+      border-color: rgba(212,175,55,.22);
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,.10), transparent 26%),
+        linear-gradient(180deg,#121212 0%, #0f0f0f 100%);
+    }
+    .gestao-summary-inline{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:10px;
+      margin-top:14px;
+    }
+    .gestao-summary-inline .mini-kpi{
+      background:#0e0e0e;
+    }
+    .money-input,
+    input[inputmode="decimal"]{
+      font-variant-numeric: tabular-nums;
+    }
+
     .selector-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
     .selector-card{padding:24px;border-radius:24px;background:linear-gradient(180deg,#121212 0%, #101010 100%);border:1px solid var(--line-gold);display:grid;gap:12px;cursor:pointer;transition:.2s ease;text-align:left}
     .selector-card:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(0,0,0,.22)}
@@ -288,8 +368,8 @@
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
 
-    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid{grid-template-columns:1fr}}
-    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
+    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline{grid-template-columns:1fr}}
+    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
   </style>
 </head>
 <body>
@@ -407,11 +487,11 @@
 
           <section id="tab-products" class="tab-panel active">
         <div class="stack">
-          <div class="card">
+          <div class="card product-form-card">
             <div class="form-header-row">
               <div>
                 <h3 class="section-title" id="form-title">Cadastrar Produto</h3>
-                <p class="section-copy" style="margin-bottom:0;">Fluxo em etapas para cadastrar mais rápido, com menos erro.</p>
+                <p class="section-copy" style="margin-bottom:0;">Fluxo em etapas, com visual mais limpo e organizado para cadastrar produto sem embolar.</p>
               </div>
               <div class="inline-status">
                 <span class="mini-kpi"><strong id="draft-step-indicator">Etapa 1/4</strong><span>Progresso do cadastro</span></span>
@@ -423,6 +503,12 @@
               <button type="button" class="step-chip" data-step-target="2">2. Preço e venda</button>
               <button type="button" class="step-chip" data-step-target="3">3. Imagens</button>
               <button type="button" class="step-chip" data-step-target="4">4. Tamanhos e salvar</button>
+            </div>
+
+            <div class="product-flow-strip">
+              <div class="product-flow-pill"><strong>Cadastro rápido</strong><span>Nome, categoria e tipo primeiro</span></div>
+              <div class="product-flow-pill"><strong>Menos erro</strong><span>Preço e imagens separados por etapa</span></div>
+              <div class="product-flow-pill"><strong>Mobile melhor</strong><span>Campos agrupados e mais limpos</span></div>
             </div>
 
             <div class="product-step active" data-step="1">
@@ -589,7 +675,7 @@
             <div id="form-message" class="message"></div>
           </div>
 
-          <div class="card">
+          <div class="card product-list-card">
             <div class="list-header-row">
               <div>
                 <h3 class="section-title" style="margin-bottom:6px;">Produtos cadastrados</h3>
@@ -1005,16 +1091,34 @@ Camisa Real Madrid 24/25"></textarea>
             <span class="module-chip" id="gestaoSyncHint">Salvando no navegador deste aparelho</span>
           </div>
 
-          <div class="gestao-subtabs">
-            <button class="gestao-subtab active" type="button" data-gestao-tab="gestao-dashboard">Resumo</button>
-            <button class="gestao-subtab" type="button" data-gestao-tab="gestao-indicadores">Indicadores</button>
-            <button class="gestao-subtab" type="button" data-gestao-tab="gestao-entradas">Pedidos / Entradas</button>
-            <button class="gestao-subtab" type="button" data-gestao-tab="gestao-estoque">Estoque</button>
-            <button class="gestao-subtab" type="button" data-gestao-tab="gestao-vendas">Vendas</button>
-            <button class="gestao-subtab" type="button" data-gestao-tab="gestao-fornecedores">Fornecedores</button>
+          <div class="focus-shortcuts">
+            <div class="focus-shortcut">
+              <strong>Cadastrar estoque</strong>
+              <span>Monte o pedido, some custos extras e salve tudo de uma vez.</span>
+              <button class="btn btn-primary" type="button" onclick="activateGestaoTab('gestao-entradas')">Abrir pedidos / entradas</button>
+            </div>
+            <div class="focus-shortcut">
+              <strong>Ver estoque</strong>
+              <span>Consulte saldo por camisa e tamanho sem passar por outras telas.</span>
+              <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-estoque')">Abrir estoque</button>
+            </div>
+            <div class="focus-shortcut">
+              <strong>Ver lucro</strong>
+              <span>Acompanhe lucro real e potencial em uma área separada.</span>
+              <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-indicadores')">Abrir indicadores</button>
+            </div>
           </div>
 
-          <section id="gestao-dashboard" class="gestao-subpanel active">
+          <div class="gestao-subtabs">
+            <button class="gestao-subtab active" type="button" data-gestao-tab="gestao-entradas">Pedidos / Entradas</button>
+            <button class="gestao-subtab" type="button" data-gestao-tab="gestao-estoque">Estoque</button>
+            <button class="gestao-subtab" type="button" data-gestao-tab="gestao-indicadores">Indicadores</button>
+            <button class="gestao-subtab" type="button" data-gestao-tab="gestao-vendas">Vendas</button>
+            <button class="gestao-subtab" type="button" data-gestao-tab="gestao-fornecedores">Fornecedores</button>
+            <button class="gestao-subtab" type="button" data-gestao-tab="gestao-dashboard">Resumo</button>
+          </div>
+
+          <section id="gestao-dashboard" class="gestao-subpanel">
             <div class="gestao-grid" style="margin-bottom:18px;">
               <div class="gestao-card">
                 <div class="gestao-icon">1</div>
@@ -1043,7 +1147,7 @@ Camisa Real Madrid 24/25"></textarea>
             </div>
 
             <div class="grid-2-equal">
-              <div class="card">
+              <div class="card finance-highlight-card">
                 <h3 class="section-title">Resumo rápido</h3>
                 <div id="gestaoResumoRapido" class="gestao-empty">Nenhuma entrada registrada ainda. Comece pela aba <strong>Pedidos / Entradas</strong>.</div>
               </div>
@@ -1051,7 +1155,7 @@ Camisa Real Madrid 24/25"></textarea>
                 <h3 class="section-title">Atalhos</h3>
                 <div class="actions-row">
                   <button class="btn btn-primary" type="button" onclick="activateGestaoTab('gestao-entradas')">Lançar pedido</button>
-                  <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-vendas')">Lançar venda</button>
+                  <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-vendas')">Lançar venda e lucro</button>
                   <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-estoque')">Ver estoque</button>
                 </div>
               </div>
@@ -1079,12 +1183,12 @@ Camisa Real Madrid 24/25"></textarea>
           </section>
 
           
-          <section id="gestao-entradas" class="gestao-subpanel">
+          <section id="gestao-entradas" class="gestao-subpanel active">
             <div class="stack">
-              <div class="card">
-                <h3 class="section-title">Montar pedido / entrada em lote</h3>
+              <div class="card order-entry-card">
+                <h3 class="section-title">Montar pedido / entrada</h3>
                 <div class="helper-box helper-box-visible" style="margin-bottom:16px;display:block;">
-                  Monte o pedido uma vez, adicione vários itens e só depois salve. Assim fica organizado, limpo no celular e sem um emaranhado de informações.
+                  Monte o pedido uma vez, adicione os itens e salve tudo no final. O custo extra entra separado no resumo, sem bagunçar o total.
                 </div>
 
                 <div class="order-builder-shell">
@@ -1107,7 +1211,7 @@ Camisa Real Madrid 24/25"></textarea>
                       <div class="grid-2-equal">
                         <div class="field">
                           <label for="gestao-entry-extra">Custo extra do pedido</label>
-                          <input type="text" inputmode="decimal" id="gestao-entry-extra" placeholder="Frete, embalagem comprada, taxa..." / class="money-input">
+                          <input type="text" inputmode="decimal" id="gestao-entry-extra" placeholder="Frete, embalagem comprada, taxa..." oninput="renderGestaoPendingOrder()" />
                         </div>
                         <div class="field">
                           <label for="gestao-entry-note">Observação do pedido</label>
@@ -1125,7 +1229,7 @@ Camisa Real Madrid 24/25"></textarea>
                         <div class="order-summary-box"><span>Itens</span><strong id="gestao-pending-items-total">0</strong></div>
                         <div class="order-summary-box"><span>Peças</span><strong id="gestao-pending-pieces-total">0</strong></div>
                         <div class="order-summary-box"><span>Produtos</span><strong id="gestao-pending-products-total">R$ 0,00</strong></div>
-                        <div class="order-summary-box"><span>Total pedido</span><strong id="gestao-pending-grand-total">R$ 0,00</strong></div>
+                        <div class="order-summary-box highlight"><span>Total pedido</span><strong id="gestao-pending-grand-total">R$ 0,00</strong></div>
                       </div>
                     </div>
                   </div>
@@ -1155,7 +1259,7 @@ Camisa Real Madrid 24/25"></textarea>
                       </div>
                       <div class="field">
                         <label for="gestao-entry-cost">Custo un.</label>
-                        <input type="text" inputmode="decimal" id="gestao-entry-cost" placeholder="89,90" / class="money-input">
+                        <input type="text" inputmode="decimal" id="gestao-entry-cost" placeholder="89,90" />
                       </div>
                       <div class="actions-row" style="margin-top:0;">
                         <button class="btn btn-secondary" type="button" onclick="addGestaoEntryItem()">Adicionar</button>
@@ -1226,8 +1330,8 @@ Camisa Real Madrid 24/25"></textarea>
 
           <section id="gestao-vendas" class="gestao-subpanel">
             <div class="grid-2-equal">
-              <div class="card">
-                <h3 class="section-title">Lançar venda</h3>
+              <div class="card sale-form-card">
+                <h3 class="section-title">Lançar venda e lucro</h3>
                 <div class="field">
                   <label for="gestao-sale-product">Produto</label>
                   <select id="gestao-sale-product" onchange="updateGestaoSalePreview()"></select>
@@ -1250,7 +1354,7 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="grid-2-equal">
                   <div class="field">
                     <label for="gestao-sale-price">Preço de venda unitário</label>
-                    <input type="text" inputmode="decimal" id="gestao-sale-price" placeholder="Ex: 149,90" oninput="updateGestaoSalePreview()" / class="money-input">
+                    <input type="text" inputmode="decimal" id="gestao-sale-price" placeholder="Ex: 149,90" oninput="updateGestaoSalePreview()" />
                   </div>
                   <div class="field">
                     <label for="gestao-sale-date">Data</label>
@@ -1270,26 +1374,26 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="grid-2-equal">
                   <div class="field">
                     <label for="gestao-sale-packaging">Embalagem</label>
-                    <input type="text" inputmode="decimal" id="gestao-sale-packaging" placeholder="Ex: 3,50" oninput="updateGestaoSalePreview()" / class="money-input">
+                    <input type="text" inputmode="decimal" id="gestao-sale-packaging" placeholder="Ex: 3,50" oninput="updateGestaoSalePreview()" />
                   </div>
                   <div class="field">
                     <label for="gestao-sale-shipping">Frete / entrega</label>
-                    <input type="text" inputmode="decimal" id="gestao-sale-shipping" placeholder="Ex: 10,00" oninput="updateGestaoSalePreview()" / class="money-input">
+                    <input type="text" inputmode="decimal" id="gestao-sale-shipping" placeholder="Ex: 10,00" oninput="updateGestaoSalePreview()" />
                   </div>
                 </div>
                 <div class="grid-2-equal">
                   <div class="field">
                     <label for="gestao-sale-fee">Taxas</label>
-                    <input type="text" inputmode="decimal" id="gestao-sale-fee" placeholder="Ex: 4,99" oninput="updateGestaoSalePreview()" / class="money-input">
+                    <input type="text" inputmode="decimal" id="gestao-sale-fee" placeholder="Ex: 4,99" oninput="updateGestaoSalePreview()" />
                   </div>
                   <div class="field">
                     <label for="gestao-sale-other">Outros custos</label>
-                    <input type="text" inputmode="decimal" id="gestao-sale-other" placeholder="Ex: brinde, ajuste, etc." oninput="updateGestaoSalePreview()" / class="money-input">
+                    <input type="text" inputmode="decimal" id="gestao-sale-other" placeholder="Ex: brinde, ajuste, etc." oninput="updateGestaoSalePreview()" />
                   </div>
                 </div>
                 <div class="preview-box">
                   <div class="small-muted" style="margin-bottom:8px;">Prévia da venda</div>
-                  <div id="gestaoSalePreview" class="gestao-empty" style="padding:14px;">Selecione produto, tamanho e valor para calcular receita, custo extra e lucro real.</div>
+                  <div id="gestaoSalePreview" class="gestao-empty" style="padding:14px;">Selecione produto, tamanho e valor para calcular receita, custo extra e lucro real de forma automática.</div>
                 </div>
                 <div class="actions-row">
                   <button class="btn btn-primary" type="button" onclick="saveGestaoSale()">Salvar venda</button>
@@ -2011,68 +2115,81 @@ Camisa Real Madrid 24/25"></textarea>
     }
 
 
+    function roundMoney(value) {
+      const numeric = Number(value || 0);
+      if (!Number.isFinite(numeric)) return 0;
+      return Math.round((numeric + Number.EPSILON) * 100) / 100;
+    }
+
     function normalizeMoneyInput(value) {
       if (value === null || value === undefined) return NaN;
       let normalized = String(value).trim();
       if (!normalized) return NaN;
 
-      normalized = normalized.replace(/\s+/g, '').replace(/R\$/gi, '').replace(/[^0-9,.-]/g, '');
+      normalized = normalized
+        .replace(/\s+/g, '')
+        .replace(/R\$/gi, '')
+        .replace(/[^0-9,.-]/g, '');
 
-      const lastComma = normalized.lastIndexOf(',');
-      const lastDot = normalized.lastIndexOf('.');
+      const hasComma = normalized.includes(',');
+      const hasDot = normalized.includes('.');
+      const commaCount = (normalized.match(/,/g) || []).length;
+      const dotCount = (normalized.match(/\./g) || []).length;
 
-      if (lastComma !== -1 && lastDot !== -1) {
-        if (lastComma > lastDot) {
+      if (hasComma && hasDot) {
+        if (normalized.lastIndexOf(',') > normalized.lastIndexOf('.')) {
           normalized = normalized.replace(/\./g, '').replace(',', '.');
         } else {
           normalized = normalized.replace(/,/g, '');
         }
-      } else if (lastComma !== -1) {
-        const decimalDigits = normalized.length - lastComma - 1;
-        if (decimalDigits === 0) {
-          normalized = normalized.replace(',', '');
-        } else if (decimalDigits <= 2) {
-          normalized = normalized.replace(/\./g, '').replace(',', '.');
+      } else if (hasComma) {
+        if (commaCount > 1) {
+          const parts = normalized.split(',');
+          const decimal = parts.pop();
+          normalized = parts.join('') + '.' + decimal;
         } else {
-          normalized = normalized.replace(/,/g, '');
+          normalized = normalized.replace(',', '.');
         }
-      } else if (lastDot !== -1) {
-        const decimalDigits = normalized.length - lastDot - 1;
-        if (decimalDigits > 2) {
-          normalized = normalized.replace(/\./g, '');
-        }
+      } else if (hasDot && dotCount > 1) {
+        const parts = normalized.split('.');
+        const decimal = parts.pop();
+        normalized = parts.join('') + '.' + decimal;
       }
 
-      normalized = normalized.replace(/[^0-9.-]/g, '');
+      normalized = normalized.replace(/(?!^)-/g, '').replace(/[^0-9.-]/g, '');
       const parsed = Number(normalized);
-      return Number.isFinite(parsed) ? parsed : NaN;
+      return Number.isFinite(parsed) ? roundMoney(parsed) : NaN;
     }
 
     function formatMoneyInputValue(value) {
-      const numeric = normalizeMoneyInput(value);
-      if (Number.isNaN(numeric)) return '';
-      return numeric.toLocaleString('pt-BR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
+      const parsed = normalizeMoneyInput(value);
+      if (Number.isNaN(parsed)) return "";
+      return roundMoney(parsed).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
-    function attachMoneyMasks() {
-      document.querySelectorAll('.money-input').forEach(input => {
-        if (input.dataset.moneyMaskReady === 'true') return;
-        input.dataset.moneyMaskReady = 'true';
+    function bindMoneyInput(inputId, onChange) {
+      const input = document.getElementById(inputId);
+      if (!input || input.dataset.moneyBound === "true") return;
+      input.dataset.moneyBound = "true";
 
-        input.addEventListener('blur', () => {
-          const formatted = formatMoneyInputValue(input.value);
-          if (formatted) input.value = formatted;
-        });
+      input.addEventListener("input", () => {
+        if (typeof onChange === "function") onChange();
+      });
 
-        input.addEventListener('focus', () => {
-          const numeric = normalizeMoneyInput(input.value);
-          if (!Number.isNaN(numeric) && input.value.includes(',')) {
-            input.value = String(numeric).replace('.', ',');
-          }
-        });
+      input.addEventListener("focus", () => {
+        const parsed = normalizeMoneyInput(input.value);
+        if (!Number.isNaN(parsed) && input.value.trim()) {
+          input.value = roundMoney(parsed).toFixed(2).replace('.', ',');
+        }
+        setTimeout(() => {
+          try { input.select(); } catch (error) {}
+        }, 0);
+      });
+
+      input.addEventListener("blur", () => {
+        const formatted = formatMoneyInputValue(input.value);
+        input.value = formatted || "";
+        if (typeof onChange === "function") onChange();
       });
     }
 
@@ -3351,6 +3468,17 @@ Camisa Real Madrid 24/25"></textarea>
     }
 
 
+    function setupMoneyInputs() {
+      bindMoneyInput("gestao-entry-extra", renderGestaoPendingOrder);
+      bindMoneyInput("gestao-entry-cost");
+      bindMoneyInput("gestao-sale-price", updateGestaoSalePreview);
+      bindMoneyInput("gestao-sale-packaging", updateGestaoSalePreview);
+      bindMoneyInput("gestao-sale-shipping", updateGestaoSalePreview);
+      bindMoneyInput("gestao-sale-fee", updateGestaoSalePreview);
+      bindMoneyInput("gestao-sale-other", updateGestaoSalePreview);
+      bindMoneyInput("batch-price-value", updateBatchPreview);
+    }
+
     function setupTabs() {
       const tabGroups = document.querySelectorAll(".tabs");
       tabGroups.forEach(group => {
@@ -3435,7 +3563,7 @@ Camisa Real Madrid 24/25"></textarea>
     function enterArea(area) {
       showAdminPanel();
       activateModule(area === 'gestao' ? 'module-gestao' : 'module-loja');
-      if (area === 'gestao') activateGestaoTab('gestao-dashboard');
+      if (area === 'gestao') activateGestaoTab('gestao-entradas');
     }
 
     function goToHomeSelector() {
@@ -3906,7 +4034,7 @@ Camisa Real Madrid 24/25"></textarea>
     function getGestaoExtraInvestedTotal() {
       const ordersExtra = gestaoEntries.reduce((sum, item) => sum + Number(item.extraCost || 0), 0);
       const salesExtra = gestaoSales.reduce((sum, item) => sum + Number(item.extraCostsTotal || 0), 0);
-      return ordersExtra + salesExtra;
+      return roundMoney(ordersExtra + salesExtra);
     }
 
     async function loadGestaoStateFromSupabase() {
@@ -4033,12 +4161,12 @@ Camisa Real Madrid 24/25"></textarea>
           costPrice: Number(item.costPrice || item.cost_price || 0),
           date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
           totalAmount: Number(item.totalAmount || item.total_amount || ((Number(item.quantity || 0) * Number(item.salePrice || item.sale_price || 0)))),
-          packagingCost: Number(item.packagingCost || 0),
-          shippingCost: Number(item.shippingCost || 0),
-          feeCost: Number(item.feeCost || 0),
-          otherCost: Number(item.otherCost || 0),
-          extraCostsTotal: Number(item.extraCostsTotal || 0),
-          profit: Number(item.profit || ((Number(item.salePrice || item.sale_price || 0) - Number(item.costPrice || item.cost_price || 0)) * Number(item.quantity || 0))),
+          packagingCost: roundMoney(item.packagingCost || 0),
+          shippingCost: roundMoney(item.shippingCost || 0),
+          feeCost: roundMoney(item.feeCost || 0),
+          otherCost: roundMoney(item.otherCost || 0),
+          extraCostsTotal: roundMoney(item.extraCostsTotal || 0),
+          profit: roundMoney(item.profit || ((Number(item.salePrice || item.sale_price || 0) - Number(item.costPrice || item.cost_price || 0)) * Number(item.quantity || 0))),
           clientName: item.clientName || gestaoSalesMeta?.[item.saleId || item.sale_id || item.id]?.clientName || '',
           clientPhone: item.clientPhone || gestaoSalesMeta?.[item.saleId || item.sale_id || item.id]?.clientPhone || ''
         }));
@@ -4242,7 +4370,7 @@ Camisa Real Madrid 24/25"></textarea>
         const currentPrice = getProductPriceById(item.productId);
         return sum + (qty * Math.max(0, currentPrice - Number(item.averageCost || 0)));
       }, 0);
-      return { totalStockPieces, realProfit, potentialRevenue, potentialProfit };
+      return { totalStockPieces, realProfit: roundMoney(realProfit), potentialRevenue: roundMoney(potentialRevenue), potentialProfit: roundMoney(potentialProfit) };
     }
 
     function calculateGestaoStock() {
@@ -4262,7 +4390,7 @@ Camisa Real Madrid 24/25"></textarea>
         }
         const row = map.get(key);
         row.qty += Number(entry.quantity || 0);
-        row.totalCost += Number(entry.quantity || 0) * Number(entry.cost || 0);
+        row.totalCost = roundMoney(row.totalCost + (Number(entry.quantity || 0) * Number(entry.cost || 0)));
       });
       gestaoSales.forEach(sale => {
         const key = `${sale.productId}__${sale.size}`;
@@ -4281,9 +4409,9 @@ Camisa Real Madrid 24/25"></textarea>
         row.soldQty += Number(sale.quantity || 0);
       });
       return [...map.values()].map(item => {
-        const averageCost = item.qty ? item.totalCost / item.qty : 0;
+        const averageCost = item.qty ? roundMoney(item.totalCost / item.qty) : 0;
         const currentQty = item.qty - item.soldQty;
-        return { ...item, averageCost, currentQty, currentInvestment: Math.max(0, currentQty) * averageCost };
+        return { ...item, averageCost, currentQty, currentInvestment: roundMoney(Math.max(0, currentQty) * averageCost) };
       }).sort((a,b)=> a.name.localeCompare(b.name) || a.size.localeCompare(b.size));
     }
 
@@ -4349,8 +4477,8 @@ Camisa Real Madrid 24/25"></textarea>
       const grandTotalEl = document.getElementById('gestao-pending-grand-total');
       const extraCost = getGestaoPendingExtraCost();
       const pieces = gestaoPendingOrderItems.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-      const productsTotal = gestaoPendingOrderItems.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.cost || 0)), 0);
-      const grandTotal = productsTotal + extraCost;
+      const productsTotal = roundMoney(gestaoPendingOrderItems.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.cost || 0)), 0));
+      const grandTotal = roundMoney(productsTotal + extraCost);
 
       if (count) count.textContent = `${gestaoPendingOrderItems.length} item(ns)`;
       if (totalItems) totalItems.textContent = String(gestaoPendingOrderItems.length);
@@ -4360,11 +4488,11 @@ Camisa Real Madrid 24/25"></textarea>
 
       if (!list) return;
       if (!gestaoPendingOrderItems.length) {
-        list.innerHTML = '<div class="gestao-empty">Nenhum item adicionado ainda.</div>';
+        list.innerHTML = `<div class="gestao-empty">Nenhum item adicionado ainda.${extraCost > 0 ? ` Custo extra digitado: <strong>${formatPrice(extraCost)}</strong>.` : ''}</div>`;
         return;
       }
-      list.innerHTML = gestaoPendingOrderItems.map(item => {
-        const itemTotal = Number(item.quantity || 0) * Number(item.cost || 0);
+      list.innerHTML = `${extraCost > 0 ? `<div class="gestao-list-card"><div class="gestao-list-head"><div><div class="gestao-list-title">Custo extra do pedido</div><div class="gestao-list-sub">Frete, taxa, embalagem ou outro custo geral</div></div><span class="badge">${formatPrice(extraCost)}</span></div></div>` : ''}` + gestaoPendingOrderItems.map(item => {
+        const itemTotal = roundMoney(Number(item.quantity || 0) * Number(item.cost || 0));
         return `
           <article class="order-item-mini">
             <div class="gestao-list-head">
@@ -4404,10 +4532,17 @@ Camisa Real Madrid 24/25"></textarea>
       const orders = getGroupedGestaoOrders();
       const lastOrder = orders[0];
       const totalPieces = gestaoEntries.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-      const totalRevenue = gestaoSales.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0);
-      const totalProfit = gestaoSales.reduce((sum, item) => sum + Number(item.profit || 0), 0);
+      const totalRevenue = roundMoney(gestaoSales.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0));
+      const totalProfit = roundMoney(gestaoSales.reduce((sum, item) => sum + Number(item.profit || 0), 0));
       const totalExtras = getGestaoExtraInvestedTotal();
-      box.innerHTML = `Você já lançou <strong>${orders.length}</strong> pedido(s), com <strong>${totalPieces}</strong> peça(s) registradas. Vendas acumuladas: <strong>${formatPrice(totalRevenue)}</strong> em faturamento e <strong>${formatPrice(totalProfit)}</strong> de lucro. Custos extras lançados: <strong>${formatPrice(totalExtras)}</strong>. Último pedido: <strong>${escapeHtml(lastOrder.supplierName)}</strong> em <strong>${escapeHtml(lastOrder.date)}</strong>, com <strong>${lastOrder.items.length}</strong> item(ns). Para ver estoque total, lucro potencial e receita potencial, abra a aba <strong>Indicadores</strong>.`;
+      const metrics = getGestaoMetrics();
+      box.innerHTML = `Você já lançou <strong>${orders.length}</strong> pedido(s), com <strong>${totalPieces}</strong> peça(s) registradas. Vendas acumuladas: <strong>${formatPrice(totalRevenue)}</strong> em faturamento e <strong>${formatPrice(totalProfit)}</strong> de lucro. Custos extras lançados: <strong>${formatPrice(totalExtras)}</strong>. Último pedido: <strong>${escapeHtml(lastOrder.supplierName)}</strong> em <strong>${escapeHtml(lastOrder.date)}</strong>, com <strong>${lastOrder.items.length}</strong> item(ns).
+      <div class="gestao-summary-inline">
+        <span class="mini-kpi"><strong>${metrics.totalStockPieces}</strong><span>Camisas em estoque</span></span>
+        <span class="mini-kpi"><strong>${formatPrice(metrics.realProfit)}</strong><span>Lucro real</span></span>
+        <span class="mini-kpi"><strong>${formatPrice(metrics.potentialProfit)}</strong><span>Lucro potencial</span></span>
+        <span class="mini-kpi"><strong>${formatPrice(metrics.potentialRevenue)}</strong><span>Receita potencial</span></span>
+      </div>`;
     }
 
     function renderGestaoMetrics() {
@@ -4562,16 +4697,16 @@ function updateGestaoSalePreview() {
       const clientName = document.getElementById('gestao-sale-client-name')?.value?.trim() || '';
       const clientPhone = document.getElementById('gestao-sale-client-phone')?.value?.trim() || '';
       if (!productId) {
-        box.innerHTML = 'Selecione produto, tamanho e valor para calcular receita, custo extra e lucro real.';
+        box.innerHTML = 'Selecione produto, tamanho e valor para calcular receita, custo extra e lucro real de forma automática.';
         return;
       }
       const stockRow = calculateGestaoStock().find(item => String(item.productId) === String(productId) && String(item.size) === String(size));
       const available = Number(stockRow?.currentQty || 0);
       const avgCost = Number(stockRow?.averageCost || getAverageCostForProductSize(productId, size) || 0);
-      const revenue = !Number.isNaN(salePrice) ? Number(quantity || 0) * salePrice : 0;
-      const productCost = Number(quantity || 0) * avgCost;
-      const extraCosts = packaging + shipping + fee + other;
-      const realProfit = revenue - productCost - extraCosts;
+      const revenue = !Number.isNaN(salePrice) ? roundMoney(Number(quantity || 0) * salePrice) : 0;
+      const productCost = roundMoney(Number(quantity || 0) * avgCost);
+      const extraCosts = roundMoney(packaging + shipping + fee + other);
+      const realProfit = roundMoney(revenue - productCost - extraCosts);
       box.innerHTML = `${escapeHtml(getProductNameById(productId))} • tamanho <strong>${escapeHtml(size)}</strong><br>Disponível agora: <strong>${available}</strong> peça(s)<br>${clientName ? `Cliente: <strong>${escapeHtml(clientName)}</strong>${clientPhone ? ` • ${escapeHtml(clientPhone)}` : ''}<br>` : ''}Custo médio do produto: <strong>${formatPrice(avgCost)}</strong><br>Custo das peças: <strong>${formatPrice(productCost)}</strong><br>Custos extras da venda: <strong>${formatPrice(extraCosts)}</strong><br>Receita prevista: <strong>${formatPrice(revenue)}</strong><br>Lucro real estimado: <strong>${formatPrice(realProfit)}</strong>`;
     }
 
@@ -4641,7 +4776,7 @@ function updateGestaoSalePreview() {
       editingGestaoOrderId = order.orderId;
       document.getElementById('gestao-entry-supplier').value = order.supplierId || '';
       document.getElementById('gestao-entry-date').value = order.date || new Date().toISOString().slice(0,10);
-      document.getElementById('gestao-entry-extra').value = order.extraCost ? String(order.extraCost).replace('.', ',') : '';
+      document.getElementById('gestao-entry-extra').value = order.extraCost ? formatMoneyInputValue(order.extraCost) : '';
       document.getElementById('gestao-entry-note').value = order.note || '';
       gestaoPendingOrderItems = order.items.map((item, index) => ({
         tempId: item.id || `edit-${Date.now()}-${index}`,
@@ -4820,11 +4955,11 @@ async function deleteGestaoSupplier(id) {
         productId: item.productId,
         size: item.size,
         quantity: Number(item.quantity || 0),
-        cost: Number(item.cost || 0),
+        cost: roundMoney(item.cost || 0),
         date: finalDate,
         supplierId: supplierId || '',
         orderKey,
-        extraCost: index === 0 ? extraCost : 0,
+        extraCost: index === 0 ? roundMoney(extraCost) : 0,
         note: index === 0 ? note : ''
       }));
 
@@ -4878,7 +5013,7 @@ async function saveGestaoSale() {
         return;
       }
 
-      const costPrice = Number(stockRow?.averageCost || getAverageCostForProductSize(productId, size) || 0);
+      const costPrice = roundMoney(stockRow?.averageCost || getAverageCostForProductSize(productId, size) || 0);
       const totalAmount = Number((quantity * salePrice).toFixed(2));
       const extraCostsTotal = Number((packagingCost + shippingCost + feeCost + otherCost).toFixed(2));
       const profit = Number((totalAmount - (quantity * costPrice) - extraCostsTotal).toFixed(2));
@@ -4952,6 +5087,7 @@ async function saveGestaoSale() {
       setupTabs();
       setupModules();
       setupGestaoTabs();
+      setupMoneyInputs();
 
       document.getElementById("product-name")?.addEventListener("input", syncSlugPreview);
       document.getElementById("product-price")?.addEventListener("input", updateDraftSummary);
