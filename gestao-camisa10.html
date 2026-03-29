@@ -43,6 +43,8 @@
     .field input,.field textarea,.field select{
       width:100%;padding:14px 14px;border-radius:14px;border:1px solid #2d2d2d;background:#101010;color:#fff;outline:none;font-size:.96rem
     }
+    .money-input{letter-spacing:.01em}
+
     .field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(212,175,55,.55);box-shadow:0 0 0 3px rgba(212,175,55,.12)}
     .field textarea{min-height:110px;resize:vertical}
     .btn{border:none;border-radius:14px;padding:13px 18px;cursor:pointer;font-weight:800;transition:.2s ease;font-size:.92rem}
@@ -1105,7 +1107,7 @@ Camisa Real Madrid 24/25"></textarea>
                       <div class="grid-2-equal">
                         <div class="field">
                           <label for="gestao-entry-extra">Custo extra do pedido</label>
-                          <input type="text" inputmode="decimal" id="gestao-entry-extra" placeholder="Frete, embalagem comprada, taxa..." />
+                          <input type="text" inputmode="decimal" id="gestao-entry-extra" placeholder="Frete, embalagem comprada, taxa..." / class="money-input">
                         </div>
                         <div class="field">
                           <label for="gestao-entry-note">Observação do pedido</label>
@@ -1153,7 +1155,7 @@ Camisa Real Madrid 24/25"></textarea>
                       </div>
                       <div class="field">
                         <label for="gestao-entry-cost">Custo un.</label>
-                        <input type="text" inputmode="decimal" id="gestao-entry-cost" placeholder="89,90" />
+                        <input type="text" inputmode="decimal" id="gestao-entry-cost" placeholder="89,90" / class="money-input">
                       </div>
                       <div class="actions-row" style="margin-top:0;">
                         <button class="btn btn-secondary" type="button" onclick="addGestaoEntryItem()">Adicionar</button>
@@ -1248,7 +1250,7 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="grid-2-equal">
                   <div class="field">
                     <label for="gestao-sale-price">Preço de venda unitário</label>
-                    <input type="text" inputmode="decimal" id="gestao-sale-price" placeholder="Ex: 149,90" oninput="updateGestaoSalePreview()" />
+                    <input type="text" inputmode="decimal" id="gestao-sale-price" placeholder="Ex: 149,90" oninput="updateGestaoSalePreview()" / class="money-input">
                   </div>
                   <div class="field">
                     <label for="gestao-sale-date">Data</label>
@@ -1268,21 +1270,21 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="grid-2-equal">
                   <div class="field">
                     <label for="gestao-sale-packaging">Embalagem</label>
-                    <input type="text" inputmode="decimal" id="gestao-sale-packaging" placeholder="Ex: 3,50" oninput="updateGestaoSalePreview()" />
+                    <input type="text" inputmode="decimal" id="gestao-sale-packaging" placeholder="Ex: 3,50" oninput="updateGestaoSalePreview()" / class="money-input">
                   </div>
                   <div class="field">
                     <label for="gestao-sale-shipping">Frete / entrega</label>
-                    <input type="text" inputmode="decimal" id="gestao-sale-shipping" placeholder="Ex: 10,00" oninput="updateGestaoSalePreview()" />
+                    <input type="text" inputmode="decimal" id="gestao-sale-shipping" placeholder="Ex: 10,00" oninput="updateGestaoSalePreview()" / class="money-input">
                   </div>
                 </div>
                 <div class="grid-2-equal">
                   <div class="field">
                     <label for="gestao-sale-fee">Taxas</label>
-                    <input type="text" inputmode="decimal" id="gestao-sale-fee" placeholder="Ex: 4,99" oninput="updateGestaoSalePreview()" />
+                    <input type="text" inputmode="decimal" id="gestao-sale-fee" placeholder="Ex: 4,99" oninput="updateGestaoSalePreview()" / class="money-input">
                   </div>
                   <div class="field">
                     <label for="gestao-sale-other">Outros custos</label>
-                    <input type="text" inputmode="decimal" id="gestao-sale-other" placeholder="Ex: brinde, ajuste, etc." oninput="updateGestaoSalePreview()" />
+                    <input type="text" inputmode="decimal" id="gestao-sale-other" placeholder="Ex: brinde, ajuste, etc." oninput="updateGestaoSalePreview()" / class="money-input">
                   </div>
                 </div>
                 <div class="preview-box">
@@ -2014,23 +2016,64 @@ Camisa Real Madrid 24/25"></textarea>
       let normalized = String(value).trim();
       if (!normalized) return NaN;
 
-      normalized = normalized.replace(/\s+/g, '').replace(/R\$/gi, '');
+      normalized = normalized.replace(/\s+/g, '').replace(/R\$/gi, '').replace(/[^0-9,.-]/g, '');
 
-      const hasComma = normalized.includes(',');
-      const hasDot = normalized.includes('.');
+      const lastComma = normalized.lastIndexOf(',');
+      const lastDot = normalized.lastIndexOf('.');
 
-      if (hasComma && hasDot) {
-        if (normalized.lastIndexOf(',') > normalized.lastIndexOf('.')) {
+      if (lastComma !== -1 && lastDot !== -1) {
+        if (lastComma > lastDot) {
           normalized = normalized.replace(/\./g, '').replace(',', '.');
         } else {
           normalized = normalized.replace(/,/g, '');
         }
-      } else if (hasComma) {
-        normalized = normalized.replace(/\./g, '').replace(',', '.');
+      } else if (lastComma !== -1) {
+        const decimalDigits = normalized.length - lastComma - 1;
+        if (decimalDigits === 0) {
+          normalized = normalized.replace(',', '');
+        } else if (decimalDigits <= 2) {
+          normalized = normalized.replace(/\./g, '').replace(',', '.');
+        } else {
+          normalized = normalized.replace(/,/g, '');
+        }
+      } else if (lastDot !== -1) {
+        const decimalDigits = normalized.length - lastDot - 1;
+        if (decimalDigits > 2) {
+          normalized = normalized.replace(/\./g, '');
+        }
       }
 
       normalized = normalized.replace(/[^0-9.-]/g, '');
-      return Number(normalized);
+      const parsed = Number(normalized);
+      return Number.isFinite(parsed) ? parsed : NaN;
+    }
+
+    function formatMoneyInputValue(value) {
+      const numeric = normalizeMoneyInput(value);
+      if (Number.isNaN(numeric)) return '';
+      return numeric.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function attachMoneyMasks() {
+      document.querySelectorAll('.money-input').forEach(input => {
+        if (input.dataset.moneyMaskReady === 'true') return;
+        input.dataset.moneyMaskReady = 'true';
+
+        input.addEventListener('blur', () => {
+          const formatted = formatMoneyInputValue(input.value);
+          if (formatted) input.value = formatted;
+        });
+
+        input.addEventListener('focus', () => {
+          const numeric = normalizeMoneyInput(input.value);
+          if (!Number.isNaN(numeric) && input.value.includes(',')) {
+            input.value = String(numeric).replace('.', ',');
+          }
+        });
+      });
     }
 
     function getFilteredProducts() {
