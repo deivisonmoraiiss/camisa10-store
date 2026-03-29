@@ -186,7 +186,14 @@
     .product-admin-actions .btn{padding:9px 12px;font-size:.84rem}
     .product-admin-desc{color:#d9d9d9;font-size:.88rem;line-height:1.5}
     
-    .batch-card{margin-top:16px;padding:16px;border-radius:18px;background:linear-gradient(180deg,rgba(212,175,55,.10),rgba(212,175,55,.04));border:1px solid rgba(212,175,55,.18);display:grid;gap:14px}
+    .batch-card{margin-top:16px;border-radius:18px;background:linear-gradient(180deg,rgba(212,175,55,.10),rgba(212,175,55,.04));border:1px solid rgba(212,175,55,.18);overflow:hidden}
+    .batch-card[open]{padding-bottom:16px}
+    .batch-card-summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:16px}
+    .batch-card-summary::-webkit-details-marker{display:none}
+    .batch-card-summary::after{content:"+";font-size:1.3rem;font-weight:900;color:var(--gold-2);line-height:1;flex-shrink:0;margin-top:2px}
+    .batch-card[open] .batch-card-summary::after{content:"−"}
+    .batch-card-body{display:grid;gap:14px;padding:0 16px 0 16px}
+    .batch-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
     .batch-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
     .batch-stats{display:flex;gap:8px;flex-wrap:wrap}
     .batch-stat{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:#111;border:1px solid var(--line);font-size:.86rem;color:#f3f3f3}
@@ -697,18 +704,21 @@
               <button class="btn btn-secondary" onclick="loadProducts()">Atualizar</button>
             </div>
 
-            <div class="batch-card">
-              <div class="batch-card-top">
-                <div>
-                  <h4 class="section-title" style="margin-bottom:6px;">Edição em lote</h4>
-                  <div class="small-muted">Selecione produtos específicos ou aplique direto nos produtos filtrados.</div>
+            <details class="batch-card">
+              <summary class="batch-card-summary">
+                <div class="batch-card-top">
+                  <div>
+                    <h4 class="section-title" style="margin-bottom:6px;">Edição em lote</h4>
+                    <div class="small-muted">Clique para expandir. Selecione produtos específicos ou aplique direto nos produtos filtrados.</div>
+                  </div>
+                  <div class="batch-stats">
+                    <div class="batch-stat">Filtrados: <strong id="batch-filtered-count">0</strong></div>
+                    <div class="batch-stat">Marcados: <strong id="batch-selected-count" class="batch-checkbox-count">0</strong></div>
+                  </div>
                 </div>
-                <div class="batch-stats">
-                  <div class="batch-stat">Filtrados: <strong id="batch-filtered-count">0</strong></div>
-                  <div class="batch-stat">Marcados: <strong id="batch-selected-count" class="batch-checkbox-count">0</strong></div>
-                </div>
-              </div>
+              </summary>
 
+              <div class="batch-card-body">
               <div class="batch-selection-bar">
                 <label class="batch-checkbox-all">
                   <input type="checkbox" id="select-all-filtered" onchange="toggleSelectAllFiltered(this.checked)" />
@@ -778,7 +788,8 @@
                   </div>
                 </div>
               </div>
-            </div>
+              </div>
+            </details>
 
             <div id="products-table-body" class="product-admin-list">
               <div class="empty-state">Carregando produtos...</div>
@@ -4007,6 +4018,25 @@ Camisa Real Madrid 24/25"></textarea>
       return `${entry.date || ''}__${entry.supplierId || 'sem-fornecedor'}`;
     }
 
+    function normalizeGestaoEntriesExtraCosts() {
+      const groups = new Map();
+      gestaoEntries.forEach((entry, index) => {
+        const key = String(entry.orderId || entry.orderKey || getGestaoOrderKey(entry));
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push({ entry, index });
+      });
+
+      groups.forEach(items => {
+        const normalizedExtra = roundMoney(Math.max(...items.map(({ entry }) => Number(entry.extraCost || 0)), 0));
+        let note = '';
+        items.forEach(({ entry }) => { if (!note && entry.note) note = entry.note; });
+        items.forEach(({ entry }, idx) => {
+          entry.extraCost = idx === 0 ? normalizedExtra : 0;
+          entry.note = idx === 0 ? note : '';
+        });
+      });
+    }
+
     function getGroupedGestaoOrders() {
       const orderMap = new Map();
       gestaoEntries.forEach(entry => {
@@ -4025,7 +4055,7 @@ Camisa Real Madrid 24/25"></textarea>
         }
         const order = orderMap.get(key);
         order.items.push(entry);
-        order.extraCost += Number(entry.extraCost || 0);
+        order.extraCost = Math.max(Number(order.extraCost || 0), Number(entry.extraCost || 0));
         if (!order.note && entry.note) order.note = entry.note;
       });
       return [...orderMap.values()].sort((a,b) => (b.date || '').localeCompare(a.date || '') || (a.supplierName || '').localeCompare(b.supplierName || ''));
@@ -4115,6 +4145,7 @@ Camisa Real Madrid 24/25"></textarea>
         clientPhone: gestaoSalesMeta?.[item.sale_id]?.clientPhone || ''
       }));
 
+      normalizeGestaoEntriesExtraCosts();
       localStorage.setItem(GESTAO_SUPPLIERS_KEY, JSON.stringify(gestaoSuppliers));
       localStorage.setItem(GESTAO_ENTRIES_KEY, JSON.stringify(gestaoEntries));
       localStorage.setItem(GESTAO_SALES_KEY, JSON.stringify(gestaoSales));
@@ -4176,11 +4207,13 @@ Camisa Real Madrid 24/25"></textarea>
         gestaoSales = [];
         gestaoSalesMeta = {};
       }
+      normalizeGestaoEntriesExtraCosts();
       gestaoSyncMode = 'local';
       updateGestaoSyncUi();
     }
 
     async function persistGestaoState() {
+      normalizeGestaoEntriesExtraCosts();
       localStorage.setItem(GESTAO_SUPPLIERS_KEY, JSON.stringify(gestaoSuppliers));
       localStorage.setItem(GESTAO_ENTRIES_KEY, JSON.stringify(gestaoEntries));
       localStorage.setItem(GESTAO_SALES_KEY, JSON.stringify(gestaoSales));
