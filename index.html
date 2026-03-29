@@ -520,6 +520,7 @@
       scrollbar-width: none;
       -ms-overflow-style: none;
       position: relative;
+      scroll-padding-left: 0;
     }
 
     .products-grid.encomenda-carousel::-webkit-scrollbar {
@@ -547,24 +548,8 @@
     }
 
     @media (min-width: 861px) {
-      .encomenda-wrap {
-        position: relative;
-      }
-
       .products-grid.encomenda-carousel {
         padding-right: 22px;
-      }
-
-      .encomenda-wrap::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 86px;
-        bottom: 66px;
-        width: 22px;
-        background: #0d0d0d;
-        pointer-events: none;
-        z-index: 2;
       }
     }
 
@@ -633,12 +618,13 @@
       font-size: 0.74rem;
       font-weight: 800;
       letter-spacing: 0.02em;
-      box-shadow: 0 10px 22px rgba(0,0,0,0.18);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.14);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.08);
       line-height: 1;
       white-space: nowrap;
+      background: rgba(12,12,12,0.52);
     }
 
     .product-badge::before {
@@ -652,19 +638,21 @@
     }
 
     .product-badge.destaque {
-      background: linear-gradient(135deg, rgba(212,175,55,0.82), rgba(244,211,94,0.72));
-      color: #141414;
-      border-color: rgba(255,255,255,0.12);
+      background: rgba(12,12,12,0.52);
+      color: #f0cf63;
+      border-color: rgba(240,207,99,0.18);
     }
 
     .product-badge.mais-vendida {
-      background: linear-gradient(135deg, rgba(255,116,82,0.78), rgba(255,77,79,0.70));
-      color: #fff;
+      background: rgba(12,12,12,0.52);
+      color: #ff9b8a;
+      border-color: rgba(255,155,138,0.18);
     }
 
     .product-badge.novo {
-      background: linear-gradient(135deg, rgba(36,191,120,0.80), rgba(60,223,145,0.70));
-      color: #08140d;
+      background: rgba(12,12,12,0.52);
+      color: #59d89a;
+      border-color: rgba(89,216,154,0.18);
     }
 
     .sale-type-badge {
@@ -678,11 +666,11 @@
       letter-spacing: 0.02em;
       line-height: 1;
       color: #f4d35e;
-      background: rgba(8,8,8,0.56);
-      border: 1px solid rgba(244,211,94,0.20);
-      box-shadow: 0 10px 22px rgba(0,0,0,0.18);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(12,12,12,0.48);
+      border: 1px solid rgba(244,211,94,0.16);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.14);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       white-space: nowrap;
     }
 
@@ -1128,6 +1116,7 @@
         overflow-x: auto;
         overflow-y: hidden;
         align-items: stretch;
+        padding-left: 0;
         padding-right: 18px;
       }
 
@@ -1259,6 +1248,7 @@
         grid-template-rows: 1fr;
         grid-auto-columns: 46vw;
         gap: 10px;
+        padding-left: 0;
         padding-bottom: 8px;
         padding-right: 16px;
         overflow-x: auto;
