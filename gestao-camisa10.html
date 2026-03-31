@@ -352,6 +352,11 @@
     .metric-card{padding:18px;border-radius:18px;background:#101010;border:1px solid var(--line);display:grid;gap:8px}
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
+    .auth-note{margin-top:12px;padding:12px 14px;border-radius:14px;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.18);color:#f3df9f;font-size:.84rem;line-height:1.55}
+    .sync-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .sync-actions .btn{padding:9px 12px;font-size:.82rem}
+    .status-chip-warning{background:rgba(219,92,88,.14);border-color:rgba(219,92,88,.28);color:#ffd9d8}
+    .status-chip-success{background:rgba(46,139,87,.16);border-color:rgba(46,139,87,.28);color:#c9f1da}
 
     .order-collapsible{border:1px solid var(--line);border-radius:18px;background:#101010;overflow:hidden}
     .order-collapsible summary{list-style:none;cursor:pointer;padding:16px;display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:flex-start}
@@ -374,6 +379,11 @@
     .metric-card{padding:18px;border-radius:18px;background:#101010;border:1px solid var(--line);display:grid;gap:8px}
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
+    .auth-note{margin-top:12px;padding:12px 14px;border-radius:14px;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.18);color:#f3df9f;font-size:.84rem;line-height:1.55}
+    .sync-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .sync-actions .btn{padding:9px 12px;font-size:.82rem}
+    .status-chip-warning{background:rgba(219,92,88,.14);border-color:rgba(219,92,88,.28);color:#ffd9d8}
+    .status-chip-success{background:rgba(46,139,87,.16);border-color:rgba(46,139,87,.28);color:#c9f1da}
 
 
     .gestao-command-bar{
@@ -510,6 +520,7 @@
       <div class="card">
         <h2 class="login-title">Entrar no painel</h2>
         <p class="subtitle">Painel simplificado da loja</p>
+        <div class="auth-note" id="auth-login-hint">Primeiro tentamos login profissional via Supabase Auth. Se ele ainda não estiver configurado no seu projeto, o painel continua aceitando o acesso atual para não te travar.</div>
         <div class="field">
           <label for="login-email">E-mail</label>
           <input type="email" id="login-email" placeholder="Digite seu e-mail" />
@@ -1213,6 +1224,10 @@ Camisa Real Madrid 24/25"></textarea>
           <div class="module-mini-tabs" style="margin-top:-4px;">
             <span class="module-chip" id="gestaoSyncStatus">Modo local</span>
             <span class="module-chip" id="gestaoSyncHint">Salvando no navegador deste aparelho</span>
+            <div class="sync-actions">
+              <button class="btn btn-secondary" type="button" onclick="syncGestaoNow()">Sincronizar agora</button>
+              <button class="btn btn-secondary" type="button" onclick="forceGestaoOnlineSync()">Forçar modo online</button>
+            </div>
           </div>
 
           <div class="gestao-command-bar">
@@ -1673,6 +1688,7 @@ Camisa Real Madrid 24/25"></textarea>
 
     const ADMIN_EMAIL = "admin@camisa10.com";
     const ADMIN_PASSWORD = "Camisa10@admin";
+    const AUTH_MODE_KEY = "camisa10_auth_mode";
 
     let editingProductId = null;
     let editingCategoryId = null;
@@ -1969,8 +1985,10 @@ Camisa Real Madrid 24/25"></textarea>
       clearMessage("category-message");
     }
 
-    function logout() {
+    async function logout() {
       localStorage.removeItem("camisa10_admin_logged");
+      localStorage.removeItem(AUTH_MODE_KEY);
+      try { await supabaseClient.auth.signOut(); } catch (error) {}
       document.getElementById("home-selector").classList.add("hidden");
       document.getElementById("home-selector").style.display = "none";
       document.getElementById("admin-panel").classList.add("hidden");
@@ -1982,19 +2000,55 @@ Camisa Real Madrid 24/25"></textarea>
       clearMessage("login-message");
     }
 
+    async function trySupabaseAdminLogin(email, password) {
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) return { success: false, message: error.message || 'Falha no login profissional.' };
+        if (!data?.session) return { success: false, message: 'Sessão não iniciada.' };
+        localStorage.setItem(AUTH_MODE_KEY, 'supabase');
+        return { success: true, mode: 'supabase' };
+      } catch (error) {
+        return { success: false, message: error?.message || 'Falha no login profissional.' };
+      }
+    }
+
+    function useLegacyAdminLogin(email, password) {
+      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+        localStorage.setItem(AUTH_MODE_KEY, 'legacy');
+        return true;
+      }
+      return false;
+    }
+
     async function handleLogin() {
       clearMessage("login-message");
 
       const email = document.getElementById("login-email").value.trim();
       const password = document.getElementById("login-password").value.trim();
 
-      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+      if (!email || !password) {
+        showMessage("login-message", "Digite e-mail e senha.", "error");
+        return;
+      }
+
+      const authAttempt = await trySupabaseAdminLogin(email, password);
+      if (authAttempt.success) {
         localStorage.setItem("camisa10_admin_logged", "true");
         await initializeAdmin();
         showHomeSelector();
-      } else {
-        showMessage("login-message", "E-mail ou senha incorretos.", "error");
+        showMessage("login-message", "Login profissional via Supabase realizado com sucesso.", "success");
+        return;
       }
+
+      if (useLegacyAdminLogin(email, password)) {
+        localStorage.setItem("camisa10_admin_logged", "true");
+        await initializeAdmin();
+        showHomeSelector();
+        showMessage("login-message", "Entrou pelo acesso atual do painel. Depois podemos concluir a migração total para o Supabase Auth.", "success");
+        return;
+      }
+
+      showMessage("login-message", "E-mail ou senha incorretos.", "error");
     }
 
     async function loadCategories(selectedCategoryId = null) {
@@ -4216,12 +4270,19 @@ Camisa Real Madrid 24/25"></textarea>
       const hintEl = document.getElementById('gestaoSyncHint');
       if (!statusEl || !hintEl) return;
 
+      statusEl.classList.remove('status-chip-warning', 'status-chip-success');
+      hintEl.classList.remove('status-chip-warning', 'status-chip-success');
+
       if (gestaoSyncMode === 'online') {
         statusEl.textContent = 'Modo online';
         hintEl.textContent = 'Gestão salva no Supabase e sincronizada entre aparelhos';
+        statusEl.classList.add('status-chip-success');
+        hintEl.classList.add('status-chip-success');
       } else {
         statusEl.textContent = 'Modo local';
         hintEl.textContent = 'Salvando no navegador deste aparelho';
+        statusEl.classList.add('status-chip-warning');
+        hintEl.classList.add('status-chip-warning');
       }
     }
 
@@ -4365,6 +4426,36 @@ Camisa Real Madrid 24/25"></textarea>
       updateGestaoSyncUi();
     }
 
+    async function syncGestaoNow() {
+      try {
+        await persistGestaoState();
+        if (gestaoSyncMode === 'online') {
+          await loadGestaoStateFromSupabase();
+        }
+        renderGestao();
+        showMessage('gestao-entry-message', 'Sincronização concluída com sucesso.', 'success');
+      } catch (error) {
+        console.error('Erro ao sincronizar agora:', error);
+        gestaoSyncMode = 'local';
+        updateGestaoSyncUi();
+        showMessage('gestao-entry-message', 'Não foi possível sincronizar agora. O painel continua em modo local neste aparelho.', 'error');
+      }
+    }
+
+    async function forceGestaoOnlineSync() {
+      try {
+        await loadGestaoStateFromSupabase();
+        await persistGestaoState();
+        renderGestao();
+        showMessage('gestao-entry-message', 'Modo online reativado e dados sincronizados com o Supabase.', 'success');
+      } catch (error) {
+        console.error('Erro ao forçar modo online:', error);
+        gestaoSyncMode = 'local';
+        updateGestaoSyncUi();
+        showMessage('gestao-entry-message', 'Seu projeto ainda não conseguiu operar 100% online. Continuamos em modo local para não parar o painel.', 'error');
+      }
+    }
+
     async function loadGestaoState() {
       try {
         await loadGestaoStateFromSupabase();
@@ -4430,13 +4521,21 @@ Camisa Real Madrid 24/25"></textarea>
       localStorage.setItem(GESTAO_SALES_KEY, JSON.stringify(gestaoSales));
       localStorage.setItem(GESTAO_SALES_META_KEY, JSON.stringify(gestaoSalesMeta));
 
-      if (gestaoSyncMode !== 'online') return;
+      if (gestaoSyncMode !== 'online') {
+        try {
+          await loadGestaoStateFromSupabase();
+        } catch (error) {
+          return;
+        }
+      }
 
       await Promise.all([
         syncGestaoSuppliersToSupabase(),
         syncGestaoEntriesToSupabase(),
         syncGestaoSalesToSupabase()
       ]);
+      gestaoSyncMode = 'online';
+      updateGestaoSyncUi();
     }
 
     async function syncGestaoSuppliersToSupabase() {
@@ -5482,7 +5581,15 @@ async function saveGestaoSale() {
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-      const logged = localStorage.getItem("camisa10_admin_logged") === "true";
+      let logged = localStorage.getItem("camisa10_admin_logged") === "true";
+      try {
+        const { data } = await supabaseClient.auth.getSession();
+        if (data?.session) {
+          logged = true;
+          localStorage.setItem("camisa10_admin_logged", "true");
+          localStorage.setItem(AUTH_MODE_KEY, 'supabase');
+        }
+      } catch (error) {}
 
       setupTabs();
       setupModules();
@@ -5530,6 +5637,15 @@ async function saveGestaoSale() {
       } else {
         showLoginScreen();
       }
+
+      supabaseClient.auth.onAuthStateChange(async (event, session) => {
+        if (session) {
+          localStorage.setItem("camisa10_admin_logged", "true");
+          localStorage.setItem(AUTH_MODE_KEY, 'supabase');
+        } else if (localStorage.getItem(AUTH_MODE_KEY) === 'supabase') {
+          localStorage.removeItem("camisa10_admin_logged");
+        }
+      });
     });
   </script>
 </body>
