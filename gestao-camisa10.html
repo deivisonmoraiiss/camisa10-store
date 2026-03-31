@@ -375,8 +375,121 @@
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
 
-    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline{grid-template-columns:1fr}}
-    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
+
+    .gestao-command-bar{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+      margin:16px 0 18px;
+    }
+    .command-chip{
+      display:grid;
+      gap:6px;
+      padding:16px 18px;
+      border-radius:18px;
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,.12), transparent 34%),
+        linear-gradient(180deg,#131313 0%, #0d0d0d 100%);
+      border:1px solid rgba(212,175,55,.18);
+      box-shadow:0 14px 28px rgba(0,0,0,.16);
+    }
+    .command-chip strong{font-size:.98rem;color:#fff}
+    .command-chip span{color:var(--muted);font-size:.83rem;line-height:1.45}
+    .command-chip .btn{margin-top:2px}
+    .alerts-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+      margin-top:16px;
+    }
+    .alert-card{
+      padding:16px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(180deg,#111 0%, #0c0c0c 100%);
+      display:grid;
+      gap:8px;
+    }
+    .alert-card strong{font-size:1rem;color:#fff}
+    .alert-card span{color:var(--muted);font-size:.84rem;line-height:1.45}
+    .alert-card.warning{border-color:rgba(212,175,55,.22)}
+    .alert-card.danger{border-color:rgba(217,83,79,.28)}
+    .alert-card.success{border-color:rgba(46,139,87,.28)}
+    .alerts-list{display:grid;gap:10px}
+    .alert-item{
+      padding:12px 14px;
+      border-radius:14px;
+      background:#101010;
+      border:1px solid rgba(255,255,255,.06);
+      color:#f2f2f2;
+      line-height:1.5;
+      font-size:.9rem;
+    }
+    .alert-item strong{color:#fff}
+    .alert-item.warning{border-color:rgba(212,175,55,.26)}
+    .alert-item.danger{border-color:rgba(217,83,79,.26)}
+    .alert-item.success{border-color:rgba(46,139,87,.24)}
+    .quick-sale-shell,
+    .grade-entry-shell{
+      padding:16px;
+      border-radius:18px;
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,.10), transparent 32%),
+        linear-gradient(180deg,#111 0%, #0d0d0d 100%);
+      border:1px solid rgba(212,175,55,.18);
+      display:grid;
+      gap:14px;
+      margin-bottom:16px;
+    }
+    .quick-sale-shell h4,
+    .grade-entry-shell h4{
+      color:#fff;
+      font-size:1rem;
+      margin:0;
+    }
+    .quick-sale-grid{
+      display:grid;
+      grid-template-columns:1.4fr .8fr .7fr .9fr;
+      gap:12px;
+      align-items:end;
+    }
+    .quick-sale-actions,
+    .grade-entry-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .grade-entry-grid{
+      display:grid;
+      grid-template-columns:1.2fr .9fr;
+      gap:14px;
+      align-items:start;
+    }
+    .grade-size-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:10px;
+    }
+    .grade-size-card{
+      padding:12px;
+      border-radius:16px;
+      background:#101010;
+      border:1px solid rgba(255,255,255,.06);
+      display:grid;
+      gap:8px;
+    }
+    .grade-size-card strong{
+      font-size:.88rem;
+      color:#f3d77d;
+      text-align:center;
+    }
+    .grade-size-card input{
+      text-align:center;
+      font-weight:800;
+    }
+
+    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline,.gestao-command-bar,.alerts-grid,.quick-sale-grid,.grade-entry-grid,.grade-size-grid{grid-template-columns:1fr}}
+    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}.command-chip{padding:14px}.quick-sale-actions .btn,.grade-entry-actions .btn{width:100%}}
   </style>
 </head>
 <body>
@@ -1102,6 +1215,29 @@ Camisa Real Madrid 24/25"></textarea>
             <span class="module-chip" id="gestaoSyncHint">Salvando no navegador deste aparelho</span>
           </div>
 
+          <div class="gestao-command-bar">
+            <div class="command-chip">
+              <strong>Venda rápida</strong>
+              <span>Registre uma venda em poucos toques, sem preencher a tela inteira.</span>
+              <button class="btn btn-primary" type="button" onclick="activateGestaoTab('gestao-vendas'); focusQuickSale();">Abrir venda rápida</button>
+            </div>
+            <div class="command-chip">
+              <strong>Entrada por grade</strong>
+              <span>Lance P, M, G e EG do mesmo modelo sem repetir produto toda hora.</span>
+              <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-entradas'); focusGradeEntry();">Abrir entrada por grade</button>
+            </div>
+            <div class="command-chip">
+              <strong>Alertas do estoque</strong>
+              <span>Veja rapidamente o que precisa repor e o que está parado.</span>
+              <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-indicadores');">Ver alertas</button>
+            </div>
+            <div class="command-chip">
+              <strong>Resumo executivo</strong>
+              <span>Lucro, receita potencial e saúde do estoque em leitura mais rápida.</span>
+              <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-dashboard');">Abrir resumo</button>
+            </div>
+          </div>
+
           <div class="focus-shortcuts">
             <div class="focus-shortcut">
               <strong>Cadastrar estoque</strong>
@@ -1163,11 +1299,14 @@ Camisa Real Madrid 24/25"></textarea>
                 <div id="gestaoResumoRapido" class="gestao-empty">Nenhuma entrada registrada ainda. Comece pela aba <strong>Pedidos / Entradas</strong>.</div>
               </div>
               <div class="card">
-                <h3 class="section-title">Atalhos</h3>
+                <h3 class="section-title">Atalhos e alertas</h3>
                 <div class="actions-row">
                   <button class="btn btn-primary" type="button" onclick="activateGestaoTab('gestao-entradas')">Lançar pedido</button>
                   <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-vendas')">Lançar venda e lucro</button>
                   <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-estoque')">Ver estoque</button>
+                </div>
+                <div id="gestaoDashboardAlerts" class="alerts-list" style="margin-top:14px;">
+                  <div class="gestao-empty">Os alertas do estoque aparecem aqui.</div>
                 </div>
               </div>
             </div>
@@ -1189,6 +1328,11 @@ Camisa Real Madrid 24/25"></textarea>
                   <div class="metric-card"><span>Lucro potencial</span><strong>R$ 0,00</strong></div>
                   <div class="metric-card"><span>Receita potencial</span><strong>R$ 0,00</strong></div>
                 </div>
+                <div id="gestaoAlertsGrid" class="alerts-grid">
+                  <div class="alert-card warning"><strong>Reposição</strong><span>Os alertas de estoque baixo aparecem aqui.</span></div>
+                  <div class="alert-card danger"><strong>Sem estoque</strong><span>Os produtos zerados aparecem aqui.</span></div>
+                  <div class="alert-card success"><strong>Saudável</strong><span>Resumo rápido dos produtos em situação boa.</span></div>
+                </div>
               </div>
             </div>
           </section>
@@ -1200,6 +1344,35 @@ Camisa Real Madrid 24/25"></textarea>
                 <h3 class="section-title">Montar pedido / entrada</h3>
                 <div class="helper-box helper-box-visible" style="margin-bottom:16px;display:block;">
                   Monte o pedido uma vez, adicione os itens e salve tudo no final. O custo extra entra separado no resumo, sem bagunçar o total.
+                </div>
+
+                <div id="gestao-grade-entry" class="grade-entry-shell">
+                  <div class="list-header-row">
+                    <div>
+                      <h4>Entrada por grade</h4>
+                      <div class="small-muted">Mais rápida para quando chega um mesmo modelo em vários tamanhos.</div>
+                    </div>
+                    <span class="badge">Atalho operacional</span>
+                  </div>
+                  <div class="grade-entry-grid">
+                    <div class="field" style="margin-bottom:0;">
+                      <label for="gestao-grade-product">Produto</label>
+                      <select id="gestao-grade-product"></select>
+                    </div>
+                    <div class="field" style="margin-bottom:0;">
+                      <label for="gestao-grade-cost">Custo por peça</label>
+                      <input type="text" inputmode="decimal" id="gestao-grade-cost" placeholder="Ex: 89,90" />
+                    </div>
+                  </div>
+                  <div class="grade-size-grid">
+                    <div class="grade-size-card"><strong>P</strong><input type="number" min="0" id="gestao-grade-p" placeholder="0" /></div>
+                    <div class="grade-size-card"><strong>M</strong><input type="number" min="0" id="gestao-grade-m" placeholder="0" /></div>
+                    <div class="grade-size-card"><strong>G</strong><input type="number" min="0" id="gestao-grade-g" placeholder="0" /></div>
+                    <div class="grade-size-card"><strong>EG</strong><input type="number" min="0" id="gestao-grade-eg" placeholder="0" /></div>
+                  </div>
+                  <div class="grade-entry-actions">
+                    <button class="btn btn-secondary" type="button" onclick="addGestaoGradeEntry()">Adicionar grade ao pedido</button>
+                  </div>
                 </div>
 
                 <div class="order-builder-shell">
@@ -1340,6 +1513,42 @@ Camisa Real Madrid 24/25"></textarea>
           </section>
 
           <section id="gestao-vendas" class="gestao-subpanel">
+            <div id="gestao-quick-sale" class="quick-sale-shell">
+              <div class="list-header-row">
+                <div>
+                  <h4>Venda rápida</h4>
+                  <div class="small-muted">Para atendimento no celular: produto, tamanho, quantidade e valor.</div>
+                </div>
+                <span class="badge">Fluxo rápido</span>
+              </div>
+              <div class="quick-sale-grid">
+                <div class="field" style="margin-bottom:0;">
+                  <label for="gestao-quick-sale-product">Produto</label>
+                  <select id="gestao-quick-sale-product" onchange="syncQuickSaleFromProduct()"></select>
+                </div>
+                <div class="field" style="margin-bottom:0;">
+                  <label for="gestao-quick-sale-size">Tamanho</label>
+                  <select id="gestao-quick-sale-size">
+                    <option value="P">P</option>
+                    <option value="M">M</option>
+                    <option value="G">G</option>
+                    <option value="EG">EG</option>
+                  </select>
+                </div>
+                <div class="field" style="margin-bottom:0;">
+                  <label for="gestao-quick-sale-qty">Qtd.</label>
+                  <input type="number" min="1" value="1" id="gestao-quick-sale-qty" />
+                </div>
+                <div class="field" style="margin-bottom:0;">
+                  <label for="gestao-quick-sale-price">Valor</label>
+                  <input type="text" inputmode="decimal" id="gestao-quick-sale-price" placeholder="Ex: 159,90" />
+                </div>
+              </div>
+              <div class="quick-sale-actions">
+                <button class="btn btn-primary" type="button" onclick="saveGestaoQuickSale()">Salvar venda rápida</button>
+                <button class="btn btn-secondary" type="button" onclick="copyQuickSaleToMainForm()">Abrir no formulário completo</button>
+              </div>
+            </div>
             <div class="grid-2-equal">
               <div class="card sale-form-card">
                 <h3 class="section-title">Lançar venda e lucro</h3>
@@ -3487,6 +3696,8 @@ Camisa Real Madrid 24/25"></textarea>
       bindMoneyInput("gestao-sale-shipping", updateGestaoSalePreview);
       bindMoneyInput("gestao-sale-fee", updateGestaoSalePreview);
       bindMoneyInput("gestao-sale-other", updateGestaoSalePreview);
+      bindMoneyInput("gestao-quick-sale-price");
+      bindMoneyInput("gestao-grade-cost");
       bindMoneyInput("batch-price-value", updateBatchPreview);
     }
 
@@ -4357,9 +4568,15 @@ Camisa Real Madrid 24/25"></textarea>
     function populateGestaoProductOptions() {
       const select = document.getElementById('gestao-entry-product');
       const saleSelect = document.getElementById('gestao-sale-product');
+      const quickSaleSelect = document.getElementById('gestao-quick-sale-product');
+      const gradeSelect = document.getElementById('gestao-grade-product');
       const options = allProducts.map(product => `<option value="${product.id}">${escapeHtml(product.name || 'Produto')}</option>`).join('');
-      if (select) select.innerHTML = options || '<option value="">Nenhum produto cadastrado</option>';
-      if (saleSelect) saleSelect.innerHTML = options || '<option value="">Nenhum produto cadastrado</option>';
+      const fallback = '<option value="">Nenhum produto cadastrado</option>';
+      if (select) select.innerHTML = options || fallback;
+      if (saleSelect) saleSelect.innerHTML = options || fallback;
+      if (quickSaleSelect) quickSaleSelect.innerHTML = options || fallback;
+      if (gradeSelect) gradeSelect.innerHTML = options || fallback;
+      syncQuickSaleFromProduct();
     }
 
     function getAverageCostForProductSize(productId, size) {
@@ -4543,6 +4760,155 @@ Camisa Real Madrid 24/25"></textarea>
         `;
       }).join('');
     }
+
+
+    function focusQuickSale() {
+      setTimeout(() => document.getElementById('gestao-quick-sale-product')?.focus(), 120);
+    }
+
+    function focusGradeEntry() {
+      setTimeout(() => document.getElementById('gestao-grade-product')?.focus(), 120);
+    }
+
+    function syncQuickSaleFromProduct() {
+      const productId = document.getElementById('gestao-quick-sale-product')?.value || '';
+      const priceInput = document.getElementById('gestao-quick-sale-price');
+      if (!priceInput || !productId) return;
+      const currentValue = priceInput.value.trim();
+      if (currentValue) return;
+      const price = getProductPriceById(productId);
+      priceInput.value = price ? formatMoneyInputValue(price) : '';
+    }
+
+    function copyQuickSaleToMainForm() {
+      const productId = document.getElementById('gestao-quick-sale-product')?.value || '';
+      if (!productId) {
+        showMessage('gestao-sale-message', 'Selecione o produto na venda rápida.', 'error');
+        return;
+      }
+      document.getElementById('gestao-sale-product').value = productId;
+      document.getElementById('gestao-sale-size').value = document.getElementById('gestao-quick-sale-size').value || 'M';
+      document.getElementById('gestao-sale-qty').value = document.getElementById('gestao-quick-sale-qty').value || '1';
+      document.getElementById('gestao-sale-price').value = document.getElementById('gestao-quick-sale-price').value || '';
+      document.getElementById('gestao-sale-date').value = document.getElementById('gestao-sale-date').value || new Date().toISOString().slice(0,10);
+      updateGestaoSalePreview();
+      showMessage('gestao-sale-message', 'Dados da venda rápida enviados para o formulário completo.', 'success');
+      activateGestaoTab('gestao-vendas');
+      setTimeout(() => document.getElementById('gestao-sale-client-name')?.focus(), 120);
+    }
+
+    async function saveGestaoQuickSale() {
+      const productId = document.getElementById('gestao-quick-sale-product')?.value || '';
+      if (!productId) {
+        showMessage('gestao-sale-message', 'Selecione o produto na venda rápida.', 'error');
+        activateGestaoTab('gestao-vendas');
+        return;
+      }
+      document.getElementById('gestao-sale-product').value = productId;
+      document.getElementById('gestao-sale-size').value = document.getElementById('gestao-quick-sale-size').value || 'M';
+      document.getElementById('gestao-sale-qty').value = document.getElementById('gestao-quick-sale-qty').value || '1';
+      document.getElementById('gestao-sale-price').value = document.getElementById('gestao-quick-sale-price').value || '';
+      document.getElementById('gestao-sale-date').value = document.getElementById('gestao-sale-date').value || new Date().toISOString().slice(0,10);
+      await saveGestaoSale();
+      const saleMessage = document.getElementById('gestao-sale-message');
+      if (saleMessage && !saleMessage.classList.contains('error')) {
+        document.getElementById('gestao-quick-sale-qty').value = '1';
+        document.getElementById('gestao-quick-sale-price').value = '';
+        syncQuickSaleFromProduct();
+      }
+      activateGestaoTab('gestao-vendas');
+    }
+
+    function addGestaoGradeEntry() {
+      clearMessage('gestao-entry-message');
+      const productId = document.getElementById('gestao-grade-product')?.value || '';
+      const cost = normalizeMoneyInput(document.getElementById('gestao-grade-cost')?.value || '');
+      const gradeMap = [
+        { size: 'P', quantity: Number(document.getElementById('gestao-grade-p')?.value || 0) },
+        { size: 'M', quantity: Number(document.getElementById('gestao-grade-m')?.value || 0) },
+        { size: 'G', quantity: Number(document.getElementById('gestao-grade-g')?.value || 0) },
+        { size: 'EG', quantity: Number(document.getElementById('gestao-grade-eg')?.value || 0) }
+      ].filter(item => item.quantity > 0);
+
+      if (!productId) {
+        showMessage('gestao-entry-message', 'Selecione o produto da grade.', 'error');
+        return;
+      }
+      if (Number.isNaN(cost) || cost <= 0) {
+        showMessage('gestao-entry-message', 'Digite um custo por peça válido para a grade.', 'error');
+        return;
+      }
+      if (!gradeMap.length) {
+        showMessage('gestao-entry-message', 'Informe pelo menos um tamanho com quantidade maior que zero.', 'error');
+        return;
+      }
+
+      gradeMap.forEach(item => {
+        gestaoPendingOrderItems.push({
+          tempId: `pending-${Date.now()}-${item.size}-${Math.random().toString(16).slice(2,6)}`,
+          productId,
+          size: item.size,
+          quantity: item.quantity,
+          cost
+        });
+      });
+
+      document.getElementById('gestao-grade-cost').value = '';
+      ['p','m','g','eg'].forEach(size => {
+        const field = document.getElementById(`gestao-grade-${size}`);
+        if (field) field.value = '';
+      });
+      renderGestaoPendingOrder();
+      showMessage('gestao-entry-message', `Grade adicionada com sucesso. ${gradeMap.length} tamanho(s) incluído(s) no pedido.`, 'success');
+    }
+
+    function getGestaoAlertData() {
+      const stock = calculateGestaoStock();
+      const positiveRows = stock.filter(item => Number(item.currentQty || 0) > 0);
+      const lowStock = positiveRows.filter(item => Number(item.currentQty || 0) > 0 && Number(item.currentQty || 0) <= 2);
+      const outOfStock = stock.filter(item => Number(item.currentQty || 0) <= 0);
+      const lowMargin = positiveRows.filter(item => {
+        const price = getProductPriceById(item.productId);
+        return price > 0 && (price - Number(item.averageCost || 0)) <= 30;
+      });
+      return { stock, positiveRows, lowStock, outOfStock, lowMargin };
+    }
+
+    function renderGestaoAlerts() {
+      const dashboardBox = document.getElementById('gestaoDashboardAlerts');
+      const indicatorsBox = document.getElementById('gestaoAlertsGrid');
+      const { positiveRows, lowStock, outOfStock, lowMargin } = getGestaoAlertData();
+
+      if (dashboardBox) {
+        const topAlerts = [
+          ...outOfStock.slice(0, 2).map(item => ({ type: 'danger', html: `<strong>${escapeHtml(item.name)}</strong> • tam. ${escapeHtml(item.size)} está sem estoque.` })),
+          ...lowStock.slice(0, 2).map(item => ({ type: 'warning', html: `<strong>${escapeHtml(item.name)}</strong> • tam. ${escapeHtml(item.size)} com só ${item.currentQty} peça(s).` })),
+          ...lowMargin.slice(0, 1).map(item => ({ type: 'warning', html: `<strong>${escapeHtml(item.name)}</strong> • tam. ${escapeHtml(item.size)} com margem apertada.` }))
+        ].slice(0, 4);
+
+        dashboardBox.innerHTML = topAlerts.length
+          ? topAlerts.map(item => `<div class="alert-item ${item.type}">${item.html}</div>`).join('')
+          : '<div class="alert-item success">Seu estoque está saudável neste momento.</div>';
+      }
+
+      if (indicatorsBox) {
+        indicatorsBox.innerHTML = `
+          <div class="alert-card danger">
+            <strong>${outOfStock.length}</strong>
+            <span>produto(s)/tamanho(s) sem estoque e pedindo reposição imediata.</span>
+          </div>
+          <div class="alert-card warning">
+            <strong>${lowStock.length}</strong>
+            <span>produto(s)/tamanho(s) com estoque baixo e já merecendo atenção.</span>
+          </div>
+          <div class="alert-card success">
+            <strong>${Math.max(positiveRows.length - lowStock.length, 0)}</strong>
+            <span>produto(s)/tamanho(s) com saldo saudável no momento.</span>
+          </div>
+        `;
+      }
+    }
+
 
     function renderGestaoKpis() {
       const totalOrders = getGroupedGestaoOrders().length;
@@ -4898,6 +5264,7 @@ function renderGestaoSuppliers() {
       renderGestaoKpis();
       renderGestaoSummary();
       renderGestaoMetrics();
+      renderGestaoAlerts();
       renderGestaoEntries();
       renderGestaoStock();
       renderGestaoSales();
