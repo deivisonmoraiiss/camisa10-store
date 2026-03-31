@@ -17,6 +17,7 @@
       --card-2: #181818;
       --text: #f5f5f5;
       --muted: #b9b9b9;
+      --muted-2: #8f8f8f;
       --line: rgba(255,255,255,0.08);
       --line-strong: rgba(212,175,55,0.18);
       --gold: #d4af37;
@@ -197,8 +198,8 @@
         radial-gradient(circle at top right, rgba(212,175,55,0.12), transparent 28%),
         linear-gradient(180deg, #151515 0%, #0d0d0d 100%);
       box-shadow: var(--shadow);
-      padding: 26px;
-      margin-bottom: 18px;
+      padding: 22px 24px;
+      margin-bottom: 14px;
     }
 
     .hero-row {
@@ -210,26 +211,26 @@
     }
 
     .hero-copy h1 {
-      font-size: clamp(1.9rem, 3.6vw, 2.6rem);
+      font-size: clamp(1.7rem, 3.4vw, 2.3rem);
       line-height: 1.05;
       color: var(--gold);
-      margin-bottom: 8px;
+      margin-bottom: 4px;
       font-weight: 900;
     }
 
     .hero-copy p {
       color: #dfdfdf;
-      line-height: 1.7;
-      font-size: 0.98rem;
+      line-height: 1.6;
+      font-size: 0.94rem;
       max-width: 620px;
     }
 
     .hero-count {
       color: #e2e2e2;
-      font-size: 14px;
+      font-size: 13px;
       background: rgba(212,175,55,0.08);
       border: 1px solid rgba(212,175,55,0.16);
-      padding: 10px 14px;
+      padding: 9px 13px;
       border-radius: 999px;
       white-space: nowrap;
     }
@@ -237,18 +238,18 @@
     .search-card {
       background: linear-gradient(180deg, #141414 0%, #101010 100%);
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 22px;
-      padding: 16px;
+      border-radius: 20px;
+      padding: 14px;
       box-shadow: var(--shadow);
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
     }
 
     .search-icon {
-      width: 48px;
-      height: 48px;
+      width: 46px;
+      height: 46px;
       border-radius: 14px;
       background: rgba(212,175,55,0.10);
       border: 1px solid rgba(212,175,55,0.18);
@@ -271,25 +272,32 @@
       color: #f4f4f4;
       font-size: 13px;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 7px;
     }
 
     .search-input {
       width: 100%;
-      height: 54px;
+      height: 50px;
       padding: 0 16px;
-      border-radius: 16px;
+      border-radius: 15px;
       border: 1px solid rgba(255,255,255,0.10);
       background: #111;
       color: #fff;
       outline: none;
       transition: 0.2s ease;
-      font-size: 0.98rem;
+      font-size: 0.96rem;
     }
 
     .search-input:focus {
       border-color: rgba(212,175,55,0.45);
       box-shadow: 0 0 0 3px rgba(212,175,55,0.08);
+    }
+
+    .search-help {
+      color: var(--muted-2);
+      font-size: 12px;
+      margin-top: 8px;
+      line-height: 1.45;
     }
 
     .product-grid {
@@ -341,7 +349,7 @@
       padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 9px;
+      gap: 8px;
       flex: 1;
     }
 
@@ -350,6 +358,7 @@
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
+      min-height: 24px;
     }
 
     .sale-type-badge {
@@ -367,18 +376,19 @@
       transition: 0.2s ease;
     }
 
-    .sale-type-badge.pronta {
-      background: linear-gradient(135deg, #27d367, #17b857);
-      border: 1px solid rgba(255,255,255,0.14);
-      color: #08140d;
-      box-shadow: 0 6px 16px rgba(39,211,103,0.24);
-    }
-
     .sale-type-badge.encomenda {
       background: linear-gradient(135deg, #e0bd49, #f4d76d);
       border: 1px solid rgba(255,255,255,0.14);
       color: #111;
       box-shadow: 0 6px 16px rgba(212,175,55,0.24);
+    }
+
+    .product-category {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+      line-height: 1.3;
+      min-height: 16px;
     }
 
     .product-card-content h3 {
@@ -592,6 +602,7 @@
 
     @media (max-width: 860px) {
       .header { display: none; }
+
       .mobile-topbar {
         display: block;
         position: sticky;
@@ -603,7 +614,7 @@
       }
 
       .mobile-topbar-inner {
-        min-height: 74px;
+        min-height: 72px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -611,13 +622,13 @@
       }
 
       .mobile-back-btn {
-        width: 44px;
-        height: 44px;
+        width: 42px;
+        height: 42px;
         border-radius: 14px;
         border: 1px solid rgba(255,255,255,0.08);
         background: rgba(255,255,255,0.03);
         color: #fff;
-        font-size: 1.5rem;
+        font-size: 1.45rem;
         line-height: 1;
         display: inline-flex;
         align-items: center;
@@ -650,30 +661,27 @@
         text-overflow: ellipsis;
       }
 
-      .catalog-shell { padding-top: 16px; }
-      .hero-card { padding: 18px; border-radius: 22px; }
-      .hero-copy h1 { font-size: 1.55rem; margin-bottom: 4px; }
-      .hero-copy p { font-size: 0.9rem; line-height: 1.55; }
-      .hero-count { font-size: 11px; padding: 8px 12px; }
-      .search-card { border-radius: 18px; }
+      .catalog-shell { padding-top: 12px; }
+      .hero-card { padding: 14px 15px; border-radius: 20px; margin-bottom: 10px; }
+      .hero-copy h1 { font-size: 1.3rem; margin-bottom: 0; }
+      .hero-copy p { display: none; }
+      .hero-count { font-size: 11px; padding: 7px 10px; }
+      .search-card { border-radius: 16px; padding: 10px; margin-bottom: 10px; }
+      .search-icon { width: 40px; height: 40px; border-radius: 12px; font-size: 0.9rem; }
+      .search-label { margin-bottom: 5px; font-size: 12px; }
+      .search-input { height: 46px; font-size: 15px; border-radius: 13px; }
+      .search-help { font-size: 11px; margin-top: 6px; }
       .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .quick-mobile-bar { display: block; }
     }
 
     @media (max-width: 560px) {
       .container { padding: 0 16px; }
-      .mobile-topbar-inner { min-height: 70px; }
+      .mobile-topbar-inner { min-height: 68px; }
       .brand-logo, .brand-logo-fallback { width: 46px; height: 46px; }
-      .hero-card { padding: 14px; margin-bottom: 12px; }
-      .hero-copy p { display: none; }
-      .hero-row { align-items: center; }
-      .search-card { padding: 12px; gap: 10px; margin-bottom: 12px; }
-      .search-icon { width: 42px; height: 42px; border-radius: 12px; font-size: 0.9rem; }
-      .search-label { margin-bottom: 6px; font-size: 12px; }
-      .search-input { height: 48px; font-size: 15px; border-radius: 14px; }
       .product-grid { gap: 10px; }
       .product-card { border-radius: 18px; }
-      .product-card-content { padding: 10px; gap: 7px; }
+      .product-card-content { padding: 10px; gap: 6px; }
+      .product-category { font-size: 11px; }
       .product-card-content h3 { min-height: auto; font-size: 14px; }
       .sale-type-badge { padding: 5px 8px; font-size: 10px; }
       .product-price { font-size: 17px; }
@@ -682,7 +690,6 @@
       .whatsapp-float { width: 56px; height: 56px; right: 14px; bottom: 14px; }
       .whatsapp-float img { width: 26px; height: 26px; }
       .back-to-top-btn { width: 50px; height: 50px; right: 14px; bottom: 80px; font-size: 20px; }
-      .brand-logo, .brand-logo-fallback { width: 46px; height: 46px; }
       .category-buttons { gap: 8px; margin-bottom: 12px; }
       .cat-btn { min-height: 38px; padding: 0 14px; font-size: 12px; }
     }
@@ -718,7 +725,7 @@
         <div id="logoFallbackMobile" class="brand-logo-fallback" style="display:none;">10</div>
         <div class="brand-text">
           <div class="mobile-brand-title">Catálogo Camisa 10 Store</div>
-          <div class="mobile-brand-subtitle">Deslize e encontre seu time</div>
+          <div class="mobile-brand-subtitle">Encontre seu time</div>
         </div>
       </a>
     </div>
@@ -731,7 +738,7 @@
           <div class="hero-row">
             <div class="hero-copy">
               <h1>Catálogo completo</h1>
-              <p>Encontre sua camisa pelo nome do time e role sem travar no celular.</p>
+              <p>Explore todas as camisas com filtro real por categoria.</p>
             </div>
             <div id="product-count" class="hero-count">Carregando produtos...</div>
           </div>
@@ -740,17 +747,14 @@
         <div class="search-card" id="top-search-card">
           <div class="search-icon">⌕</div>
           <div class="search-content">
-            <label class="search-label" for="search-input">Buscar pelo nome do time</label>
-            <input type="text" id="search-input" class="search-input" placeholder="Ex: Flamengo, Real Madrid, Brasil..." />
+            <label class="search-label" for="search-input">Buscar por time ou categoria</label>
+            <input type="text" id="search-input" class="search-input" placeholder="Ex: Flamengo, Real Madrid, Brasil, Seleções..." />
+            <div class="search-help">A busca entende nome do time, categoria e ignora acentos.</div>
           </div>
         </div>
 
         <div class="category-buttons" id="category-buttons">
-          <button type="button" class="cat-btn active" data-search="">Todos</button>
-          <button type="button" class="cat-btn" data-search="flamengo palmeiras corinthians sao paulo vasco botafogo gremio internacional cruzeiro atletico bahia santos brasileirao">Brasileirão</button>
-          <button type="button" class="cat-btn" data-search="brasil argentina franca portugal inglaterra selecao seleções">Seleções</button>
-          <button type="button" class="cat-btn" data-search="real madrid barcelona city united arsenal liverpool bayern psg juventus milan inter internacional">Times Internacionais</button>
-          <button type="button" class="cat-btn" data-search="feminina feminino women fem">Femininas</button>
+          <button type="button" class="cat-btn active" data-category-id="">Todos</button>
         </div>
 
         <div id="catalog-grid" class="product-grid">
@@ -829,6 +833,14 @@
       });
     }
 
+    function normalizeText(value) {
+      return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+    }
+
     function getSaleTypeLabel(saleType) {
       return saleType === "sob_encomenda" ? "Sob encomenda" : "Pronta entrega";
     }
@@ -848,11 +860,19 @@
     }
 
     function normalizeProduct(product) {
+      const categoryName = product.categories?.name || "";
+      const normalizedName = normalizeText(product.name || "");
+      const normalizedCategory = normalizeText(categoryName);
+      const searchableText = `${normalizedName} ${normalizedCategory}`.trim();
+
       return {
         ...product,
         numeric_price: Number(product.price || 0),
-        team_name: (product.name || "").toLowerCase().trim(),
-        sale_type: product.sale_type || "pronta_entrega"
+        sale_type: product.sale_type || "pronta_entrega",
+        category_name: categoryName,
+        normalized_name: normalizedName,
+        normalized_category: normalizedCategory,
+        searchable_text: searchableText
       };
     }
 
@@ -860,6 +880,7 @@
       const oldPrice = Number(product.old_price || 0);
       const hasOldPrice = oldPrice > product.numeric_price;
       const badgeLabel = formatBadgeLabel(product.badge_type);
+      const showSaleTypeBadge = product.sale_type === "sob_encomenda";
 
       return `
         <article class="product-card">
@@ -876,8 +897,10 @@
 
           <div class="product-card-content">
             <div class="product-top-tags">
-              <span class="sale-type-badge ${product.sale_type === "sob_encomenda" ? "encomenda" : "pronta"}">${getSaleTypeLabel(product.sale_type)}</span>
+              ${showSaleTypeBadge ? `<span class="sale-type-badge encomenda">${getSaleTypeLabel(product.sale_type)}</span>` : ""}
             </div>
+
+            <div class="product-category">${product.category_name || "Camisa de time"}</div>
 
             <h3>${product.name || "Produto sem nome"}</h3>
 
@@ -905,7 +928,7 @@
         grid.innerHTML = `
           <div class="empty-box">
             <strong>Nenhum produto encontrado</strong>
-            Tente buscar por outro time.
+            Tente buscar por outro time ou categoria.
           </div>
         `;
         updateProductCount(0);
@@ -925,6 +948,12 @@
       });
     }
 
+    function getActiveCategoryId() {
+      const activeBtn = document.querySelector(".cat-btn.active");
+      if (!activeBtn) return "";
+      return activeBtn.dataset.categoryId || "";
+    }
+
     function setupBackToTop() {
       const btn = document.getElementById("backToTop");
       if (!btn) return;
@@ -939,32 +968,49 @@
       });
     }
 
-    function getCategoryKeywords() {
-      const activeBtn = document.querySelector(".cat-btn.active");
-      if (!activeBtn) return [];
-      return (activeBtn.dataset.search || "")
-        .toLowerCase()
-        .split(/\s+/)
-        .filter(Boolean);
+    function buildCategoryButtons(products) {
+      const wrap = document.getElementById("category-buttons");
+      if (!wrap) return;
+
+      const categoryMap = new Map();
+
+      products.forEach(product => {
+        if (product.category_id && product.category_name) {
+          categoryMap.set(String(product.category_id), product.category_name);
+        }
+      });
+
+      const sortedCategories = [...categoryMap.entries()].sort((a, b) => a[1].localeCompare(b[1], "pt-BR"));
+
+      wrap.innerHTML = `
+        <button type="button" class="cat-btn active" data-category-id="">Todos</button>
+        ${sortedCategories.map(([id, name]) => `
+          <button type="button" class="cat-btn" data-category-id="${id}">${name}</button>
+        `).join("")}
+      `;
+
+      bindCategoryButtons();
     }
 
-    function productMatchesCategory(product, keywords) {
-      if (!keywords.length) return true;
-      return keywords.some(keyword => product.team_name.includes(keyword));
+    function matchesSearch(product, normalizedSearch) {
+      if (!normalizedSearch) return true;
+
+      const searchTerms = normalizedSearch.split(/\s+/).filter(Boolean);
+      return searchTerms.every(term => product.searchable_text.includes(term));
     }
 
     function applyFilters(resetVisible = true) {
-      const searchTerm = document.getElementById("search-input").value.trim().toLowerCase();
-      const categoryKeywords = getCategoryKeywords();
+      const searchTerm = normalizeText(document.getElementById("search-input").value);
+      const activeCategoryId = getActiveCategoryId();
 
       if (resetVisible) {
         visibleProducts = PRODUCTS_PER_LOAD;
       }
 
       filteredProducts = allProducts.filter(product => {
-        const matchesSearch = !searchTerm || product.team_name.includes(searchTerm);
-        const matchesCategory = productMatchesCategory(product, categoryKeywords);
-        return matchesSearch && matchesCategory;
+        const matchesCategory = !activeCategoryId || String(product.category_id || "") === String(activeCategoryId);
+        const searchOk = matchesSearch(product, searchTerm);
+        return matchesCategory && searchOk;
       });
 
       renderProducts(filteredProducts);
@@ -1045,11 +1091,22 @@
       filteredProducts = [...allProducts];
       visibleProducts = PRODUCTS_PER_LOAD;
 
-      const defaultAllButton = document.querySelector('.cat-btn[data-search=""]');
+      buildCategoryButtons(allProducts);
+
+      const defaultAllButton = document.querySelector('.cat-btn[data-category-id=""]');
       setActiveCategoryButton(defaultAllButton);
 
       renderProducts(filteredProducts);
       setupInfiniteScroll();
+    }
+
+    function bindCategoryButtons() {
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          setActiveCategoryButton(btn);
+          applyFilters(true);
+        });
+      });
     }
 
     function setupEvents() {
@@ -1057,18 +1114,6 @@
 
       topInput.addEventListener("input", () => {
         applyFilters(true);
-      });
-
-      document.querySelectorAll(".cat-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          setActiveCategoryButton(btn);
-
-          if (btn.dataset.search === "") {
-            document.getElementById("search-input").value = "";
-          }
-
-          applyFilters(true);
-        });
       });
     }
 
