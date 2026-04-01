@@ -414,6 +414,28 @@
       padding-bottom: 6px;
     }
 
+    .share-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .share-btn:hover {
+      background: rgba(212,175,55,0.12);
+      border-color: rgba(212,175,55,0.35);
+      transform: translateY(-1px);
+      color: #f3d77d;
+    }
+
     .product-description {
       color: #e2e2e2;
       line-height: 1.75;
@@ -1040,6 +1062,11 @@
         padding: 9px 12px;
         font-size: 0.9rem;
       }
+
+      .share-btn {
+        width: 48px;
+        height: 48px;
+      }
     }
     @media (max-width: 768px) {
   .container.footer-grid,
@@ -1176,7 +1203,13 @@
                 <div id="product-old-price" class="product-old-price" style="display:none;">R$ 0,00</div>
                 <div id="product-price" class="product-price">R$ 0,00</div>
               </div>
-              
+
+              <button class="share-btn" onclick="compartilharProduto()" aria-label="Compartilhar produto" title="Compartilhar produto">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 16V4M12 4L8 8M12 4L16 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M4 12V20H20V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
             </div>
 
             <div id="product-description" class="product-description">
@@ -1527,6 +1560,26 @@ ${window.location.href}`;
       return encodeURIComponent(message);
     }
 
+
+    function compartilharProduto() {
+      const url = window.location.href;
+      const titulo = currentProduct?.name || "Confira essa camisa";
+
+      if (navigator.share) {
+        navigator.share({
+          title: titulo,
+          text: "Olha essa camisa 🔥",
+          url: url
+        }).catch(() => {});
+      } else if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(url)
+          .then(() => alert("Link copiado!"))
+          .catch(() => alert("Não foi possível copiar o link."));
+      } else {
+        alert(url);
+      }
+    }
+
     function setupBuyButton() {
       document.getElementById("buy-whatsapp-btn").onclick = () => {
         if (!selectedSize) {
@@ -1794,6 +1847,17 @@ ${window.location.href}`;
       document.getElementById("product-category").textContent = product.categories?.name || "Camisa 10 Store";
       document.getElementById("product-name").textContent = product.name || "Produto";
       document.getElementById("product-price").textContent = formatPrice(product.price);
+      const oldPriceEl = document.getElementById("product-old-price");
+      const hasOldPrice = Number(product.old_price || 0) > Number(product.price || 0);
+      if (oldPriceEl) {
+        if (hasOldPrice) {
+          oldPriceEl.textContent = formatPrice(product.old_price);
+          oldPriceEl.style.display = "block";
+        } else {
+          oldPriceEl.textContent = "R$ 0,00";
+          oldPriceEl.style.display = "none";
+        }
+      }
       document.getElementById("product-description").textContent = product.short_description || "Sem descrição disponível.";
 
       const saleTypeBadge = document.getElementById("product-sale-type");
