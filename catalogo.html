@@ -819,10 +819,13 @@
     const SUPABASE_KEY = "sb_publishable_fSGhfKrj2NK5UHNYRGk8nw_fl4mCJ_n";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    const PRODUCTS_PER_LOAD = 12;
+    const PRODUCTS_CACHE_KEY = "camisa10_catalog_products_v2";
+    const PRODUCTS_CACHE_TTL = 1000 * 60 * 8;
+
     let allProducts = [];
     let filteredProducts = [];
-    let visibleProducts = 12;
-    const PRODUCTS_PER_LOAD = 12;
+    let visibleProducts = PRODUCTS_PER_LOAD;
     let isLoadingMore = false;
     let observer = null;
 
@@ -881,6 +884,7 @@
       const hasOldPrice = oldPrice > product.numeric_price;
       const badgeLabel = formatBadgeLabel(product.badge_type);
       const showSaleTypeBadge = product.sale_type === "sob_encomenda";
+      const fallbackImage = "https://via.placeholder.com/600x600?text=Sem+Imagem";
 
       return `
         <article class="product-card">
@@ -888,10 +892,12 @@
 
           <a href="${getProductLink(product)}">
             <img
-              src="${product.image_url || 'https://via.placeholder.com/600x600?text=Sem+Imagem'}"
+              src="${product.image_url || fallbackImage}"
               alt="${product.name || "Produto"}"
               class="product-card-image"
-              onerror="this.src='https://via.placeholder.com/600x600?text=Imagem';"
+              loading="lazy"
+              decoding="async"
+              onerror="this.src='${fallbackImage}';"
             />
           </a>
 
@@ -1021,11 +1027,11 @@
       if (visibleProducts >= filteredProducts.length) return;
 
       isLoadingMore = true;
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         visibleProducts += PRODUCTS_PER_LOAD;
         renderProducts(filteredProducts);
         isLoadingMore = false;
-      }, 180);
+      });
     }
 
     function setupInfiniteScroll() {
@@ -1049,10 +1055,32 @@
       observer.observe(sentinel);
     }
 
-    async function loadProducts() {
-      const grid = document.getElementById("catalog-grid");
-      grid.innerHTML = `<div class="loading-box">Carregando catálogo...</div>`;
+    function getCachedProducts() {
+      try {
+        const raw = localStorage.getItem(PRODUCTS_CACHE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed?.timestamp || !Array.isArray(parsed?.data)) return null;
+        if (Date.now() - parsed.timestamp > PRODUCTS_CACHE_TTL) return null;
+        return parsed.data;
+      } catch (error) {
+        console.warn("Cache do catálogo inválido:", error);
+        return null;
+      }
+    }
 
+    function setCachedProducts(data) {
+      try {
+        localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify({
+          timestamp: Date.now(),
+          data
+        }));
+      } catch (error) {
+        console.warn("Não foi possível salvar cache do catálogo:", error);
+      }
+    }
+
+    async function fetchProductsFromSupabase() {
       const { data, error } = await supabaseClient
         .from("products")
         .select(`
@@ -1062,7 +1090,6 @@
           price,
           old_price,
           image_url,
-          description,
           featured,
           badge_type,
           sale_type,
@@ -1073,29 +1100,76 @@
             name
           )
         `)
+        .eq("visible", true)
         .order("created_at", { ascending: false });
+
+      if (error && error.code === "42703") {
+        const fallback = await supabaseClient
+          .from("products")
+          .select(`
+            id,
+            name,
+            slug,
+            price,
+            old_price,
+            image_url,
+            featured,
+            badge_type,
+            sale_type,
+            category_id,
+            created_at,
+            categories (
+              id,
+              name
+            )
+          `)
+          .order("created_at", { ascending: false });
+        return fallback;
+      }
+
+      return { data, error };
+    }
+
+    async function loadProducts() {
+      const grid = document.getElementById("catalog-grid");
+      grid.innerHTML = `<div class="loading-box">Carregando catálogo...</div>`;
+
+      const cachedProducts = getCachedProducts();
+      if (cachedProducts?.length) {
+        allProducts = cachedProducts.map(normalizeProduct);
+        filteredProducts = [...allProducts];
+        visibleProducts = PRODUCTS_PER_LOAD;
+        buildCategoryButtons(allProducts);
+        setActiveCategoryButton(document.querySelector('.cat-btn[data-category-id=""]'));
+        renderProducts(filteredProducts);
+        setupInfiniteScroll();
+      }
+
+      const { data, error } = await fetchProductsFromSupabase();
 
       if (error) {
         console.error("Erro ao carregar produtos:", error);
-        grid.innerHTML = `
-          <div class="empty-box">
-            <strong>Não foi possível carregar o catálogo</strong>
-            Tente novamente em instantes.
-          </div>
-        `;
-        updateProductCount(0);
+        if (!cachedProducts?.length) {
+          grid.innerHTML = `
+            <div class="empty-box">
+              <strong>Não foi possível carregar o catálogo</strong>
+              Tente novamente em instantes.
+            </div>
+          `;
+          updateProductCount(0);
+        }
         return;
       }
 
-      allProducts = (data || []).map(normalizeProduct);
+      const normalized = (data || []).map(normalizeProduct);
+      allProducts = normalized;
       filteredProducts = [...allProducts];
       visibleProducts = PRODUCTS_PER_LOAD;
+      setCachedProducts(data || []);
 
       buildCategoryButtons(allProducts);
-
       const defaultAllButton = document.querySelector('.cat-btn[data-category-id=""]');
       setActiveCategoryButton(defaultAllButton);
-
       renderProducts(filteredProducts);
       setupInfiniteScroll();
     }
@@ -1111,9 +1185,13 @@
 
     function setupEvents() {
       const topInput = document.getElementById("search-input");
+      let debounceTimer = null;
 
       topInput.addEventListener("input", () => {
-        applyFilters(true);
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          applyFilters(true);
+        }, 120);
       });
     }
 
