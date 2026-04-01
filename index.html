@@ -1696,6 +1696,45 @@
     let heroTouchStartX = 0;
     let heroTouchEndX = 0;
 
+    const CACHE_PREFIX = "camisa10_home_cache_v1";
+    const CACHE_TTL = {
+      settings: 10 * 60 * 1000,
+      slides: 10 * 60 * 1000,
+      categories: 10 * 60 * 1000,
+      products: 5 * 60 * 1000
+    };
+
+    function getCacheKey(key) {
+      return `${CACHE_PREFIX}:${key}`;
+    }
+
+    function saveCache(key, value) {
+      try {
+        localStorage.setItem(getCacheKey(key), JSON.stringify({
+          timestamp: Date.now(),
+          value
+        }));
+      } catch (error) {
+        console.warn("Não foi possível salvar cache:", key, error);
+      }
+    }
+
+    function readCache(key, ttl) {
+      try {
+        const raw = localStorage.getItem(getCacheKey(key));
+        if (!raw) return null;
+
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== "object") return null;
+        if (!parsed.timestamp || Date.now() - parsed.timestamp > ttl) return null;
+
+        return parsed.value ?? null;
+      } catch (error) {
+        console.warn("Não foi possível ler cache:", key, error);
+        return null;
+      }
+    }
+
     function formatPrice(value) {
       const number = Number(value || 0);
       return number.toLocaleString("pt-BR", {
@@ -1946,7 +1985,9 @@
 
     function renderFeaturedProducts() {
       const grid = document.getElementById("featuredProductsGrid");
-      const featured = allProducts.filter(product => product.featured === true || product.is_featured === true);
+      const featured = allProducts
+        .filter(product => product.featured === true || product.is_featured === true)
+        .slice(0, 4);
 
       if (!featured.length) {
         grid.innerHTML = `<div class="state-box">Nenhum destaque disponível no momento.</div>`;
@@ -1959,7 +2000,7 @@
         return bDate - aDate;
       });
 
-      grid.innerHTML = sortedFeatured.slice(0, 4).map(product => buildProductCard(product, true)).join("");
+      grid.innerHTML = sortedFeatured.map(product => buildProductCard(product, true)).join("");
     }
 
     function renderProducts() {
@@ -1970,7 +2011,9 @@
       const prontaSubtitle = document.getElementById("pronta-section-subtitle");
       const filtered = getFilteredProducts();
 
-      const pronta = filtered.filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega");
+      const pronta = filtered
+        .filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega")
+        .slice(0, 8);
       const encomenda = filtered
         .filter(product => product.sale_type === "sob_encomenda")
         .sort((a, b) => {
@@ -1981,7 +2024,8 @@
           const aDate = new Date(a.created_at || 0).getTime();
           const bDate = new Date(b.created_at || 0).getTime();
           return bDate - aDate;
-        });
+        })
+        .slice(0, 10);
 
       const usingFilterView = activeCategory !== "all" || !!searchTerm;
 
@@ -2248,9 +2292,15 @@
     }
 
     async function loadHeroSlides() {
+      const cachedSlides = readCache("hero_slides", CACHE_TTL.slides);
+      if (cachedSlides) {
+        heroSlides = cachedSlides;
+        return;
+      }
+
       const { data, error } = await supabaseClient
         .from("hero_slides")
-        .select("*")
+        .select("id, title, subtitle, image_url, sort_order, created_at, is_active")
         .eq("is_active", true)
         .order("sort_order", { ascending: true })
         .order("created_at", { ascending: true });
@@ -2262,12 +2312,20 @@
       }
 
       heroSlides = data || [];
+      saveCache("hero_slides", heroSlides);
     }
 
     async function loadSiteSettings() {
+      const cachedSettings = readCache("site_settings", CACHE_TTL.settings);
+      if (cachedSettings) {
+        siteSettings = cachedSettings;
+        applySiteSettings();
+        return;
+      }
+
       const { data, error } = await supabaseClient
         .from("site_settings")
-        .select("*")
+        .select("id, hero_title, hero_subtitle, hero_image_url, logo_url, whatsapp_number, delivery_text, catalog_title, catalog_subtitle, contact_text, footer_text")
         .eq("id", SITE_SETTINGS_ID)
         .single();
 
@@ -2280,14 +2338,21 @@
 
       if (data) {
         siteSettings = data;
+        saveCache("site_settings", data);
         applySiteSettings();
       }
     }
 
     async function loadCategories() {
+      const cachedCategories = readCache("categories", CACHE_TTL.categories);
+      if (cachedCategories) {
+        allCategories = cachedCategories;
+        return;
+      }
+
       const { data, error } = await supabaseClient
         .from("categories")
-        .select("*")
+        .select("id, name")
         .order("name", { ascending: true });
 
       if (error) {
@@ -2297,9 +2362,16 @@
       }
 
       allCategories = data || [];
+      saveCache("categories", allCategories);
     }
 
     async function loadProducts() {
+      const cachedProducts = readCache("products", CACHE_TTL.products);
+      if (cachedProducts) {
+        allProducts = cachedProducts;
+        return;
+      }
+
       const { data, error } = await supabaseClient
         .from("products")
         .select(`
@@ -2309,11 +2381,11 @@
           price,
           old_price,
           image_url,
-          description,
           featured,
           badge_type,
           sale_type,
           category_id,
+          priority_encomenda,
           created_at,
           categories (
             id,
@@ -2332,6 +2404,8 @@
         ...product,
         category_name: product.categories?.name || product.category_name || product.category || "Sem categoria"
       }));
+
+      saveCache("products", allProducts);
     }
 
     async function init() {
@@ -2342,8 +2416,10 @@
         await loadHeroSlides();
         renderHeroSlides();
 
-        await loadCategories();
-        await loadProducts();
+        await Promise.all([
+          loadCategories(),
+          loadProducts()
+        ]);
 
         if (!allCategories.length && allProducts.length) {
           const uniqueCategories = [...new Set(
