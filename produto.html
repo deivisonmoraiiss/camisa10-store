@@ -1323,6 +1323,38 @@
     let galleryImagesList = [];
     let currentGalleryIndex = 0;
 
+    const CACHE_TTL_MS = 10 * 60 * 1000;
+
+    function getCacheKey(prefix, value) {
+      return `camisa10_${prefix}_${String(value || "").trim()}`;
+    }
+
+    function getCachedData(key) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== "object") return null;
+        if (!parsed.timestamp || (Date.now() - parsed.timestamp) > CACHE_TTL_MS) {
+          localStorage.removeItem(key);
+          return null;
+        }
+        return parsed.data ?? null;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function setCachedData(key, data) {
+      try {
+        localStorage.setItem(key, JSON.stringify({
+          timestamp: Date.now(),
+          data
+        }));
+      } catch (error) {}
+    }
+
+
     function formatPrice(value) {
       return Number(value || 0).toLocaleString("pt-BR", {
         style: "currency",
@@ -1475,7 +1507,7 @@
 
       thumbsColumn.innerHTML = galleryImagesList.map((url, index) => `
         <button class="thumb-btn ${index === 0 ? "active" : ""}" onclick="changeMainImage('${url}', this)">
-          <img src="${url}" alt="Imagem do produto" />
+          <img src="${url}" alt="Imagem do produto" loading="lazy" />
         </button>
       `).join("");
 
@@ -1673,6 +1705,15 @@ ${window.location.href}`;
     }
 
     async function loadSiteSettings() {
+      const cacheKey = getCacheKey("site_settings", SITE_SETTINGS_ID);
+      const cached = getCachedData(cacheKey);
+
+      if (cached) {
+        siteSettings = cached;
+        applySiteSettings();
+        return;
+      }
+
       const { data, error } = await supabaseClient
         .from("site_settings")
         .select(`
@@ -1695,6 +1736,7 @@ ${window.location.href}`;
 
       if (data) {
         siteSettings = data;
+        setCachedData(cacheKey, data);
         applySiteSettings();
       }
     }
@@ -1735,7 +1777,7 @@ ${window.location.href}`;
         return `
           <article class="related-card">
             <a href="${url}">
-              <img class="related-card-image" src="${getProductImage(item)}" alt="${item.name || "Camisa"}">
+              <img class="related-card-image" src="${getProductImage(item)}" alt="${item.name || "Camisa"}" loading="lazy">
             </a>
 
             <div class="related-card-body">
@@ -1755,6 +1797,14 @@ ${window.location.href}`;
         return;
       }
 
+      const cacheKey = getCacheKey("related", `${product.category_id}_${product.id}`);
+      const cached = getCachedData(cacheKey);
+
+      if (cached) {
+        renderRelatedProducts(cached);
+        return;
+      }
+
       const { data, error } = await supabaseClient
         .from("products")
         .select(`
@@ -1764,6 +1814,7 @@ ${window.location.href}`;
           price,
           old_price,
           image_url,
+          category_id,
           categories (
             name
           )
@@ -1778,7 +1829,9 @@ ${window.location.href}`;
         return;
       }
 
-      renderRelatedProducts(data || []);
+      const related = data || [];
+      setCachedData(cacheKey, related);
+      renderRelatedProducts(related);
     }
 
     async function loadProduct() {
@@ -1791,53 +1844,72 @@ ${window.location.href}`;
 
       showState("loading");
 
-      let query = supabaseClient
-        .from("products")
-        .select(`
-          id,
-          name,
-          slug,
-          price,
-          old_price,
-          image_url,
-          short_description,
-          sale_type,
-          category_id,
-          categories (
-            id,
-            name
-          ),
-          product_sizes (
-            id,
-            size,
-            available,
-            is_available
-          )
-        `);
-
-      query = productSlug ? query.eq("slug", productSlug) : query.eq("id", productId);
-
-      const { data: product, error: productError } = await query.single();
-
-      if (productError) {
-        console.error("Erro ao carregar produto:", productError);
-        showState("error");
-        return;
-      }
+      const productCacheKey = getCacheKey("product", productSlug || productId);
+      const galleryCacheKeyBase = productSlug || productId;
+      let product = getCachedData(productCacheKey);
+      let galleryImages = null;
 
       if (!product) {
-        showState("empty");
-        return;
+        let query = supabaseClient
+          .from("products")
+          .select(`
+            id,
+            name,
+            slug,
+            price,
+            old_price,
+            image_url,
+            short_description,
+            sale_type,
+            category_id,
+            categories (
+              id,
+              name
+            ),
+            product_sizes (
+              id,
+              size,
+              available,
+              is_available
+            )
+          `);
+
+        query = productSlug ? query.eq("slug", productSlug) : query.eq("id", productId);
+
+        const { data: fetchedProduct, error: productError } = await query.single();
+
+        if (productError) {
+          console.error("Erro ao carregar produto:", productError);
+          showState("error");
+          return;
+        }
+
+        if (!fetchedProduct) {
+          showState("empty");
+          return;
+        }
+
+        product = fetchedProduct;
+        setCachedData(productCacheKey, product);
       }
 
-      const { data: galleryImages, error: galleryError } = await supabaseClient
-        .from("product_images")
-        .select("id, image_url, sort_order")
-        .eq("product_id", product.id)
-        .order("sort_order", { ascending: true });
+      const galleryCacheKey = getCacheKey("gallery", galleryCacheKeyBase || product.id);
+      galleryImages = getCachedData(galleryCacheKey);
 
-      if (galleryError) {
-        console.error("Erro ao carregar galeria:", galleryError);
+      if (!galleryImages) {
+        const { data: fetchedGalleryImages, error: galleryError } = await supabaseClient
+          .from("product_images")
+          .select("id, image_url, sort_order")
+          .eq("product_id", product.id)
+          .order("sort_order", { ascending: true });
+
+        if (galleryError) {
+          console.error("Erro ao carregar galeria:", galleryError);
+          galleryImages = [];
+        } else {
+          galleryImages = fetchedGalleryImages || [];
+          setCachedData(galleryCacheKey, galleryImages);
+        }
       }
 
       currentProduct = product;
