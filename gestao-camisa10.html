@@ -1452,8 +1452,8 @@ Camisa Real Madrid 24/25"></textarea>
     </div>
   </div>
 <script>
-const SUPABASE_URL = "https://elxwjajwfljwyextmdql.supabase.co";
-const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
+    const SUPABASE_URL = "https://mgxyupekvuihjbzvzfmf.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_fSGhfKrj2NK5UHNYRGk8nw_fl4mCJ_n";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const PRODUCT_BUCKET = "products";
@@ -1494,91 +1494,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     let gestaoSalesMeta = {};
     let editingGestaoSupplierId = null;
     let editingGestaoOrderId = null;
-
-    const ADMIN_CACHE_TTL = 5 * 60 * 1000;
-
-    function getAdminCache(key) {
-      try {
-        const raw = localStorage.getItem(key);
-        if (!raw) return null;
-        const parsed = JSON.parse(raw);
-        if (!parsed || typeof parsed !== "object") return null;
-        if (!parsed.expiresAt || Date.now() > Number(parsed.expiresAt)) {
-          localStorage.removeItem(key);
-          return null;
-        }
-        return parsed.data ?? null;
-      } catch (error) {
-        return null;
-      }
-    }
-
-    function setAdminCache(key, data, ttl = ADMIN_CACHE_TTL) {
-      try {
-        localStorage.setItem(key, JSON.stringify({
-          expiresAt: Date.now() + ttl,
-          data
-        }));
-      } catch (error) {}
-    }
-
-    function clearAdminCache(key) {
-      try { localStorage.removeItem(key); } catch (error) {}
-    }
-
-    function populateCategorySelects(categories = [], selectedCategoryId = null) {
-      const select = document.getElementById("product-category");
-      const filterSelect = document.getElementById("product-filter-category");
-      const batchCategorySelect = document.getElementById("batch-create-category");
-
-      if (select) {
-        if (!categories.length) {
-          select.innerHTML = '<option value="">Nenhuma categoria cadastrada</option>';
-        } else {
-          select.innerHTML = '<option value="">Selecione uma categoria</option>';
-          categories.forEach(category => {
-            const option = document.createElement("option");
-            option.value = category.id;
-            option.textContent = category.name;
-            if (selectedCategoryId && String(selectedCategoryId) === String(category.id)) {
-              option.selected = true;
-            }
-            select.appendChild(option);
-          });
-        }
-      }
-
-      if (filterSelect) {
-        const currentValue = filterSelect.value;
-        filterSelect.innerHTML = '<option value="">Todas as categorias</option>';
-        categories.forEach(category => {
-          const optionFilter = document.createElement("option");
-          optionFilter.value = category.id;
-          optionFilter.textContent = category.name;
-          if (currentValue && String(currentValue) === String(category.id)) {
-            optionFilter.selected = true;
-          }
-          filterSelect.appendChild(optionFilter);
-        });
-      }
-
-      if (batchCategorySelect) {
-        const currentBatchValue = batchCategorySelect.value;
-        batchCategorySelect.innerHTML = '<option value="">Selecione a categoria</option>';
-        categories.forEach(category => {
-          const option = document.createElement("option");
-          option.value = category.id;
-          option.textContent = category.name;
-          if (currentBatchValue && String(currentBatchValue) === String(category.id)) {
-            option.selected = true;
-          }
-          batchCategorySelect.appendChild(option);
-        });
-      }
-
-      updateDraftSummary();
-    }
-
 
 
     function generateClientUuid() {
@@ -1882,7 +1797,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     async function handleLogin() {
       clearMessage("login-message");
 
-      const email = document.getElementById("login-email").value.trim();
+      const email = document.getElementById("login-email").value.trim().toLowerCase();
       const password = document.getElementById("login-password").value.trim();
 
       if (!email || !password) {
@@ -1898,57 +1813,90 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         return;
       }
 
-      await initializeAdmin();
+      document.getElementById("login-email").value = email;
       showHomeSelector();
       showMessage("login-message", "Login realizado com sucesso.", "success");
+
+      initializeAdmin().catch((initError) => {
+        console.error("Erro ao inicializar painel:", initError);
+      });
     }
 
-    async function loadCategories(selectedCategoryId = null, forceRefresh = true) {
+    async function loadCategories(selectedCategoryId = null) {
       const select = document.getElementById("product-category");
-      if (select) {
-        select.innerHTML = '<option value="">Carregando categorias...</option>';
+      const filterSelect = document.getElementById("product-filter-category");
+      select.innerHTML = '<option value="">Carregando categorias...</option>';
+
+      const { data, error } = await supabaseClient
+        .from("categories")
+        .select("id, name")
+        .order("name", { ascending: true });
+
+      if (error) {
+        console.error("Erro ao carregar categorias:", error);
+        select.innerHTML = '<option value="">Erro ao carregar categorias</option>';
+        showMessage("form-message", "Não foi possível carregar as categorias.", "error");
+        return;
       }
 
-      let data = null;
-      if (!forceRefresh) {
-        data = getAdminCache("camisa10_admin_categories_v1");
+      if (!data || data.length === 0) {
+        select.innerHTML = '<option value="">Nenhuma categoria cadastrada</option>';
+        if (filterSelect) {
+          filterSelect.innerHTML = '<option value="">Todas as categorias</option>';
+        }
+        return;
       }
 
-      if (!data) {
-        const response = await supabaseClient
-          .from("categories")
-          .select("id, name")
-          .order("name", { ascending: true });
+      select.innerHTML = '<option value="">Selecione uma categoria</option>';
 
-        if (response.error) {
-          console.error("Erro ao carregar categorias:", response.error);
-          if (select) {
-            select.innerHTML = '<option value="">Erro ao carregar categorias</option>';
+      if (filterSelect) {
+        const currentValue = filterSelect.value;
+        filterSelect.innerHTML = '<option value="">Todas as categorias</option>';
+        data.forEach(category => {
+          const optionFilter = document.createElement("option");
+          optionFilter.value = category.id;
+          optionFilter.textContent = category.name;
+          if (currentValue && String(currentValue) === String(category.id)) {
+            optionFilter.selected = true;
           }
-          showMessage("form-message", "Não foi possível carregar as categorias.", "error");
-          return [];
+          filterSelect.appendChild(optionFilter);
+        });
+      }
+
+      data.forEach(category => {
+        const option = document.createElement("option");
+        option.value = category.id;
+        option.textContent = category.name;
+
+        if (selectedCategoryId && String(selectedCategoryId) === String(category.id)) {
+          option.selected = true;
         }
 
-        data = response.data || [];
-        setAdminCache("camisa10_admin_categories_v1", data);
-      }
+        select.appendChild(option);
+      });
 
-      allCategories = data || [];
-      populateCategorySelects(allCategories, selectedCategoryId);
-      return allCategories;
+      updateDraftSummary();
     }
 
-    async function loadCategoriesList(forceRefresh = true) {
+    async function loadCategoriesList() {
       const tbody = document.getElementById("categories-table-body");
       tbody.innerHTML = `<tr><td colspan="2" class="empty-state">Carregando categorias...</td></tr>`;
       clearMessage("category-list-message");
 
-      if (!allCategories.length || forceRefresh) {
-        await loadCategories(null, forceRefresh);
+      const { data, error } = await supabaseClient
+        .from("categories")
+        .select("id, name")
+        .order("name", { ascending: true });
+
+      if (error) {
+        console.error("Erro ao carregar lista de categorias:", error);
+        tbody.innerHTML = `<tr><td colspan="2" class="empty-state">Erro ao carregar categorias.</td></tr>`;
+        showMessage("category-list-message", "Não foi possível buscar as categorias.", "error");
+        return;
       }
 
+      allCategories = data || [];
       renderCategories(allCategories);
-      return allCategories;
     }
 
     function renderCategories(categories) {
@@ -2019,7 +1967,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         return;
       }
 
-      clearAdminCache("camisa10_admin_categories_v1");
       showMessage(
         "category-message",
         editingCategoryId ? "Categoria atualizada com sucesso." : "Categoria cadastrada com sucesso.",
@@ -2027,11 +1974,9 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       );
 
       resetCategoryForm();
-      clearAdminCache("camisa10_admin_categories_v1");
-      clearAdminCache("camisa10_admin_products_v1");
-      await loadCategories(null, true);
-      await loadCategoriesList(false);
-      await loadProducts(true);
+      await loadCategories();
+      await loadCategoriesList();
+      await loadProducts();
     }
 
     function editCategory(categoryId, categoryName) {
@@ -2080,18 +2025,15 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         return;
       }
 
-      clearAdminCache("camisa10_admin_categories_v1");
       showMessage("category-list-message", "Categoria excluída com sucesso.", "success");
 
       if (editingCategoryId && String(editingCategoryId) === String(categoryId)) {
         resetCategoryForm();
       }
 
-      clearAdminCache("camisa10_admin_categories_v1");
-      clearAdminCache("camisa10_admin_products_v1");
-      await loadCategories(null, true);
-      await loadCategoriesList(true);
-      await loadProducts(true);
+      await loadCategories();
+      await loadCategoriesList();
+      await loadProducts();
     }
 
     async function uploadMainImage() {
@@ -2476,7 +2418,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
       document.getElementById("batch-price-value").value = "";
       showMessage("list-message", `${targetProducts.length} produto(s) tiveram o preço atualizado com sucesso.`, "success");
-      await loadProducts(true);
+      await loadProducts();
     }
 
     async function applyBatchDescription() {
@@ -2523,58 +2465,48 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
       document.getElementById("batch-description-value").value = "";
       showMessage("list-message", `${targetProducts.length} produto(s) tiveram a descrição atualizada com sucesso.`, "success");
-      await loadProducts(true);
+      await loadProducts();
     }
 
-    async function loadProducts(forceRefresh = true) {
+    async function loadProducts() {
       const tbody = document.getElementById("products-table-body");
       tbody.innerHTML = `<div class="empty-state">Carregando produtos...</div>`;
       clearMessage("list-message");
 
-      let data = null;
-      if (!forceRefresh) {
-        data = getAdminCache("camisa10_admin_products_v1");
-      }
-
-      if (!data) {
-        const response = await supabaseClient
-          .from("products")
-          .select(`
+      const { data, error } = await supabaseClient
+        .from("products")
+        .select(`
+          id,
+          name,
+          slug,
+          price,
+          old_price,
+          image_url,
+          short_description,
+          priority_encomenda,
+          is_featured,
+          is_visible,
+          badge_type,
+          sale_type,
+          category_id,
+          created_at,
+          categories (
             id,
-            name,
-            slug,
-            price,
-            old_price,
-            image_url,
-            short_description,
-            priority_encomenda,
-            is_featured,
-            is_visible,
-            badge_type,
-            sale_type,
-            category_id,
-            created_at,
-            categories (
-              id,
-              name
-            ),
-            product_sizes (
-              id,
-              size,
-              is_available
-            )
-          `)
-          .order("created_at", { ascending: false });
+            name
+          ),
+          product_sizes (
+            id,
+            size,
+            is_available
+          )
+        `)
+        .order("created_at", { ascending: false });
 
-        if (response.error) {
-          console.error("Erro ao carregar produtos:", response.error);
-          tbody.innerHTML = `<div class="empty-state">Erro ao carregar produtos.</div>`;
-          showMessage("list-message", "Erro ao buscar produtos no Supabase.", "error");
-          return [];
-        }
-
-        data = response.data || [];
-        setAdminCache("camisa10_admin_products_v1", data, 2 * 60 * 1000);
+      if (error) {
+        console.error("Erro ao carregar produtos:", error);
+        tbody.innerHTML = `<div class="empty-state">Erro ao carregar produtos.</div>`;
+        showMessage("list-message", "Erro ao buscar produtos no Supabase.", "error");
+        return;
       }
 
       allProducts = data || [];
@@ -2583,7 +2515,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       filteredProducts = getFilteredProducts();
       renderProducts(filteredProducts);
       updateBatchPreview();
-      return allProducts;
     }
 
     function renderProducts(products) {
@@ -2850,10 +2781,9 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         "success"
       );
 
-      clearAdminCache("camisa10_admin_products_v1");
       resetForm();
-      await loadCategories(null, true);
-      await loadProducts(true);
+      await loadCategories();
+      await loadProducts();
       setProductStep(1);
     }
 
@@ -2904,7 +2834,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       document.getElementById("product-files").value = "";
       resetMultiPreview();
 
-      await loadCategories(data.category_id, true);
+      await loadCategories(data.category_id);
 
       const availableSizes = Array.isArray(data.product_sizes)
         ? data.product_sizes.filter(item => item.is_available).map(item => item.size)
@@ -3014,9 +2944,8 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         }
       }
 
-      clearAdminCache("camisa10_admin_products_v1");
       showMessage("list-message", "Produto duplicado com sucesso.", "success");
-      await loadProducts(true);
+      await loadProducts();
     }
 
 
@@ -3053,9 +2982,8 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         return;
       }
 
-      clearAdminCache("camisa10_admin_products_v1");
       showMessage("list-message", "Produto excluído com sucesso.", "success");
-      await loadProducts(true);
+      await loadProducts();
 
       if (editingProductId && String(editingProductId) === String(productId)) {
         resetForm();
@@ -3115,7 +3043,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         return;
       }
 
-      clearAdminCache("camisa10_admin_site_settings_v1");
       showMessage("settings-message", "Imagem do banner principal enviada e salva com sucesso.", "success");
     }
 
@@ -3172,7 +3099,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         return;
       }
 
-      clearAdminCache("camisa10_admin_site_settings_v1");
       showMessage("settings-message", "Imagem da esquerda enviada e salva com sucesso.", "success");
     }
 
@@ -3235,7 +3161,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         return;
       }
 
-      clearAdminCache("camisa10_admin_site_settings_v1");
       showMessage("settings-message", "Logo enviada e salva com sucesso.", "success");
     }
 
@@ -3308,41 +3233,29 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
       document.getElementById("hero-slide-image-url").value = imageUrl;
       document.getElementById("hero-slide-preview").src = imageUrl;
-      clearAdminCache("camisa10_admin_hero_slides_v1");
       showMessage("hero-slide-message", "Imagem do slide enviada com sucesso.", "success");
     }
 
-    async function loadHeroSlidesAdmin(forceRefresh = true) {
+    async function loadHeroSlidesAdmin() {
       const tbody = document.getElementById("hero-slides-table-body");
       tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Carregando slides...</td></tr>`;
       clearMessage("hero-slides-list-message");
 
-      let data = null;
-      if (!forceRefresh) {
-        data = getAdminCache("camisa10_admin_hero_slides_v1");
-      }
+      const { data, error } = await supabaseClient
+        .from(HERO_SLIDES_TABLE)
+        .select("*")
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: true });
 
-      if (!data) {
-        const response = await supabaseClient
-          .from(HERO_SLIDES_TABLE)
-          .select("*")
-          .order("sort_order", { ascending: true })
-          .order("created_at", { ascending: true });
-
-        if (response.error) {
-          console.error("Erro ao carregar hero_slides:", response.error);
-          tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Erro ao carregar slides.</td></tr>`;
-          showMessage("hero-slides-list-message", `Erro ao buscar slides: ${response.error.message}`, "error");
-          return [];
-        }
-
-        data = response.data || [];
-        setAdminCache("camisa10_admin_hero_slides_v1", data);
+      if (error) {
+        console.error("Erro ao carregar hero_slides:", error);
+        tbody.innerHTML = `<tr><td colspan="7" class="empty-state">Erro ao carregar slides.</td></tr>`;
+        showMessage("hero-slides-list-message", `Erro ao buscar slides: ${error.message}`, "error");
+        return;
       }
 
       allHeroSlides = data || [];
       renderHeroSlidesAdmin(allHeroSlides);
-      return allHeroSlides;
     }
 
     function renderHeroSlidesAdmin(slides) {
@@ -3448,7 +3361,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         return;
       }
 
-      clearAdminCache("camisa10_admin_hero_slides_v1");
       showMessage(
         "hero-slide-message",
         editingHeroSlideId ? "Slide atualizado com sucesso." : "Slide cadastrado com sucesso.",
@@ -3456,8 +3368,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       );
 
       resetHeroSlideForm();
-      clearAdminCache("camisa10_admin_hero_slides_v1");
-      await loadHeroSlidesAdmin(true);
+      await loadHeroSlidesAdmin();
     }
 
     async function editHeroSlide(slideId) {
@@ -3505,57 +3416,43 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         return;
       }
 
-      clearAdminCache("camisa10_admin_hero_slides_v1");
       showMessage("hero-slides-list-message", "Slide excluído com sucesso.", "success");
 
       if (editingHeroSlideId && String(editingHeroSlideId) === String(slideId)) {
         resetHeroSlideForm();
       }
 
-      clearAdminCache("camisa10_admin_hero_slides_v1");
-      await loadHeroSlidesAdmin(true);
+      await loadHeroSlidesAdmin();
     }
 
-    async function loadSiteSettings(forceRefresh = true) {
+    async function loadSiteSettings() {
       clearMessage("settings-message");
 
-      let data = null;
-      if (!forceRefresh) {
-        data = getAdminCache("camisa10_admin_site_settings_v1");
+      const { data, error } = await supabaseClient
+        .from(SITE_SETTINGS_TABLE)
+        .select(`
+          id,
+          hero_title,
+          hero_subtitle,
+          hero_image_url,
+          hero_left_image_url,
+          delivery_text,
+          catalog_title,
+          catalog_subtitle,
+          contact_text,
+          footer_text,
+          logo_url,
+          instagram_url,
+          whatsapp_number
+        `)
+        .eq("id", SITE_SETTINGS_ID)
+        .single();
+
+      if (error) {
+        console.error("Erro ao carregar configurações do site:", error);
+        showMessage("settings-message", "Não foi possível carregar as configurações do site.", "error");
+        return;
       }
-
-      if (!data) {
-        const response = await supabaseClient
-          .from(SITE_SETTINGS_TABLE)
-          .select(`
-            id,
-            hero_title,
-            hero_subtitle,
-            hero_image_url,
-            hero_left_image_url,
-            delivery_text,
-            catalog_title,
-            catalog_subtitle,
-            contact_text,
-            footer_text,
-            logo_url,
-            instagram_url,
-            whatsapp_number
-          `)
-          .eq("id", SITE_SETTINGS_ID)
-          .single();
-
-        if (response.error) {
-          console.error("Erro ao carregar configurações do site:", response.error);
-          showMessage("settings-message", "Não foi possível carregar as configurações do site.", "error");
-          return null;
-        }
-
-        data = response.data || null;
-        setAdminCache("camisa10_admin_site_settings_v1", data);
-      }
-
-      if (!data) return null;
 
       document.getElementById("setting-hero-title").value = data.hero_title || "";
       document.getElementById("setting-hero-subtitle").value = data.hero_subtitle || "";
@@ -3581,8 +3478,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       if (data.logo_url) {
         document.getElementById("logo-preview").src = data.logo_url;
       }
-
-      return data;
     }
 
     async function saveSiteSettings() {
@@ -3614,7 +3509,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         return;
       }
 
-      clearAdminCache("camisa10_admin_site_settings_v1");
       showMessage("settings-message", "Configurações do site salvas com sucesso.", "success");
     }
 
@@ -4131,7 +4025,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         refreshBatchSizeChipStates();
         await renderBatchSharedPreviews();
         await renderBatchCreateProducts();
-        await loadProducts(true);
+        await loadProducts();
       } catch (error) {
         console.error("Erro no cadastro em lote:", error);
         showMessage("batch-create-message", `Erro no cadastro em lote: ${error?.message || "sem detalhe"}.${successCount ? ` Já foram salvos ${successCount} produto(s).` : ""}`, "error");
@@ -5237,17 +5131,18 @@ async function saveGestaoSale() {
     }
 
     async function initializeAdmin() {
-      await Promise.all([
-        loadCategories(null, false),
-        loadProducts(false),
-        loadSiteSettings(false),
-        loadHeroSlidesAdmin(false),
-        loadGestaoState()
-      ]);
-
-      await loadCategoriesList(false);
+      await loadCategories();
+      await loadCategoriesList();
+      await loadProducts();
+      await loadSiteSettings();
+      await loadHeroSlidesAdmin();
       resetHeroSlideForm();
       updateBatchPreview();
+      const batchCategorySelect = document.getElementById("batch-create-category");
+      if (batchCategorySelect) {
+        batchCategorySelect.innerHTML = '<option value="">Selecione a categoria</option>' + allCategories.map(category => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join("");
+      }
+      await loadGestaoState();
       renderGestao();
       renderBatchSharedPreviews();
       renderBatchCreateProducts();
@@ -5302,8 +5197,10 @@ async function saveGestaoSale() {
 
         if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION' || event === 'TOKEN_REFRESHED') && session) {
           if (document.getElementById('admin-panel').classList.contains('hidden') && document.getElementById('home-selector').classList.contains('hidden')) {
-            await initializeAdmin();
             showHomeSelector();
+            initializeAdmin().catch((initError) => {
+              console.error("Erro ao inicializar painel:", initError);
+            });
           }
         }
       });
@@ -5311,8 +5208,10 @@ async function saveGestaoSale() {
       const session = await getCurrentSession();
       if (session) {
         document.getElementById('login-email').value = session.user?.email || '';
-        await initializeAdmin();
         showHomeSelector();
+        initializeAdmin().catch((initError) => {
+          console.error("Erro ao inicializar painel:", initError);
+        });
       } else {
         showLoginScreen();
       }
@@ -5320,3 +5219,4 @@ async function saveGestaoSale() {
   </script>
 </body>
 </html>
+
