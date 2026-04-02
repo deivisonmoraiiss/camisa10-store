@@ -375,11 +375,65 @@
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
 
-    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline{grid-template-columns:1fr}}
+    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline,.product-admin-list{grid-template-columns:1fr}}
     @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
+
+    .global-loading{
+      position:fixed;inset:0;z-index:999;display:none;align-items:center;justify-content:center;
+      background:rgba(4,4,4,.66);backdrop-filter:blur(8px)
+    }
+    .global-loading.show{display:flex}
+    .global-loading-card{
+      width:min(420px,92vw);padding:22px;border-radius:22px;
+      background:linear-gradient(180deg,#151515 0%, #0f0f0f 100%);border:1px solid rgba(212,175,55,.18);
+      box-shadow:0 22px 48px rgba(0,0,0,.35);display:grid;gap:12px
+    }
+    .global-loading-title{font-size:1.05rem;font-weight:900;color:#fff}
+    .global-loading-copy{color:var(--muted);font-size:.9rem;line-height:1.6}
+    .loading-bar{height:10px;border-radius:999px;background:#0b0b0b;border:1px solid rgba(255,255,255,.06);overflow:hidden}
+    .loading-bar span{display:block;height:100%;width:42%;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--gold-2));animation:loadingSlide 1.1s ease-in-out infinite}
+    @keyframes loadingSlide{0%{transform:translateX(-120%)}100%{transform:translateX(340%)}}
+
+    .product-list-headline{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin:16px 0 14px}
+    .product-list-stats{display:flex;gap:8px;flex-wrap:wrap}
+    .product-list-pill{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:#0f0f0f;border:1px solid var(--line);font-size:.84rem;color:#f2f2f2}
+    .product-admin-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .product-admin-card{padding:14px;border-radius:20px;border:1px solid rgba(255,255,255,.08);box-shadow:0 12px 30px rgba(0,0,0,.16)}
+    .product-admin-image-wrap{width:96px;height:96px;border-radius:16px}
+    .product-admin-thumb{transition:transform .25s ease}
+    .product-admin-card:hover .product-admin-thumb{transform:scale(1.03)}
+    .product-admin-top{gap:10px}
+    .product-admin-title{font-size:1.02rem}
+    .product-admin-sub{display:none}
+    .product-admin-desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .product-admin-status-row{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+    .product-admin-actions .btn{padding:10px 12px;border-radius:12px}
+    .product-admin-skeleton{padding:16px;border-radius:18px;background:linear-gradient(180deg,#111 0%, #0c0c0c 100%);border:1px solid rgba(255,255,255,.06);display:grid;grid-template-columns:88px 1fr;gap:12px}
+    .skeleton-box{border-radius:14px;background:linear-gradient(90deg, rgba(255,255,255,.04), rgba(255,255,255,.10), rgba(255,255,255,.04));background-size:200% 100%;animation:skeletonMove 1.15s linear infinite}
+    .skeleton-thumb{width:88px;height:88px}
+    .skeleton-line{height:14px;margin-bottom:8px}
+    .skeleton-line.sm{height:11px;width:62%}
+    .skeleton-line.md{width:78%}
+    .skeleton-line.lg{width:92%}
+    @keyframes skeletonMove{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+    .batch-builder-tools{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px}
+    .batch-tool-row{display:flex;gap:8px;flex-wrap:wrap}
+    .batch-item-card{border-color:rgba(255,255,255,.08);box-shadow:0 10px 24px rgba(0,0,0,.12)}
+    .batch-ready-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .batch-ready-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#0f0f0f;border:1px solid var(--line);font-size:.82rem}
+
   </style>
 </head>
 <body>
+  <div id="global-loading" class="global-loading" aria-live="polite" aria-busy="true">
+    <div class="global-loading-card">
+      <div class="global-loading-title" id="global-loading-title">Carregando painel</div>
+      <div class="global-loading-copy" id="global-loading-copy">Estamos preparando os dados da loja para você.</div>
+      <div class="loading-bar"><span></span></div>
+    </div>
+  </div>
+
   <div class="topbar">
     <div class="topbar-inner">
       <div class="brand-block">
@@ -704,6 +758,14 @@
               <button class="btn btn-secondary" onclick="loadProducts()">Atualizar</button>
             </div>
 
+            <div class="product-list-headline">
+              <div class="product-list-stats">
+                <span class="product-list-pill">Exibindo: <strong id="products-visible-count">0</strong></span>
+                <span class="product-list-pill">Marcados: <strong id="products-selected-count">0</strong></span>
+              </div>
+              <div class="small-muted">Lista em cards, com foto e ações mais rápidas.</div>
+            </div>
+
             <details class="batch-card">
               <summary class="batch-card-summary">
                 <div class="batch-card-top">
@@ -909,6 +971,17 @@ Camisa Real Madrid 24/25"></textarea>
                     Exemplo de uso: digite um modelo por linha, marque os tamanhos padrão e salve. O estoque real e o custo por item você lança depois na área <strong>Gestão &gt; Pedidos / Entradas</strong>.
                   </div>
 
+                  <div class="batch-builder-tools">
+                    <div class="batch-tool-row">
+                      <button class="btn btn-ghost" type="button" onclick="toggleBatchSharedForAll(true)">Usar compartilhadas em todos</button>
+                      <button class="btn btn-ghost" type="button" onclick="toggleBatchSharedForAll(false)">Tirar compartilhadas de todos</button>
+                    </div>
+                    <div class="batch-tool-row">
+                      <button class="btn btn-ghost" type="button" onclick="markAllBatchSizes(true)">Marcar todos tamanhos</button>
+                      <button class="btn btn-ghost" type="button" onclick="markAllBatchSizes(false)">Limpar tamanhos</button>
+                    </div>
+                  </div>
+
                   <div class="batch-save-bar">
                     <div class="batch-create-kpi">
                       <div class="mini-kpi"><strong id="batch-kpi-lines">0</strong><span>Modelos digitados</span></div>
@@ -932,6 +1005,10 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="mini-card">
                   <div class="batch-save-bar">
                     <div class="batch-summary-list">
+                      <div class="batch-ready-strip">
+                        <span class="batch-ready-chip">1 upload compartilhado pode servir para vários modelos</span>
+                        <span class="batch-ready-chip">O preço padrão já vale para todo o lote</span>
+                      </div>
                       <strong>Antes de salvar:</strong>
                       <span>• cada modelo precisa ter imagem principal própria ou compartilhada</span>
                       <span>• os tamanhos marcados serão aplicados em todos os modelos do lote</span>
@@ -1529,6 +1606,26 @@ Camisa Real Madrid 24/25"></textarea>
       const el = document.getElementById(elementId);
       el.textContent = "";
       el.className = "message";
+    }
+
+    function setGlobalLoading(show, title = "Carregando painel", copy = "Estamos preparando os dados da loja para você.") {
+      const overlay = document.getElementById("global-loading");
+      const titleEl = document.getElementById("global-loading-title");
+      const copyEl = document.getElementById("global-loading-copy");
+      if (!overlay) return;
+      if (titleEl) titleEl.textContent = title;
+      if (copyEl) copyEl.textContent = copy;
+      overlay.classList.toggle("show", !!show);
+    }
+
+    function renderProductsLoadingState(message = "Carregando produtos...") {
+      const tbody = document.getElementById("products-table-body");
+      if (!tbody) return;
+      tbody.innerHTML = `
+        <div class="empty-state" style="padding-bottom:8px;">${message}</div>
+        <div class="product-admin-skeleton"><div class="skeleton-box skeleton-thumb"></div><div><div class="skeleton-box skeleton-line lg"></div><div class="skeleton-box skeleton-line md"></div><div class="skeleton-box skeleton-line sm"></div></div></div>
+        <div class="product-admin-skeleton"><div class="skeleton-box skeleton-thumb"></div><div><div class="skeleton-box skeleton-line lg"></div><div class="skeleton-box skeleton-line md"></div><div class="skeleton-box skeleton-line sm"></div></div></div>
+      `;
     }
 
     function formatPrice(value) {
@@ -2269,10 +2366,14 @@ Camisa Real Madrid 24/25"></textarea>
       const filteredCountEl = document.getElementById("batch-filtered-count");
       const selectedCountEl = document.getElementById("batch-selected-count");
       const selectAllCheckbox = document.getElementById("select-all-filtered");
+      const productsVisibleCount = document.getElementById("products-visible-count");
+      const productsSelectedCount = document.getElementById("products-selected-count");
 
       if (filteredCountEl) filteredCountEl.textContent = String(filteredProducts.length);
       const selectedInFiltered = filteredProducts.filter(product => selectedProductIds.has(String(product.id))).length;
       if (selectedCountEl) selectedCountEl.textContent = String(selectedInFiltered);
+      if (productsVisibleCount) productsVisibleCount.textContent = String(filteredProducts.length);
+      if (productsSelectedCount) productsSelectedCount.textContent = String(selectedInFiltered);
 
       if (selectAllCheckbox) {
         selectAllCheckbox.checked = !!filteredProducts.length && selectedInFiltered === filteredProducts.length;
@@ -2582,12 +2683,14 @@ Camisa Real Madrid 24/25"></textarea>
 
               ${description}
 
-              <div class="product-admin-meta">
-                <span class="badge">${categoryName}</span>
-                <span class="badge">${saleType}</span>
-                ${visibleBadge}
-                ${badgeType}
-                ${encomendaOrderBadge}
+              <div class="product-admin-status-row">
+                <div class="product-admin-meta">
+                  <span class="badge">${categoryName}</span>
+                  <span class="badge">${saleType}</span>
+                  ${visibleBadge}
+                  ${badgeType}
+                  ${encomendaOrderBadge}
+                </div>
               </div>
 
               <div class="product-admin-meta">
@@ -3719,6 +3822,38 @@ Camisa Real Madrid 24/25"></textarea>
       batchCreateProducts = [];
       document.getElementById("batch-create-names").value = "";
       clearMessage("batch-create-message");
+      renderBatchCreateProducts();
+    }
+
+    function toggleBatchSharedForAll(checked) {
+      batchCreateProducts = batchCreateProducts.map(item => ({ ...item, useSharedImages: !!checked }));
+      renderBatchCreateProducts();
+    }
+
+    function markAllBatchSizes(checked) {
+      document.querySelectorAll(".batch-size-check").forEach(check => { check.checked = !!checked; });
+      refreshBatchSizeChipStates();
+    }
+
+    function syncBatchBuilderFromNames() {
+      const names = parseBatchCreateNames();
+      if (!names.length) {
+        batchCreateProducts = [];
+        renderBatchCreateProducts();
+        return;
+      }
+      const byName = new Map(batchCreateProducts.map(item => [item.name, item]));
+      batchCreateProducts = names.map((name) => {
+        const existing = byName.get(name);
+        return existing ? existing : {
+          name,
+          slug: generateSlug(name),
+          useSharedImages: true,
+          mainFile: null,
+          mainUrl: "",
+          extraFiles: []
+        };
+      });
       renderBatchCreateProducts();
     }
 
@@ -5131,21 +5266,28 @@ async function saveGestaoSale() {
     }
 
     async function initializeAdmin() {
-      await loadCategories();
-      await loadCategoriesList();
-      await loadProducts();
-      await loadSiteSettings();
-      await loadHeroSlidesAdmin();
-      resetHeroSlideForm();
-      updateBatchPreview();
-      const batchCategorySelect = document.getElementById("batch-create-category");
-      if (batchCategorySelect) {
-        batchCategorySelect.innerHTML = '<option value="">Selecione a categoria</option>' + allCategories.map(category => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join("");
+      setGlobalLoading(true, "Preparando o painel", "Carregando produtos, categorias e gestão sem travar sua entrada.");
+      try {
+        const categoriesResult = await loadCategories();
+        await Promise.allSettled([
+          loadCategoriesList(),
+          loadProducts(),
+          loadSiteSettings(),
+          loadHeroSlidesAdmin(),
+          loadGestaoState()
+        ]);
+        resetHeroSlideForm();
+        updateBatchPreview();
+        const batchCategorySelect = document.getElementById("batch-create-category");
+        if (batchCategorySelect) {
+          batchCategorySelect.innerHTML = '<option value="">Selecione a categoria</option>' + allCategories.map(category => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join("");
+        }
+        renderGestao();
+        renderBatchSharedPreviews();
+        renderBatchCreateProducts();
+      } finally {
+        setGlobalLoading(false);
       }
-      await loadGestaoState();
-      renderGestao();
-      renderBatchSharedPreviews();
-      renderBatchCreateProducts();
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
@@ -5166,7 +5308,7 @@ async function saveGestaoSale() {
       document.querySelectorAll(".batch-size-check").forEach(check => {
         check.addEventListener("change", refreshBatchSizeChipStates);
       });
-      document.getElementById("batch-create-names")?.addEventListener("input", updateBatchCreateKpis);
+      document.getElementById("batch-create-names")?.addEventListener("input", syncBatchBuilderFromNames);
       document.querySelectorAll(".step-chip").forEach(button => {
         button.addEventListener("click", () => setProductStep(Number(button.dataset.stepTarget)));
       });
@@ -5219,4 +5361,3 @@ async function saveGestaoSale() {
   </script>
 </body>
 </html>
-
