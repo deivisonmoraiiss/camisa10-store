@@ -375,65 +375,11 @@
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
 
-    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline,.product-admin-list{grid-template-columns:1fr}}
+    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline{grid-template-columns:1fr}}
     @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
-
-    .global-loading{
-      position:fixed;inset:0;z-index:999;display:none;align-items:center;justify-content:center;
-      background:rgba(4,4,4,.66);backdrop-filter:blur(8px)
-    }
-    .global-loading.show{display:flex}
-    .global-loading-card{
-      width:min(420px,92vw);padding:22px;border-radius:22px;
-      background:linear-gradient(180deg,#151515 0%, #0f0f0f 100%);border:1px solid rgba(212,175,55,.18);
-      box-shadow:0 22px 48px rgba(0,0,0,.35);display:grid;gap:12px
-    }
-    .global-loading-title{font-size:1.05rem;font-weight:900;color:#fff}
-    .global-loading-copy{color:var(--muted);font-size:.9rem;line-height:1.6}
-    .loading-bar{height:10px;border-radius:999px;background:#0b0b0b;border:1px solid rgba(255,255,255,.06);overflow:hidden}
-    .loading-bar span{display:block;height:100%;width:42%;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--gold-2));animation:loadingSlide 1.1s ease-in-out infinite}
-    @keyframes loadingSlide{0%{transform:translateX(-120%)}100%{transform:translateX(340%)}}
-
-    .product-list-headline{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin:16px 0 14px}
-    .product-list-stats{display:flex;gap:8px;flex-wrap:wrap}
-    .product-list-pill{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:#0f0f0f;border:1px solid var(--line);font-size:.84rem;color:#f2f2f2}
-    .product-admin-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-    .product-admin-card{padding:14px;border-radius:20px;border:1px solid rgba(255,255,255,.08);box-shadow:0 12px 30px rgba(0,0,0,.16)}
-    .product-admin-image-wrap{width:96px;height:96px;border-radius:16px}
-    .product-admin-thumb{transition:transform .25s ease}
-    .product-admin-card:hover .product-admin-thumb{transform:scale(1.03)}
-    .product-admin-top{gap:10px}
-    .product-admin-title{font-size:1.02rem}
-    .product-admin-sub{display:none}
-    .product-admin-desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-    .product-admin-status-row{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
-    .product-admin-actions .btn{padding:10px 12px;border-radius:12px}
-    .product-admin-skeleton{padding:16px;border-radius:18px;background:linear-gradient(180deg,#111 0%, #0c0c0c 100%);border:1px solid rgba(255,255,255,.06);display:grid;grid-template-columns:88px 1fr;gap:12px}
-    .skeleton-box{border-radius:14px;background:linear-gradient(90deg, rgba(255,255,255,.04), rgba(255,255,255,.10), rgba(255,255,255,.04));background-size:200% 100%;animation:skeletonMove 1.15s linear infinite}
-    .skeleton-thumb{width:88px;height:88px}
-    .skeleton-line{height:14px;margin-bottom:8px}
-    .skeleton-line.sm{height:11px;width:62%}
-    .skeleton-line.md{width:78%}
-    .skeleton-line.lg{width:92%}
-    @keyframes skeletonMove{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-    .batch-builder-tools{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px}
-    .batch-tool-row{display:flex;gap:8px;flex-wrap:wrap}
-    .batch-item-card{border-color:rgba(255,255,255,.08);box-shadow:0 10px 24px rgba(0,0,0,.12)}
-    .batch-ready-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .batch-ready-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#0f0f0f;border:1px solid var(--line);font-size:.82rem}
-
   </style>
 </head>
 <body>
-  <div id="global-loading" class="global-loading" aria-live="polite" aria-busy="true">
-    <div class="global-loading-card">
-      <div class="global-loading-title" id="global-loading-title">Carregando painel</div>
-      <div class="global-loading-copy" id="global-loading-copy">Estamos preparando os dados da loja para você.</div>
-      <div class="loading-bar"><span></span></div>
-    </div>
-  </div>
-
   <div class="topbar">
     <div class="topbar-inner">
       <div class="brand-block">
@@ -758,14 +704,6 @@
               <button class="btn btn-secondary" onclick="loadProducts()">Atualizar</button>
             </div>
 
-            <div class="product-list-headline">
-              <div class="product-list-stats">
-                <span class="product-list-pill">Exibindo: <strong id="products-visible-count">0</strong></span>
-                <span class="product-list-pill">Marcados: <strong id="products-selected-count">0</strong></span>
-              </div>
-              <div class="small-muted">Lista em cards, com foto e ações mais rápidas.</div>
-            </div>
-
             <details class="batch-card">
               <summary class="batch-card-summary">
                 <div class="batch-card-top">
@@ -971,17 +909,6 @@ Camisa Real Madrid 24/25"></textarea>
                     Exemplo de uso: digite um modelo por linha, marque os tamanhos padrão e salve. O estoque real e o custo por item você lança depois na área <strong>Gestão &gt; Pedidos / Entradas</strong>.
                   </div>
 
-                  <div class="batch-builder-tools">
-                    <div class="batch-tool-row">
-                      <button class="btn btn-ghost" type="button" onclick="toggleBatchSharedForAll(true)">Usar compartilhadas em todos</button>
-                      <button class="btn btn-ghost" type="button" onclick="toggleBatchSharedForAll(false)">Tirar compartilhadas de todos</button>
-                    </div>
-                    <div class="batch-tool-row">
-                      <button class="btn btn-ghost" type="button" onclick="markAllBatchSizes(true)">Marcar todos tamanhos</button>
-                      <button class="btn btn-ghost" type="button" onclick="markAllBatchSizes(false)">Limpar tamanhos</button>
-                    </div>
-                  </div>
-
                   <div class="batch-save-bar">
                     <div class="batch-create-kpi">
                       <div class="mini-kpi"><strong id="batch-kpi-lines">0</strong><span>Modelos digitados</span></div>
@@ -1005,10 +932,6 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="mini-card">
                   <div class="batch-save-bar">
                     <div class="batch-summary-list">
-                      <div class="batch-ready-strip">
-                        <span class="batch-ready-chip">1 upload compartilhado pode servir para vários modelos</span>
-                        <span class="batch-ready-chip">O preço padrão já vale para todo o lote</span>
-                      </div>
                       <strong>Antes de salvar:</strong>
                       <span>• cada modelo precisa ter imagem principal própria ou compartilhada</span>
                       <span>• os tamanhos marcados serão aplicados em todos os modelos do lote</span>
@@ -1533,6 +1456,90 @@ Camisa Real Madrid 24/25"></textarea>
     const SUPABASE_KEY = "sb_publishable_fSGhfKrj2NK5UHNYRGk8nw_fl4mCJ_n";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    const CLOUDINARY_CLOUD_NAME = "dofhls4cy";
+    const CLOUDINARY_UPLOAD_PRESET = "camisa10";
+
+    function canvasToBlob(canvas, mimeType, quality) {
+      return new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            reject(new Error("Não foi possível comprimir a imagem."));
+            return;
+          }
+          resolve(blob);
+        }, mimeType, quality);
+      });
+    }
+
+    async function compressImageToTarget(file, options = {}) {
+      const {
+        maxWidth = 1000,
+        maxHeight = 1000,
+        targetSizeKB = 400,
+        mimeType = "image/jpeg",
+        initialQuality = 0.82,
+        minQuality = 0.45,
+        qualityStep = 0.07
+      } = options;
+
+      if (!file || !file.type || !file.type.startsWith("image/")) {
+        return file;
+      }
+
+      const sourceBitmap = await createImageBitmap(file);
+
+      let { width, height } = sourceBitmap;
+      const scale = Math.min(maxWidth / width, maxHeight / height, 1);
+      width = Math.max(1, Math.round(width * scale));
+      height = Math.max(1, Math.round(height * scale));
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext("2d", { alpha: false });
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, width, height);
+      ctx.drawImage(sourceBitmap, 0, 0, width, height);
+
+      let quality = initialQuality;
+      let blob = await canvasToBlob(canvas, mimeType, quality);
+
+      while (blob.size > targetSizeKB * 1024 && quality > minQuality) {
+        quality = Math.max(minQuality, quality - qualityStep);
+        blob = await canvasToBlob(canvas, mimeType, quality);
+        if (quality === minQuality) break;
+      }
+
+      return new File(
+        [blob],
+        file.name.replace(/\.[^/.]+$/, ".jpg"),
+        { type: blob.type || mimeType, lastModified: Date.now() }
+      );
+    }
+
+    async function uploadToCloudinary(file, folder = "camisa10-store") {
+      if (!file) throw new Error("Arquivo inválido para upload.");
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+      formData.append("folder", folder);
+
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.secure_url) {
+        throw new Error(data?.error?.message || "Erro ao enviar imagem para o Cloudinary.");
+      }
+
+      return data.secure_url;
+    }
+
     const PRODUCT_BUCKET = "products";
     const SITE_ASSETS_BUCKET = "site-assets";
     const SITE_SETTINGS_TABLE = "site_settings";
@@ -1606,26 +1613,6 @@ Camisa Real Madrid 24/25"></textarea>
       const el = document.getElementById(elementId);
       el.textContent = "";
       el.className = "message";
-    }
-
-    function setGlobalLoading(show, title = "Carregando painel", copy = "Estamos preparando os dados da loja para você.") {
-      const overlay = document.getElementById("global-loading");
-      const titleEl = document.getElementById("global-loading-title");
-      const copyEl = document.getElementById("global-loading-copy");
-      if (!overlay) return;
-      if (titleEl) titleEl.textContent = title;
-      if (copyEl) copyEl.textContent = copy;
-      overlay.classList.toggle("show", !!show);
-    }
-
-    function renderProductsLoadingState(message = "Carregando produtos...") {
-      const tbody = document.getElementById("products-table-body");
-      if (!tbody) return;
-      tbody.innerHTML = `
-        <div class="empty-state" style="padding-bottom:8px;">${message}</div>
-        <div class="product-admin-skeleton"><div class="skeleton-box skeleton-thumb"></div><div><div class="skeleton-box skeleton-line lg"></div><div class="skeleton-box skeleton-line md"></div><div class="skeleton-box skeleton-line sm"></div></div></div>
-        <div class="product-admin-skeleton"><div class="skeleton-box skeleton-thumb"></div><div><div class="skeleton-box skeleton-line lg"></div><div class="skeleton-box skeleton-line md"></div><div class="skeleton-box skeleton-line sm"></div></div></div>
-      `;
     }
 
     function formatPrice(value) {
@@ -1894,7 +1881,7 @@ Camisa Real Madrid 24/25"></textarea>
     async function handleLogin() {
       clearMessage("login-message");
 
-      const email = document.getElementById("login-email").value.trim().toLowerCase();
+      const email = document.getElementById("login-email").value.trim();
       const password = document.getElementById("login-password").value.trim();
 
       if (!email || !password) {
@@ -1910,13 +1897,9 @@ Camisa Real Madrid 24/25"></textarea>
         return;
       }
 
-      document.getElementById("login-email").value = email;
+      await initializeAdmin();
       showHomeSelector();
       showMessage("login-message", "Login realizado com sucesso.", "success");
-
-      initializeAdmin().catch((initError) => {
-        console.error("Erro ao inicializar painel:", initError);
-      });
     }
 
     async function loadCategories(selectedCategoryId = null) {
@@ -2133,31 +2116,30 @@ Camisa Real Madrid 24/25"></textarea>
       await loadProducts();
     }
 
-    async function uploadMainImage() {
+    
+async function uploadMainImage() {
       clearMessage("form-message");
 
       const fileInput = document.getElementById("product-file");
-      const file = fileInput.files[0];
+      const originalFile = fileInput.files[0];
 
-      if (!file) {
+      if (!originalFile) {
         showMessage("form-message", "Selecione a imagem principal antes de fazer upload.", "error");
         return "";
       }
 
       try {
-        const fileExt = file.name.split(".").pop();
-        const safeName = file.name
-          .replace(/\.[^/.]+$/, "")
-          .replace(/[^a-zA-Z0-9-_]/g, "-")
-          .toLowerCase();
+        const compressedFile = await compressImageToTarget(originalFile, {
+          maxWidth: 1000,
+          maxHeight: 1000,
+          targetSizeKB: 400
+        });
 
-        const fileName = `${Date.now()}-${safeName}.${fileExt}`;
-        const filePath = `produtos/main/${fileName}`;
-        const publicUrl = await uploadFileToBucket(PRODUCT_BUCKET, filePath, file);
+        const publicUrl = await uploadToCloudinary(compressedFile, "camisa10-store/produtos/main");
 
         document.getElementById("product-image").value = publicUrl;
         document.getElementById("main-image-preview").src = publicUrl;
-        showMessage("form-message", "Imagem principal pronta para salvar.", "success");
+        showMessage("form-message", `Imagem principal otimizada e enviada (${Math.round(compressedFile.size / 1024)} KB).`, "success");
         return publicUrl;
       } catch (error) {
         console.error("Erro no upload da imagem principal:", error);
@@ -2166,7 +2148,9 @@ Camisa Real Madrid 24/25"></textarea>
       }
     }
 
-    async function uploadMultipleProductImages(productId) {
+
+    
+async function uploadMultipleProductImages(productId) {
       const fileInput = document.getElementById("product-files");
       const files = fileInput.files;
 
@@ -2178,16 +2162,14 @@ Camisa Real Madrid 24/25"></textarea>
 
       for (let i = 0; i < files.length; i++) {
         try {
-          const file = files[i];
-          const fileExt = file.name.split(".").pop();
-          const safeName = file.name
-            .replace(/\.[^/.]+$/, "")
-            .replace(/[^a-zA-Z0-9-_]/g, "-")
-            .toLowerCase();
+          const originalFile = files[i];
+          const compressedFile = await compressImageToTarget(originalFile, {
+            maxWidth: 1000,
+            maxHeight: 1000,
+            targetSizeKB: 300
+          });
 
-          const fileName = `${Date.now()}-${i}-${safeName}.${fileExt}`;
-          const filePath = `produtos/${productId}/${fileName}`;
-          const imageUrl = await uploadFileToBucket(PRODUCT_BUCKET, filePath, file);
+          const imageUrl = await uploadToCloudinary(compressedFile, `camisa10-store/produtos/${productId}`);
 
           const { error: insertImageError } = await supabaseClient
             .from("product_images")
@@ -2216,6 +2198,7 @@ Camisa Real Madrid 24/25"></textarea>
         uploaded: uploadedCount
       };
     }
+
 
     async function saveProductSizes(productId, sizes) {
       const { error: deleteError } = await supabaseClient
@@ -2366,14 +2349,10 @@ Camisa Real Madrid 24/25"></textarea>
       const filteredCountEl = document.getElementById("batch-filtered-count");
       const selectedCountEl = document.getElementById("batch-selected-count");
       const selectAllCheckbox = document.getElementById("select-all-filtered");
-      const productsVisibleCount = document.getElementById("products-visible-count");
-      const productsSelectedCount = document.getElementById("products-selected-count");
 
       if (filteredCountEl) filteredCountEl.textContent = String(filteredProducts.length);
       const selectedInFiltered = filteredProducts.filter(product => selectedProductIds.has(String(product.id))).length;
       if (selectedCountEl) selectedCountEl.textContent = String(selectedInFiltered);
-      if (productsVisibleCount) productsVisibleCount.textContent = String(filteredProducts.length);
-      if (productsSelectedCount) productsSelectedCount.textContent = String(selectedInFiltered);
 
       if (selectAllCheckbox) {
         selectAllCheckbox.checked = !!filteredProducts.length && selectedInFiltered === filteredProducts.length;
@@ -2683,14 +2662,12 @@ Camisa Real Madrid 24/25"></textarea>
 
               ${description}
 
-              <div class="product-admin-status-row">
-                <div class="product-admin-meta">
-                  <span class="badge">${categoryName}</span>
-                  <span class="badge">${saleType}</span>
-                  ${visibleBadge}
-                  ${badgeType}
-                  ${encomendaOrderBadge}
-                </div>
+              <div class="product-admin-meta">
+                <span class="badge">${categoryName}</span>
+                <span class="badge">${saleType}</span>
+                ${visibleBadge}
+                ${badgeType}
+                ${encomendaOrderBadge}
               </div>
 
               <div class="product-admin-meta">
@@ -3093,7 +3070,8 @@ Camisa Real Madrid 24/25"></textarea>
       }
     }
 
-    async function uploadHeroBannerImage() {
+    
+async function uploadHeroBannerImage() {
       clearMessage("settings-message");
 
       const fileInput = document.getElementById("hero-image-file");
@@ -3104,52 +3082,40 @@ Camisa Real Madrid 24/25"></textarea>
         return;
       }
 
-      const fileExt = file.name.split(".").pop();
-      const safeName = file.name
-        .replace(/\.[^/.]+$/, "")
-        .replace(/[^a-zA-Z0-9-_]/g, "-")
-        .toLowerCase();
-
-      const fileName = `${Date.now()}-${safeName}.${fileExt}`;
-      const filePath = `banners/home/${fileName}`;
-
-      const { error: uploadError } = await supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: true
+      try {
+        const compressedFile = await compressImageToTarget(file, {
+          maxWidth: 1600,
+          maxHeight: 900,
+          targetSizeKB: 600
         });
 
-      if (uploadError) {
-        console.error(uploadError);
-        showMessage("settings-message", `Erro ao enviar imagem: ${uploadError.message}`, "error");
-        return;
+        const imageUrl = await uploadToCloudinary(compressedFile, "camisa10-store/banners/home");
+
+        document.getElementById("setting-hero-image-url").value = imageUrl;
+        document.getElementById("hero-banner-preview").src = imageUrl;
+
+        const { error } = await supabaseClient
+          .from(SITE_SETTINGS_TABLE)
+          .update({ hero_image_url: imageUrl })
+          .eq("id", SITE_SETTINGS_ID);
+
+        if (error) {
+          console.error(error);
+          showMessage("settings-message", `Upload feito, mas erro ao salvar no banco: ${error.message}`, "error");
+          return;
+        }
+
+        clearAdminCache("camisa10_admin_site_settings_v1");
+        showMessage("settings-message", `Imagem do banner principal enviada e salva (${Math.round(compressedFile.size / 1024)} KB).`, "success");
+      } catch (error) {
+        console.error("Erro no upload do banner principal:", error);
+        showMessage("settings-message", `Erro ao enviar imagem: ${error.message || "sem detalhe"}`, "error");
       }
-
-      const { data: publicUrlData } = supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .getPublicUrl(filePath);
-
-      const imageUrl = publicUrlData?.publicUrl || "";
-
-      document.getElementById("setting-hero-image-url").value = imageUrl;
-      document.getElementById("hero-banner-preview").src = imageUrl;
-
-      const { error } = await supabaseClient
-        .from(SITE_SETTINGS_TABLE)
-        .update({ hero_image_url: imageUrl })
-        .eq("id", SITE_SETTINGS_ID);
-
-      if (error) {
-        console.error(error);
-        showMessage("settings-message", `Upload feito, mas erro ao salvar no banco: ${error.message}`, "error");
-        return;
-      }
-
-      showMessage("settings-message", "Imagem do banner principal enviada e salva com sucesso.", "success");
     }
 
-    async function uploadHeroLeftImage() {
+
+    
+async function uploadHeroLeftImage() {
       clearMessage("settings-message");
 
       const fileInput = document.getElementById("hero-left-image-file");
@@ -3160,52 +3126,40 @@ Camisa Real Madrid 24/25"></textarea>
         return;
       }
 
-      const fileExt = file.name.split(".").pop();
-      const safeName = file.name
-        .replace(/\.[^/.]+$/, "")
-        .replace(/[^a-zA-Z0-9-_]/g, "-")
-        .toLowerCase();
-
-      const fileName = `${Date.now()}-${safeName}.${fileExt}`;
-      const filePath = `banners/home-left/${fileName}`;
-
-      const { error: uploadError } = await supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: true
+      try {
+        const compressedFile = await compressImageToTarget(file, {
+          maxWidth: 1600,
+          maxHeight: 900,
+          targetSizeKB: 600
         });
 
-      if (uploadError) {
-        console.error(uploadError);
-        showMessage("settings-message", `Erro ao enviar imagem da esquerda: ${uploadError.message}`, "error");
-        return;
+        const imageUrl = await uploadToCloudinary(compressedFile, "camisa10-store/banners/home-left");
+
+        document.getElementById("setting-hero-left-image-url").value = imageUrl;
+        document.getElementById("hero-left-banner-preview").src = imageUrl;
+
+        const { error } = await supabaseClient
+          .from(SITE_SETTINGS_TABLE)
+          .update({ hero_left_image_url: imageUrl })
+          .eq("id", SITE_SETTINGS_ID);
+
+        if (error) {
+          console.error(error);
+          showMessage("settings-message", `Upload feito, mas erro ao salvar no banco: ${error.message}`, "error");
+          return;
+        }
+
+        clearAdminCache("camisa10_admin_site_settings_v1");
+        showMessage("settings-message", `Imagem da esquerda enviada e salva (${Math.round(compressedFile.size / 1024)} KB).`, "success");
+      } catch (error) {
+        console.error("Erro no upload da imagem da esquerda:", error);
+        showMessage("settings-message", `Erro ao enviar imagem da esquerda: ${error.message || "sem detalhe"}`, "error");
       }
-
-      const { data: publicUrlData } = supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .getPublicUrl(filePath);
-
-      const imageUrl = publicUrlData?.publicUrl || "";
-
-      document.getElementById("setting-hero-left-image-url").value = imageUrl;
-      document.getElementById("hero-left-banner-preview").src = imageUrl;
-
-      const { error } = await supabaseClient
-        .from(SITE_SETTINGS_TABLE)
-        .update({ hero_left_image_url: imageUrl })
-        .eq("id", SITE_SETTINGS_ID);
-
-      if (error) {
-        console.error(error);
-        showMessage("settings-message", `Upload feito, mas erro ao salvar no banco: ${error.message}`, "error");
-        return;
-      }
-
-      showMessage("settings-message", "Imagem da esquerda enviada e salva com sucesso.", "success");
     }
 
-    async function uploadLogoImage() {
+
+    
+async function uploadLogoImage() {
 
       clearMessage("settings-message");
 
@@ -3217,55 +3171,37 @@ Camisa Real Madrid 24/25"></textarea>
         return;
       }
 
-      const fileExt = file.name.split(".").pop();
-      const safeName = file.name
-        .replace(/\.[^/.]+$/, "")
-        .replace(/[^a-zA-Z0-9-_]/g, "-")
-        .toLowerCase();
-
-      const fileName = `${Date.now()}-${safeName}.${fileExt}`;
-      const filePath = `logo/${fileName}`;
-
-      const { error: uploadError } = await supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: true
+      try {
+        const compressedFile = await compressImageToTarget(file, {
+          maxWidth: 800,
+          maxHeight: 800,
+          targetSizeKB: 300
         });
 
-      if (uploadError) {
-        console.error("Erro no upload da logo:", uploadError);
-        showMessage("settings-message", `Erro ao enviar logo: ${uploadError.message}`, "error");
-        return;
+        const logoUrl = await uploadToCloudinary(compressedFile, "camisa10-store/logo");
+
+        document.getElementById("setting-logo-url").value = logoUrl;
+        document.getElementById("logo-preview").src = logoUrl;
+
+        const { error: saveError } = await supabaseClient
+          .from(SITE_SETTINGS_TABLE)
+          .update({ logo_url: logoUrl })
+          .eq("id", SITE_SETTINGS_ID);
+
+        if (saveError) {
+          console.error("Erro ao salvar logo_url:", saveError);
+          showMessage("settings-message", `Upload feito, mas erro ao salvar no banco: ${saveError.message}`, "error");
+          return;
+        }
+
+        clearAdminCache("camisa10_admin_site_settings_v1");
+        showMessage("settings-message", `Logo enviada e salva (${Math.round(compressedFile.size / 1024)} KB).`, "success");
+      } catch (error) {
+        console.error("Erro no upload da logo:", error);
+        showMessage("settings-message", `Erro ao enviar logo: ${error.message || "sem detalhe"}`, "error");
       }
-
-      const { data: publicUrlData } = supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .getPublicUrl(filePath);
-
-      const logoUrl = publicUrlData?.publicUrl || "";
-
-      if (!logoUrl) {
-        showMessage("settings-message", "Upload feito, mas não foi possível gerar a URL da logo.", "error");
-        return;
-      }
-
-      document.getElementById("setting-logo-url").value = logoUrl;
-      document.getElementById("logo-preview").src = logoUrl;
-
-      const { error: saveError } = await supabaseClient
-        .from(SITE_SETTINGS_TABLE)
-        .update({ logo_url: logoUrl })
-        .eq("id", SITE_SETTINGS_ID);
-
-      if (saveError) {
-        console.error("Erro ao salvar logo_url:", saveError);
-        showMessage("settings-message", `Upload feito, mas erro ao salvar no banco: ${saveError.message}`, "error");
-        return;
-      }
-
-      showMessage("settings-message", "Logo enviada e salva com sucesso.", "success");
     }
+
 
     function resetHeroSlidePreview() {
       document.getElementById("hero-slide-preview").src = "https://via.placeholder.com/1200x500?text=Preview+do+Slide";
@@ -3290,7 +3226,8 @@ Camisa Real Madrid 24/25"></textarea>
       clearMessage("hero-slide-message");
     }
 
-    async function uploadHeroSlideImage() {
+    
+async function uploadHeroSlideImage() {
       clearMessage("hero-slide-message");
 
       const fileInput = document.getElementById("hero-slide-file");
@@ -3301,43 +3238,25 @@ Camisa Real Madrid 24/25"></textarea>
         return;
       }
 
-      const fileExt = file.name.split(".").pop();
-      const safeName = file.name
-        .replace(/\.[^/.]+$/, "")
-        .replace(/[^a-zA-Z0-9-_]/g, "-")
-        .toLowerCase();
-
-      const fileName = `${Date.now()}-${safeName}.${fileExt}`;
-      const filePath = `hero-slides/${fileName}`;
-
-      const { error: uploadError } = await supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: true
+      try {
+        const compressedFile = await compressImageToTarget(file, {
+          maxWidth: 1600,
+          maxHeight: 900,
+          targetSizeKB: 600
         });
 
-      if (uploadError) {
-        console.error("Erro no upload da imagem do slide:", uploadError);
-        showMessage("hero-slide-message", `Erro ao enviar imagem do slide: ${uploadError.message}`, "error");
-        return;
+        const imageUrl = await uploadToCloudinary(compressedFile, "camisa10-store/hero-slides");
+
+        document.getElementById("hero-slide-image-url").value = imageUrl;
+        document.getElementById("hero-slide-preview").src = imageUrl;
+        clearAdminCache("camisa10_admin_hero_slides_v1");
+        showMessage("hero-slide-message", `Imagem do slide enviada (${Math.round(compressedFile.size / 1024)} KB).`, "success");
+      } catch (error) {
+        console.error("Erro no upload da imagem do slide:", error);
+        showMessage("hero-slide-message", `Erro ao enviar imagem do slide: ${error.message || "sem detalhe"}`, "error");
       }
-
-      const { data: publicUrlData } = supabaseClient.storage
-        .from(SITE_ASSETS_BUCKET)
-        .getPublicUrl(filePath);
-
-      const imageUrl = publicUrlData?.publicUrl || "";
-
-      if (!imageUrl) {
-        showMessage("hero-slide-message", "Upload feito, mas não foi possível gerar a URL da imagem.", "error");
-        return;
-      }
-
-      document.getElementById("hero-slide-image-url").value = imageUrl;
-      document.getElementById("hero-slide-preview").src = imageUrl;
-      showMessage("hero-slide-message", "Imagem do slide enviada com sucesso.", "success");
     }
+
 
     async function loadHeroSlidesAdmin() {
       const tbody = document.getElementById("hero-slides-table-body");
@@ -3825,38 +3744,6 @@ Camisa Real Madrid 24/25"></textarea>
       renderBatchCreateProducts();
     }
 
-    function toggleBatchSharedForAll(checked) {
-      batchCreateProducts = batchCreateProducts.map(item => ({ ...item, useSharedImages: !!checked }));
-      renderBatchCreateProducts();
-    }
-
-    function markAllBatchSizes(checked) {
-      document.querySelectorAll(".batch-size-check").forEach(check => { check.checked = !!checked; });
-      refreshBatchSizeChipStates();
-    }
-
-    function syncBatchBuilderFromNames() {
-      const names = parseBatchCreateNames();
-      if (!names.length) {
-        batchCreateProducts = [];
-        renderBatchCreateProducts();
-        return;
-      }
-      const byName = new Map(batchCreateProducts.map(item => [item.name, item]));
-      batchCreateProducts = names.map((name) => {
-        const existing = byName.get(name);
-        return existing ? existing : {
-          name,
-          slug: generateSlug(name),
-          useSharedImages: true,
-          mainFile: null,
-          mainUrl: "",
-          extraFiles: []
-        };
-      });
-      renderBatchCreateProducts();
-    }
-
     function syncBatchProductName(index, value) {
       if (!batchCreateProducts[index]) return;
       batchCreateProducts[index].name = value;
@@ -4016,26 +3903,35 @@ Camisa Real Madrid 24/25"></textarea>
       updateBatchCreateKpis();
     }
 
-    async function uploadBatchMainImageForProduct(item, slugBase) {
+    
+async function uploadBatchMainImageForProduct(item, slugBase) {
       const ownUrl = (item.mainUrl || "").trim();
       if (item.mainFile) {
-        const fileExt = item.mainFile.name.split(".").pop();
-        const safeName = item.mainFile.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9-_]/g, "-").toLowerCase();
-        return await uploadFileToBucket(PRODUCT_BUCKET, `produtos/main/${Date.now()}-${slugBase}-${safeName}.${fileExt}`, item.mainFile);
+        const compressedFile = await compressImageToTarget(item.mainFile, {
+          maxWidth: 1000,
+          maxHeight: 1000,
+          targetSizeKB: 400
+        });
+        return await uploadToCloudinary(compressedFile, "camisa10-store/produtos/main");
       }
       if (ownUrl) return ownUrl;
 
       const sharedUrl = document.getElementById("batch-shared-main-url")?.value?.trim() || "";
       if (item.useSharedImages && batchCreateSharedMainFile) {
-        const fileExt = batchCreateSharedMainFile.name.split(".").pop();
-        const safeName = batchCreateSharedMainFile.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9-_]/g, "-").toLowerCase();
-        return await uploadFileToBucket(PRODUCT_BUCKET, `produtos/main/${Date.now()}-${slugBase}-shared-${safeName}.${fileExt}`, batchCreateSharedMainFile);
+        const compressedFile = await compressImageToTarget(batchCreateSharedMainFile, {
+          maxWidth: 1000,
+          maxHeight: 1000,
+          targetSizeKB: 400
+        });
+        return await uploadToCloudinary(compressedFile, "camisa10-store/produtos/main");
       }
       if (item.useSharedImages && sharedUrl) return sharedUrl;
       return "";
     }
 
-    async function uploadAdditionalImagesForBatchProduct(productId, item) {
+
+    
+async function uploadAdditionalImagesForBatchProduct(productId, item) {
       const allFiles = [];
       if (item.useSharedImages) allFiles.push(...batchCreateSharedExtraFiles);
       allFiles.push(...(item.extraFiles || []));
@@ -4043,10 +3939,12 @@ Camisa Real Madrid 24/25"></textarea>
       let uploaded = 0;
       for (let i = 0; i < allFiles.length; i++) {
         const file = allFiles[i];
-        const fileExt = file.name.split(".").pop();
-        const safeName = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9-_]/g, "-").toLowerCase();
-        const filePath = `produtos/${productId}/${Date.now()}-${i}-${safeName}.${fileExt}`;
-        const imageUrl = await uploadFileToBucket(PRODUCT_BUCKET, filePath, file);
+        const compressedFile = await compressImageToTarget(file, {
+          maxWidth: 1000,
+          maxHeight: 1000,
+          targetSizeKB: 300
+        });
+        const imageUrl = await uploadToCloudinary(compressedFile, `camisa10-store/produtos/${productId}`);
 
         const { error } = await supabaseClient
           .from("product_images")
@@ -4061,6 +3959,7 @@ Camisa Real Madrid 24/25"></textarea>
       }
       return uploaded;
     }
+
 
     async function saveBatchCreateProducts() {
       clearMessage("batch-create-message");
@@ -5266,28 +5165,21 @@ async function saveGestaoSale() {
     }
 
     async function initializeAdmin() {
-      setGlobalLoading(true, "Preparando o painel", "Carregando produtos, categorias e gestão sem travar sua entrada.");
-      try {
-        const categoriesResult = await loadCategories();
-        await Promise.allSettled([
-          loadCategoriesList(),
-          loadProducts(),
-          loadSiteSettings(),
-          loadHeroSlidesAdmin(),
-          loadGestaoState()
-        ]);
-        resetHeroSlideForm();
-        updateBatchPreview();
-        const batchCategorySelect = document.getElementById("batch-create-category");
-        if (batchCategorySelect) {
-          batchCategorySelect.innerHTML = '<option value="">Selecione a categoria</option>' + allCategories.map(category => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join("");
-        }
-        renderGestao();
-        renderBatchSharedPreviews();
-        renderBatchCreateProducts();
-      } finally {
-        setGlobalLoading(false);
+      await loadCategories();
+      await loadCategoriesList();
+      await loadProducts();
+      await loadSiteSettings();
+      await loadHeroSlidesAdmin();
+      resetHeroSlideForm();
+      updateBatchPreview();
+      const batchCategorySelect = document.getElementById("batch-create-category");
+      if (batchCategorySelect) {
+        batchCategorySelect.innerHTML = '<option value="">Selecione a categoria</option>' + allCategories.map(category => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join("");
       }
+      await loadGestaoState();
+      renderGestao();
+      renderBatchSharedPreviews();
+      renderBatchCreateProducts();
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
@@ -5308,7 +5200,7 @@ async function saveGestaoSale() {
       document.querySelectorAll(".batch-size-check").forEach(check => {
         check.addEventListener("change", refreshBatchSizeChipStates);
       });
-      document.getElementById("batch-create-names")?.addEventListener("input", syncBatchBuilderFromNames);
+      document.getElementById("batch-create-names")?.addEventListener("input", updateBatchCreateKpis);
       document.querySelectorAll(".step-chip").forEach(button => {
         button.addEventListener("click", () => setProductStep(Number(button.dataset.stepTarget)));
       });
@@ -5339,10 +5231,8 @@ async function saveGestaoSale() {
 
         if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION' || event === 'TOKEN_REFRESHED') && session) {
           if (document.getElementById('admin-panel').classList.contains('hidden') && document.getElementById('home-selector').classList.contains('hidden')) {
+            await initializeAdmin();
             showHomeSelector();
-            initializeAdmin().catch((initError) => {
-              console.error("Erro ao inicializar painel:", initError);
-            });
           }
         }
       });
@@ -5350,10 +5240,8 @@ async function saveGestaoSale() {
       const session = await getCurrentSession();
       if (session) {
         document.getElementById('login-email').value = session.user?.email || '';
+        await initializeAdmin();
         showHomeSelector();
-        initializeAdmin().catch((initError) => {
-          console.error("Erro ao inicializar painel:", initError);
-        });
       } else {
         showLoginScreen();
       }
