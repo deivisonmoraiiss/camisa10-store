@@ -1844,8 +1844,14 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         .toLowerCase();
     }
 
+    function optimizeCloudinaryImage(url, width = 500) {
+      if (!url || !url.includes("res.cloudinary.com")) return url;
+      return url.replace("/upload/", `/upload/f_auto,q_auto,w_${width}/`);
+    }
+
     function getProductImage(product) {
-      return product.image_url || product.photo_url || product.cover_url || product.product_images?.[0]?.image_url || "";
+      const url = product.image_url || product.photo_url || product.cover_url || product.product_images?.[0]?.image_url || "";
+      return optimizeCloudinaryImage(url, 500);
     }
 
     function getProductUrl(product) {
@@ -1967,7 +1973,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
               ${(productBadge || saleTypeBadge) ? `<div class="badge-stack">${productBadge}${saleTypeBadge}</div>` : ""}
               ${
                 imagem
-                  ? `<img class="product-image" src="${imagem}" alt="${title}" loading="lazy" />`
+                  ? `<img class="product-image lazy-img" data-src="${imagem}" alt="${title}" />`
                   : `<div class="product-image-placeholder">Camisa 10 Store</div>`
               }
             </div>
@@ -2001,6 +2007,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       });
 
       grid.innerHTML = sortedFeatured.map(product => buildProductCard(product, true)).join("");
+      setupLazyLoad();
     }
 
     function renderProducts() {
@@ -2074,6 +2081,8 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
           ? encomenda.map(product => buildProductCard(product)).join("")
           : `<div class="state-box">Nenhum produto sob encomenda com esse filtro.</div>`;
       }
+
+      setupLazyLoad();
     }
 
     function syncSearchInputs(value) {
@@ -2392,7 +2401,8 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
             name
           )
         `)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(50);
 
       if (error) {
         console.error("Erro real do Supabase:", error);
@@ -2406,6 +2416,24 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       }));
 
       saveCache("products", allProducts);
+    }
+
+    function setupLazyLoad() {
+      const images = document.querySelectorAll(".lazy-img");
+      if (!images.length) return;
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.removeAttribute("data-src");
+          img.classList.remove("lazy-img");
+          obs.unobserve(img);
+        });
+      }, { rootMargin: "150px 0px" });
+
+      images.forEach(img => observer.observe(img));
     }
 
     async function init() {
