@@ -1957,7 +1957,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       `;
     }
 
-    function buildProductCard(product, isFeatured = false) {
+    function buildProductCard(product, isFeatured = false, useLazyImage = true) {
       const imagem = getProductImage(product) || "https://via.placeholder.com/300x300?text=Camisa";
       const categoryName = normalizeCategoryName(product);
       const title = product.name || product.title || "Camisa disponível";
@@ -1973,7 +1973,11 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
               ${(productBadge || saleTypeBadge) ? `<div class="badge-stack">${productBadge}${saleTypeBadge}</div>` : ""}
               ${
                 imagem
-                  ? `<img class="product-image lazy-img" data-src="${imagem}" alt="${title}" />`
+                  ? (
+                      useLazyImage
+                        ? `<img class="product-image lazy-img" data-src="${imagem}" alt="${title}" />`
+                        : `<img class="product-image" src="${imagem}" alt="${title}" loading="eager" />`
+                    )
                   : `<div class="product-image-placeholder">Camisa 10 Store</div>`
               }
             </div>
@@ -2006,7 +2010,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         return bDate - aDate;
       });
 
-      grid.innerHTML = sortedFeatured.map(product => buildProductCard(product, true)).join("");
+      grid.innerHTML = sortedFeatured.map(product => buildProductCard(product, true, false)).join("");
       setupLazyLoad();
     }
 
