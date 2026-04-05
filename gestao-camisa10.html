@@ -1867,6 +1867,8 @@ Camisa Real Madrid 24/25"></textarea>
       }
 
       document.getElementById("login-password").value = "";
+      adminInitialized = false;
+      adminInitPromise = null;
       document.getElementById("home-selector").classList.add("hidden");
       document.getElementById("home-selector").style.display = "none";
       document.getElementById("admin-panel").classList.add("hidden");
@@ -5164,22 +5166,37 @@ async function saveGestaoSale() {
       showMessage('gestao-sale-message', 'Venda registrada com sucesso.', 'success');
     }
 
-    async function initializeAdmin() {
-      await loadCategories();
-      await loadCategoriesList();
-      await loadProducts();
-      await loadSiteSettings();
-      await loadHeroSlidesAdmin();
-      resetHeroSlideForm();
-      updateBatchPreview();
-      const batchCategorySelect = document.getElementById("batch-create-category");
-      if (batchCategorySelect) {
-        batchCategorySelect.innerHTML = '<option value="">Selecione a categoria</option>' + allCategories.map(category => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join("");
+    let adminInitPromise = null;
+    let adminInitialized = false;
+
+    async function initializeAdmin(force = false) {
+      if (adminInitPromise && !force) return adminInitPromise;
+      if (adminInitialized && !force) return;
+
+      adminInitPromise = (async () => {
+        await loadCategories();
+        await loadCategoriesList();
+        await loadProducts();
+        await loadSiteSettings();
+        await loadHeroSlidesAdmin();
+        resetHeroSlideForm();
+        updateBatchPreview();
+        const batchCategorySelect = document.getElementById("batch-create-category");
+        if (batchCategorySelect) {
+          batchCategorySelect.innerHTML = '<option value="">Selecione a categoria</option>' + allCategories.map(category => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join("");
+        }
+        await loadGestaoState();
+        renderGestao();
+        await renderBatchSharedPreviews();
+        await renderBatchCreateProducts();
+        adminInitialized = true;
+      })();
+
+      try {
+        await adminInitPromise;
+      } finally {
+        adminInitPromise = null;
       }
-      await loadGestaoState();
-      renderGestao();
-      renderBatchSharedPreviews();
-      renderBatchCreateProducts();
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
@@ -5223,17 +5240,16 @@ async function saveGestaoSale() {
       const saleDateField = document.getElementById('gestao-sale-date');
       if (saleDateField) saleDateField.value = new Date().toISOString().slice(0,10);
 
-      supabaseClient.auth.onAuthStateChange(async (event, session) => {
+      supabaseClient.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_OUT') {
+          adminInitialized = false;
+          adminInitPromise = null;
           showLoginScreen();
           return;
         }
 
-        if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION' || event === 'TOKEN_REFRESHED') && session) {
-          if (document.getElementById('admin-panel').classList.contains('hidden') && document.getElementById('home-selector').classList.contains('hidden')) {
-            await initializeAdmin();
-            showHomeSelector();
-          }
+        if (event === 'INITIAL_SESSION' && session) {
+          document.getElementById('login-email').value = session.user?.email || '';
         }
       });
 
