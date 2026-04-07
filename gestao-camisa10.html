@@ -405,6 +405,36 @@
     .settings-status-pill{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:#101010;border:1px solid var(--line);font-size:.84rem;color:#f3f3f3}
     .settings-status-pill strong{color:var(--gold-2)}
 
+    .loja-products-layout{display:grid;grid-template-columns:minmax(360px,460px) minmax(0,1fr);gap:18px;align-items:start}
+    .loja-products-layout > .product-form-card{position:sticky;top:154px}
+    .loja-helper-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 16px}
+    .loja-helper-card{padding:12px 14px;border-radius:16px;background:#0f0f0f;border:1px solid rgba(255,255,255,.06);display:grid;gap:4px}
+    .loja-helper-card strong{font-size:.84rem;color:#fff}
+    .loja-helper-card span{font-size:.78rem;color:var(--muted);line-height:1.45}
+    .upload-split-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .upload-dropzone{display:grid;gap:8px;padding:14px;border-radius:16px;border:1px dashed rgba(212,175,55,.28);background:linear-gradient(180deg,rgba(212,175,55,.08),rgba(212,175,55,.03));min-height:100%}
+    .upload-dropzone strong{font-size:.9rem;color:#fff}
+    .upload-dropzone span{font-size:.8rem;color:var(--muted);line-height:1.45}
+    .upload-dropzone input{background:#0f0f0f;border:1px solid rgba(255,255,255,.08)}
+    .variant-helper-card{padding:14px;border-radius:16px;background:#101010;border:1px solid rgba(255,255,255,.06);display:grid;gap:8px;margin-top:14px}
+    .variant-helper-card strong{font-size:.9rem;color:#fff}
+    .variant-helper-card span{font-size:.82rem;color:var(--muted);line-height:1.5}
+    .variant-helper-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .list-meta-strip{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 14px}
+    .list-meta-pill{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:#101010;border:1px solid var(--line);font-size:.84rem;color:#ececec}
+    .list-meta-pill strong{color:var(--gold-2)}
+    .products-toolbar.products-toolbar-advanced{gap:10px;margin-bottom:14px}
+    .product-list-card{gap:0}
+    .product-admin-actions .btn-secondary{background:#171717;border:1px solid rgba(212,175,55,.18);color:#f3e0a0}
+    .product-admin-actions .btn-secondary:hover{background:#1d1d1d}
+    .batch-card{margin-top:18px}
+    .batch-card-summary{padding:18px}
+    .batch-card-body{padding:0 18px 0 18px}
+    .batch-panel strong{font-size:.95rem}
+    .batch-panel{background:linear-gradient(180deg,#111 0%, #0d0d0d 100%)}
+    .batch-summary{min-height:72px}
+    .step-actions{position:sticky;bottom:12px;background:rgba(10,10,10,.92);backdrop-filter:blur(10px);padding:14px;border:1px solid rgba(255,255,255,.06);border-radius:16px;z-index:4}
+
     @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline,.admin-overview-grid,.settings-summary-grid{grid-template-columns:1fr}}
     @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}.order-collapsible summary{grid-template-columns:56px minmax(0,1fr);align-items:start}.order-summary-side{grid-column:1/-1;justify-items:start;padding-left:70px}.order-summary-toggle{width:100%;justify-content:center}.order-detail-item{grid-template-columns:56px minmax(0,1fr);align-items:start}.order-detail-pricing{grid-column:2/3;justify-items:start;text-align:left;min-width:0}}
   </style>
@@ -523,7 +553,7 @@
           </div>
 
           <section id="tab-products" class="tab-panel active">
-        <div class="stack">
+        <div class="stack loja-products-layout">
           <div class="card product-form-card">
             <div class="form-header-row">
               <div>
@@ -546,6 +576,12 @@
               <div class="product-flow-pill"><strong>Cadastro rápido</strong><span>Nome, categoria e tipo primeiro</span></div>
               <div class="product-flow-pill"><strong>Menos erro</strong><span>Preço e imagens separados por etapa</span></div>
               <div class="product-flow-pill"><strong>Mobile melhor</strong><span>Campos agrupados e mais limpos</span></div>
+            </div>
+            <div class="loja-helper-strip">
+              <div class="loja-helper-card"><strong>Nova cor sem retrabalho</strong><span>Salve a primeira camisa e use “Duplicar / nova cor” na lista ao lado.</span></div>
+              <div class="loja-helper-card"><strong>Imagens mais simples</strong><span>Principal separada da galeria, com prévia clara antes de salvar.</span></div>
+              <div class="loja-helper-card"><strong>Edição em lote recolhida</strong><span>Abra só quando precisar alterar preços ou descrição em massa.</span></div>
+              <div class="loja-helper-card"><strong>Layout mais loja</strong><span>Cadastro fixo de um lado e produtos organizados do outro.</span></div>
             </div>
 
             <div class="product-step active" data-step="1">
@@ -631,14 +667,22 @@
             </div>
 
             <div class="product-step" data-step="3">
-              <div class="grid-2-equal">
-                <div class="field">
-                  <label for="product-file">Imagem principal</label>
-                  <input type="file" id="product-file" accept="image/*" onchange="previewSelectedMainImage(event)" />
+              <div class="upload-split-grid">
+                <div class="upload-dropzone">
+                  <strong>Imagem principal</strong>
+                  <span>Escolha a foto que vai aparecer primeiro no site. Pode subir do celular/computador ou usar URL pronta.</span>
+                  <div class="field" style="margin-bottom:0;">
+                    <label for="product-file">Arquivo da capa</label>
+                    <input type="file" id="product-file" accept="image/*" onchange="previewSelectedMainImage(event)" />
+                  </div>
                 </div>
-                <div class="field">
-                  <label for="product-image">URL da imagem principal</label>
-                  <input type="text" id="product-image" placeholder="Se preferir, cole uma URL pronta" />
+                <div class="upload-dropzone">
+                  <strong>URL pronta da capa</strong>
+                  <span>Use quando já tiver a imagem hospedada e quiser só colar o link.</span>
+                  <div class="field" style="margin-bottom:0;">
+                    <label for="product-image">URL da imagem principal</label>
+                    <input type="text" id="product-image" placeholder="Se preferir, cole uma URL pronta" />
+                  </div>
                 </div>
               </div>
 
@@ -648,7 +692,7 @@
               </div>
 
               <div class="field" style="margin-top:16px;">
-                <label for="product-files">Fotos adicionais da galeria</label>
+                <label for="product-files">Galeria do produto</label>
                 <input type="file" id="product-files" accept="image/*" multiple onchange="previewSelectedImages(event)" />
               </div>
 
@@ -658,7 +702,16 @@
               </div>
 
               <div class="helper-box helper-box-visible">
-                O upload é automático quando você salvar o produto. Não precisa subir imagem manualmente antes.
+                O upload é automático quando você salvar o produto. Use a galeria para detalhes, costas, mangas ou variações visuais.
+              </div>
+
+              <div class="variant-helper-card">
+                <strong>Fluxo rápido para outra cor</strong>
+                <span>Cadastre a primeira versão completa. Depois, na lista de produtos, clique em <strong>Duplicar / nova cor</strong>, troque nome, imagens e salve. Isso evita preencher tudo de novo.</span>
+                <div class="variant-helper-actions">
+                  <span class="badge">Bom para variações</span>
+                  <span class="badge">Mais rápido no celular</span>
+                </div>
               </div>
 
               <div id="current-gallery-box" class="preview-box hidden" style="margin-top:16px;">
@@ -719,6 +772,11 @@
                 <div class="small-muted">Busque, filtre e duplique produtos para cadastrar muito mais rápido.</div>
               </div>
               <button class="btn btn-secondary" type="button" onclick="startNewProduct()">Novo produto</button>
+            </div>
+            <div class="list-meta-strip">
+              <div class="list-meta-pill">Total: <strong id="products-total-pill">0</strong></div>
+              <div class="list-meta-pill">Filtrados: <strong id="products-filtered-pill">0</strong></div>
+              <div class="list-meta-pill">Selecionados: <strong id="products-selected-pill">0</strong></div>
             </div>
 
             <div class="products-toolbar products-toolbar-advanced">
@@ -2408,10 +2466,16 @@ async function uploadMultipleProductImages(productId) {
       const filteredCountEl = document.getElementById("batch-filtered-count");
       const selectedCountEl = document.getElementById("batch-selected-count");
       const selectAllCheckbox = document.getElementById("select-all-filtered");
+      const totalPill = document.getElementById("products-total-pill");
+      const filteredPill = document.getElementById("products-filtered-pill");
+      const selectedPill = document.getElementById("products-selected-pill");
 
       if (filteredCountEl) filteredCountEl.textContent = String(filteredProducts.length);
       const selectedInFiltered = filteredProducts.filter(product => selectedProductIds.has(String(product.id))).length;
       if (selectedCountEl) selectedCountEl.textContent = String(selectedInFiltered);
+      if (totalPill) totalPill.textContent = String(allProducts.length || 0);
+      if (filteredPill) filteredPill.textContent = String(filteredProducts.length || 0);
+      if (selectedPill) selectedPill.textContent = String(selectedInFiltered || 0);
 
       if (selectAllCheckbox) {
         selectAllCheckbox.checked = !!filteredProducts.length && selectedInFiltered === filteredProducts.length;
@@ -2736,7 +2800,7 @@ async function uploadMultipleProductImages(productId) {
 
               <div class="product-admin-actions">
                 <button class="btn btn-success" onclick="editProduct('${product.id}')">Editar</button>
-                <button class="btn btn-secondary" onclick="duplicateProduct('${product.id}')">Duplicar</button>
+                <button class="btn btn-secondary" onclick="duplicateProduct('${product.id}')">Duplicar / nova cor</button>
                 <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">Excluir</button>
               </div>
             </div>
