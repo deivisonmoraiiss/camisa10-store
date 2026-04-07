@@ -353,16 +353,32 @@
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
 
-    .order-collapsible{border:1px solid var(--line);border-radius:18px;background:#101010;overflow:hidden}
-    .order-collapsible summary{list-style:none;cursor:pointer;padding:16px;display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:flex-start}
+    .order-collapsible{border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,#101010 0%, #0c0c0c 100%);overflow:hidden;transition:border-color .2s ease, box-shadow .2s ease}
+    .order-collapsible:hover{border-color:rgba(212,175,55,.22)}
+    .order-collapsible[open]{border-color:rgba(212,175,55,.24);box-shadow:0 16px 32px rgba(0,0,0,.16)}
+    .order-collapsible summary{list-style:none;cursor:pointer;padding:16px;display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center}
     .order-collapsible summary::-webkit-details-marker{display:none}
     .order-collapsible[open] summary{border-bottom:1px solid rgba(255,255,255,.06)}
-    .order-collapsible-body{padding:14px 16px 16px}
-    .order-summary-main{display:grid;gap:6px}
-    .order-summary-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-    .order-summary-thumb{width:64px;height:64px;border-radius:14px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f}
-    .order-detail-item{display:grid;grid-template-columns:60px minmax(0,1fr);gap:12px;align-items:start;margin-top:10px;padding:12px;border-radius:14px;background:#0d0d0d;border:1px solid rgba(255,255,255,.05)}
-    .order-detail-item img{width:60px;height:60px;border-radius:12px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f}
+    .order-collapsible-body{display:grid;gap:14px;padding:0 16px 16px;opacity:0;transform:translateY(-4px);transition:opacity .22s ease, transform .22s ease}
+    .order-collapsible[open] .order-collapsible-body{padding-top:14px;opacity:1;transform:translateY(0)}
+    .order-summary-main{display:grid;gap:8px;min-width:0}
+    .order-summary-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .order-summary-side{display:grid;justify-items:end;gap:10px;align-self:center}
+    .order-summary-thumb{width:64px;height:64px;border-radius:16px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f}
+    .order-summary-total{display:inline-flex;align-items:center;justify-content:center;padding:9px 14px;border-radius:999px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.24);color:#f5d983;font-weight:900;min-width:112px}
+    .order-summary-toggle{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:999px;background:#141414;border:1px solid rgba(255,255,255,.08);color:#ececec;font-size:.82rem;font-weight:800}
+    .order-summary-toggle::before{content:'▾';font-size:.9rem;transition:transform .2s ease}
+    .order-collapsible[open] .order-summary-toggle::before{transform:rotate(180deg)}
+    .order-detail-grid{display:grid;gap:10px}
+    .order-detail-item{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center;margin-top:0;padding:12px 14px;border-radius:16px;background:linear-gradient(180deg,#0e0e0e 0%, #0b0b0b 100%);border:1px solid rgba(255,255,255,.05)}
+    .order-detail-item img{width:56px;height:56px;border-radius:14px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f}
+    .order-detail-copy{display:grid;gap:4px;min-width:0}
+    .order-detail-title{font-size:.95rem;font-weight:900;color:#fff;line-height:1.35}
+    .order-detail-meta{color:var(--muted);font-size:.84rem;line-height:1.45}
+    .order-detail-pricing{display:grid;gap:4px;justify-items:end;text-align:right;min-width:110px}
+    .order-detail-unit{font-size:.82rem;color:var(--muted)}
+    .order-detail-total{font-size:.92rem;color:#f1f1f1}
+    .order-detail-total strong{color:var(--gold-2)}
     .stock-group-card{display:grid;grid-template-columns:72px minmax(0,1fr);gap:14px;align-items:start}
     .stock-group-card img{width:72px;height:72px;border-radius:14px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f;display:block}
     .stock-size-summary{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
@@ -376,7 +392,7 @@
     .metric-card strong{font-size:1.2rem;color:#fff}
 
     @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline{grid-template-columns:1fr}}
-    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
+    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}.order-collapsible summary{grid-template-columns:56px minmax(0,1fr);align-items:start}.order-summary-side{grid-column:1/-1;justify-items:start;padding-left:70px}.order-summary-toggle{width:100%;justify-content:center}.order-detail-item{grid-template-columns:56px minmax(0,1fr);align-items:start}.order-detail-pricing{grid-column:2/3;justify-items:start;text-align:left;min-width:0}}
   </style>
 </head>
 <body>
@@ -1621,6 +1637,13 @@ Camisa Real Madrid 24/25"></textarea>
         style: "currency",
         currency: "BRL"
       });
+    }
+
+    function formatGestaoDate(value) {
+      if (!value) return '—';
+      const parsed = new Date(`${String(value).slice(0, 10)}T12:00:00`);
+      if (Number.isNaN(parsed.getTime())) return escapeHtml(String(value));
+      return parsed.toLocaleDateString('pt-BR');
     }
 
     function formatBadgeLabel(badgeType) {
@@ -4218,52 +4241,36 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
 
     async function loadGestaoStateFromSupabase() {
       const localBackup = readGestaoLocalState();
+      const { data: suppliers, error: supplierError } = await supabaseClient
+        .from(GESTAO_SUPPLIERS_TABLE)
+        .select('id, name, contact, created_at')
+        .order('created_at', { ascending: false });
 
-      const [
-        suppliersResult,
-        ordersResult,
-        orderItemsResult,
-        saleItemsResult
-      ] = await Promise.allSettled([
-        supabaseClient
-          .from(GESTAO_SUPPLIERS_TABLE)
-          .select('id, name, contact, created_at')
-          .order('created_at', { ascending: false }),
-        supabaseClient
-          .from(GESTAO_ORDERS_TABLE)
-          .select('id, supplier_id, order_date, extra_cost, notes, created_at')
-          .order('order_date', { ascending: false })
-          .order('created_at', { ascending: false }),
-        supabaseClient
-          .from(GESTAO_ORDER_ITEMS_TABLE)
-          .select('id, order_id, product_id, size, quantity, cost_price')
-          .order('id', { ascending: false }),
-        supabaseClient
-          .from(GESTAO_SALE_ITEMS_TABLE)
-          .select('id, sale_id, product_id, quantity, sale_price, cost_price, size, sales(total_amount, profit, created_at, packaging_cost, shipping_cost, extra_cost)')
-          .order('id', { ascending: false })
-      ]);
+      if (supplierError) throw supplierError;
 
-      const suppliersPayload = suppliersResult.status === 'fulfilled' ? suppliersResult.value : null;
-      const ordersPayload = ordersResult.status === 'fulfilled' ? ordersResult.value : null;
-      const orderItemsPayload = orderItemsResult.status === 'fulfilled' ? orderItemsResult.value : null;
-      const salesPayload = saleItemsResult.status === 'fulfilled' ? saleItemsResult.value : null;
+      const { data: orders, error: ordersError } = await supabaseClient
+        .from(GESTAO_ORDERS_TABLE)
+        .select('id, supplier_id, order_date, extra_cost, notes, created_at')
+        .order('order_date', { ascending: false })
+        .order('created_at', { ascending: false });
 
-      const suppliersError = suppliersPayload?.error || (suppliersResult.status === 'rejected' ? suppliersResult.reason : null);
-      const ordersError = ordersPayload?.error || (ordersResult.status === 'rejected' ? ordersResult.reason : null);
-      const orderItemsError = orderItemsPayload?.error || (orderItemsResult.status === 'rejected' ? orderItemsResult.reason : null);
-      const salesError = salesPayload?.error || (saleItemsResult.status === 'rejected' ? saleItemsResult.reason : null);
-
-      if (suppliersError) throw suppliersError;
       if (ordersError) throw ordersError;
+
+      const { data: orderItems, error: orderItemsError } = await supabaseClient
+        .from(GESTAO_ORDER_ITEMS_TABLE)
+        .select('id, order_id, product_id, size, quantity, cost_price')
+        .order('id', { ascending: false });
+
       if (orderItemsError) throw orderItemsError;
 
-      const suppliers = suppliersPayload?.data || [];
-      const orders = ordersPayload?.data || [];
-      const orderItems = orderItemsPayload?.data || [];
-      const saleItems = salesPayload?.data || [];
+      const { data: saleItems, error: salesError } = await supabaseClient
+        .from(GESTAO_SALE_ITEMS_TABLE)
+        .select('id, sale_id, product_id, quantity, sale_price, cost_price, size, sales(total_amount, profit, created_at, packaging_cost, shipping_cost, extra_cost)')
+        .order('id', { ascending: false });
 
-      gestaoSuppliers = suppliers.map(item => ({
+      if (salesError) throw salesError;
+
+      gestaoSuppliers = (suppliers || []).map(item => ({
         id: item.id,
         name: item.name,
         contact: item.contact || ''
@@ -4273,8 +4280,8 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         gestaoSuppliers = [...localBackup.suppliers];
       }
 
-      const ordersMap = new Map(orders.map(order => [String(order.id), order]));
-      gestaoEntries = orderItems.map(item => {
+      const ordersMap = new Map((orders || []).map(order => [String(order.id), order]));
+      gestaoEntries = (orderItems || []).map(item => {
         const order = ordersMap.get(String(item.order_id)) || {};
         const orderDate = order.order_date || (order.created_at ? String(order.created_at).slice(0,10) : '');
         return {
@@ -4302,33 +4309,28 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         gestaoSalesMeta = { ...localBackup.salesMeta };
       }
 
-      if (salesError) {
-        console.warn('Gestão: falha ao carregar vendas, seguindo com estoque online.', salesError?.message || salesError);
-        gestaoSales = localBackup.sales.length ? [...localBackup.sales] : [];
-      } else {
-        gestaoSales = saleItems.map(item => ({
-          id: item.id,
-          saleId: item.sale_id,
-          productId: item.product_id,
-          size: item.size || 'M',
-          quantity: Number(item.quantity || 0),
-          salePrice: Number(item.sale_price || 0),
-          costPrice: Number(item.cost_price || 0),
-          date: item.sales?.created_at ? String(item.sales.created_at).slice(0,10) : '',
-          totalAmount: Number(item.sales?.total_amount || (Number(item.quantity || 0) * Number(item.sale_price || 0))),
-          packagingCost: Number(item.sales?.packaging_cost || 0),
-          shippingCost: Number(item.sales?.shipping_cost || 0),
-          feeCost: 0,
-          otherCost: Number(item.sales?.extra_cost || 0),
-          extraCostsTotal: Number(item.sales?.packaging_cost || 0) + Number(item.sales?.shipping_cost || 0) + Number(item.sales?.extra_cost || 0),
-          profit: Number(item.sales?.profit || ((Number(item.sale_price || 0) - Number(item.cost_price || 0)) * Number(item.quantity || 0))),
-          clientName: gestaoSalesMeta?.[item.sale_id]?.clientName || '',
-          clientPhone: gestaoSalesMeta?.[item.sale_id]?.clientPhone || ''
-        }));
+      gestaoSales = (saleItems || []).map(item => ({
+        id: item.id,
+        saleId: item.sale_id,
+        productId: item.product_id,
+        size: item.size || 'M',
+        quantity: Number(item.quantity || 0),
+        salePrice: Number(item.sale_price || 0),
+        costPrice: Number(item.cost_price || 0),
+        date: item.sales?.created_at ? String(item.sales.created_at).slice(0,10) : '',
+        totalAmount: Number(item.sales?.total_amount || (Number(item.quantity || 0) * Number(item.sale_price || 0))),
+        packagingCost: Number(item.sales?.packaging_cost || 0),
+        shippingCost: Number(item.sales?.shipping_cost || 0),
+        feeCost: 0,
+        otherCost: Number(item.sales?.extra_cost || 0),
+        extraCostsTotal: Number(item.sales?.packaging_cost || 0) + Number(item.sales?.shipping_cost || 0) + Number(item.sales?.extra_cost || 0),
+        profit: Number(item.sales?.profit || ((Number(item.sale_price || 0) - Number(item.cost_price || 0)) * Number(item.quantity || 0))),
+        clientName: gestaoSalesMeta?.[item.sale_id]?.clientName || '',
+        clientPhone: gestaoSalesMeta?.[item.sale_id]?.clientPhone || ''
+      }));
 
-        if (!gestaoSales.length && localBackup.sales.length) {
-          gestaoSales = [...localBackup.sales];
-        }
+      if (!gestaoSales.length && localBackup.sales.length) {
+        gestaoSales = [...localBackup.sales];
       }
 
       normalizeGestaoEntriesExtraCosts();
@@ -4341,7 +4343,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     }
 
     async function loadGestaoState() {
-      const localState = readGestaoLocalState();
       try {
         await loadGestaoStateFromSupabase();
         return;
@@ -4349,6 +4350,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         console.warn('Gestão em modo local:', error?.message || error);
       }
 
+      const localState = readGestaoLocalState();
       gestaoSuppliers = localState.suppliers;
       gestaoEntries = localState.entries;
       gestaoSales = localState.sales;
@@ -4750,26 +4752,37 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         const grandTotal = itemsTotal + Number(order.extraCost || 0);
         const contact = gestaoSuppliers.find(s => String(s.id) === String(order.supplierId))?.contact || '—';
         const coverImage = getProductImageById(order.items[0]?.productId);
-        const itemsHtml = order.items.map(entry => `
-          <div class="order-detail-item">
-            <img src="${escapeHtml(getProductImageById(entry.productId))}" alt="${escapeHtml(getProductNameById(entry.productId))}" onerror="this.src='https://via.placeholder.com/240x240?text=Camisa';" />
-            <div>
-              <strong>${escapeHtml(getProductNameById(entry.productId))}</strong> • tam. ${escapeHtml(entry.size)} • ${entry.quantity} un.<br>
-              Custo unitário: <strong>${formatPrice(entry.cost)}</strong> • Total item: <strong>${formatPrice(Number(entry.cost || 0) * Number(entry.quantity || 0))}</strong>
+        const formattedDate = formatGestaoDate(order.date || '');
+        const supplierName = order.supplierName || 'Sem fornecedor';
+        const itemsHtml = order.items.map(entry => {
+          const itemTotal = Number(entry.cost || 0) * Number(entry.quantity || 0);
+          return `
+            <div class="order-detail-item">
+              <img src="${escapeHtml(getProductImageById(entry.productId))}" alt="${escapeHtml(getProductNameById(entry.productId))}" onerror="this.src='https://via.placeholder.com/240x240?text=Camisa';" />
+              <div class="order-detail-copy">
+                <div class="order-detail-title">${escapeHtml(getProductNameById(entry.productId))}</div>
+                <div class="order-detail-meta">Tam. ${escapeHtml(entry.size)} • ${entry.quantity} un.</div>
+              </div>
+              <div class="order-detail-pricing">
+                <div class="order-detail-unit">${formatPrice(entry.cost)} / un.</div>
+                <div class="order-detail-total"><strong>${formatPrice(itemTotal)}</strong> total</div>
+              </div>
             </div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
         return `
           <details class="order-collapsible">
             <summary>
-              <img class="order-summary-thumb" src="${escapeHtml(coverImage)}" alt="Pedido ${escapeHtml(order.supplierName)}" onerror="this.src='https://via.placeholder.com/240x240?text=Camisa';" />
+              <img class="order-summary-thumb" src="${escapeHtml(coverImage)}" alt="Pedido ${escapeHtml(supplierName)}" onerror="this.src='https://via.placeholder.com/240x240?text=Camisa';" />
               <div class="order-summary-main">
-                <div class="gestao-list-title">Pedido • ${escapeHtml(order.supplierName)}</div>
-                <div class="gestao-list-sub">${escapeHtml(order.date || '')} • ${totalPieces} peça(s) • ${order.items.length} item(ns)</div>
+                <div class="order-summary-top">
+                  <div class="gestao-list-title">Pedido • ${escapeHtml(supplierName)}</div>
+                </div>
+                <div class="gestao-list-sub">${formattedDate} • ${totalPieces} peça(s) • ${order.items.length} item(ns)</div>
               </div>
               <div class="order-summary-side">
-                <span class="badge">${formatPrice(grandTotal)}</span>
-                <span class="small-muted">Toque para ver detalhes</span>
+                <span class="order-summary-total">${formatPrice(grandTotal)}</span>
+                <span class="order-summary-toggle">Ver itens do pedido</span>
               </div>
             </summary>
             <div class="order-collapsible-body">
@@ -4778,12 +4791,12 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
                 <span class="badge">Custos extras: ${formatPrice(order.extraCost)}</span>
                 <span class="badge">Contato: ${escapeHtml(contact)}</span>
               </div>
-              <div class="actions-row" style="margin-top:10px;">
+              <div class="actions-row" style="margin-top:0;">
                 <button class="btn btn-success" type="button" onclick="editGestaoOrder('${order.orderId}')">Editar pedido</button>
                 <button class="btn btn-danger" type="button" onclick="deleteGestaoOrder('${order.orderId}')">Excluir pedido</button>
               </div>
-              ${order.note ? `<div class="small-muted" style="margin-top:10px;">Obs.: ${escapeHtml(order.note)}</div>` : ''}
-              ${itemsHtml}
+              ${order.note ? `<div class="small-muted">Obs.: ${escapeHtml(order.note)}</div>` : ''}
+              <div class="order-detail-grid">${itemsHtml}</div>
             </div>
           </details>
         `;
