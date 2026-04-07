@@ -4107,6 +4107,85 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       });
     }
 
+    function readGestaoLocalState() {
+      let suppliers = [];
+      let entries = [];
+      let sales = [];
+      let salesMeta = {};
+
+      try {
+        suppliers = JSON.parse(localStorage.getItem(GESTAO_SUPPLIERS_KEY) || '[]').map(item => ({
+          id: item.id,
+          name: item.name,
+          contact: item.contact || item.note || ''
+        }));
+      } catch (error) {
+        suppliers = [];
+      }
+
+      try {
+        entries = JSON.parse(localStorage.getItem(GESTAO_ENTRIES_KEY) || '[]').map(item => ({
+          id: item.id,
+          productId: item.productId || item.product_id,
+          size: item.size || 'M',
+          quantity: Number(item.quantity || 0),
+          cost: Number(item.cost || item.cost_price || 0),
+          date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
+          supplierId: item.supplierId || item.supplier_id || '',
+          orderId: item.orderId || item.order_id || generateClientUuid(),
+          orderKey: item.orderKey || `${item.date || (item.created_at ? String(item.created_at).slice(0,10) : '')}__${item.supplierId || item.supplier_id || 'sem-fornecedor'}__${item.orderId || item.order_id || ''}`,
+          extraCost: Number(item.extraCost || item.extra_cost || 0),
+          note: item.note || ''
+        }));
+      } catch (error) {
+        entries = [];
+      }
+
+      try {
+        salesMeta = JSON.parse(localStorage.getItem(GESTAO_SALES_META_KEY) || '{}') || {};
+      } catch (error) {
+        salesMeta = {};
+      }
+
+      try {
+        sales = JSON.parse(localStorage.getItem(GESTAO_SALES_KEY) || '[]').map(item => ({
+          id: item.id,
+          saleId: item.saleId || item.sale_id || item.id,
+          productId: item.productId || item.product_id,
+          size: item.size || 'M',
+          quantity: Number(item.quantity || 0),
+          salePrice: Number(item.salePrice || item.sale_price || 0),
+          costPrice: Number(item.costPrice || item.cost_price || 0),
+          date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
+          totalAmount: Number(item.totalAmount || item.total_amount || ((Number(item.quantity || 0) * Number(item.salePrice || item.sale_price || 0)))),
+          packagingCost: roundMoney(item.packagingCost || 0),
+          shippingCost: roundMoney(item.shippingCost || 0),
+          feeCost: roundMoney(item.feeCost || 0),
+          otherCost: roundMoney(item.otherCost || 0),
+          extraCostsTotal: roundMoney(item.extraCostsTotal || 0),
+          profit: roundMoney(item.profit || ((Number(item.salePrice || item.sale_price || 0) - Number(item.costPrice || item.cost_price || 0)) * Number(item.quantity || 0))),
+          clientName: item.clientName || salesMeta?.[item.saleId || item.sale_id || item.id]?.clientName || '',
+          clientPhone: item.clientPhone || salesMeta?.[item.saleId || item.sale_id || item.id]?.clientPhone || ''
+        }));
+      } catch (error) {
+        sales = [];
+      }
+
+      return { suppliers, entries, sales, salesMeta };
+    }
+
+    function hasGestaoLocalBackup(localState) {
+      return !!(
+        localState &&
+        (
+          (Array.isArray(localState.suppliers) && localState.suppliers.length) ||
+          (Array.isArray(localState.entries) && localState.entries.length) ||
+          (Array.isArray(localState.sales) && localState.sales.length)
+        )
+      );
+    }
+
+
     function getGroupedGestaoOrders() {
       const orderMap = new Map();
       gestaoEntries.forEach(entry => {
@@ -4137,109 +4216,54 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       return roundMoney(ordersExtra + salesExtra);
     }
 
-    async function loadGestaoLegacyEntriesFromSupabase() {
-      try {
-        const { data, error } = await supabaseClient
-          .from(GESTAO_ENTRIES_TABLE)
-          .select('*')
-          .order('created_at', { ascending: false });
-
-        if (error) {
-          console.warn('Não foi possível ler inventory_entries legado:', error?.message || error);
-          return [];
-        }
-
-        return (data || []).map((item, index) => {
-          const orderId = item.order_id || item.orderId || item.group_id || item.batch_id || item.id || generateClientUuid();
-          const orderDate = item.date || item.order_date || (item.created_at ? String(item.created_at).slice(0,10) : '');
-          const supplierId = item.supplier_id || item.supplierId || '';
-          return {
-            id: item.id || generateClientUuid(),
-            orderId,
-            productId: item.product_id || item.productId || '',
-            size: item.size || 'M',
-            quantity: Number(item.quantity || 0),
-            cost: Number(item.cost_price || item.cost || 0),
-            date: orderDate,
-            supplierId,
-            orderKey: `${orderDate || ''}__${supplierId || 'sem-fornecedor'}__${orderId}`,
-            extraCost: Number(item.extra_cost || item.extraCost || 0),
-            note: item.note || item.notes || '',
-            _legacy: true,
-            _legacyIndex: index
-          };
-        });
-      } catch (error) {
-        console.warn('Falha ao carregar inventory_entries legado:', error?.message || error);
-        return [];
-      }
-    }
-
-    async function syncLegacyGestaoEntriesTable() {
-      try {
-        const legacyPayload = gestaoEntries.map(item => ({
-          id: item.id,
-          product_id: item.productId,
-          size: item.size || 'M',
-          quantity: Number(item.quantity || 0),
-          cost_price: Number(item.cost || 0),
-          supplier_id: item.supplierId || null,
-          order_id: item.orderId || null,
-          date: item.date || new Date().toISOString().slice(0,10),
-          extra_cost: Number(item.extraCost || 0),
-          note: item.note || null,
-          created_at: item.date ? `${item.date}T12:00:00` : new Date().toISOString()
-        }));
-
-        const { error: deleteLegacyError } = await supabaseClient
-          .from(GESTAO_ENTRIES_TABLE)
-          .delete()
-          .not('id', 'is', null);
-        if (deleteLegacyError) throw deleteLegacyError;
-
-        if (!legacyPayload.length) return;
-
-        const { error: insertLegacyError } = await supabaseClient
-          .from(GESTAO_ENTRIES_TABLE)
-          .insert(legacyPayload);
-        if (insertLegacyError) throw insertLegacyError;
-      } catch (error) {
-        console.warn('Não foi possível atualizar inventory_entries legado:', error?.message || error);
-      }
-    }
-
     async function loadGestaoStateFromSupabase() {
       const localBackup = readGestaoLocalState();
-      const { data: suppliers, error: supplierError } = await supabaseClient
-        .from(GESTAO_SUPPLIERS_TABLE)
-        .select('id, name, contact, created_at')
-        .order('created_at', { ascending: false });
 
-      if (supplierError) throw supplierError;
+      const [
+        suppliersResult,
+        ordersResult,
+        orderItemsResult,
+        saleItemsResult
+      ] = await Promise.allSettled([
+        supabaseClient
+          .from(GESTAO_SUPPLIERS_TABLE)
+          .select('id, name, contact, created_at')
+          .order('created_at', { ascending: false }),
+        supabaseClient
+          .from(GESTAO_ORDERS_TABLE)
+          .select('id, supplier_id, order_date, extra_cost, notes, created_at')
+          .order('order_date', { ascending: false })
+          .order('created_at', { ascending: false }),
+        supabaseClient
+          .from(GESTAO_ORDER_ITEMS_TABLE)
+          .select('id, order_id, product_id, size, quantity, cost_price')
+          .order('id', { ascending: false }),
+        supabaseClient
+          .from(GESTAO_SALE_ITEMS_TABLE)
+          .select('id, sale_id, product_id, quantity, sale_price, cost_price, size, sales(total_amount, profit, created_at, packaging_cost, shipping_cost, extra_cost)')
+          .order('id', { ascending: false })
+      ]);
 
-      const { data: orders, error: ordersError } = await supabaseClient
-        .from(GESTAO_ORDERS_TABLE)
-        .select('id, supplier_id, order_date, extra_cost, notes, created_at')
-        .order('order_date', { ascending: false })
-        .order('created_at', { ascending: false });
+      const suppliersPayload = suppliersResult.status === 'fulfilled' ? suppliersResult.value : null;
+      const ordersPayload = ordersResult.status === 'fulfilled' ? ordersResult.value : null;
+      const orderItemsPayload = orderItemsResult.status === 'fulfilled' ? orderItemsResult.value : null;
+      const salesPayload = saleItemsResult.status === 'fulfilled' ? saleItemsResult.value : null;
 
+      const suppliersError = suppliersPayload?.error || (suppliersResult.status === 'rejected' ? suppliersResult.reason : null);
+      const ordersError = ordersPayload?.error || (ordersResult.status === 'rejected' ? ordersResult.reason : null);
+      const orderItemsError = orderItemsPayload?.error || (orderItemsResult.status === 'rejected' ? orderItemsResult.reason : null);
+      const salesError = salesPayload?.error || (saleItemsResult.status === 'rejected' ? saleItemsResult.reason : null);
+
+      if (suppliersError) throw suppliersError;
       if (ordersError) throw ordersError;
-
-      const { data: orderItems, error: orderItemsError } = await supabaseClient
-        .from(GESTAO_ORDER_ITEMS_TABLE)
-        .select('id, order_id, product_id, size, quantity, cost_price')
-        .order('id', { ascending: false });
-
       if (orderItemsError) throw orderItemsError;
 
-      const { data: saleItems, error: salesError } = await supabaseClient
-        .from(GESTAO_SALE_ITEMS_TABLE)
-        .select('id, sale_id, product_id, quantity, sale_price, cost_price, size, sales(total_amount, profit, created_at, packaging_cost, shipping_cost, extra_cost)')
-        .order('id', { ascending: false });
+      const suppliers = suppliersPayload?.data || [];
+      const orders = ordersPayload?.data || [];
+      const orderItems = orderItemsPayload?.data || [];
+      const saleItems = salesPayload?.data || [];
 
-      if (salesError) throw salesError;
-
-      gestaoSuppliers = (suppliers || []).map(item => ({
+      gestaoSuppliers = suppliers.map(item => ({
         id: item.id,
         name: item.name,
         contact: item.contact || ''
@@ -4249,8 +4273,8 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         gestaoSuppliers = [...localBackup.suppliers];
       }
 
-      const ordersMap = new Map((orders || []).map(order => [String(order.id), order]));
-      gestaoEntries = (orderItems || []).map(item => {
+      const ordersMap = new Map(orders.map(order => [String(order.id), order]));
+      gestaoEntries = orderItems.map(item => {
         const order = ordersMap.get(String(item.order_id)) || {};
         const orderDate = order.order_date || (order.created_at ? String(order.created_at).slice(0,10) : '');
         return {
@@ -4268,13 +4292,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         };
       });
 
-      if (!gestaoEntries.length) {
-        const legacyEntries = await loadGestaoLegacyEntriesFromSupabase();
-        if (legacyEntries.length) {
-          gestaoEntries = legacyEntries;
-        }
-      }
-
       if (!gestaoEntries.length && localBackup.entries.length) {
         gestaoEntries = [...localBackup.entries];
       }
@@ -4285,28 +4302,33 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         gestaoSalesMeta = { ...localBackup.salesMeta };
       }
 
-      gestaoSales = (saleItems || []).map(item => ({
-        id: item.id,
-        saleId: item.sale_id,
-        productId: item.product_id,
-        size: item.size || 'M',
-        quantity: Number(item.quantity || 0),
-        salePrice: Number(item.sale_price || 0),
-        costPrice: Number(item.cost_price || 0),
-        date: item.sales?.created_at ? String(item.sales.created_at).slice(0,10) : '',
-        totalAmount: Number(item.sales?.total_amount || (Number(item.quantity || 0) * Number(item.sale_price || 0))),
-        packagingCost: Number(item.sales?.packaging_cost || 0),
-        shippingCost: Number(item.sales?.shipping_cost || 0),
-        feeCost: 0,
-        otherCost: Number(item.sales?.extra_cost || 0),
-        extraCostsTotal: Number(item.sales?.packaging_cost || 0) + Number(item.sales?.shipping_cost || 0) + Number(item.sales?.extra_cost || 0),
-        profit: Number(item.sales?.profit || ((Number(item.sale_price || 0) - Number(item.cost_price || 0)) * Number(item.quantity || 0))),
-        clientName: gestaoSalesMeta?.[item.sale_id]?.clientName || '',
-        clientPhone: gestaoSalesMeta?.[item.sale_id]?.clientPhone || ''
-      }));
+      if (salesError) {
+        console.warn('Gestão: falha ao carregar vendas, seguindo com estoque online.', salesError?.message || salesError);
+        gestaoSales = localBackup.sales.length ? [...localBackup.sales] : [];
+      } else {
+        gestaoSales = saleItems.map(item => ({
+          id: item.id,
+          saleId: item.sale_id,
+          productId: item.product_id,
+          size: item.size || 'M',
+          quantity: Number(item.quantity || 0),
+          salePrice: Number(item.sale_price || 0),
+          costPrice: Number(item.cost_price || 0),
+          date: item.sales?.created_at ? String(item.sales.created_at).slice(0,10) : '',
+          totalAmount: Number(item.sales?.total_amount || (Number(item.quantity || 0) * Number(item.sale_price || 0))),
+          packagingCost: Number(item.sales?.packaging_cost || 0),
+          shippingCost: Number(item.sales?.shipping_cost || 0),
+          feeCost: 0,
+          otherCost: Number(item.sales?.extra_cost || 0),
+          extraCostsTotal: Number(item.sales?.packaging_cost || 0) + Number(item.sales?.shipping_cost || 0) + Number(item.sales?.extra_cost || 0),
+          profit: Number(item.sales?.profit || ((Number(item.sale_price || 0) - Number(item.cost_price || 0)) * Number(item.quantity || 0))),
+          clientName: gestaoSalesMeta?.[item.sale_id]?.clientName || '',
+          clientPhone: gestaoSalesMeta?.[item.sale_id]?.clientPhone || ''
+        }));
 
-      if (!gestaoSales.length && localBackup.sales.length) {
-        gestaoSales = [...localBackup.sales];
+        if (!gestaoSales.length && localBackup.sales.length) {
+          gestaoSales = [...localBackup.sales];
+        }
       }
 
       normalizeGestaoEntriesExtraCosts();
@@ -4319,6 +4341,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     }
 
     async function loadGestaoState() {
+      const localState = readGestaoLocalState();
       try {
         await loadGestaoStateFromSupabase();
         return;
@@ -4326,51 +4349,10 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         console.warn('Gestão em modo local:', error?.message || error);
       }
 
-      try {
-        gestaoSuppliers = JSON.parse(localStorage.getItem(GESTAO_SUPPLIERS_KEY) || '[]').map(item => ({
-          id: item.id,
-          name: item.name,
-          contact: item.contact || item.note || ''
-        }));
-        gestaoEntries = JSON.parse(localStorage.getItem(GESTAO_ENTRIES_KEY) || '[]').map(item => ({
-          id: item.id,
-          productId: item.productId || item.product_id,
-          size: item.size || 'M',
-          quantity: Number(item.quantity || 0),
-          cost: Number(item.cost || item.cost_price || 0),
-          date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
-          supplierId: item.supplierId || item.supplier_id || '',
-          orderId: item.orderId || item.order_id || generateClientUuid(),
-          orderKey: item.orderKey || `${item.date || (item.created_at ? String(item.created_at).slice(0,10) : '')}__${item.supplierId || item.supplier_id || 'sem-fornecedor'}__${item.orderId || item.order_id || ''}`,
-          extraCost: Number(item.extraCost || item.extra_cost || 0),
-          note: item.note || ''
-        }));
-        try { gestaoSalesMeta = JSON.parse(localStorage.getItem(GESTAO_SALES_META_KEY) || '{}') || {}; } catch (error) { gestaoSalesMeta = {}; }
-        gestaoSales = JSON.parse(localStorage.getItem(GESTAO_SALES_KEY) || '[]').map(item => ({
-          id: item.id,
-          saleId: item.saleId || item.sale_id || item.id,
-          productId: item.productId || item.product_id,
-          size: item.size || 'M',
-          quantity: Number(item.quantity || 0),
-          salePrice: Number(item.salePrice || item.sale_price || 0),
-          costPrice: Number(item.costPrice || item.cost_price || 0),
-          date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
-          totalAmount: Number(item.totalAmount || item.total_amount || ((Number(item.quantity || 0) * Number(item.salePrice || item.sale_price || 0)))),
-          packagingCost: roundMoney(item.packagingCost || 0),
-          shippingCost: roundMoney(item.shippingCost || 0),
-          feeCost: roundMoney(item.feeCost || 0),
-          otherCost: roundMoney(item.otherCost || 0),
-          extraCostsTotal: roundMoney(item.extraCostsTotal || 0),
-          profit: roundMoney(item.profit || ((Number(item.salePrice || item.sale_price || 0) - Number(item.costPrice || item.cost_price || 0)) * Number(item.quantity || 0))),
-          clientName: item.clientName || gestaoSalesMeta?.[item.saleId || item.sale_id || item.id]?.clientName || '',
-          clientPhone: item.clientPhone || gestaoSalesMeta?.[item.saleId || item.sale_id || item.id]?.clientPhone || ''
-        }));
-      } catch (error) {
-        gestaoSuppliers = [];
-        gestaoEntries = [];
-        gestaoSales = [];
-        gestaoSalesMeta = {};
-      }
+      gestaoSuppliers = localState.suppliers;
+      gestaoEntries = localState.entries;
+      gestaoSales = localState.sales;
+      gestaoSalesMeta = localState.salesMeta;
       normalizeGestaoEntriesExtraCosts();
       gestaoSyncMode = 'local';
       updateGestaoSyncUi();
@@ -4465,8 +4447,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
           .insert(itemsPayload);
         if (itemsInsertError) throw itemsInsertError;
       }
-
-      await syncLegacyGestaoEntriesTable();
     }
 
     async function syncGestaoSalesToSupabase() {
@@ -4849,7 +4829,8 @@ function renderGestaoStock() {
       }
 
       if (!grouped.length) {
-        container.innerHTML = '<div class="gestao-empty">Nenhum resultado encontrado no estoque.</div>';
+        const hasBackup = hasGestaoLocalBackup(readGestaoLocalState());
+        container.innerHTML = `<div class="gestao-empty">Nenhum resultado encontrado no estoque.${hasBackup ? ' Existe dado salvo no navegador deste aparelho, mas ele não foi convertido em saldo visível. Recarregue a página e teste novamente.' : ''}</div>`;
         return;
       }
 
