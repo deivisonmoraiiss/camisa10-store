@@ -5381,10 +5381,7 @@ async function saveGestaoSale() {
         showLoginScreen();
       }
     });
-
-
-
-    function renderGestaoDashboardOverview() {
+      function renderGestaoDashboardOverview() {
       const container = document.getElementById('gestaoDashboardOverview');
       if (!container) return;
       const metrics = getGestaoMetrics();
@@ -5400,9 +5397,8 @@ async function saveGestaoSale() {
         <div class="overview-card"><span>Peças em estoque</span><strong>${metrics.totalStockPieces}</strong></div>
         <div class="overview-card"><span>Pedidos lançados</span><strong>${totalOrders}</strong></div>
       `;
-    
     }
-
-  </script>
+</script>
 </body>
 </html>
+
