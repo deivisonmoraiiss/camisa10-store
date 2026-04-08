@@ -353,32 +353,16 @@
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
 
-    .order-collapsible{border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,#101010 0%, #0c0c0c 100%);overflow:hidden;transition:border-color .2s ease, box-shadow .2s ease}
-    .order-collapsible:hover{border-color:rgba(212,175,55,.22)}
-    .order-collapsible[open]{border-color:rgba(212,175,55,.24);box-shadow:0 16px 32px rgba(0,0,0,.16)}
-    .order-collapsible summary{list-style:none;cursor:pointer;padding:16px;display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center}
+    .order-collapsible{border:1px solid var(--line);border-radius:18px;background:#101010;overflow:hidden}
+    .order-collapsible summary{list-style:none;cursor:pointer;padding:16px;display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:flex-start}
     .order-collapsible summary::-webkit-details-marker{display:none}
     .order-collapsible[open] summary{border-bottom:1px solid rgba(255,255,255,.06)}
-    .order-collapsible-body{display:grid;gap:14px;padding:0 16px 16px;opacity:0;transform:translateY(-4px);transition:opacity .22s ease, transform .22s ease}
-    .order-collapsible[open] .order-collapsible-body{padding-top:14px;opacity:1;transform:translateY(0)}
-    .order-summary-main{display:grid;gap:8px;min-width:0}
-    .order-summary-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-    .order-summary-side{display:grid;justify-items:end;gap:10px;align-self:center}
-    .order-summary-thumb{width:64px;height:64px;border-radius:16px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f}
-    .order-summary-total{display:inline-flex;align-items:center;justify-content:center;padding:9px 14px;border-radius:999px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.24);color:#f5d983;font-weight:900;min-width:112px}
-    .order-summary-toggle{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:999px;background:#141414;border:1px solid rgba(255,255,255,.08);color:#ececec;font-size:.82rem;font-weight:800}
-    .order-summary-toggle::before{content:'▾';font-size:.9rem;transition:transform .2s ease}
-    .order-collapsible[open] .order-summary-toggle::before{transform:rotate(180deg)}
-    .order-detail-grid{display:grid;gap:10px}
-    .order-detail-item{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center;margin-top:0;padding:12px 14px;border-radius:16px;background:linear-gradient(180deg,#0e0e0e 0%, #0b0b0b 100%);border:1px solid rgba(255,255,255,.05)}
-    .order-detail-item img{width:56px;height:56px;border-radius:14px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f}
-    .order-detail-copy{display:grid;gap:4px;min-width:0}
-    .order-detail-title{font-size:.95rem;font-weight:900;color:#fff;line-height:1.35}
-    .order-detail-meta{color:var(--muted);font-size:.84rem;line-height:1.45}
-    .order-detail-pricing{display:grid;gap:4px;justify-items:end;text-align:right;min-width:110px}
-    .order-detail-unit{font-size:.82rem;color:var(--muted)}
-    .order-detail-total{font-size:.92rem;color:#f1f1f1}
-    .order-detail-total strong{color:var(--gold-2)}
+    .order-collapsible-body{padding:14px 16px 16px}
+    .order-summary-main{display:grid;gap:6px}
+    .order-summary-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+    .order-summary-thumb{width:64px;height:64px;border-radius:14px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f}
+    .order-detail-item{display:grid;grid-template-columns:60px minmax(0,1fr);gap:12px;align-items:start;margin-top:10px;padding:12px;border-radius:14px;background:#0d0d0d;border:1px solid rgba(255,255,255,.05)}
+    .order-detail-item img{width:60px;height:60px;border-radius:12px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f}
     .stock-group-card{display:grid;grid-template-columns:72px minmax(0,1fr);gap:14px;align-items:start}
     .stock-group-card img{width:72px;height:72px;border-radius:14px;object-fit:cover;border:1px solid #2a2a2a;background:#0f0f0f;display:block}
     .stock-size-summary{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
@@ -391,52 +375,8 @@
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
 
-    .admin-overview-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;margin-bottom:18px}
-    .overview-card{padding:18px;border-radius:20px;background:linear-gradient(180deg,#121212 0%, #0f0f0f 100%);border:1px solid var(--line);display:grid;gap:8px}
-    .overview-card span{color:var(--muted);font-size:.82rem;line-height:1.4}
-    .overview-card strong{font-size:1.18rem;color:#fff}
-    .overview-card .kpi-accent{color:var(--gold-2)}
-    .admin-overview-grid.compact{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .settings-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px}
-    .settings-summary-card{padding:14px 16px;border-radius:16px;background:#101010;border:1px solid var(--line);display:grid;gap:6px}
-    .settings-summary-card span{color:var(--muted);font-size:.8rem}
-    .settings-summary-card strong{color:#fff;font-size:.96rem;line-height:1.35;word-break:break-word}
-    .settings-status-strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
-    .settings-status-pill{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:#101010;border:1px solid var(--line);font-size:.84rem;color:#f3f3f3}
-    .settings-status-pill strong{color:var(--gold-2)}
-
-    .loja-products-layout{display:grid;grid-template-columns:minmax(360px,460px) minmax(0,1fr);gap:18px;align-items:start}
-    .loja-products-layout > .product-form-card{position:sticky;top:154px}
-    .loja-helper-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 16px}
-    .loja-helper-card{padding:12px 14px;border-radius:16px;background:#0f0f0f;border:1px solid rgba(255,255,255,.06);display:grid;gap:4px}
-    .loja-helper-card strong{font-size:.84rem;color:#fff}
-    .loja-helper-card span{font-size:.78rem;color:var(--muted);line-height:1.45}
-    .upload-split-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-    .upload-dropzone{display:grid;gap:8px;padding:14px;border-radius:16px;border:1px dashed rgba(212,175,55,.28);background:linear-gradient(180deg,rgba(212,175,55,.08),rgba(212,175,55,.03));min-height:100%}
-    .upload-dropzone strong{font-size:.9rem;color:#fff}
-    .upload-dropzone span{font-size:.8rem;color:var(--muted);line-height:1.45}
-    .upload-dropzone input{background:#0f0f0f;border:1px solid rgba(255,255,255,.08)}
-    .variant-helper-card{padding:14px;border-radius:16px;background:#101010;border:1px solid rgba(255,255,255,.06);display:grid;gap:8px;margin-top:14px}
-    .variant-helper-card strong{font-size:.9rem;color:#fff}
-    .variant-helper-card span{font-size:.82rem;color:var(--muted);line-height:1.5}
-    .variant-helper-actions{display:flex;gap:8px;flex-wrap:wrap}
-    .list-meta-strip{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 14px}
-    .list-meta-pill{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:#101010;border:1px solid var(--line);font-size:.84rem;color:#ececec}
-    .list-meta-pill strong{color:var(--gold-2)}
-    .products-toolbar.products-toolbar-advanced{gap:10px;margin-bottom:14px}
-    .product-list-card{gap:0}
-    .product-admin-actions .btn-secondary{background:#171717;border:1px solid rgba(212,175,55,.18);color:#f3e0a0}
-    .product-admin-actions .btn-secondary:hover{background:#1d1d1d}
-    .batch-card{margin-top:18px}
-    .batch-card-summary{padding:18px}
-    .batch-card-body{padding:0 18px 0 18px}
-    .batch-panel strong{font-size:.95rem}
-    .batch-panel{background:linear-gradient(180deg,#111 0%, #0d0d0d 100%)}
-    .batch-summary{min-height:72px}
-    .step-actions{position:sticky;bottom:12px;background:rgba(10,10,10,.92);backdrop-filter:blur(10px);padding:14px;border:1px solid rgba(255,255,255,.06);border-radius:16px;z-index:4}
-
-    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline,.admin-overview-grid,.settings-summary-grid{grid-template-columns:1fr}}
-    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}.order-collapsible summary{grid-template-columns:56px minmax(0,1fr);align-items:start}.order-summary-side{grid-column:1/-1;justify-items:start;padding-left:70px}.order-summary-toggle{width:100%;justify-content:center}.order-detail-item{grid-template-columns:56px minmax(0,1fr);align-items:start}.order-detail-pricing{grid-column:2/3;justify-items:start;text-align:left;min-width:0}}
+    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline{grid-template-columns:1fr}}
+    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
   </style>
 </head>
 <body>
@@ -508,10 +448,10 @@
         <button class="btn btn-secondary" onclick="logout()">Sair</button>
       </div>
 
-      <div class="admin-overview-grid compact" style="margin-bottom:16px;">
-        <div class="overview-card"><span>Produtos cadastrados</span><strong id="statProducts">--</strong></div>
-        <div class="overview-card"><span>Categorias ativas</span><strong id="statCategories">--</strong></div>
-        <div class="overview-card"><span>Slides do banner</span><strong id="statSlides">--</strong></div>
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div class="stat-card"><strong id="statProducts">--</strong><span>Produtos cadastrados</span></div>
+        <div class="stat-card"><strong id="statCategories">--</strong><span>Categorias ativas</span></div>
+        <div class="stat-card"><strong id="statSlides">--</strong><span>Slides do banner</span></div>
       </div>
 
       <div class="module-shell">
@@ -553,7 +493,7 @@
           </div>
 
           <section id="tab-products" class="tab-panel active">
-        <div class="stack loja-products-layout">
+        <div class="stack">
           <div class="card product-form-card">
             <div class="form-header-row">
               <div>
@@ -576,12 +516,6 @@
               <div class="product-flow-pill"><strong>Cadastro rápido</strong><span>Nome, categoria e tipo primeiro</span></div>
               <div class="product-flow-pill"><strong>Menos erro</strong><span>Preço e imagens separados por etapa</span></div>
               <div class="product-flow-pill"><strong>Mobile melhor</strong><span>Campos agrupados e mais limpos</span></div>
-            </div>
-            <div class="loja-helper-strip">
-              <div class="loja-helper-card"><strong>Nova cor sem retrabalho</strong><span>Salve a primeira camisa e use “Duplicar / nova cor” na lista ao lado.</span></div>
-              <div class="loja-helper-card"><strong>Imagens mais simples</strong><span>Principal separada da galeria, com prévia clara antes de salvar.</span></div>
-              <div class="loja-helper-card"><strong>Edição em lote recolhida</strong><span>Abra só quando precisar alterar preços ou descrição em massa.</span></div>
-              <div class="loja-helper-card"><strong>Layout mais loja</strong><span>Cadastro fixo de um lado e produtos organizados do outro.</span></div>
             </div>
 
             <div class="product-step active" data-step="1">
@@ -667,22 +601,14 @@
             </div>
 
             <div class="product-step" data-step="3">
-              <div class="upload-split-grid">
-                <div class="upload-dropzone">
-                  <strong>Imagem principal</strong>
-                  <span>Escolha a foto que vai aparecer primeiro no site. Pode subir do celular/computador ou usar URL pronta.</span>
-                  <div class="field" style="margin-bottom:0;">
-                    <label for="product-file">Arquivo da capa</label>
-                    <input type="file" id="product-file" accept="image/*" onchange="previewSelectedMainImage(event)" />
-                  </div>
+              <div class="grid-2-equal">
+                <div class="field">
+                  <label for="product-file">Imagem principal</label>
+                  <input type="file" id="product-file" accept="image/*" onchange="previewSelectedMainImage(event)" />
                 </div>
-                <div class="upload-dropzone">
-                  <strong>URL pronta da capa</strong>
-                  <span>Use quando já tiver a imagem hospedada e quiser só colar o link.</span>
-                  <div class="field" style="margin-bottom:0;">
-                    <label for="product-image">URL da imagem principal</label>
-                    <input type="text" id="product-image" placeholder="Se preferir, cole uma URL pronta" />
-                  </div>
+                <div class="field">
+                  <label for="product-image">URL da imagem principal</label>
+                  <input type="text" id="product-image" placeholder="Se preferir, cole uma URL pronta" />
                 </div>
               </div>
 
@@ -692,7 +618,7 @@
               </div>
 
               <div class="field" style="margin-top:16px;">
-                <label for="product-files">Galeria do produto</label>
+                <label for="product-files">Fotos adicionais da galeria</label>
                 <input type="file" id="product-files" accept="image/*" multiple onchange="previewSelectedImages(event)" />
               </div>
 
@@ -702,16 +628,7 @@
               </div>
 
               <div class="helper-box helper-box-visible">
-                O upload é automático quando você salvar o produto. Use a galeria para detalhes, costas, mangas ou variações visuais.
-              </div>
-
-              <div class="variant-helper-card">
-                <strong>Fluxo rápido para outra cor</strong>
-                <span>Cadastre a primeira versão completa. Depois, na lista de produtos, clique em <strong>Duplicar / nova cor</strong>, troque nome, imagens e salve. Isso evita preencher tudo de novo.</span>
-                <div class="variant-helper-actions">
-                  <span class="badge">Bom para variações</span>
-                  <span class="badge">Mais rápido no celular</span>
-                </div>
+                O upload é automático quando você salvar o produto. Não precisa subir imagem manualmente antes.
               </div>
 
               <div id="current-gallery-box" class="preview-box hidden" style="margin-top:16px;">
@@ -772,11 +689,6 @@
                 <div class="small-muted">Busque, filtre e duplique produtos para cadastrar muito mais rápido.</div>
               </div>
               <button class="btn btn-secondary" type="button" onclick="startNewProduct()">Novo produto</button>
-            </div>
-            <div class="list-meta-strip">
-              <div class="list-meta-pill">Total: <strong id="products-total-pill">0</strong></div>
-              <div class="list-meta-pill">Filtrados: <strong id="products-filtered-pill">0</strong></div>
-              <div class="list-meta-pill">Selecionados: <strong id="products-selected-pill">0</strong></div>
             </div>
 
             <div class="products-toolbar products-toolbar-advanced">
@@ -1092,17 +1004,6 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="field"><label for="setting-footer-text">Texto do rodapé</label><input type="text" id="setting-footer-text" placeholder="Texto do rodapé" /></div>
               </div>
             </div>
-            <div class="settings-status-strip" id="settingsStatusStrip">
-              <div class="settings-status-pill">Instagram: <strong id="settingsStatusInstagram">—</strong></div>
-              <div class="settings-status-pill">WhatsApp: <strong id="settingsStatusWhatsapp">—</strong></div>
-              <div class="settings-status-pill">Logo: <strong id="settingsStatusLogo">Sem logo</strong></div>
-            </div>
-            <div id="settingsSummaryGrid" class="settings-summary-grid">
-              <div class="settings-summary-card"><span>Entrega</span><strong>—</strong></div>
-              <div class="settings-summary-card"><span>Título catálogo</span><strong>—</strong></div>
-              <div class="settings-summary-card"><span>Contato</span><strong>—</strong></div>
-              <div class="settings-summary-card"><span>Rodapé</span><strong>—</strong></div>
-            </div>
             <div class="actions-row"><button class="btn btn-primary" type="button" onclick="saveSiteSettings()">Salvar configurações</button></div>
             <div id="settings-message" class="message"></div>
           </div>
@@ -1229,14 +1130,6 @@ Camisa Real Madrid 24/25"></textarea>
           </div>
 
           <section id="gestao-dashboard" class="gestao-subpanel">
-            <div id="gestaoDashboardOverview" class="admin-overview-grid" style="margin-bottom:18px;">
-              <div class="overview-card"><span>Receita real</span><strong class="kpi-accent">R$ 0,00</strong></div>
-              <div class="overview-card"><span>Lucro real</span><strong>R$ 0,00</strong></div>
-              <div class="overview-card"><span>Investimento atual</span><strong>R$ 0,00</strong></div>
-              <div class="overview-card"><span>Ticket médio</span><strong>R$ 0,00</strong></div>
-              <div class="overview-card"><span>Peças em estoque</span><strong>0</strong></div>
-              <div class="overview-card"><span>Pedidos lançados</span><strong>0</strong></div>
-            </div>
             <div class="gestao-grid" style="margin-bottom:18px;">
               <div class="gestao-card">
                 <div class="gestao-icon">1</div>
@@ -1514,13 +1407,20 @@ Camisa Real Madrid 24/25"></textarea>
                   <div id="gestaoSalePreview" class="gestao-empty" style="padding:14px;">Selecione produto, tamanho e valor para calcular receita, custo extra e lucro real de forma automática.</div>
                 </div>
                 <div class="actions-row">
-                  <button class="btn btn-primary" type="button" onclick="saveGestaoSale()">Salvar venda</button>
+                  <button class="btn btn-primary" id="gestao-sale-save-btn" type="button" onclick="saveGestaoSale()">Salvar venda</button>
+                  <button class="btn btn-secondary hidden" id="gestao-sale-cancel-btn" type="button" onclick="cancelGestaoSaleEdit()">Cancelar edição</button>
                 </div>
                 <div id="gestao-sale-message" class="message"></div>
               </div>
 
               <div class="card">
-                <h3 class="section-title">Últimas vendas</h3>
+                <div class="list-header-row">
+                  <div>
+                    <h3 class="section-title" style="margin-bottom:6px;">Últimas vendas</h3>
+                    <div class="small-muted">Agora você pode editar uma venda já lançada sem precisar apagar e refazer.</div>
+                  </div>
+                  <button class="btn btn-secondary" type="button" onclick="renderGestao()">Atualizar</button>
+                </div>
                 <div id="gestaoSalesList" class="gestao-list">
                   <div class="gestao-empty">Nenhuma venda lançada ainda.</div>
                 </div>
@@ -1685,6 +1585,7 @@ Camisa Real Madrid 24/25"></textarea>
     let gestaoSalesMeta = {};
     let editingGestaoSupplierId = null;
     let editingGestaoOrderId = null;
+    let editingGestaoSaleId = null;
 
 
     function generateClientUuid() {
@@ -1728,13 +1629,6 @@ Camisa Real Madrid 24/25"></textarea>
         style: "currency",
         currency: "BRL"
       });
-    }
-
-    function formatGestaoDate(value) {
-      if (!value) return '—';
-      const parsed = new Date(`${String(value).slice(0, 10)}T12:00:00`);
-      if (Number.isNaN(parsed.getTime())) return escapeHtml(String(value));
-      return parsed.toLocaleDateString('pt-BR');
     }
 
     function formatBadgeLabel(badgeType) {
@@ -2093,7 +1987,6 @@ Camisa Real Madrid 24/25"></textarea>
 
       allCategories = data || [];
       renderCategories(allCategories);
-      updateAdminHeaderStats();
     }
 
     function renderCategories(categories) {
@@ -2466,16 +2359,10 @@ async function uploadMultipleProductImages(productId) {
       const filteredCountEl = document.getElementById("batch-filtered-count");
       const selectedCountEl = document.getElementById("batch-selected-count");
       const selectAllCheckbox = document.getElementById("select-all-filtered");
-      const totalPill = document.getElementById("products-total-pill");
-      const filteredPill = document.getElementById("products-filtered-pill");
-      const selectedPill = document.getElementById("products-selected-pill");
 
       if (filteredCountEl) filteredCountEl.textContent = String(filteredProducts.length);
       const selectedInFiltered = filteredProducts.filter(product => selectedProductIds.has(String(product.id))).length;
       if (selectedCountEl) selectedCountEl.textContent = String(selectedInFiltered);
-      if (totalPill) totalPill.textContent = String(allProducts.length || 0);
-      if (filteredPill) filteredPill.textContent = String(filteredProducts.length || 0);
-      if (selectedPill) selectedPill.textContent = String(selectedInFiltered || 0);
 
       if (selectAllCheckbox) {
         selectAllCheckbox.checked = !!filteredProducts.length && selectedInFiltered === filteredProducts.length;
@@ -2713,7 +2600,6 @@ async function uploadMultipleProductImages(productId) {
       }
 
       allProducts = data || [];
-      updateAdminHeaderStats();
       const validIds = new Set(allProducts.map(product => String(product.id)));
       selectedProductIds = new Set([...selectedProductIds].filter(id => validIds.has(String(id))));
       filteredProducts = getFilteredProducts();
@@ -2800,7 +2686,7 @@ async function uploadMultipleProductImages(productId) {
 
               <div class="product-admin-actions">
                 <button class="btn btn-success" onclick="editProduct('${product.id}')">Editar</button>
-                <button class="btn btn-secondary" onclick="duplicateProduct('${product.id}')">Duplicar / nova cor</button>
+                <button class="btn btn-secondary" onclick="duplicateProduct('${product.id}')">Duplicar</button>
                 <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">Excluir</button>
               </div>
             </div>
@@ -2875,8 +2761,8 @@ async function uploadMultipleProductImages(productId) {
       clearMessage("form-message");
 
       const name = document.getElementById("product-name").value.trim();
-      const price = normalizeMoneyInput(document.getElementById("product-price").value.trim());
-      const old_price = normalizeMoneyInput(document.getElementById("product-old-price").value.trim());
+      const price = document.getElementById("product-price").value.trim();
+      const old_price = document.getElementById("product-old-price").value.trim();
       let image_url = document.getElementById("product-image").value.trim();
       const category_id = document.getElementById("product-category").value;
       const description = document.getElementById("product-description").value.trim();
@@ -2887,7 +2773,7 @@ async function uploadMultipleProductImages(productId) {
       const sale_type = document.getElementById("product-sale-type").value || "pronta_entrega";
       const sizes = getSelectedSizes();
 
-      if (!name || Number.isNaN(price) || price <= 0 || !category_id) {
+      if (!name || !price || !category_id) {
         showMessage("form-message", "Preencha nome, preço e categoria.", "error");
         return;
       }
@@ -2909,7 +2795,7 @@ async function uploadMultipleProductImages(productId) {
       const payload = {
         name,
         price: Number(price),
-        old_price: Number.isNaN(old_price) ? null : Number(old_price),
+        old_price: old_price ? Number(old_price) : null,
         image_url,
         category_id,
         short_description: description,
@@ -3402,7 +3288,6 @@ async function uploadHeroSlideImage() {
 
       allHeroSlides = data || [];
       renderHeroSlidesAdmin(allHeroSlides);
-      updateAdminHeaderStats();
     }
 
     function renderHeroSlidesAdmin(slides) {
@@ -3625,7 +3510,6 @@ async function uploadHeroSlideImage() {
       if (data.logo_url) {
         document.getElementById("logo-preview").src = data.logo_url;
       }
-      renderSiteSettingsSummary();
     }
 
     async function saveSiteSettings() {
@@ -3657,16 +3541,11 @@ async function uploadHeroSlideImage() {
         return;
       }
 
-      renderSiteSettingsSummary();
       showMessage("settings-message", "Configurações do site salvas com sucesso.", "success");
     }
 
 
     function setupMoneyInputs() {
-      bindMoneyInput("product-price", updateDraftSummary);
-      bindMoneyInput("product-old-price", updateDraftSummary);
-      bindMoneyInput("batch-create-price", renderBatchCreateProducts);
-      bindMoneyInput("batch-create-old-price", renderBatchCreateProducts);
       bindMoneyInput("gestao-entry-extra", renderGestaoPendingOrder);
       bindMoneyInput("gestao-entry-cost");
       bindMoneyInput("gestao-sale-price", updateGestaoSalePreview);
@@ -4098,8 +3977,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       const description = document.getElementById("batch-create-description")?.value?.trim() || "";
       const batchPriceRaw = document.getElementById("batch-create-price")?.value?.trim() || "";
       const batchOldPriceRaw = document.getElementById("batch-create-old-price")?.value?.trim() || "";
-      const batchPriceValue = normalizeMoneyInput(batchPriceRaw);
-      const batchOldPriceValue = normalizeMoneyInput(batchOldPriceRaw);
       const sizes = getBatchCreateSelectedSizes();
       const isVisible = !!document.getElementById("batch-create-visible")?.checked;
 
@@ -4111,7 +3988,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         showMessage("batch-create-message", "Selecione a categoria do lote.", "error");
         return;
       }
-      if (!batchPriceRaw || Number.isNaN(batchPriceValue) || batchPriceValue <= 0) {
+      if (!batchPriceRaw || Number.isNaN(Number(batchPriceRaw)) || Number(batchPriceRaw) <= 0) {
         showMessage("batch-create-message", "Digite o preço padrão do lote.", "error");
         return;
       }
@@ -4141,8 +4018,8 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
           const payload = {
             name,
             slug: `${slugBase}-${Date.now()}-${index + 1}`,
-            price: Number(batchPriceValue),
-            old_price: Number.isNaN(batchOldPriceValue) ? null : Number(batchOldPriceValue),
+            price: Number(batchPriceRaw),
+            old_price: batchOldPriceRaw ? Number(batchOldPriceRaw) : null,
             image_url: mainImageUrl,
             short_description: description,
             is_featured: false,
@@ -4238,85 +4115,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       });
     }
 
-    function readGestaoLocalState() {
-      let suppliers = [];
-      let entries = [];
-      let sales = [];
-      let salesMeta = {};
-
-      try {
-        suppliers = JSON.parse(localStorage.getItem(GESTAO_SUPPLIERS_KEY) || '[]').map(item => ({
-          id: item.id,
-          name: item.name,
-          contact: item.contact || item.note || ''
-        }));
-      } catch (error) {
-        suppliers = [];
-      }
-
-      try {
-        entries = JSON.parse(localStorage.getItem(GESTAO_ENTRIES_KEY) || '[]').map(item => ({
-          id: item.id,
-          productId: item.productId || item.product_id,
-          size: item.size || 'M',
-          quantity: Number(item.quantity || 0),
-          cost: Number(item.cost || item.cost_price || 0),
-          date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
-          supplierId: item.supplierId || item.supplier_id || '',
-          orderId: item.orderId || item.order_id || generateClientUuid(),
-          orderKey: item.orderKey || `${item.date || (item.created_at ? String(item.created_at).slice(0,10) : '')}__${item.supplierId || item.supplier_id || 'sem-fornecedor'}__${item.orderId || item.order_id || ''}`,
-          extraCost: Number(item.extraCost || item.extra_cost || 0),
-          note: item.note || ''
-        }));
-      } catch (error) {
-        entries = [];
-      }
-
-      try {
-        salesMeta = JSON.parse(localStorage.getItem(GESTAO_SALES_META_KEY) || '{}') || {};
-      } catch (error) {
-        salesMeta = {};
-      }
-
-      try {
-        sales = JSON.parse(localStorage.getItem(GESTAO_SALES_KEY) || '[]').map(item => ({
-          id: item.id,
-          saleId: item.saleId || item.sale_id || item.id,
-          productId: item.productId || item.product_id,
-          size: item.size || 'M',
-          quantity: Number(item.quantity || 0),
-          salePrice: Number(item.salePrice || item.sale_price || 0),
-          costPrice: Number(item.costPrice || item.cost_price || 0),
-          date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
-          totalAmount: Number(item.totalAmount || item.total_amount || ((Number(item.quantity || 0) * Number(item.salePrice || item.sale_price || 0)))),
-          packagingCost: roundMoney(item.packagingCost || 0),
-          shippingCost: roundMoney(item.shippingCost || 0),
-          feeCost: roundMoney(item.feeCost || 0),
-          otherCost: roundMoney(item.otherCost || 0),
-          extraCostsTotal: roundMoney(item.extraCostsTotal || 0),
-          profit: roundMoney(item.profit || ((Number(item.salePrice || item.sale_price || 0) - Number(item.costPrice || item.cost_price || 0)) * Number(item.quantity || 0))),
-          clientName: item.clientName || salesMeta?.[item.saleId || item.sale_id || item.id]?.clientName || '',
-          clientPhone: item.clientPhone || salesMeta?.[item.saleId || item.sale_id || item.id]?.clientPhone || ''
-        }));
-      } catch (error) {
-        sales = [];
-      }
-
-      return { suppliers, entries, sales, salesMeta };
-    }
-
-    function hasGestaoLocalBackup(localState) {
-      return !!(
-        localState &&
-        (
-          (Array.isArray(localState.suppliers) && localState.suppliers.length) ||
-          (Array.isArray(localState.entries) && localState.entries.length) ||
-          (Array.isArray(localState.sales) && localState.sales.length)
-        )
-      );
-    }
-
-
     function getGroupedGestaoOrders() {
       const orderMap = new Map();
       gestaoEntries.forEach(entry => {
@@ -4348,7 +4146,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     }
 
     async function loadGestaoStateFromSupabase() {
-      const localBackup = readGestaoLocalState();
       const { data: suppliers, error: supplierError } = await supabaseClient
         .from(GESTAO_SUPPLIERS_TABLE)
         .select('id, name, contact, created_at')
@@ -4384,10 +4181,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         contact: item.contact || ''
       }));
 
-      if (!gestaoSuppliers.length && localBackup.suppliers.length) {
-        gestaoSuppliers = [...localBackup.suppliers];
-      }
-
       const ordersMap = new Map((orders || []).map(order => [String(order.id), order]));
       gestaoEntries = (orderItems || []).map(item => {
         const order = ordersMap.get(String(item.order_id)) || {};
@@ -4407,15 +4200,8 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         };
       });
 
-      if (!gestaoEntries.length && localBackup.entries.length) {
-        gestaoEntries = [...localBackup.entries];
-      }
-
       const savedMetaRaw = localStorage.getItem(GESTAO_SALES_META_KEY) || '{}';
       try { gestaoSalesMeta = JSON.parse(savedMetaRaw) || {}; } catch(e) { gestaoSalesMeta = {}; }
-      if (!Object.keys(gestaoSalesMeta).length && localBackup.salesMeta && Object.keys(localBackup.salesMeta).length) {
-        gestaoSalesMeta = { ...localBackup.salesMeta };
-      }
 
       gestaoSales = (saleItems || []).map(item => ({
         id: item.id,
@@ -4437,10 +4223,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         clientPhone: gestaoSalesMeta?.[item.sale_id]?.clientPhone || ''
       }));
 
-      if (!gestaoSales.length && localBackup.sales.length) {
-        gestaoSales = [...localBackup.sales];
-      }
-
       normalizeGestaoEntriesExtraCosts();
       localStorage.setItem(GESTAO_SUPPLIERS_KEY, JSON.stringify(gestaoSuppliers));
       localStorage.setItem(GESTAO_ENTRIES_KEY, JSON.stringify(gestaoEntries));
@@ -4458,11 +4240,51 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         console.warn('Gestão em modo local:', error?.message || error);
       }
 
-      const localState = readGestaoLocalState();
-      gestaoSuppliers = localState.suppliers;
-      gestaoEntries = localState.entries;
-      gestaoSales = localState.sales;
-      gestaoSalesMeta = localState.salesMeta;
+      try {
+        gestaoSuppliers = JSON.parse(localStorage.getItem(GESTAO_SUPPLIERS_KEY) || '[]').map(item => ({
+          id: item.id,
+          name: item.name,
+          contact: item.contact || item.note || ''
+        }));
+        gestaoEntries = JSON.parse(localStorage.getItem(GESTAO_ENTRIES_KEY) || '[]').map(item => ({
+          id: item.id,
+          productId: item.productId || item.product_id,
+          size: item.size || 'M',
+          quantity: Number(item.quantity || 0),
+          cost: Number(item.cost || item.cost_price || 0),
+          date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
+          supplierId: item.supplierId || item.supplier_id || '',
+          orderId: item.orderId || item.order_id || generateClientUuid(),
+          orderKey: item.orderKey || `${item.date || (item.created_at ? String(item.created_at).slice(0,10) : '')}__${item.supplierId || item.supplier_id || 'sem-fornecedor'}__${item.orderId || item.order_id || ''}`,
+          extraCost: Number(item.extraCost || item.extra_cost || 0),
+          note: item.note || ''
+        }));
+        try { gestaoSalesMeta = JSON.parse(localStorage.getItem(GESTAO_SALES_META_KEY) || '{}') || {}; } catch (error) { gestaoSalesMeta = {}; }
+        gestaoSales = JSON.parse(localStorage.getItem(GESTAO_SALES_KEY) || '[]').map(item => ({
+          id: item.id,
+          saleId: item.saleId || item.sale_id || item.id,
+          productId: item.productId || item.product_id,
+          size: item.size || 'M',
+          quantity: Number(item.quantity || 0),
+          salePrice: Number(item.salePrice || item.sale_price || 0),
+          costPrice: Number(item.costPrice || item.cost_price || 0),
+          date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
+          totalAmount: Number(item.totalAmount || item.total_amount || ((Number(item.quantity || 0) * Number(item.salePrice || item.sale_price || 0)))),
+          packagingCost: roundMoney(item.packagingCost || 0),
+          shippingCost: roundMoney(item.shippingCost || 0),
+          feeCost: roundMoney(item.feeCost || 0),
+          otherCost: roundMoney(item.otherCost || 0),
+          extraCostsTotal: roundMoney(item.extraCostsTotal || 0),
+          profit: roundMoney(item.profit || ((Number(item.salePrice || item.sale_price || 0) - Number(item.costPrice || item.cost_price || 0)) * Number(item.quantity || 0))),
+          clientName: item.clientName || gestaoSalesMeta?.[item.saleId || item.sale_id || item.id]?.clientName || '',
+          clientPhone: item.clientPhone || gestaoSalesMeta?.[item.saleId || item.sale_id || item.id]?.clientPhone || ''
+        }));
+      } catch (error) {
+        gestaoSuppliers = [];
+        gestaoEntries = [];
+        gestaoSales = [];
+        gestaoSalesMeta = {};
+      }
       normalizeGestaoEntriesExtraCosts();
       gestaoSyncMode = 'local';
       updateGestaoSyncUi();
@@ -4860,37 +4682,26 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         const grandTotal = itemsTotal + Number(order.extraCost || 0);
         const contact = gestaoSuppliers.find(s => String(s.id) === String(order.supplierId))?.contact || '—';
         const coverImage = getProductImageById(order.items[0]?.productId);
-        const formattedDate = formatGestaoDate(order.date || '');
-        const supplierName = order.supplierName || 'Sem fornecedor';
-        const itemsHtml = order.items.map(entry => {
-          const itemTotal = Number(entry.cost || 0) * Number(entry.quantity || 0);
-          return `
-            <div class="order-detail-item">
-              <img src="${escapeHtml(getProductImageById(entry.productId))}" alt="${escapeHtml(getProductNameById(entry.productId))}" onerror="this.src='https://via.placeholder.com/240x240?text=Camisa';" />
-              <div class="order-detail-copy">
-                <div class="order-detail-title">${escapeHtml(getProductNameById(entry.productId))}</div>
-                <div class="order-detail-meta">Tam. ${escapeHtml(entry.size)} • ${entry.quantity} un.</div>
-              </div>
-              <div class="order-detail-pricing">
-                <div class="order-detail-unit">${formatPrice(entry.cost)} / un.</div>
-                <div class="order-detail-total"><strong>${formatPrice(itemTotal)}</strong> total</div>
-              </div>
+        const itemsHtml = order.items.map(entry => `
+          <div class="order-detail-item">
+            <img src="${escapeHtml(getProductImageById(entry.productId))}" alt="${escapeHtml(getProductNameById(entry.productId))}" onerror="this.src='https://via.placeholder.com/240x240?text=Camisa';" />
+            <div>
+              <strong>${escapeHtml(getProductNameById(entry.productId))}</strong> • tam. ${escapeHtml(entry.size)} • ${entry.quantity} un.<br>
+              Custo unitário: <strong>${formatPrice(entry.cost)}</strong> • Total item: <strong>${formatPrice(Number(entry.cost || 0) * Number(entry.quantity || 0))}</strong>
             </div>
-          `;
-        }).join('');
+          </div>
+        `).join('');
         return `
           <details class="order-collapsible">
             <summary>
-              <img class="order-summary-thumb" src="${escapeHtml(coverImage)}" alt="Pedido ${escapeHtml(supplierName)}" onerror="this.src='https://via.placeholder.com/240x240?text=Camisa';" />
+              <img class="order-summary-thumb" src="${escapeHtml(coverImage)}" alt="Pedido ${escapeHtml(order.supplierName)}" onerror="this.src='https://via.placeholder.com/240x240?text=Camisa';" />
               <div class="order-summary-main">
-                <div class="order-summary-top">
-                  <div class="gestao-list-title">Pedido • ${escapeHtml(supplierName)}</div>
-                </div>
-                <div class="gestao-list-sub">${formattedDate} • ${totalPieces} peça(s) • ${order.items.length} item(ns)</div>
+                <div class="gestao-list-title">Pedido • ${escapeHtml(order.supplierName)}</div>
+                <div class="gestao-list-sub">${escapeHtml(order.date || '')} • ${totalPieces} peça(s) • ${order.items.length} item(ns)</div>
               </div>
               <div class="order-summary-side">
-                <span class="order-summary-total">${formatPrice(grandTotal)}</span>
-                <span class="order-summary-toggle">Ver itens do pedido</span>
+                <span class="badge">${formatPrice(grandTotal)}</span>
+                <span class="small-muted">Toque para ver detalhes</span>
               </div>
             </summary>
             <div class="order-collapsible-body">
@@ -4899,12 +4710,12 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
                 <span class="badge">Custos extras: ${formatPrice(order.extraCost)}</span>
                 <span class="badge">Contato: ${escapeHtml(contact)}</span>
               </div>
-              <div class="actions-row" style="margin-top:0;">
+              <div class="actions-row" style="margin-top:10px;">
                 <button class="btn btn-success" type="button" onclick="editGestaoOrder('${order.orderId}')">Editar pedido</button>
                 <button class="btn btn-danger" type="button" onclick="deleteGestaoOrder('${order.orderId}')">Excluir pedido</button>
               </div>
-              ${order.note ? `<div class="small-muted">Obs.: ${escapeHtml(order.note)}</div>` : ''}
-              <div class="order-detail-grid">${itemsHtml}</div>
+              ${order.note ? `<div class="small-muted" style="margin-top:10px;">Obs.: ${escapeHtml(order.note)}</div>` : ''}
+              ${itemsHtml}
             </div>
           </details>
         `;
@@ -4950,8 +4761,7 @@ function renderGestaoStock() {
       }
 
       if (!grouped.length) {
-        const hasBackup = hasGestaoLocalBackup(readGestaoLocalState());
-        container.innerHTML = `<div class="gestao-empty">Nenhum resultado encontrado no estoque.${hasBackup ? ' Existe dado salvo no navegador deste aparelho, mas ele não foi convertido em saldo visível. Recarregue a página e teste novamente.' : ''}</div>`;
+        container.innerHTML = '<div class="gestao-empty">Nenhum resultado encontrado no estoque.</div>';
         return;
       }
 
@@ -5011,23 +4821,97 @@ function updateGestaoSalePreview() {
       box.innerHTML = `${escapeHtml(getProductNameById(productId))} • tamanho <strong>${escapeHtml(size)}</strong><br>Disponível agora: <strong>${available}</strong> peça(s)<br>${clientName ? `Cliente: <strong>${escapeHtml(clientName)}</strong>${clientPhone ? ` • ${escapeHtml(clientPhone)}` : ''}<br>` : ''}Custo médio do produto: <strong>${formatPrice(avgCost)}</strong><br>Custo das peças: <strong>${formatPrice(productCost)}</strong><br>Custos extras da venda: <strong>${formatPrice(extraCosts)}</strong><br>Receita prevista: <strong>${formatPrice(revenue)}</strong><br>Lucro real estimado: <strong>${formatPrice(realProfit)}</strong>`;
     }
 
-    function renderGestaoSales() {
+    
+    function resetGestaoSaleForm() {
+      editingGestaoSaleId = null;
+      const saleDate = document.getElementById('gestao-sale-date');
+      document.getElementById('gestao-sale-product').value = '';
+      document.getElementById('gestao-sale-size').value = 'M';
+      document.getElementById('gestao-sale-qty').value = '1';
+      document.getElementById('gestao-sale-price').value = '';
+      if (saleDate) saleDate.value = new Date().toISOString().slice(0,10);
+      document.getElementById('gestao-sale-packaging').value = '';
+      document.getElementById('gestao-sale-shipping').value = '';
+      document.getElementById('gestao-sale-fee').value = '';
+      document.getElementById('gestao-sale-other').value = '';
+      document.getElementById('gestao-sale-client-name').value = '';
+      document.getElementById('gestao-sale-client-phone').value = '';
+      const saveBtn = document.getElementById('gestao-sale-save-btn');
+      const cancelBtn = document.getElementById('gestao-sale-cancel-btn');
+      if (saveBtn) saveBtn.textContent = 'Salvar venda';
+      if (cancelBtn) cancelBtn.classList.add('hidden');
+      clearMessage('gestao-sale-message');
+      updateGestaoSalePreview();
+    }
+
+    function editGestaoSale(saleId) {
+      const sale = gestaoSales.find(item => String(item.saleId || item.id) === String(saleId));
+      if (!sale) {
+        showMessage('gestao-sale-message', 'Não foi possível localizar essa venda.', 'error');
+        return;
+      }
+      editingGestaoSaleId = String(sale.saleId || sale.id);
+      document.getElementById('gestao-sale-product').value = sale.productId || '';
+      document.getElementById('gestao-sale-size').value = sale.size || 'M';
+      document.getElementById('gestao-sale-qty').value = String(sale.quantity || 1);
+      document.getElementById('gestao-sale-price').value = formatMoneyInputValue(sale.salePrice || 0);
+      document.getElementById('gestao-sale-date').value = sale.date || new Date().toISOString().slice(0,10);
+      document.getElementById('gestao-sale-packaging').value = formatMoneyInputValue(sale.packagingCost || 0);
+      document.getElementById('gestao-sale-shipping').value = formatMoneyInputValue(sale.shippingCost || 0);
+      document.getElementById('gestao-sale-fee').value = formatMoneyInputValue(sale.feeCost || 0);
+      document.getElementById('gestao-sale-other').value = formatMoneyInputValue(sale.otherCost || 0);
+      document.getElementById('gestao-sale-client-name').value = sale.clientName || '';
+      document.getElementById('gestao-sale-client-phone').value = sale.clientPhone || '';
+      const saveBtn = document.getElementById('gestao-sale-save-btn');
+      const cancelBtn = document.getElementById('gestao-sale-cancel-btn');
+      if (saveBtn) saveBtn.textContent = 'Atualizar venda';
+      if (cancelBtn) cancelBtn.classList.remove('hidden');
+      activateGestaoTab('gestao-vendas');
+      updateGestaoSalePreview();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function deleteGestaoSale(saleId) {
+      const confirmDelete = confirm('Deseja excluir esta venda?');
+      if (!confirmDelete) return;
+      gestaoSales = gestaoSales.filter(item => String(item.saleId || item.id) !== String(saleId));
+      delete gestaoSalesMeta[String(saleId)];
+      if (String(editingGestaoSaleId || '') === String(saleId)) {
+        resetGestaoSaleForm();
+      }
+      try {
+        await persistGestaoState();
+      } catch (error) {
+        console.error('Erro ao excluir venda:', error);
+        gestaoSyncMode = 'local';
+        updateGestaoSyncUi();
+      }
+      renderGestao();
+      showMessage('gestao-sale-message', 'Venda excluída com sucesso.', 'success');
+    }
+
+function renderGestaoSales() {
       const container = document.getElementById('gestaoSalesList');
       if (!container) return;
       if (!gestaoSales.length) {
         container.innerHTML = '<div class="gestao-empty">Nenhuma venda lançada ainda.</div>';
         return;
       }
-      container.innerHTML = gestaoSales.map(item => `
+      const sales = [...gestaoSales].sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+      container.innerHTML = sales.map(item => `
         <article class="gestao-list-card">
           <div class="gestao-list-head">
             <div>
               <div class="gestao-list-title">${escapeHtml(getProductNameById(item.productId))}</div>
-              <div class="gestao-list-sub">${escapeHtml(item.date || '')} • tamanho ${escapeHtml(item.size)}${item.clientName ? ` • ${escapeHtml(item.clientName)}` : ''}</div>
+              <div class="gestao-list-sub">${escapeHtml(formatGestaoDate(item.date || ''))} • tamanho ${escapeHtml(item.size)}${item.clientName ? ` • ${escapeHtml(item.clientName)}` : ''}</div>
             </div>
-            <span class="badge">${item.quantity} un.</span>
+            <div class="table-actions">
+              <button class="btn btn-success" type="button" onclick="editGestaoSale('${item.saleId || item.id}')">Editar</button>
+              <button class="btn btn-danger" type="button" onclick="deleteGestaoSale('${item.saleId || item.id}')">Excluir</button>
+            </div>
           </div>
           <div class="product-admin-meta">
+            <span class="badge">${item.quantity} un.</span>
             ${item.clientPhone ? `<span class="badge">Cliente: ${escapeHtml(item.clientPhone)}</span>` : ''}
             <span class="badge">Venda: ${formatPrice(item.salePrice)}</span>
             <span class="badge">Receita: ${formatPrice(item.totalAmount)}</span>
@@ -5158,73 +5042,6 @@ function renderGestaoSuppliers() {
           </div>
         </article>
       `).join('');
-    }
-
-    function updateAdminHeaderStats() {
-      const productsEl = document.getElementById('statProducts');
-      const categoriesEl = document.getElementById('statCategories');
-      const slidesEl = document.getElementById('statSlides');
-      if (productsEl) productsEl.textContent = String(allProducts.length || 0);
-      if (categoriesEl) categoriesEl.textContent = String(allCategories.length || 0);
-      if (slidesEl) slidesEl.textContent = String(allHeroSlides.length || 0);
-    }
-
-    function getGestaoOverviewMetrics() {
-      const metrics = getGestaoMetrics();
-      const totalRevenue = roundMoney(gestaoSales.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0));
-      const totalProfit = roundMoney(gestaoSales.reduce((sum, item) => sum + Number(item.profit || 0), 0));
-      const totalInvested = roundMoney(calculateGestaoStock().reduce((sum, item) => sum + Number(item.currentInvestment || 0), 0) + getGestaoExtraInvestedTotal());
-      const totalSalesCount = gestaoSales.length;
-      const ticketAverage = totalSalesCount ? roundMoney(totalRevenue / totalSalesCount) : 0;
-      return {
-        totalRevenue,
-        totalProfit,
-        totalInvested,
-        ticketAverage,
-        totalStockPieces: metrics.totalStockPieces,
-        totalOrders: getGroupedGestaoOrders().length,
-        lowStockCount: calculateGestaoStock().filter(item => Number(item.currentQty || 0) > 0 && Number(item.currentQty || 0) <= 2).length
-      };
-    }
-
-    function renderGestaoDashboardOverview() {
-      const box = document.getElementById('gestaoDashboardOverview');
-      if (!box) return;
-      const overview = getGestaoOverviewMetrics();
-      box.innerHTML = `
-        <div class="overview-card"><span>Receita real</span><strong class="kpi-accent">${formatPrice(overview.totalRevenue)}</strong></div>
-        <div class="overview-card"><span>Lucro real</span><strong>${formatPrice(overview.totalProfit)}</strong></div>
-        <div class="overview-card"><span>Investimento atual</span><strong>${formatPrice(overview.totalInvested)}</strong></div>
-        <div class="overview-card"><span>Ticket médio</span><strong>${formatPrice(overview.ticketAverage)}</strong></div>
-        <div class="overview-card"><span>Peças em estoque</span><strong>${overview.totalStockPieces}</strong></div>
-        <div class="overview-card"><span>Pedidos lançados</span><strong>${overview.totalOrders}</strong></div>
-      `;
-    }
-
-    function renderSiteSettingsSummary() {
-      const grid = document.getElementById('settingsSummaryGrid');
-      if (!grid) return;
-      const delivery = document.getElementById('setting-delivery-text')?.value?.trim() || 'Não definido';
-      const catalogTitle = document.getElementById('setting-catalog-title')?.value?.trim() || 'Não definido';
-      const contact = document.getElementById('setting-contact-text')?.value?.trim() || 'Não definido';
-      const footer = document.getElementById('setting-footer-text')?.value?.trim() || 'Não definido';
-      const instagram = document.getElementById('setting-instagram-url')?.value?.trim() || 'Não definido';
-      const whatsapp = document.getElementById('setting-whatsapp-number')?.value?.trim() || 'Não definido';
-      const logo = document.getElementById('setting-logo-url')?.value?.trim() || '';
-
-      const statusInstagram = document.getElementById('settingsStatusInstagram');
-      const statusWhatsapp = document.getElementById('settingsStatusWhatsapp');
-      const statusLogo = document.getElementById('settingsStatusLogo');
-      if (statusInstagram) statusInstagram.textContent = instagram !== 'Não definido' ? 'Configurado' : 'Pendente';
-      if (statusWhatsapp) statusWhatsapp.textContent = whatsapp !== 'Não definido' ? whatsapp : 'Pendente';
-      if (statusLogo) statusLogo.textContent = logo ? 'Configurada' : 'Sem logo';
-
-      grid.innerHTML = `
-        <div class="settings-summary-card"><span>Entrega</span><strong>${escapeHtml(delivery)}</strong></div>
-        <div class="settings-summary-card"><span>Título catálogo</span><strong>${escapeHtml(catalogTitle)}</strong></div>
-        <div class="settings-summary-card"><span>Contato</span><strong>${escapeHtml(contact)}</strong></div>
-        <div class="settings-summary-card"><span>Rodapé</span><strong>${escapeHtml(footer)}</strong></div>
-      `;
     }
 
     function renderGestao() {
@@ -5375,23 +5192,24 @@ async function saveGestaoSale() {
         return;
       }
 
+      const existingSale = editingGestaoSaleId ? gestaoSales.find(item => String(item.saleId || item.id) === String(editingGestaoSaleId)) : null;
       const stockRow = calculateGestaoStock().find(item => String(item.productId) === String(productId) && String(item.size) === String(size));
-      const available = Number(stockRow?.currentQty || 0);
+      const available = Number(stockRow?.currentQty || 0) + (existingSale && String(existingSale.productId) === String(productId) && String(existingSale.size) === String(size) ? Number(existingSale.quantity || 0) : 0);
       if (quantity > available) {
         showMessage('gestao-sale-message', `Estoque insuficiente. Disponível em ${size}: ${available} peça(s).`, 'error');
         return;
       }
 
-      const costPrice = roundMoney(stockRow?.averageCost || getAverageCostForProductSize(productId, size) || 0);
+      const costPrice = roundMoney(stockRow?.averageCost || getAverageCostForProductSize(productId, size) || existingSale?.costPrice || 0);
       const totalAmount = Number((quantity * salePrice).toFixed(2));
       const extraCostsTotal = Number((packagingCost + shippingCost + feeCost + otherCost).toFixed(2));
       const profit = Number((totalAmount - (quantity * costPrice) - extraCostsTotal).toFixed(2));
-      const saleId = generateClientUuid();
+      const saleId = existingSale?.saleId || generateClientUuid();
 
       gestaoSalesMeta[saleId] = { clientName, clientPhone };
 
-      gestaoSales.unshift({
-        id: generateClientUuid(),
+      const salePayload = {
+        id: existingSale?.id || generateClientUuid(),
         saleId,
         productId,
         size,
@@ -5408,7 +5226,13 @@ async function saveGestaoSale() {
         profit,
         clientName,
         clientPhone
-      });
+      };
+
+      if (existingSale) {
+        gestaoSales = gestaoSales.map(item => String(item.saleId || item.id) === String(editingGestaoSaleId) ? salePayload : item);
+      } else {
+        gestaoSales.unshift(salePayload);
+      }
 
       try {
         await persistGestaoState();
@@ -5416,21 +5240,49 @@ async function saveGestaoSale() {
         console.error('Erro ao salvar venda:', error);
         gestaoSyncMode = 'local';
         updateGestaoSyncUi();
-        showMessage('gestao-sale-message', 'Venda salva no aparelho. Os custos extras desta versão ficam locais para não quebrar seu banco atual.', 'success');
+        showMessage('gestao-sale-message', existingSale ? 'Venda atualizada no aparelho. Os custos extras desta versão ficam locais para não quebrar seu banco atual.' : 'Venda salva no aparelho. Os custos extras desta versão ficam locais para não quebrar seu banco atual.', 'success');
       }
 
-      document.getElementById('gestao-sale-qty').value = '1';
-      document.getElementById('gestao-sale-price').value = '';
-      document.getElementById('gestao-sale-date').value = '';
-      document.getElementById('gestao-sale-packaging').value = '';
-      document.getElementById('gestao-sale-shipping').value = '';
-      document.getElementById('gestao-sale-fee').value = '';
-      document.getElementById('gestao-sale-other').value = '';
-      document.getElementById('gestao-sale-client-name').value = '';
-      document.getElementById('gestao-sale-client-phone').value = '';
       renderGestao();
-      showMessage('gestao-sale-message', 'Venda registrada com sucesso.', 'success');
+      const wasEditing = !!existingSale;
+      resetGestaoSaleForm();
+      showMessage('gestao-sale-message', wasEditing ? 'Venda atualizada com sucesso.' : 'Venda registrada com sucesso.', 'success');
     }
+
+    function updateAdminHeaderStats() {
+      const productsCount = Array.isArray(allProducts) ? allProducts.length : 0;
+      const categoriesCount = Array.isArray(allCategories) ? allCategories.length : 0;
+      const slidesCount = Array.isArray(allHeroSlides) ? allHeroSlides.length : 0;
+      const productsEl = document.getElementById('statProducts');
+      const categoriesEl = document.getElementById('statCategories');
+      const slidesEl = document.getElementById('statSlides');
+      if (productsEl) productsEl.textContent = String(productsCount);
+      if (categoriesEl) categoriesEl.textContent = String(categoriesCount);
+      if (slidesEl) slidesEl.textContent = String(slidesCount);
+    }
+
+    function renderSiteSettingsSummary() {
+      const instagram = document.getElementById('setting-instagram-url')?.value?.trim() || '';
+      const whatsapp = document.getElementById('setting-whatsapp-number')?.value?.trim() || '';
+      const logo = document.getElementById('setting-logo-url')?.value?.trim() || '';
+      const summary = [
+        { label: 'Entrega', value: document.getElementById('setting-delivery-text')?.value?.trim() || '—' },
+        { label: 'Título catálogo', value: document.getElementById('setting-catalog-title')?.value?.trim() || '—' },
+        { label: 'Contato', value: document.getElementById('setting-contact-text')?.value?.trim() || '—' },
+        { label: 'Rodapé', value: document.getElementById('setting-footer-text')?.value?.trim() || '—' }
+      ];
+      const grid = document.getElementById('settingsSummaryGrid');
+      if (grid) {
+        grid.innerHTML = summary.map(item => `<div class="settings-summary-card"><span>${escapeHtml(item.label)}</span><strong>${escapeHtml(item.value)}</strong></div>`).join('');
+      }
+      const igEl = document.getElementById('settingsStatusInstagram');
+      const waEl = document.getElementById('settingsStatusWhatsapp');
+      const logoEl = document.getElementById('settingsStatusLogo');
+      if (igEl) igEl.textContent = instagram ? 'Conectado' : 'Não definido';
+      if (waEl) waEl.textContent = whatsapp || 'Não definido';
+      if (logoEl) logoEl.textContent = logo ? 'Configurada' : 'Sem logo';
+    }
+
 
     let adminInitPromise = null;
     let adminInitialized = false;
@@ -5447,7 +5299,6 @@ async function saveGestaoSale() {
         await loadHeroSlidesAdmin();
         resetHeroSlideForm();
         updateBatchPreview();
-        updateAdminHeaderStats();
         const batchCategorySelect = document.getElementById("batch-create-category");
         if (batchCategorySelect) {
           batchCategorySelect.innerHTML = '<option value="">Selecione a categoria</option>' + allCategories.map(category => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join("");
@@ -5471,6 +5322,7 @@ async function saveGestaoSale() {
       setupModules();
       setupGestaoTabs();
       setupMoneyInputs();
+      renderSiteSettingsSummary();
 
       document.getElementById("product-name")?.addEventListener("input", syncSlugPreview);
       document.getElementById("product-price")?.addEventListener("input", updateDraftSummary);
@@ -5485,9 +5337,6 @@ async function saveGestaoSale() {
         check.addEventListener("change", refreshBatchSizeChipStates);
       });
       document.getElementById("batch-create-names")?.addEventListener("input", updateBatchCreateKpis);
-      ["setting-delivery-text","setting-catalog-title","setting-contact-text","setting-footer-text","setting-instagram-url","setting-whatsapp-number","setting-logo-url"].forEach(id => {
-        document.getElementById(id)?.addEventListener("input", renderSiteSettingsSummary);
-      });
       document.querySelectorAll(".step-chip").forEach(button => {
         button.addEventListener("click", () => setProductStep(Number(button.dataset.stepTarget)));
       });
@@ -5504,8 +5353,6 @@ async function saveGestaoSale() {
       refreshBatchSizeChipStates();
       updateDraftSummary();
       updateBatchCreateKpis();
-      updateAdminHeaderStats();
-      renderSiteSettingsSummary();
       const entryDateField = document.getElementById('gestao-entry-date');
       if (entryDateField) entryDateField.value = new Date().toISOString().slice(0,10);
       document.getElementById('gestao-entry-extra')?.addEventListener('input', renderGestaoPendingOrder);
@@ -5536,4 +5383,22 @@ async function saveGestaoSale() {
     });
   </script>
 </body>
-</html>
+</html
+
+    function renderGestaoDashboardOverview() {
+      const container = document.getElementById('gestaoDashboardOverview');
+      if (!container) return;
+      const metrics = getGestaoMetrics();
+      const totalRevenue = roundMoney(gestaoSales.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0));
+      const totalInvested = roundMoney(calculateGestaoStock().reduce((sum, item) => sum + Number(item.currentInvestment || 0), 0) + getGestaoExtraInvestedTotal());
+      const totalOrders = getGroupedGestaoOrders().length;
+      const ticketAverage = gestaoSales.length ? roundMoney(totalRevenue / gestaoSales.length) : 0;
+      container.innerHTML = `
+        <div class="overview-card"><span>Receita real</span><strong class="kpi-accent">${formatPrice(totalRevenue)}</strong></div>
+        <div class="overview-card"><span>Lucro real</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
+        <div class="overview-card"><span>Investimento atual</span><strong>${formatPrice(totalInvested)}</strong></div>
+        <div class="overview-card"><span>Ticket médio</span><strong>${formatPrice(ticketAverage)}</strong></div>
+        <div class="overview-card"><span>Peças em estoque</span><strong>${metrics.totalStockPieces}</strong></div>
+        <div class="overview-card"><span>Pedidos lançados</span><strong>${totalOrders}</strong></div>
+      `;
+    }>
