@@ -1623,6 +1623,62 @@ Camisa Real Madrid 24/25"></textarea>
       });
     }
 
+
+    function formatGestaoDate(value) {
+      if (!value) return '—';
+      const parsed = new Date(`${String(value).slice(0, 10)}T12:00:00`);
+      if (Number.isNaN(parsed.getTime())) return escapeHtml(String(value));
+      return parsed.toLocaleDateString('pt-BR');
+    }
+
+    function updateAdminHeaderStats() {
+      const statProducts = document.getElementById('statProducts');
+      const statCategories = document.getElementById('statCategories');
+      const statSlides = document.getElementById('statSlides');
+      if (statProducts) statProducts.textContent = String(allProducts.length || 0);
+      if (statCategories) statCategories.textContent = String(allCategories.length || 0);
+      if (statSlides) statSlides.textContent = String(allHeroSlides.length || 0);
+    }
+
+    function renderSiteSettingsSummary() {
+      const instagram = document.getElementById('settingsStatusInstagram');
+      const whatsapp = document.getElementById('settingsStatusWhatsapp');
+      const logo = document.getElementById('settingsStatusLogo');
+      const summaryGrid = document.getElementById('settingsSummaryGrid');
+      const instagramValue = document.getElementById('setting-instagram-url')?.value?.trim() || '—';
+      const whatsappValue = document.getElementById('setting-whatsapp-number')?.value?.trim() || '—';
+      const logoValue = document.getElementById('setting-logo-url')?.value?.trim() || '';
+      if (instagram) instagram.textContent = instagramValue !== '—' ? 'Configurado' : '—';
+      if (whatsapp) whatsapp.textContent = whatsappValue !== '—' ? whatsappValue : '—';
+      if (logo) logo.textContent = logoValue ? 'Configurada' : 'Sem logo';
+      if (summaryGrid) {
+        summaryGrid.innerHTML = `
+          <div class="settings-summary-card"><span>Entrega</span><strong>${escapeHtml(document.getElementById('setting-delivery-text')?.value?.trim() || '—')}</strong></div>
+          <div class="settings-summary-card"><span>Título catálogo</span><strong>${escapeHtml(document.getElementById('setting-catalog-title')?.value?.trim() || '—')}</strong></div>
+          <div class="settings-summary-card"><span>Contato</span><strong>${escapeHtml(document.getElementById('setting-contact-text')?.value?.trim() || '—')}</strong></div>
+          <div class="settings-summary-card"><span>Rodapé</span><strong>${escapeHtml(document.getElementById('setting-footer-text')?.value?.trim() || '—')}</strong></div>
+        `;
+      }
+    }
+
+    function renderGestaoDashboardOverview() {
+      const box = document.getElementById('gestaoDashboardOverview');
+      if (!box) return;
+      const metrics = getGestaoMetrics();
+      const totalRevenue = roundMoney(gestaoSales.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0));
+      const totalInvested = roundMoney(calculateGestaoStock().reduce((sum, item) => sum + Number(item.currentInvestment || 0), 0) + getGestaoExtraInvestedTotal());
+      const totalOrders = getGroupedGestaoOrders().length;
+      const ticketAverage = gestaoSales.length ? roundMoney(totalRevenue / gestaoSales.length) : 0;
+      box.innerHTML = `
+        <div class="overview-card"><span>Receita real</span><strong class="kpi-accent">${formatPrice(totalRevenue)}</strong></div>
+        <div class="overview-card"><span>Lucro real</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
+        <div class="overview-card"><span>Investimento atual</span><strong>${formatPrice(totalInvested)}</strong></div>
+        <div class="overview-card"><span>Ticket médio</span><strong>${formatPrice(ticketAverage)}</strong></div>
+        <div class="overview-card"><span>Peças em estoque</span><strong>${metrics.totalStockPieces}</strong></div>
+        <div class="overview-card"><span>Pedidos lançados</span><strong>${totalOrders}</strong></div>
+      `;
+    }
+
     function formatBadgeLabel(badgeType) {
       switch (badgeType) {
         case "destaque":
@@ -3505,6 +3561,7 @@ async function uploadHeroSlideImage() {
       if (data.logo_url) {
         document.getElementById("logo-preview").src = data.logo_url;
       }
+      renderSiteSettingsSummary();
     }
 
     async function saveSiteSettings() {
@@ -3536,23 +3593,10 @@ async function uploadHeroSlideImage() {
         return;
       }
 
+      renderSiteSettingsSummary();
       showMessage("settings-message", "Configurações do site salvas com sucesso.", "success");
     }
 
-
-
-    function updateAdminHeaderStats() {
-      const productsEl = document.getElementById('statProducts');
-      const categoriesEl = document.getElementById('statCategories');
-      const slidesEl = document.getElementById('statSlides');
-      if (productsEl) productsEl.textContent = String(allProducts.length || 0);
-      if (categoriesEl) categoriesEl.textContent = String(allCategories.length || 0);
-      if (slidesEl) slidesEl.textContent = String(allHeroSlides.length || 0);
-    }
-
-    function renderSiteSettingsSummary() {
-      // função mantida para compatibilidade com inicialização
-    }
 
     function setupMoneyInputs() {
       bindMoneyInput("gestao-entry-extra", renderGestaoPendingOrder);
@@ -4235,52 +4279,36 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
 
     async function loadGestaoStateFromSupabase() {
       const localBackup = readGestaoLocalState();
+      const { data: suppliers, error: supplierError } = await supabaseClient
+        .from(GESTAO_SUPPLIERS_TABLE)
+        .select('id, name, contact, created_at')
+        .order('created_at', { ascending: false });
 
-      const [
-        suppliersResult,
-        ordersResult,
-        orderItemsResult,
-        saleItemsResult
-      ] = await Promise.allSettled([
-        supabaseClient
-          .from(GESTAO_SUPPLIERS_TABLE)
-          .select('id, name, contact, created_at')
-          .order('created_at', { ascending: false }),
-        supabaseClient
-          .from(GESTAO_ORDERS_TABLE)
-          .select('id, supplier_id, order_date, extra_cost, notes, created_at')
-          .order('order_date', { ascending: false })
-          .order('created_at', { ascending: false }),
-        supabaseClient
-          .from(GESTAO_ORDER_ITEMS_TABLE)
-          .select('id, order_id, product_id, size, quantity, cost_price')
-          .order('id', { ascending: false }),
-        supabaseClient
-          .from(GESTAO_SALE_ITEMS_TABLE)
-          .select('id, sale_id, product_id, quantity, sale_price, cost_price, size, sales(total_amount, profit, created_at, packaging_cost, shipping_cost, extra_cost)')
-          .order('id', { ascending: false })
-      ]);
+      if (supplierError) throw supplierError;
 
-      const suppliersPayload = suppliersResult.status === 'fulfilled' ? suppliersResult.value : null;
-      const ordersPayload = ordersResult.status === 'fulfilled' ? ordersResult.value : null;
-      const orderItemsPayload = orderItemsResult.status === 'fulfilled' ? orderItemsResult.value : null;
-      const salesPayload = saleItemsResult.status === 'fulfilled' ? saleItemsResult.value : null;
+      const { data: orders, error: ordersError } = await supabaseClient
+        .from(GESTAO_ORDERS_TABLE)
+        .select('id, supplier_id, order_date, extra_cost, notes, created_at')
+        .order('order_date', { ascending: false })
+        .order('created_at', { ascending: false });
 
-      const suppliersError = suppliersPayload?.error || (suppliersResult.status === 'rejected' ? suppliersResult.reason : null);
-      const ordersError = ordersPayload?.error || (ordersResult.status === 'rejected' ? ordersResult.reason : null);
-      const orderItemsError = orderItemsPayload?.error || (orderItemsResult.status === 'rejected' ? orderItemsResult.reason : null);
-      const salesError = salesPayload?.error || (saleItemsResult.status === 'rejected' ? saleItemsResult.reason : null);
-
-      if (suppliersError) throw suppliersError;
       if (ordersError) throw ordersError;
+
+      const { data: orderItems, error: orderItemsError } = await supabaseClient
+        .from(GESTAO_ORDER_ITEMS_TABLE)
+        .select('id, order_id, product_id, size, quantity, cost_price')
+        .order('id', { ascending: false });
+
       if (orderItemsError) throw orderItemsError;
 
-      const suppliers = suppliersPayload?.data || [];
-      const orders = ordersPayload?.data || [];
-      const orderItems = orderItemsPayload?.data || [];
-      const saleItems = salesPayload?.data || [];
+      const { data: saleItems, error: salesError } = await supabaseClient
+        .from(GESTAO_SALE_ITEMS_TABLE)
+        .select('id, sale_id, product_id, quantity, sale_price, cost_price, size, sales(total_amount, profit, created_at, packaging_cost, shipping_cost, extra_cost)')
+        .order('id', { ascending: false });
 
-      gestaoSuppliers = suppliers.map(item => ({
+      if (salesError) throw salesError;
+
+      gestaoSuppliers = (suppliers || []).map(item => ({
         id: item.id,
         name: item.name,
         contact: item.contact || ''
@@ -4290,8 +4318,8 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         gestaoSuppliers = [...localBackup.suppliers];
       }
 
-      const ordersMap = new Map(orders.map(order => [String(order.id), order]));
-      gestaoEntries = orderItems.map(item => {
+      const ordersMap = new Map((orders || []).map(order => [String(order.id), order]));
+      gestaoEntries = (orderItems || []).map(item => {
         const order = ordersMap.get(String(item.order_id)) || {};
         const orderDate = order.order_date || (order.created_at ? String(order.created_at).slice(0,10) : '');
         return {
@@ -4319,33 +4347,28 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         gestaoSalesMeta = { ...localBackup.salesMeta };
       }
 
-      if (salesError) {
-        console.warn('Gestão: falha ao carregar vendas, seguindo com estoque online.', salesError?.message || salesError);
-        gestaoSales = localBackup.sales.length ? [...localBackup.sales] : [];
-      } else {
-        gestaoSales = saleItems.map(item => ({
-          id: item.id,
-          saleId: item.sale_id,
-          productId: item.product_id,
-          size: item.size || 'M',
-          quantity: Number(item.quantity || 0),
-          salePrice: Number(item.sale_price || 0),
-          costPrice: Number(item.cost_price || 0),
-          date: item.sales?.created_at ? String(item.sales.created_at).slice(0,10) : '',
-          totalAmount: Number(item.sales?.total_amount || (Number(item.quantity || 0) * Number(item.sale_price || 0))),
-          packagingCost: Number(item.sales?.packaging_cost || 0),
-          shippingCost: Number(item.sales?.shipping_cost || 0),
-          feeCost: 0,
-          otherCost: Number(item.sales?.extra_cost || 0),
-          extraCostsTotal: Number(item.sales?.packaging_cost || 0) + Number(item.sales?.shipping_cost || 0) + Number(item.sales?.extra_cost || 0),
-          profit: Number(item.sales?.profit || ((Number(item.sale_price || 0) - Number(item.cost_price || 0)) * Number(item.quantity || 0))),
-          clientName: gestaoSalesMeta?.[item.sale_id]?.clientName || '',
-          clientPhone: gestaoSalesMeta?.[item.sale_id]?.clientPhone || ''
-        }));
+      gestaoSales = (saleItems || []).map(item => ({
+        id: item.id,
+        saleId: item.sale_id,
+        productId: item.product_id,
+        size: item.size || 'M',
+        quantity: Number(item.quantity || 0),
+        salePrice: Number(item.sale_price || 0),
+        costPrice: Number(item.cost_price || 0),
+        date: item.sales?.created_at ? String(item.sales.created_at).slice(0,10) : '',
+        totalAmount: Number(item.sales?.total_amount || (Number(item.quantity || 0) * Number(item.sale_price || 0))),
+        packagingCost: Number(item.sales?.packaging_cost || 0),
+        shippingCost: Number(item.sales?.shipping_cost || 0),
+        feeCost: 0,
+        otherCost: Number(item.sales?.extra_cost || 0),
+        extraCostsTotal: Number(item.sales?.packaging_cost || 0) + Number(item.sales?.shipping_cost || 0) + Number(item.sales?.extra_cost || 0),
+        profit: Number(item.sales?.profit || ((Number(item.sale_price || 0) - Number(item.cost_price || 0)) * Number(item.quantity || 0))),
+        clientName: gestaoSalesMeta?.[item.sale_id]?.clientName || '',
+        clientPhone: gestaoSalesMeta?.[item.sale_id]?.clientPhone || ''
+      }));
 
-        if (!gestaoSales.length && localBackup.sales.length) {
-          gestaoSales = [...localBackup.sales];
-        }
+      if (!gestaoSales.length && localBackup.sales.length) {
+        gestaoSales = [...localBackup.sales];
       }
 
       normalizeGestaoEntriesExtraCosts();
@@ -4358,7 +4381,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     }
 
     async function loadGestaoState() {
-      const localState = readGestaoLocalState();
       try {
         await loadGestaoStateFromSupabase();
         return;
@@ -4366,6 +4388,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         console.warn('Gestão em modo local:', error?.message || error);
       }
 
+      const localState = readGestaoLocalState();
       gestaoSuppliers = localState.suppliers;
       gestaoEntries = localState.entries;
       gestaoSales = localState.sales;
@@ -4919,7 +4942,7 @@ function updateGestaoSalePreview() {
           <div class="gestao-list-head">
             <div>
               <div class="gestao-list-title">${escapeHtml(getProductNameById(item.productId))}</div>
-              <div class="gestao-list-sub">${formatGestaoDate(item.date || '')} • tamanho ${escapeHtml(item.size)}${item.clientName ? ` • ${escapeHtml(item.clientName)}` : ''}</div>
+              <div class="gestao-list-sub">${formatGestaoDate(item.date)} • tamanho ${escapeHtml(item.size)}${item.clientName ? ` • ${escapeHtml(item.clientName)}` : ''}</div>
             </div>
             <span class="badge">${item.quantity} un.</span>
           </div>
@@ -4931,11 +4954,80 @@ function updateGestaoSalePreview() {
             <span class="badge">Lucro: ${formatPrice(item.profit)}</span>
           </div>
           <div class="table-actions">
-            <button class="btn btn-success" type="button" onclick="editGestaoSale('${item.saleId || item.id}')">Editar venda</button>
-            <button class="btn btn-danger" type="button" onclick="deleteGestaoSale('${item.saleId || item.id}')">Excluir venda</button>
+            <button class="btn btn-success" type="button" onclick="editGestaoSale('${item.id}')">Editar venda</button>
+            <button class="btn btn-danger" type="button" onclick="deleteGestaoSale('${item.id}')">Excluir venda</button>
           </div>
         </article>
       `).join('');
+    }
+
+    function editGestaoSale(saleItemId) {
+      const sale = gestaoSales.find(item => String(item.id) === String(saleItemId));
+      if (!sale) {
+        showMessage('gestao-sale-message', 'Não foi possível localizar essa venda.', 'error');
+        return;
+      }
+      editingGestaoSaleId = sale.id;
+      document.getElementById('gestao-sale-product').value = sale.productId || '';
+      document.getElementById('gestao-sale-size').value = sale.size || 'M';
+      document.getElementById('gestao-sale-qty').value = sale.quantity || 1;
+      document.getElementById('gestao-sale-price').value = formatMoneyInputValue(sale.salePrice || 0);
+      document.getElementById('gestao-sale-date').value = sale.date || new Date().toISOString().slice(0,10);
+      document.getElementById('gestao-sale-packaging').value = formatMoneyInputValue(sale.packagingCost || 0);
+      document.getElementById('gestao-sale-shipping').value = formatMoneyInputValue(sale.shippingCost || 0);
+      document.getElementById('gestao-sale-fee').value = formatMoneyInputValue(sale.feeCost || 0);
+      document.getElementById('gestao-sale-other').value = formatMoneyInputValue(sale.otherCost || 0);
+      document.getElementById('gestao-sale-client-name').value = sale.clientName || '';
+      document.getElementById('gestao-sale-client-phone').value = sale.clientPhone || '';
+      const saveBtn = document.getElementById('gestao-sale-save-btn');
+      const cancelBtn = document.getElementById('gestao-sale-cancel-btn');
+      if (saveBtn) saveBtn.textContent = 'Atualizar venda';
+      if (cancelBtn) cancelBtn.classList.remove('hidden');
+      activateGestaoTab('gestao-vendas');
+      updateGestaoSalePreview();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function cancelGestaoSaleEdit() {
+      editingGestaoSaleId = null;
+      document.getElementById('gestao-sale-product').value = allProducts[0]?.id || '';
+      document.getElementById('gestao-sale-size').value = 'M';
+      document.getElementById('gestao-sale-qty').value = '1';
+      document.getElementById('gestao-sale-price').value = '';
+      document.getElementById('gestao-sale-date').value = new Date().toISOString().slice(0,10);
+      document.getElementById('gestao-sale-packaging').value = '';
+      document.getElementById('gestao-sale-shipping').value = '';
+      document.getElementById('gestao-sale-fee').value = '';
+      document.getElementById('gestao-sale-other').value = '';
+      document.getElementById('gestao-sale-client-name').value = '';
+      document.getElementById('gestao-sale-client-phone').value = '';
+      const saveBtn = document.getElementById('gestao-sale-save-btn');
+      const cancelBtn = document.getElementById('gestao-sale-cancel-btn');
+      if (saveBtn) saveBtn.textContent = 'Salvar venda';
+      if (cancelBtn) cancelBtn.classList.add('hidden');
+      clearMessage('gestao-sale-message');
+      updateGestaoSalePreview();
+    }
+
+    async function deleteGestaoSale(saleItemId) {
+      const sale = gestaoSales.find(item => String(item.id) === String(saleItemId));
+      if (!sale) return;
+      const confirmed = confirm('Deseja excluir esta venda?');
+      if (!confirmed) return;
+      gestaoSales = gestaoSales.filter(item => String(item.id) !== String(saleItemId));
+      if (gestaoSalesMeta && sale.saleId) delete gestaoSalesMeta[sale.saleId];
+      try {
+        await persistGestaoState();
+      } catch (error) {
+        console.error('Erro ao excluir venda:', error);
+        gestaoSyncMode = 'local';
+        updateGestaoSyncUi();
+      }
+      if (editingGestaoSaleId && String(editingGestaoSaleId) === String(saleItemId)) {
+        cancelGestaoSaleEdit();
+      }
+      renderGestao();
+      showMessage('gestao-sale-message', 'Venda excluída com sucesso.', 'success');
     }
 
 
@@ -5064,6 +5156,7 @@ function renderGestaoSuppliers() {
       populateGestaoProductOptions();
       populateGestaoSupplierOptions();
       renderGestaoKpis();
+      renderGestaoDashboardOverview();
       renderGestaoSummary();
       renderGestaoMetrics();
       renderGestaoEntries();
@@ -5071,34 +5164,7 @@ function renderGestaoSuppliers() {
       renderGestaoSales();
       renderGestaoSuppliers();
       renderGestaoPendingOrder();
-      renderGestaoDashboardOverview();
       updateGestaoSalePreview();
-    }
-
-    function renderGestaoDashboardOverview() {
-      const panel = document.getElementById('gestao-dashboard');
-      if (!panel) return;
-      let grid = document.getElementById('gestaoDashboardOverview');
-      const metrics = getGestaoMetrics();
-      const totalRevenue = roundMoney(gestaoSales.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0));
-      const totalInvested = roundMoney(calculateGestaoStock().reduce((sum, item) => sum + Number(item.currentInvestment || 0), 0) + getGestaoExtraInvestedTotal());
-      const totalOrders = getGroupedGestaoOrders().length;
-      const ticketAverage = gestaoSales.length ? roundMoney(totalRevenue / gestaoSales.length) : 0;
-
-      if (!grid) {
-        grid = document.createElement('div');
-        grid.id = 'gestaoDashboardOverview';
-        grid.className = 'metrics-grid';
-        grid.style.marginBottom = '18px';
-        panel.prepend(grid);
-      }
-
-      grid.innerHTML = `
-        <div class="metric-card"><span>Receita real</span><strong>${formatPrice(totalRevenue)}</strong></div>
-        <div class="metric-card"><span>Lucro real</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
-        <div class="metric-card"><span>Investimento atual</span><strong>${formatPrice(totalInvested)}</strong></div>
-        <div class="metric-card"><span>Ticket médio</span><strong>${formatPrice(ticketAverage)}</strong></div>
-      `;
     }
 
     function activateGestaoTab(targetId) {
@@ -5234,32 +5300,24 @@ async function saveGestaoSale() {
         return;
       }
 
-      const currentSaleId = editingGestaoSaleId || generateClientUuid();
-      const stockRows = calculateGestaoStock().filter(item => String(item.productId) === String(productId) && String(item.size) === String(size));
-      let available = Number(stockRows[0]?.currentQty || 0);
-
-      if (editingGestaoSaleId) {
-        const previousSale = gestaoSales.find(item => String(item.saleId || item.id) === String(editingGestaoSaleId));
-        if (previousSale && String(previousSale.productId) === String(productId) && String(previousSale.size) === String(size)) {
-          available += Number(previousSale.quantity || 0);
-        }
-      }
-
+      const stockRow = calculateGestaoStock().find(item => String(item.productId) === String(productId) && String(item.size) === String(size));
+      const available = Number(stockRow?.currentQty || 0);
       if (quantity > available) {
         showMessage('gestao-sale-message', `Estoque insuficiente. Disponível em ${size}: ${available} peça(s).`, 'error');
         return;
       }
 
-      const costPrice = roundMoney(getAverageCostForProductSize(productId, size) || 0);
+      const costPrice = roundMoney(stockRow?.averageCost || getAverageCostForProductSize(productId, size) || 0);
       const totalAmount = Number((quantity * salePrice).toFixed(2));
       const extraCostsTotal = Number((packagingCost + shippingCost + feeCost + otherCost).toFixed(2));
       const profit = Number((totalAmount - (quantity * costPrice) - extraCostsTotal).toFixed(2));
+      const saleId = generateClientUuid();
 
-      gestaoSalesMeta[currentSaleId] = { clientName, clientPhone };
+      gestaoSalesMeta[saleId] = { clientName, clientPhone };
 
-      const salePayload = {
-        id: editingGestaoSaleId ? (gestaoSales.find(item => String(item.saleId || item.id) === String(editingGestaoSaleId))?.id || generateClientUuid()) : generateClientUuid(),
-        saleId: currentSaleId,
+      gestaoSales.unshift({
+        id: generateClientUuid(),
+        saleId,
         productId,
         size,
         quantity,
@@ -5275,13 +5333,7 @@ async function saveGestaoSale() {
         profit,
         clientName,
         clientPhone
-      };
-
-      if (editingGestaoSaleId) {
-        gestaoSales = gestaoSales.map(item => String(item.saleId || item.id) === String(editingGestaoSaleId) ? salePayload : item);
-      } else {
-        gestaoSales.unshift(salePayload);
-      }
+      });
 
       try {
         await persistGestaoState();
@@ -5289,75 +5341,22 @@ async function saveGestaoSale() {
         console.error('Erro ao salvar venda:', error);
         gestaoSyncMode = 'local';
         updateGestaoSyncUi();
+        showMessage('gestao-sale-message', 'Venda salva no aparelho. Os custos extras desta versão ficam locais para não quebrar seu banco atual.', 'success');
       }
 
-      resetGestaoSaleForm();
-      renderGestao();
-      showMessage('gestao-sale-message', editingGestaoSaleId ? 'Venda atualizada com sucesso.' : 'Venda salva com sucesso.', 'success');
-    }
-
-    function resetGestaoSaleForm() {
-      editingGestaoSaleId = null;
       document.getElementById('gestao-sale-qty').value = '1';
       document.getElementById('gestao-sale-price').value = '';
-      document.getElementById('gestao-sale-date').value = new Date().toISOString().slice(0,10);
+      document.getElementById('gestao-sale-date').value = '';
       document.getElementById('gestao-sale-packaging').value = '';
       document.getElementById('gestao-sale-shipping').value = '';
       document.getElementById('gestao-sale-fee').value = '';
       document.getElementById('gestao-sale-other').value = '';
       document.getElementById('gestao-sale-client-name').value = '';
       document.getElementById('gestao-sale-client-phone').value = '';
-      const saveBtn = document.getElementById('gestao-sale-save-btn');
-      const cancelBtn = document.getElementById('gestao-sale-cancel-btn');
-      if (saveBtn) saveBtn.textContent = 'Salvar venda';
-      if (cancelBtn) cancelBtn.classList.add('hidden');
-      updateGestaoSalePreview();
-    }
-
-    function editGestaoSale(saleId) {
-      const sale = gestaoSales.find(item => String(item.saleId || item.id) === String(saleId));
-      if (!sale) return;
-      editingGestaoSaleId = sale.saleId || sale.id;
-      document.getElementById('gestao-sale-product').value = sale.productId || '';
-      document.getElementById('gestao-sale-size').value = sale.size || 'M';
-      document.getElementById('gestao-sale-qty').value = String(sale.quantity || 1);
-      document.getElementById('gestao-sale-price').value = formatMoneyInputValue(sale.salePrice || 0);
-      document.getElementById('gestao-sale-date').value = sale.date || new Date().toISOString().slice(0,10);
-      document.getElementById('gestao-sale-packaging').value = sale.packagingCost ? formatMoneyInputValue(sale.packagingCost) : '';
-      document.getElementById('gestao-sale-shipping').value = sale.shippingCost ? formatMoneyInputValue(sale.shippingCost) : '';
-      document.getElementById('gestao-sale-fee').value = sale.feeCost ? formatMoneyInputValue(sale.feeCost) : '';
-      document.getElementById('gestao-sale-other').value = sale.otherCost ? formatMoneyInputValue(sale.otherCost) : '';
-      document.getElementById('gestao-sale-client-name').value = sale.clientName || '';
-      document.getElementById('gestao-sale-client-phone').value = sale.clientPhone || '';
-      const saveBtn = document.getElementById('gestao-sale-save-btn');
-      const cancelBtn = document.getElementById('gestao-sale-cancel-btn');
-      if (saveBtn) saveBtn.textContent = 'Atualizar venda';
-      if (cancelBtn) cancelBtn.classList.remove('hidden');
-      activateGestaoTab('gestao-vendas');
-      updateGestaoSalePreview();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function cancelGestaoSaleEdit() {
-      resetGestaoSaleForm();
-    }
-
-    async function deleteGestaoSale(saleId) {
-      const confirmDelete = confirm('Deseja excluir esta venda?');
-      if (!confirmDelete) return;
-      gestaoSales = gestaoSales.filter(item => String(item.saleId || item.id) !== String(saleId));
-      delete gestaoSalesMeta[saleId];
-      try {
-        await persistGestaoState();
-      } catch (error) {
-        console.error('Erro ao excluir venda:', error);
-        gestaoSyncMode = 'local';
-        updateGestaoSyncUi();
-      }
-      if (String(editingGestaoSaleId || '') === String(saleId)) {
-        resetGestaoSaleForm();
-      }
+      const wasEditingSale = !!editingGestaoSaleId;
+      cancelGestaoSaleEdit();
       renderGestao();
+      showMessage('gestao-sale-message', wasEditingSale ? 'Venda atualizada com sucesso.' : 'Venda registrada com sucesso.', 'success');
     }
 
     let adminInitPromise = null;
