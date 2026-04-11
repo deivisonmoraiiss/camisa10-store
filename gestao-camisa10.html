@@ -375,19 +375,6 @@
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
 
-
-    .searchable-product-wrap{position:relative}
-    .searchable-results{position:absolute;top:100%;left:0;right:0;z-index:30;background:#101010;border:1px solid var(--line);border-radius:14px;margin-top:6px;max-height:260px;overflow:auto;box-shadow:var(--shadow);display:none}
-    .searchable-results.show{display:block}
-    .searchable-result-item{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer}
-    .searchable-result-item:last-child{border-bottom:none}
-    .searchable-result-item:hover,.searchable-result-item.active{background:rgba(212,175,55,.10)}
-    .searchable-result-item strong{display:block;color:#fff;font-size:.92rem}
-    .searchable-result-item span{display:block;color:var(--muted);font-size:.78rem;margin-top:4px}
-    .searchable-hidden-select{display:none!important}
-    .clickable-metric{cursor:pointer;transition:.2s ease}
-    .clickable-metric:hover{transform:translateY(-2px);border-color:rgba(212,175,55,.35)}
-
     @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline{grid-template-columns:1fr}}
     @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
   </style>
@@ -1264,11 +1251,9 @@ Camisa Real Madrid 24/25"></textarea>
                       <span class="small-muted">Adicione quantos produtos quiser antes de salvar o pedido</span>
                     </div>
                     <div class="order-item-row">
-                      <div class="field searchable-product-wrap">
-                        <label for="gestao-entry-product-search">Produto</label>
-                        <input type="text" id="gestao-entry-product-search" placeholder="Digite o nome da camisa" autocomplete="off" oninput="filterGestaoProductSearch('entry')" onfocus="filterGestaoProductSearch('entry')" />
-                        <div id="gestao-entry-product-results" class="searchable-results"></div>
-                        <select id="gestao-entry-product" class="searchable-hidden-select"></select>
+                      <div class="field">
+                        <label for="gestao-entry-product">Produto</label>
+                        <select id="gestao-entry-product"></select>
                       </div>
                       <div class="field">
                         <label for="gestao-entry-size">Tam.</label>
@@ -1358,11 +1343,14 @@ Camisa Real Madrid 24/25"></textarea>
             <div class="grid-2-equal">
               <div class="card sale-form-card">
                 <h3 class="section-title">Lançar venda e lucro</h3>
-                <div class="field">
-                  <label for="gestao-sale-product">Produto</label>
-                  <select id="gestao-sale-product" onchange="updateGestaoSalePreview()"></select>
+                <div class="helper-box helper-box-visible" style="margin-bottom:16px;display:block;">
+                  Agora você pode montar uma venda com várias camisas no mesmo pedido. Adicione cada item e finalize tudo de uma vez.
                 </div>
                 <div class="grid-2-equal">
+                  <div class="field">
+                    <label for="gestao-sale-product">Produto</label>
+                    <select id="gestao-sale-product" onchange="updateGestaoSalePreview()"></select>
+                  </div>
                   <div class="field">
                     <label for="gestao-sale-size">Tamanho</label>
                     <select id="gestao-sale-size" onchange="updateGestaoSalePreview()">
@@ -1372,57 +1360,80 @@ Camisa Real Madrid 24/25"></textarea>
                       <option value="EG">EG</option>
                     </select>
                   </div>
+                </div>
+                <div class="grid-2-equal">
                   <div class="field">
                     <label for="gestao-sale-qty">Quantidade</label>
                     <input type="number" id="gestao-sale-qty" min="1" value="1" placeholder="Ex: 1" oninput="updateGestaoSalePreview()" />
                   </div>
-                </div>
-                <div class="grid-2-equal">
                   <div class="field">
                     <label for="gestao-sale-price">Preço de venda unitário</label>
                     <input type="text" inputmode="decimal" id="gestao-sale-price" placeholder="Ex: 149,90" oninput="updateGestaoSalePreview()" />
                   </div>
+                </div>
+                <div class="preview-box">
+                  <div class="small-muted" style="margin-bottom:8px;">Prévia do item</div>
+                  <div id="gestaoSalePreview" class="gestao-empty" style="padding:14px;">Selecione produto, tamanho e valor para calcular receita, custo extra e lucro real de forma automática.</div>
+                </div>
+                <div class="actions-row">
+                  <button class="btn btn-secondary" type="button" onclick="addGestaoSaleItem()">Adicionar item na venda</button>
+                  <button class="btn btn-ghost" type="button" onclick="clearGestaoPendingSale()">Limpar venda</button>
+                </div>
+
+                <div class="grid-2-equal" style="margin-top:16px;">
                   <div class="field">
                     <label for="gestao-sale-date">Data</label>
-                    <input type="date" id="gestao-sale-date" onchange="updateGestaoSalePreview()" />
+                    <input type="date" id="gestao-sale-date" onchange="renderGestaoPendingSale()" />
                   </div>
-                </div>
-                <div class="grid-2-equal">
                   <div class="field">
                     <label for="gestao-sale-client-name">Nome do cliente</label>
-                    <input type="text" id="gestao-sale-client-name" placeholder="Ex: João Pedro" oninput="updateGestaoSalePreview()" />
+                    <input type="text" id="gestao-sale-client-name" placeholder="Ex: João Pedro" oninput="renderGestaoPendingSale()" />
                   </div>
-                  <div class="field">
-                    <label for="gestao-sale-client-phone">Número do cliente</label>
-                    <input type="text" id="gestao-sale-client-phone" placeholder="Ex: 5597..." oninput="updateGestaoSalePreview()" />
-                  </div>
+                </div>
+                <div class="field">
+                  <label for="gestao-sale-client-phone">Número do cliente</label>
+                  <input type="text" id="gestao-sale-client-phone" placeholder="Ex: 5597..." oninput="renderGestaoPendingSale()" />
                 </div>
                 <div class="grid-2-equal">
                   <div class="field">
                     <label for="gestao-sale-packaging">Embalagem</label>
-                    <input type="text" inputmode="decimal" id="gestao-sale-packaging" placeholder="Ex: 3,50" oninput="updateGestaoSalePreview()" />
+                    <input type="text" inputmode="decimal" id="gestao-sale-packaging" placeholder="Ex: 3,50" oninput="renderGestaoPendingSale()" />
                   </div>
                   <div class="field">
                     <label for="gestao-sale-shipping">Frete / entrega</label>
-                    <input type="text" inputmode="decimal" id="gestao-sale-shipping" placeholder="Ex: 10,00" oninput="updateGestaoSalePreview()" />
+                    <input type="text" inputmode="decimal" id="gestao-sale-shipping" placeholder="Ex: 10,00" oninput="renderGestaoPendingSale()" />
                   </div>
                 </div>
                 <div class="grid-2-equal">
                   <div class="field">
                     <label for="gestao-sale-fee">Taxas</label>
-                    <input type="text" inputmode="decimal" id="gestao-sale-fee" placeholder="Ex: 4,99" oninput="updateGestaoSalePreview()" />
+                    <input type="text" inputmode="decimal" id="gestao-sale-fee" placeholder="Ex: 4,99" oninput="renderGestaoPendingSale()" />
                   </div>
                   <div class="field">
                     <label for="gestao-sale-other">Outros custos</label>
-                    <input type="text" inputmode="decimal" id="gestao-sale-other" placeholder="Ex: brinde, ajuste, etc." oninput="updateGestaoSalePreview()" />
+                    <input type="text" inputmode="decimal" id="gestao-sale-other" placeholder="Ex: brinde, ajuste, etc." oninput="renderGestaoPendingSale()" />
                   </div>
                 </div>
-                <div class="preview-box">
-                  <div class="small-muted" style="margin-bottom:8px;">Prévia da venda</div>
-                  <div id="gestaoSalePreview" class="gestao-empty" style="padding:14px;">Selecione produto, tamanho e valor para calcular receita, custo extra e lucro real de forma automática.</div>
+
+                <div class="order-items-box" style="margin-top:4px;">
+                  <div class="order-items-head">
+                    <strong>Itens da venda</strong>
+                    <span class="badge" id="gestao-sale-pending-count">0 item(ns)</span>
+                  </div>
+                  <div id="gestaoPendingSaleItemsList" class="gestao-list">
+                    <div class="gestao-empty">Nenhum item adicionado à venda ainda.</div>
+                  </div>
+                  <div class="order-summary-grid" style="margin-top:12px;">
+                    <div class="order-summary-box"><span>Camisas</span><strong id="gestao-sale-shirts-total">0</strong></div>
+                    <div class="order-summary-box"><span>Receita</span><strong id="gestao-sale-revenue-total">R$ 0,00</strong></div>
+                    <div class="order-summary-box"><span>Custos extras</span><strong id="gestao-sale-extra-total">R$ 0,00</strong></div>
+                    <div class="order-summary-box highlight"><span>Lucro real</span><strong id="gestao-sale-profit-total">R$ 0,00</strong></div>
+                  </div>
                 </div>
+
                 <div class="actions-row">
-                  <button class="btn btn-primary" type="button" onclick="saveGestaoSale()">Salvar venda</button>
+                  <button class="btn btn-primary" type="button" id="gestao-sale-save-btn" onclick="saveGestaoSale()">Salvar venda</button>
+                  <button class="btn btn-secondary hidden" type="button" id="gestao-sale-cancel-btn" onclick="cancelGestaoSaleEdit()">Cancelar edição</button>
                 </div>
                 <div id="gestao-sale-message" class="message"></div>
               </div>
@@ -1590,9 +1601,11 @@ Camisa Real Madrid 24/25"></textarea>
     let gestaoSales = [];
     let gestaoSyncMode = "local";
     let gestaoPendingOrderItems = [];
+    let gestaoPendingSaleItems = [];
     let gestaoSalesMeta = {};
     let editingGestaoSupplierId = null;
     let editingGestaoOrderId = null;
+    let editingGestaoSaleId = null;
 
 
     function generateClientUuid() {
@@ -4122,85 +4135,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       });
     }
 
-    function readGestaoLocalState() {
-      let suppliers = [];
-      let entries = [];
-      let sales = [];
-      let salesMeta = {};
-
-      try {
-        suppliers = JSON.parse(localStorage.getItem(GESTAO_SUPPLIERS_KEY) || '[]').map(item => ({
-          id: item.id,
-          name: item.name,
-          contact: item.contact || item.note || ''
-        }));
-      } catch (error) {
-        suppliers = [];
-      }
-
-      try {
-        entries = JSON.parse(localStorage.getItem(GESTAO_ENTRIES_KEY) || '[]').map(item => ({
-          id: item.id,
-          productId: item.productId || item.product_id,
-          size: item.size || 'M',
-          quantity: Number(item.quantity || 0),
-          cost: Number(item.cost || item.cost_price || 0),
-          date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
-          supplierId: item.supplierId || item.supplier_id || '',
-          orderId: item.orderId || item.order_id || generateClientUuid(),
-          orderKey: item.orderKey || `${item.date || (item.created_at ? String(item.created_at).slice(0,10) : '')}__${item.supplierId || item.supplier_id || 'sem-fornecedor'}__${item.orderId || item.order_id || ''}`,
-          extraCost: Number(item.extraCost || item.extra_cost || 0),
-          note: item.note || ''
-        }));
-      } catch (error) {
-        entries = [];
-      }
-
-      try {
-        salesMeta = JSON.parse(localStorage.getItem(GESTAO_SALES_META_KEY) || '{}') || {};
-      } catch (error) {
-        salesMeta = {};
-      }
-
-      try {
-        sales = JSON.parse(localStorage.getItem(GESTAO_SALES_KEY) || '[]').map(item => ({
-          id: item.id,
-          saleId: item.saleId || item.sale_id || item.id,
-          productId: item.productId || item.product_id,
-          size: item.size || 'M',
-          quantity: Number(item.quantity || 0),
-          salePrice: Number(item.salePrice || item.sale_price || 0),
-          costPrice: Number(item.costPrice || item.cost_price || 0),
-          date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
-          totalAmount: Number(item.totalAmount || item.total_amount || ((Number(item.quantity || 0) * Number(item.salePrice || item.sale_price || 0)))),
-          packagingCost: roundMoney(item.packagingCost || 0),
-          shippingCost: roundMoney(item.shippingCost || 0),
-          feeCost: roundMoney(item.feeCost || 0),
-          otherCost: roundMoney(item.otherCost || 0),
-          extraCostsTotal: roundMoney(item.extraCostsTotal || 0),
-          profit: roundMoney(item.profit || ((Number(item.salePrice || item.sale_price || 0) - Number(item.costPrice || item.cost_price || 0)) * Number(item.quantity || 0))),
-          clientName: item.clientName || salesMeta?.[item.saleId || item.sale_id || item.id]?.clientName || '',
-          clientPhone: item.clientPhone || salesMeta?.[item.saleId || item.sale_id || item.id]?.clientPhone || ''
-        }));
-      } catch (error) {
-        sales = [];
-      }
-
-      return { suppliers, entries, sales, salesMeta };
-    }
-
-    function hasGestaoLocalBackup(localState) {
-      return !!(
-        localState &&
-        (
-          (Array.isArray(localState.suppliers) && localState.suppliers.length) ||
-          (Array.isArray(localState.entries) && localState.entries.length) ||
-          (Array.isArray(localState.sales) && localState.sales.length)
-        )
-      );
-    }
-
-
     function getGroupedGestaoOrders() {
       const orderMap = new Map();
       gestaoEntries.forEach(entry => {
@@ -4232,7 +4166,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     }
 
     async function loadGestaoStateFromSupabase() {
-      const localBackup = readGestaoLocalState();
       const { data: suppliers, error: supplierError } = await supabaseClient
         .from(GESTAO_SUPPLIERS_TABLE)
         .select('id, name, contact, created_at')
@@ -4268,10 +4201,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         contact: item.contact || ''
       }));
 
-      if (!gestaoSuppliers.length && localBackup.suppliers.length) {
-        gestaoSuppliers = [...localBackup.suppliers];
-      }
-
       const ordersMap = new Map((orders || []).map(order => [String(order.id), order]));
       gestaoEntries = (orderItems || []).map(item => {
         const order = ordersMap.get(String(item.order_id)) || {};
@@ -4291,15 +4220,8 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         };
       });
 
-      if (!gestaoEntries.length && localBackup.entries.length) {
-        gestaoEntries = [...localBackup.entries];
-      }
-
       const savedMetaRaw = localStorage.getItem(GESTAO_SALES_META_KEY) || '{}';
       try { gestaoSalesMeta = JSON.parse(savedMetaRaw) || {}; } catch(e) { gestaoSalesMeta = {}; }
-      if (!Object.keys(gestaoSalesMeta).length && localBackup.salesMeta && Object.keys(localBackup.salesMeta).length) {
-        gestaoSalesMeta = { ...localBackup.salesMeta };
-      }
 
       gestaoSales = (saleItems || []).map(item => ({
         id: item.id,
@@ -4321,10 +4243,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         clientPhone: gestaoSalesMeta?.[item.sale_id]?.clientPhone || ''
       }));
 
-      if (!gestaoSales.length && localBackup.sales.length) {
-        gestaoSales = [...localBackup.sales];
-      }
-
       normalizeGestaoEntriesExtraCosts();
       localStorage.setItem(GESTAO_SUPPLIERS_KEY, JSON.stringify(gestaoSuppliers));
       localStorage.setItem(GESTAO_ENTRIES_KEY, JSON.stringify(gestaoEntries));
@@ -4342,11 +4260,51 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         console.warn('Gestão em modo local:', error?.message || error);
       }
 
-      const localState = readGestaoLocalState();
-      gestaoSuppliers = localState.suppliers;
-      gestaoEntries = localState.entries;
-      gestaoSales = localState.sales;
-      gestaoSalesMeta = localState.salesMeta;
+      try {
+        gestaoSuppliers = JSON.parse(localStorage.getItem(GESTAO_SUPPLIERS_KEY) || '[]').map(item => ({
+          id: item.id,
+          name: item.name,
+          contact: item.contact || item.note || ''
+        }));
+        gestaoEntries = JSON.parse(localStorage.getItem(GESTAO_ENTRIES_KEY) || '[]').map(item => ({
+          id: item.id,
+          productId: item.productId || item.product_id,
+          size: item.size || 'M',
+          quantity: Number(item.quantity || 0),
+          cost: Number(item.cost || item.cost_price || 0),
+          date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
+          supplierId: item.supplierId || item.supplier_id || '',
+          orderId: item.orderId || item.order_id || generateClientUuid(),
+          orderKey: item.orderKey || `${item.date || (item.created_at ? String(item.created_at).slice(0,10) : '')}__${item.supplierId || item.supplier_id || 'sem-fornecedor'}__${item.orderId || item.order_id || ''}`,
+          extraCost: Number(item.extraCost || item.extra_cost || 0),
+          note: item.note || ''
+        }));
+        try { gestaoSalesMeta = JSON.parse(localStorage.getItem(GESTAO_SALES_META_KEY) || '{}') || {}; } catch (error) { gestaoSalesMeta = {}; }
+        gestaoSales = JSON.parse(localStorage.getItem(GESTAO_SALES_KEY) || '[]').map(item => ({
+          id: item.id,
+          saleId: item.saleId || item.sale_id || item.id,
+          productId: item.productId || item.product_id,
+          size: item.size || 'M',
+          quantity: Number(item.quantity || 0),
+          salePrice: Number(item.salePrice || item.sale_price || 0),
+          costPrice: Number(item.costPrice || item.cost_price || 0),
+          date: item.date || (item.created_at ? String(item.created_at).slice(0,10) : ''),
+          totalAmount: Number(item.totalAmount || item.total_amount || ((Number(item.quantity || 0) * Number(item.salePrice || item.sale_price || 0)))),
+          packagingCost: roundMoney(item.packagingCost || 0),
+          shippingCost: roundMoney(item.shippingCost || 0),
+          feeCost: roundMoney(item.feeCost || 0),
+          otherCost: roundMoney(item.otherCost || 0),
+          extraCostsTotal: roundMoney(item.extraCostsTotal || 0),
+          profit: roundMoney(item.profit || ((Number(item.salePrice || item.sale_price || 0) - Number(item.costPrice || item.cost_price || 0)) * Number(item.quantity || 0))),
+          clientName: item.clientName || gestaoSalesMeta?.[item.saleId || item.sale_id || item.id]?.clientName || '',
+          clientPhone: item.clientPhone || gestaoSalesMeta?.[item.saleId || item.sale_id || item.id]?.clientPhone || ''
+        }));
+      } catch (error) {
+        gestaoSuppliers = [];
+        gestaoEntries = [];
+        gestaoSales = [];
+        gestaoSalesMeta = {};
+      }
       normalizeGestaoEntriesExtraCosts();
       gestaoSyncMode = 'local';
       updateGestaoSyncUi();
@@ -4497,109 +4455,9 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     function populateGestaoProductOptions() {
       const select = document.getElementById('gestao-entry-product');
       const saleSelect = document.getElementById('gestao-sale-product');
-      const productsSorted = [...allProducts].sort((a,b) => (a.name || '').localeCompare(b.name || ''));
-      const options = productsSorted.map(product => `<option value="${product.id}">${escapeHtml(product.name || 'Produto')}</option>`).join('');
+      const options = allProducts.map(product => `<option value="${product.id}">${escapeHtml(product.name || 'Produto')}</option>`).join('');
       if (select) select.innerHTML = options || '<option value="">Nenhum produto cadastrado</option>';
       if (saleSelect) saleSelect.innerHTML = options || '<option value="">Nenhum produto cadastrado</option>';
-      syncGestaoSearchInput('entry');
-      syncGestaoSearchInput('sale');
-      refreshGestaoEntrySizes();
-      handleGestaoSaleProductChange(false);
-    }
-
-    function getProductById(productId) {
-      return allProducts.find(item => String(item.id) === String(productId)) || null;
-    }
-
-    function getAvailableSizesForProduct(productId) {
-      const product = getProductById(productId);
-      const sizes = Array.isArray(product?.product_sizes)
-        ? product.product_sizes.filter(item => item.is_available).map(item => String(item.size || '').toUpperCase())
-        : [];
-      const ordered = ['P','M','G','GG','EG'];
-      const unique = [...new Set(sizes.filter(Boolean))];
-      return unique.sort((a,b) => {
-        const ia = ordered.indexOf(a);
-        const ib = ordered.indexOf(b);
-        return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
-      });
-    }
-
-    function refreshSizeSelectOptions(selectId, productId, preferredSize = '') {
-      const select = document.getElementById(selectId);
-      if (!select) return;
-      const sizes = getAvailableSizesForProduct(productId);
-      const finalSizes = sizes.length ? sizes : ['P','M','G','EG'];
-      const keep = preferredSize || select.value || finalSizes[0] || 'M';
-      select.innerHTML = finalSizes.map(size => `<option value="${size}">${size}</option>`).join('');
-      select.value = finalSizes.includes(keep) ? keep : (finalSizes[0] || 'M');
-    }
-
-    function syncGestaoSearchInput(type) {
-      const select = document.getElementById(`gestao-${type}-product`);
-      const input = document.getElementById(`gestao-${type}-product-search`);
-      if (!select || !input) return;
-      const product = getProductById(select.value);
-      input.value = product?.name || '';
-    }
-
-    function hideGestaoProductResults(type) {
-      const box = document.getElementById(`gestao-${type}-product-results`);
-      if (box) {
-        box.classList.remove('show');
-        box.innerHTML = '';
-      }
-    }
-
-    function filterGestaoProductSearch(type) {
-      const input = document.getElementById(`gestao-${type}-product-search`);
-      const results = document.getElementById(`gestao-${type}-product-results`);
-      if (!input || !results) return;
-      const term = (input.value || '').trim().toLowerCase();
-      const productsSorted = [...allProducts].sort((a,b) => (a.name || '').localeCompare(b.name || ''));
-      const filtered = !term ? productsSorted.slice(0, 12) : productsSorted.filter(product => (product.name || '').toLowerCase().includes(term)).slice(0, 20);
-      if (!filtered.length) {
-        results.innerHTML = '<div class="searchable-result-item"><strong>Nenhum produto encontrado</strong><span>Tente outro nome</span></div>';
-        results.classList.add('show');
-        return;
-      }
-      results.innerHTML = filtered.map(product => {
-        const sizes = getAvailableSizesForProduct(product.id);
-        const price = Number(product.price || 0);
-        return `<div class="searchable-result-item" onclick="selectGestaoProductSearch('${type}','${product.id}')"><strong>${escapeHtml(product.name || 'Produto')}</strong><span>${sizes.length ? 'Tamanhos: ' + sizes.join(', ') + ' • ' : ''}${formatPrice(price)}</span></div>`;
-      }).join('');
-      results.classList.add('show');
-    }
-
-    function selectGestaoProductSearch(type, productId) {
-      const select = document.getElementById(`gestao-${type}-product`);
-      if (!select) return;
-      select.value = productId;
-      syncGestaoSearchInput(type);
-      hideGestaoProductResults(type);
-      if (type === 'sale') {
-        handleGestaoSaleProductChange();
-      } else {
-        refreshGestaoEntrySizes();
-      }
-    }
-
-    function refreshGestaoEntrySizes() {
-      const productId = document.getElementById('gestao-entry-product')?.value || '';
-      refreshSizeSelectOptions('gestao-entry-size', productId);
-    }
-
-    function handleGestaoSaleProductChange(autofillPrice = true) {
-      const productId = document.getElementById('gestao-sale-product')?.value || '';
-      const priceField = document.getElementById('gestao-sale-price');
-      refreshSizeSelectOptions('gestao-sale-size', productId);
-      if (autofillPrice && priceField && productId) {
-        const basePrice = getProductPriceById(productId);
-        if (basePrice > 0) priceField.value = formatMoneyInputValue(basePrice);
-      }
-      syncGestaoSearchInput('sale');
-      renderGestaoPendingSale();
-      updateGestaoSalePreview();
     }
 
     function getAverageCostForProductSize(productId, size) {
@@ -4636,14 +4494,41 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     function getGestaoMetrics() {
       const stock = calculateGestaoStock();
       const totalStockPieces = stock.reduce((sum, item) => sum + Math.max(0, Number(item.currentQty || 0)), 0);
-      const realProfit = gestaoSales.reduce((sum, item) => sum + Number(item.profit || 0), 0);
-      const potentialRevenue = stock.reduce((sum, item) => sum + (Math.max(0, Number(item.currentQty || 0)) * getProductPriceById(item.productId)), 0);
-      const potentialProfit = stock.reduce((sum, item) => {
+      const totalRevenue = roundMoney(gestaoSales.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0));
+      const realProfit = roundMoney(gestaoSales.reduce((sum, item) => sum + Number(item.profit || 0), 0));
+      const shirtsSold = gestaoSales.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+      const saleGroups = getGroupedGestaoSales();
+      const salesCount = saleGroups.length;
+      const ticketAverage = salesCount ? roundMoney(totalRevenue / salesCount) : 0;
+      const potentialRevenue = roundMoney(stock.reduce((sum, item) => sum + (Math.max(0, Number(item.currentQty || 0)) * getProductPriceById(item.productId)), 0));
+      const potentialProfit = roundMoney(stock.reduce((sum, item) => {
         const qty = Math.max(0, Number(item.currentQty || 0));
         const currentPrice = getProductPriceById(item.productId);
         return sum + (qty * Math.max(0, currentPrice - Number(item.averageCost || 0)));
-      }, 0);
-      return { totalStockPieces, realProfit: roundMoney(realProfit), potentialRevenue: roundMoney(potentialRevenue), potentialProfit: roundMoney(potentialProfit) };
+      }, 0));
+
+      const bySold = new Map();
+      const byProfit = new Map();
+      gestaoSales.forEach(item => {
+        const key = String(item.productId);
+        bySold.set(key, (bySold.get(key) || 0) + Number(item.quantity || 0));
+        byProfit.set(key, roundMoney((byProfit.get(key) || 0) + Number(item.profit || 0)));
+      });
+      const topProductId = [...bySold.entries()].sort((a,b) => b[1]-a[1])[0]?.[0] || '';
+      const topProfitProductId = [...byProfit.entries()].sort((a,b) => b[1]-a[1])[0]?.[0] || '';
+
+      return {
+        totalStockPieces,
+        totalRevenue,
+        realProfit,
+        shirtsSold,
+        salesCount,
+        ticketAverage,
+        potentialRevenue,
+        potentialProfit,
+        topProductName: topProductId ? getProductNameById(topProductId) : '—',
+        topProfitProductName: topProfitProductId ? getProductNameById(topProfitProductId) : '—'
+      };
     }
 
     function calculateGestaoStock() {
@@ -4798,24 +4683,22 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     function renderGestaoSummary() {
       const box = document.getElementById('gestaoResumoRapido');
       if (!box) return;
-      if (!gestaoEntries.length) {
-        box.innerHTML = 'Nenhum pedido registrado ainda. Comece pela aba <strong>Pedidos / Entradas</strong>.';
-        return;
-      }
       const orders = getGroupedGestaoOrders();
-      const lastOrder = orders[0];
-      const totalPieces = gestaoEntries.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-      const totalRevenue = roundMoney(gestaoSales.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0));
-      const totalProfit = roundMoney(gestaoSales.reduce((sum, item) => sum + Number(item.profit || 0), 0));
-      const totalExtras = getGestaoExtraInvestedTotal();
       const metrics = getGestaoMetrics();
-      box.innerHTML = `Você já lançou <strong>${orders.length}</strong> pedido(s), com <strong>${totalPieces}</strong> peça(s) registradas. Vendas acumuladas: <strong>${formatPrice(totalRevenue)}</strong> em faturamento e <strong>${formatPrice(totalProfit)}</strong> de lucro. Custos extras lançados: <strong>${formatPrice(totalExtras)}</strong>. Último pedido: <strong>${escapeHtml(lastOrder.supplierName)}</strong> em <strong>${escapeHtml(lastOrder.date)}</strong>, com <strong>${lastOrder.items.length}</strong> item(ns).
-      <div class="gestao-summary-inline">
-        <span class="mini-kpi"><strong>${metrics.totalStockPieces}</strong><span>Camisas em estoque</span></span>
-        <span class="mini-kpi"><strong>${formatPrice(metrics.realProfit)}</strong><span>Lucro real</span></span>
-        <span class="mini-kpi"><strong>${formatPrice(metrics.potentialProfit)}</strong><span>Lucro potencial</span></span>
-        <span class="mini-kpi"><strong>${formatPrice(metrics.potentialRevenue)}</strong><span>Receita potencial</span></span>
-      </div>`;
+      const totalInvested = roundMoney(calculateGestaoStock().reduce((sum, item) => sum + Number(item.currentInvestment || 0), 0) + getGestaoExtraInvestedTotal());
+      const totalOrders = orders.length;
+      box.innerHTML = `
+        <div class="gestao-summary-inline">
+          <span class="mini-kpi"><strong>${formatPrice(metrics.totalRevenue)}</strong><span>Receita real</span></span>
+          <span class="mini-kpi"><strong>${formatPrice(metrics.realProfit)}</strong><span>Lucro real</span></span>
+          <span class="mini-kpi"><strong>${metrics.shirtsSold}</strong><span>Camisas vendidas</span></span>
+          <span class="mini-kpi"><strong>${metrics.salesCount}</strong><span>Vendas registradas</span></span>
+          <span class="mini-kpi"><strong>${formatPrice(metrics.ticketAverage)}</strong><span>Ticket médio</span></span>
+          <span class="mini-kpi"><strong>${metrics.totalStockPieces}</strong><span>Peças em estoque</span></span>
+          <span class="mini-kpi"><strong>${formatPrice(totalInvested)}</strong><span>Investimento atual</span></span>
+          <span class="mini-kpi"><strong>${totalOrders}</strong><span>Pedidos lançados</span></span>
+        </div>
+      `;
     }
 
     function renderGestaoMetrics() {
@@ -4823,10 +4706,14 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       if (!box) return;
       const metrics = getGestaoMetrics();
       box.innerHTML = `
-        <div class="metric-card clickable-metric" onclick="activateGestaoTab('gestao-estoque')"><span>Total de camisas em estoque</span><strong>${metrics.totalStockPieces}</strong></div>
-        <div class="metric-card clickable-metric" onclick="activateGestaoTab('gestao-vendas')"><span>Lucro real</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
-        <div class="metric-card clickable-metric" onclick="activateGestaoTab('gestao-estoque')"><span>Lucro potencial</span><strong>${formatPrice(metrics.potentialProfit)}</strong></div>
-        <div class="metric-card clickable-metric" onclick="activateGestaoTab('gestao-vendas')"><span>Receita potencial</span><strong>${formatPrice(metrics.potentialRevenue)}</strong></div>
+        <div class="metric-card"><span>Camisas vendidas</span><strong>${metrics.shirtsSold}</strong></div>
+        <div class="metric-card"><span>Receita real</span><strong>${formatPrice(metrics.totalRevenue)}</strong></div>
+        <div class="metric-card"><span>Lucro real</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
+        <div class="metric-card"><span>Vendas registradas</span><strong>${metrics.salesCount}</strong></div>
+        <div class="metric-card"><span>Ticket médio</span><strong>${formatPrice(metrics.ticketAverage)}</strong></div>
+        <div class="metric-card"><span>Camisas em estoque</span><strong>${metrics.totalStockPieces}</strong></div>
+        <div class="metric-card"><span>Produto mais vendido</span><strong>${escapeHtml(metrics.topProductName)}</strong></div>
+        <div class="metric-card"><span>Maior lucro acumulado</span><strong>${escapeHtml(metrics.topProfitProductName)}</strong></div>
       `;
     }
 
@@ -4923,8 +4810,7 @@ function renderGestaoStock() {
       }
 
       if (!grouped.length) {
-        const hasBackup = hasGestaoLocalBackup(readGestaoLocalState());
-        container.innerHTML = `<div class="gestao-empty">Nenhum resultado encontrado no estoque.${hasBackup ? ' Existe dado salvo no navegador deste aparelho, mas ele não foi convertido em saldo visível. Recarregue a página e teste novamente.' : ''}</div>`;
+        container.innerHTML = '<div class="gestao-empty">Nenhum resultado encontrado no estoque.</div>';
         return;
       }
 
@@ -4957,46 +4843,28 @@ function renderGestaoStock() {
       }).join('');
     }
 
-function updateGestaoSalePreview() {
-      const box = document.getElementById('gestaoSalePreview');
-      if (!box) return;
-      const productId = document.getElementById('gestao-sale-product')?.value || '';
-      const size = document.getElementById('gestao-sale-size')?.value || 'M';
-      const quantity = Number(document.getElementById('gestao-sale-qty')?.value || 0);
-      const salePrice = normalizeMoneyInput(document.getElementById('gestao-sale-price')?.value || '');
-      if (!productId) {
-        box.innerHTML = 'Selecione produto, tamanho e valor para calcular receita, custo extra e lucro real de forma automática.';
-        return;
-      }
-      const stockRow = calculateGestaoStock().find(item => String(item.productId) === String(productId) && String(item.size) === String(size));
-      const available = Number(stockRow?.currentQty || 0);
-      const avgCost = Number(stockRow?.averageCost || getAverageCostForProductSize(productId, size) || 0);
-      const revenue = !Number.isNaN(salePrice) ? roundMoney(Number(quantity || 0) * salePrice) : 0;
-      const productCost = roundMoney(Number(quantity || 0) * avgCost);
-      const realProfit = roundMoney(revenue - productCost);
-      box.innerHTML = `${escapeHtml(getProductNameById(productId))} • tamanho <strong>${escapeHtml(size)}</strong><br>Disponível agora: <strong>${available}</strong> peça(s)<br>Preço padrão: <strong>${formatPrice(getProductPriceById(productId))}</strong><br>Custo médio do produto: <strong>${formatPrice(avgCost)}</strong><br>Custo das peças: <strong>${formatPrice(productCost)}</strong><br>Receita prevista: <strong>${formatPrice(revenue)}</strong><br>Lucro estimado do item: <strong>${formatPrice(realProfit)}</strong>`;
+function getGestaoSaleExtraCosts() {
+      return roundMoney((normalizeMoneyInput(document.getElementById('gestao-sale-packaging')?.value || '') || 0) + (normalizeMoneyInput(document.getElementById('gestao-sale-shipping')?.value || '') || 0) + (normalizeMoneyInput(document.getElementById('gestao-sale-fee')?.value || '') || 0) + (normalizeMoneyInput(document.getElementById('gestao-sale-other')?.value || '') || 0));
     }
 
     function resetGestaoSaleItemFields() {
-      const qty = document.getElementById('gestao-sale-qty');
-      if (qty) qty.value = '1';
-      const price = document.getElementById('gestao-sale-price');
-      const productId = document.getElementById('gestao-sale-product')?.value || '';
-      if (price && productId) price.value = formatMoneyInputValue(getProductPriceById(productId));
-      refreshSizeSelectOptions('gestao-sale-size', productId);
+      document.getElementById('gestao-sale-product').value = '';
+      document.getElementById('gestao-sale-size').value = 'M';
+      document.getElementById('gestao-sale-qty').value = '1';
+      document.getElementById('gestao-sale-price').value = '';
       updateGestaoSalePreview();
     }
 
     function clearGestaoPendingSale() {
-      gestaoPendingSaleItems = [];
       editingGestaoSaleId = null;
+      gestaoPendingSaleItems = [];
       document.getElementById('gestao-sale-date').value = new Date().toISOString().slice(0,10);
+      document.getElementById('gestao-sale-client-name').value = '';
+      document.getElementById('gestao-sale-client-phone').value = '';
       document.getElementById('gestao-sale-packaging').value = '';
       document.getElementById('gestao-sale-shipping').value = '';
       document.getElementById('gestao-sale-fee').value = '';
       document.getElementById('gestao-sale-other').value = '';
-      document.getElementById('gestao-sale-client-name').value = '';
-      document.getElementById('gestao-sale-client-phone').value = '';
       document.getElementById('gestao-sale-save-btn').textContent = 'Salvar venda';
       document.getElementById('gestao-sale-cancel-btn').classList.add('hidden');
       resetGestaoSaleItemFields();
@@ -5006,29 +4874,22 @@ function updateGestaoSalePreview() {
 
     function addGestaoSaleItem() {
       clearMessage('gestao-sale-message');
-      const productId = document.getElementById('gestao-sale-product')?.value || '';
-      const size = document.getElementById('gestao-sale-size')?.value || 'M';
-      const quantity = Number(document.getElementById('gestao-sale-qty')?.value || 0);
-      const salePrice = normalizeMoneyInput(document.getElementById('gestao-sale-price')?.value || '');
-      if (!productId) return showMessage('gestao-sale-message','Selecione o produto.','error');
-      if (!quantity || quantity < 1) return showMessage('gestao-sale-message','Digite uma quantidade válida.','error');
-      if (Number.isNaN(salePrice) || salePrice <= 0) return showMessage('gestao-sale-message','Digite um preço de venda válido.','error');
+      const productId = document.getElementById('gestao-sale-product').value;
+      const size = document.getElementById('gestao-sale-size').value;
+      const quantity = Number(document.getElementById('gestao-sale-qty').value || 0);
+      const salePrice = normalizeMoneyInput(document.getElementById('gestao-sale-price').value || '');
+      if (!productId) return showMessage('gestao-sale-message', 'Selecione o produto.', 'error');
+      if (!quantity || quantity < 1) return showMessage('gestao-sale-message', 'Digite uma quantidade válida.', 'error');
+      if (Number.isNaN(salePrice) || salePrice <= 0) return showMessage('gestao-sale-message', 'Digite um valor de venda válido.', 'error');
       const stockRow = calculateGestaoStock().find(item => String(item.productId) === String(productId) && String(item.size) === String(size));
       const available = Number(stockRow?.currentQty || 0);
-      const alreadyPending = gestaoPendingSaleItems.filter(item => String(item.productId) === String(productId) && String(item.size) === String(size)).reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-      if (quantity + alreadyPending > available) {
-        return showMessage('gestao-sale-message', `Estoque insuficiente. Disponível em ${size}: ${available} peça(s).`, 'error');
-      }
+      const alreadyInCart = gestaoPendingSaleItems.filter(item => String(item.productId) === String(productId) && String(item.size) === String(size)).reduce((sum,item)=>sum+Number(item.quantity||0),0);
+      if ((quantity + alreadyInCart) > available) return showMessage('gestao-sale-message', `Estoque insuficiente. Disponível em ${size}: ${available} peça(s).`, 'error');
       const costPrice = roundMoney(stockRow?.averageCost || getAverageCostForProductSize(productId, size) || 0);
-      gestaoPendingSaleItems.push({
-        tempId: `sale-${Date.now()}-${Math.random().toString(16).slice(2,6)}`,
-        productId, size, quantity, salePrice, costPrice,
-        totalAmount: roundMoney(quantity * salePrice),
-        profit: roundMoney((quantity * salePrice) - (quantity * costPrice))
-      });
+      gestaoPendingSaleItems.push({ tempId:`sale-${Date.now()}-${Math.random().toString(16).slice(2,6)}`, productId, size, quantity, salePrice, costPrice });
       resetGestaoSaleItemFields();
       renderGestaoPendingSale();
-      showMessage('gestao-sale-message','Item adicionado à venda.','success');
+      showMessage('gestao-sale-message', 'Item adicionado à venda.', 'success');
     }
 
     function removeGestaoPendingSaleItem(tempId) {
@@ -5039,80 +4900,78 @@ function updateGestaoSalePreview() {
     function renderGestaoPendingSale() {
       const list = document.getElementById('gestaoPendingSaleItemsList');
       const count = document.getElementById('gestao-sale-pending-count');
-      const shirts = document.getElementById('gestao-sale-shirts-total');
+      const shirtsEl = document.getElementById('gestao-sale-shirts-total');
       const revenueEl = document.getElementById('gestao-sale-revenue-total');
       const extraEl = document.getElementById('gestao-sale-extra-total');
       const profitEl = document.getElementById('gestao-sale-profit-total');
-      const packaging = normalizeMoneyInput(document.getElementById('gestao-sale-packaging')?.value || '') || 0;
-      const shipping = normalizeMoneyInput(document.getElementById('gestao-sale-shipping')?.value || '') || 0;
-      const fee = normalizeMoneyInput(document.getElementById('gestao-sale-fee')?.value || '') || 0;
-      const other = normalizeMoneyInput(document.getElementById('gestao-sale-other')?.value || '') || 0;
-      const extraCosts = roundMoney(packaging + shipping + fee + other);
-      const totalShirts = gestaoPendingSaleItems.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-      const revenue = roundMoney(gestaoPendingSaleItems.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0));
-      const itemsProfit = roundMoney(gestaoPendingSaleItems.reduce((sum, item) => sum + Number(item.profit || 0), 0));
-      const realProfit = roundMoney(itemsProfit - extraCosts);
+      const extraCosts = getGestaoSaleExtraCosts();
+      const shirts = gestaoPendingSaleItems.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+      const revenue = roundMoney(gestaoPendingSaleItems.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.salePrice || 0)), 0));
+      const productCost = roundMoney(gestaoPendingSaleItems.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.costPrice || 0)), 0));
+      const profit = roundMoney(revenue - productCost - extraCosts);
       if (count) count.textContent = `${gestaoPendingSaleItems.length} item(ns)`;
-      if (shirts) shirts.textContent = String(totalShirts);
+      if (shirtsEl) shirtsEl.textContent = String(shirts);
       if (revenueEl) revenueEl.textContent = formatPrice(revenue);
       if (extraEl) extraEl.textContent = formatPrice(extraCosts);
-      if (profitEl) profitEl.textContent = formatPrice(realProfit);
+      if (profitEl) profitEl.textContent = formatPrice(profit);
       if (!list) return;
       if (!gestaoPendingSaleItems.length) {
         list.innerHTML = '<div class="gestao-empty">Nenhum item adicionado à venda ainda.</div>';
         return;
       }
-      list.innerHTML = gestaoPendingSaleItems.map(item => `
-        <article class="order-item-mini">
-          <div class="gestao-list-head">
-            <div>
-              <div class="gestao-list-title">${escapeHtml(getProductNameById(item.productId))}</div>
-              <div class="gestao-list-sub">Tam. ${escapeHtml(item.size)} • ${item.quantity} un.</div>
-            </div>
-            <button class="btn btn-danger" type="button" onclick="removeGestaoPendingSaleItem('${item.tempId}')">Remover</button>
-          </div>
-          <div class="product-admin-meta">
-            <span class="badge">Venda un.: ${formatPrice(item.salePrice)}</span>
-            <span class="badge">Receita item: ${formatPrice(item.totalAmount)}</span>
-            <span class="badge">Lucro item: ${formatPrice(item.profit)}</span>
-          </div>
-        </article>
-      `).join('');
+      list.innerHTML = gestaoPendingSaleItems.map(item => {
+        const total = roundMoney(Number(item.quantity || 0) * Number(item.salePrice || 0));
+        return `<article class="order-item-mini"><div class="gestao-list-head"><div><div class="gestao-list-title">${escapeHtml(getProductNameById(item.productId))}</div><div class="gestao-list-sub">Tam. ${escapeHtml(item.size)} • ${item.quantity} un.</div></div><button class="btn btn-danger" type="button" onclick="removeGestaoPendingSaleItem('${item.tempId}')">Remover</button></div><div class="product-admin-meta"><span class="badge">Venda un.: ${formatPrice(item.salePrice)}</span><span class="badge">Receita item: ${formatPrice(total)}</span><span class="badge">Custo médio: ${formatPrice(item.costPrice)}</span></div></article>`;
+      }).join('');
+    }
+
+    function getGroupedGestaoSales() {
+      const map = new Map();
+      gestaoSales.forEach(item => {
+        const key = String(item.saleId || item.id);
+        if (!map.has(key)) {
+          map.set(key, { saleId:key, date:item.date || '', clientName:item.clientName || '', clientPhone:item.clientPhone || '', packagingCost:Number(item.packagingCost||0), shippingCost:Number(item.shippingCost||0), feeCost:Number(item.feeCost||0), otherCost:Number(item.otherCost||0), items:[] });
+        }
+        const row = map.get(key);
+        row.items.push(item);
+        row.clientName = row.clientName || item.clientName || '';
+        row.clientPhone = row.clientPhone || item.clientPhone || '';
+        row.date = row.date || item.date || '';
+        row.packagingCost = Math.max(row.packagingCost, Number(item.packagingCost||0));
+        row.shippingCost = Math.max(row.shippingCost, Number(item.shippingCost||0));
+        row.feeCost = Math.max(row.feeCost, Number(item.feeCost||0));
+        row.otherCost = Math.max(row.otherCost, Number(item.otherCost||0));
+      });
+      return [...map.values()].map(group => ({
+        ...group,
+        shirtsSold: group.items.reduce((sum,item)=>sum+Number(item.quantity||0),0),
+        totalAmount: roundMoney(group.items.reduce((sum,item)=>sum+Number(item.totalAmount||0),0)),
+        totalProfit: roundMoney(group.items.reduce((sum,item)=>sum+Number(item.profit||0),0)),
+        extraCostsTotal: roundMoney(group.packagingCost + group.shippingCost + group.feeCost + group.otherCost)
+      })).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    }
+
+    function loadGestaoSaleIntoForm(saleId) {
+      const group = getGroupedGestaoSales().find(item => String(item.saleId) === String(saleId));
+      if (!group) return false;
+      editingGestaoSaleId = saleId;
+      gestaoPendingSaleItems = group.items.map((item, index) => ({ tempId: item.id || `sale-edit-${index}`, originalId:item.id || '', productId:item.productId, size:item.size, quantity:Number(item.quantity||0), salePrice:Number(item.salePrice||0), costPrice:Number(item.costPrice||0) }));
+      document.getElementById('gestao-sale-date').value = group.date || new Date().toISOString().slice(0,10);
+      document.getElementById('gestao-sale-client-name').value = group.clientName || '';
+      document.getElementById('gestao-sale-client-phone').value = group.clientPhone || '';
+      document.getElementById('gestao-sale-packaging').value = group.packagingCost ? formatMoneyInputValue(group.packagingCost) : '';
+      document.getElementById('gestao-sale-shipping').value = group.shippingCost ? formatMoneyInputValue(group.shippingCost) : '';
+      document.getElementById('gestao-sale-fee').value = group.feeCost ? formatMoneyInputValue(group.feeCost) : '';
+      document.getElementById('gestao-sale-other').value = group.otherCost ? formatMoneyInputValue(group.otherCost) : '';
+      document.getElementById('gestao-sale-save-btn').textContent = 'Atualizar venda';
+      document.getElementById('gestao-sale-cancel-btn').classList.remove('hidden');
+      renderGestaoPendingSale();
+      activateGestaoTab('gestao-vendas');
+      return true;
     }
 
     function editGestaoSale(saleId) {
-      const saleItems = gestaoSales.filter(item => String(item.saleId || item.id) === String(saleId));
-      if (!saleItems.length) return;
-      const first = saleItems[0];
-      editingGestaoSaleId = saleId;
-      gestaoPendingSaleItems = saleItems.map((item, index) => ({
-        tempId: item.id || `sale-edit-${index}`,
-        originalId: item.id,
-        productId: item.productId,
-        size: item.size,
-        quantity: Number(item.quantity || 0),
-        salePrice: Number(item.salePrice || 0),
-        costPrice: Number(item.costPrice || 0),
-        totalAmount: Number(item.totalAmount || 0),
-        profit: Number(item.profit || 0)
-      }));
-      document.getElementById('gestao-sale-date').value = first.date || new Date().toISOString().slice(0,10);
-      document.getElementById('gestao-sale-client-name').value = first.clientName || '';
-      document.getElementById('gestao-sale-client-phone').value = first.clientPhone || '';
-      document.getElementById('gestao-sale-packaging').value = first.packagingCost ? formatMoneyInputValue(first.packagingCost) : '';
-      document.getElementById('gestao-sale-shipping').value = first.shippingCost ? formatMoneyInputValue(first.shippingCost) : '';
-      document.getElementById('gestao-sale-fee').value = first.feeCost ? formatMoneyInputValue(first.feeCost) : '';
-      document.getElementById('gestao-sale-other').value = first.otherCost ? formatMoneyInputValue(first.otherCost) : '';
-      document.getElementById('gestao-sale-save-btn').textContent = 'Atualizar venda';
-      document.getElementById('gestao-sale-cancel-btn').classList.remove('hidden');
-      document.getElementById('gestao-sale-product').value = first.productId || '';
-      syncGestaoSearchInput('sale');
-      refreshSizeSelectOptions('gestao-sale-size', first.productId, first.size || 'M');
-      document.getElementById('gestao-sale-qty').value = '1';
-      document.getElementById('gestao-sale-price').value = formatMoneyInputValue(getProductPriceById(first.productId || ''));
-      renderGestaoPendingSale();
-      activateGestaoTab('gestao-vendas');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (!loadGestaoSaleIntoForm(saleId)) showMessage('gestao-sale-message', 'Não foi possível localizar essa venda.', 'error');
     }
 
     function cancelGestaoSaleEdit() {
@@ -5124,64 +4983,53 @@ function updateGestaoSalePreview() {
       if (!confirmDelete) return;
       gestaoSales = gestaoSales.filter(item => String(item.saleId || item.id) !== String(saleId));
       delete gestaoSalesMeta[saleId];
-      if (String(editingGestaoSaleId || '') === String(saleId)) clearGestaoPendingSale();
-      try {
-        await persistGestaoState();
-      } catch (error) {
-        console.error('Erro ao excluir venda:', error);
-        gestaoSyncMode = 'local';
-        updateGestaoSyncUi();
-      }
+      try { await persistGestaoState(); } catch (error) { console.error('Erro ao excluir venda:', error); gestaoSyncMode = 'local'; updateGestaoSyncUi(); }
+      if (String(editingGestaoSaleId||'') === String(saleId)) clearGestaoPendingSale();
       renderGestao();
       showMessage('gestao-sale-message', 'Venda excluída com sucesso.', 'success');
+    }
+
+function updateGestaoSalePreview() {
+      const box = document.getElementById('gestaoSalePreview');
+      if (!box) return;
+      const productId = document.getElementById('gestao-sale-product')?.value || '';
+      const size = document.getElementById('gestao-sale-size')?.value || 'M';
+      const quantity = Number(document.getElementById('gestao-sale-qty')?.value || 0);
+      const salePrice = normalizeMoneyInput(document.getElementById('gestao-sale-price')?.value || '');
+      const packaging = normalizeMoneyInput(document.getElementById('gestao-sale-packaging')?.value || '') || 0;
+      const shipping = normalizeMoneyInput(document.getElementById('gestao-sale-shipping')?.value || '') || 0;
+      const fee = normalizeMoneyInput(document.getElementById('gestao-sale-fee')?.value || '') || 0;
+      const other = normalizeMoneyInput(document.getElementById('gestao-sale-other')?.value || '') || 0;
+      const clientName = document.getElementById('gestao-sale-client-name')?.value?.trim() || '';
+      const clientPhone = document.getElementById('gestao-sale-client-phone')?.value?.trim() || '';
+      if (!productId) {
+        box.innerHTML = 'Selecione produto, tamanho e valor para calcular receita, custo extra e lucro real de forma automática.';
+        return;
+      }
+      const stockRow = calculateGestaoStock().find(item => String(item.productId) === String(productId) && String(item.size) === String(size));
+      const available = Number(stockRow?.currentQty || 0);
+      const avgCost = Number(stockRow?.averageCost || getAverageCostForProductSize(productId, size) || 0);
+      const revenue = !Number.isNaN(salePrice) ? roundMoney(Number(quantity || 0) * salePrice) : 0;
+      const productCost = roundMoney(Number(quantity || 0) * avgCost);
+      const extraCosts = roundMoney(packaging + shipping + fee + other);
+      const realProfit = roundMoney(revenue - productCost - extraCosts);
+      box.innerHTML = `${escapeHtml(getProductNameById(productId))} • tamanho <strong>${escapeHtml(size)}</strong><br>Disponível agora: <strong>${available}</strong> peça(s)<br>${clientName ? `Cliente: <strong>${escapeHtml(clientName)}</strong>${clientPhone ? ` • ${escapeHtml(clientPhone)}` : ''}<br>` : ''}Custo médio do produto: <strong>${formatPrice(avgCost)}</strong><br>Custo das peças: <strong>${formatPrice(productCost)}</strong><br>Custos extras da venda: <strong>${formatPrice(extraCosts)}</strong><br>Receita prevista: <strong>${formatPrice(revenue)}</strong><br>Lucro real estimado: <strong>${formatPrice(realProfit)}</strong>`;
     }
 
     function renderGestaoSales() {
       const container = document.getElementById('gestaoSalesList');
       if (!container) return;
-      const grouped = [...new Set(gestaoSales.map(item => item.saleId || item.id))].map(saleId => {
-        const items = gestaoSales.filter(row => String(row.saleId || row.id) === String(saleId));
-        const first = items[0];
-        return {
-          saleId,
-          date: first?.date || '',
-          clientName: first?.clientName || '',
-          clientPhone: first?.clientPhone || '',
-          packagingCost: Number(first?.packagingCost || 0),
-          shippingCost: Number(first?.shippingCost || 0),
-          feeCost: Number(first?.feeCost || 0),
-          otherCost: Number(first?.otherCost || 0),
-          items,
-          shirts: items.reduce((sum, item) => sum + Number(item.quantity || 0), 0),
-          revenue: roundMoney(items.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0)),
-          profit: roundMoney(items.reduce((sum, item) => sum + Number(item.profit || 0), 0) - (Number(first?.packagingCost || 0) + Number(first?.shippingCost || 0) + Number(first?.feeCost || 0) + Number(first?.otherCost || 0)))
-        };
-      }).sort((a,b) => (b.date || '').localeCompare(a.date || ''));
-      if (!grouped.length) {
+      const sales = getGroupedGestaoSales();
+      if (!sales.length) {
         container.innerHTML = '<div class="gestao-empty">Nenhuma venda lançada ainda.</div>';
         return;
       }
-      container.innerHTML = grouped.map(sale => `
-        <article class="gestao-list-card">
-          <div class="gestao-list-head">
-            <div>
-              <div class="gestao-list-title">Venda • ${sale.items.length} item(ns) • ${sale.shirts} camisa(s)</div>
-              <div class="gestao-list-sub">${escapeHtml(formatGestaoDate(sale.date || ''))}${sale.clientName ? ` • ${escapeHtml(sale.clientName)}` : ''}${sale.clientPhone ? ` • ${escapeHtml(sale.clientPhone)}` : ''}</div>
-            </div>
-            <div class="table-actions">
-              <button class="btn btn-success" type="button" onclick="editGestaoSale('${sale.saleId}')">Editar</button>
-              <button class="btn btn-danger" type="button" onclick="deleteGestaoSale('${sale.saleId}')">Excluir</button>
-            </div>
-          </div>
-          <div class="product-admin-meta">
-            <span class="badge">Receita: ${formatPrice(sale.revenue)}</span>
-            <span class="badge">Lucro: ${formatPrice(sale.profit)}</span>
-            <span class="badge">Custos extras: ${formatPrice(Number(sale.packagingCost||0)+Number(sale.shippingCost||0)+Number(sale.feeCost||0)+Number(sale.otherCost||0))}</span>
-          </div>
-          ${sale.items.map(item => `<div class="small-muted" style="margin-top:6px;">• ${escapeHtml(getProductNameById(item.productId))} — tam. ${escapeHtml(item.size)} — ${item.quantity} un. — ${formatPrice(item.totalAmount)}</div>`).join('')}
-        </article>
-      `).join('');
+      container.innerHTML = sales.map(group => {
+        const itemsHtml = group.items.map(item => `<div class="order-detail-item"><img src="${escapeHtml(getProductImageById(item.productId))}" alt="${escapeHtml(getProductNameById(item.productId))}" onerror="this.src='https://via.placeholder.com/240x240?text=Camisa';" /><div><strong>${escapeHtml(getProductNameById(item.productId))}</strong> • tam. ${escapeHtml(item.size)} • ${item.quantity} un.<br>Venda un.: <strong>${formatPrice(item.salePrice)}</strong> • Receita item: <strong>${formatPrice(item.totalAmount)}</strong> • Lucro item: <strong>${formatPrice(item.profit)}</strong></div></div>`).join('');
+        return `<details class="order-collapsible"><summary><img class="order-summary-thumb" src="${escapeHtml(getProductImageById(group.items[0]?.productId))}" alt="Venda" onerror="this.src='https://via.placeholder.com/240x240?text=Camisa';" /><div class="order-summary-main"><div class="gestao-list-title">Venda • ${group.clientName ? escapeHtml(group.clientName) : 'Cliente não informado'}</div><div class="gestao-list-sub">${escapeHtml(group.date || '')} • ${group.shirtsSold} camisa(s) • ${group.items.length} item(ns)${group.clientPhone ? ` • ${escapeHtml(group.clientPhone)}` : ''}</div></div><div class="order-summary-side"><span class="badge">${formatPrice(group.totalAmount)}</span><span class="small-muted">Toque para ver detalhes</span></div></summary><div class="order-collapsible-body"><div class="product-admin-meta"><span class="badge">Receita: ${formatPrice(group.totalAmount)}</span><span class="badge">Custos extras: ${formatPrice(group.extraCostsTotal)}</span><span class="badge">Lucro: ${formatPrice(group.totalProfit)}</span></div><div class="actions-row" style="margin-top:10px;"><button class="btn btn-success" type="button" onclick="editGestaoSale('${group.saleId}')">Editar venda</button><button class="btn btn-danger" type="button" onclick="deleteGestaoSale('${group.saleId}')">Excluir venda</button></div>${itemsHtml}</div></details>`;
+      }).join('');
     }
+
 
     function resetGestaoSupplierForm() {
       editingGestaoSupplierId = null;
@@ -5428,60 +5276,51 @@ async function deleteGestaoSupplier(id) {
 async function saveGestaoSale() {
       clearMessage('gestao-sale-message');
       const date = document.getElementById('gestao-sale-date').value || new Date().toISOString().slice(0,10);
-      const clientName = document.getElementById('gestao-sale-client-name').value.trim();
-      const clientPhone = document.getElementById('gestao-sale-client-phone').value.trim();
       const packagingCost = normalizeMoneyInput(document.getElementById('gestao-sale-packaging').value || '') || 0;
       const shippingCost = normalizeMoneyInput(document.getElementById('gestao-sale-shipping').value || '') || 0;
       const feeCost = normalizeMoneyInput(document.getElementById('gestao-sale-fee').value || '') || 0;
       const otherCost = normalizeMoneyInput(document.getElementById('gestao-sale-other').value || '') || 0;
-      const extraCostsTotal = roundMoney(packagingCost + shippingCost + feeCost + otherCost);
+      const clientName = document.getElementById('gestao-sale-client-name').value.trim();
+      const clientPhone = document.getElementById('gestao-sale-client-phone').value.trim();
 
       if (!gestaoPendingSaleItems.length) {
-        showMessage('gestao-sale-message', 'Adicione pelo menos um item na venda.', 'error');
-        return;
+        addGestaoSaleItem();
+        if (!gestaoPendingSaleItems.length) return;
       }
 
-      for (const item of gestaoPendingSaleItems) {
-        const stockRow = calculateGestaoStock().find(row => String(row.productId) === String(item.productId) && String(row.size) === String(item.size));
-        const available = Number(stockRow?.currentQty || 0);
-        if (Number(item.quantity || 0) > available + (editingGestaoSaleId ? Number(item.quantity || 0) : 0)) {
-          showMessage('gestao-sale-message', `Estoque insuficiente para ${getProductNameById(item.productId)} (${item.size}).`, 'error');
-          return;
-        }
-      }
-
+      const extraCostsTotal = roundMoney(packagingCost + shippingCost + feeCost + otherCost);
       const saleId = editingGestaoSaleId || generateClientUuid();
       if (editingGestaoSaleId) {
         gestaoSales = gestaoSales.filter(item => String(item.saleId || item.id) !== String(editingGestaoSaleId));
       }
       gestaoSalesMeta[saleId] = { clientName, clientPhone };
 
-      const itemsProfit = roundMoney(gestaoPendingSaleItems.reduce((sum, item) => sum + Number(item.profit || 0), 0));
-      let remainingExtra = extraCostsTotal;
-      const rows = gestaoPendingSaleItems.map((item, index) => {
-        const rowExtra = index === 0 ? remainingExtra : 0;
+      const entries = gestaoPendingSaleItems.map((item, index) => {
+        const totalAmount = roundMoney(Number(item.quantity || 0) * Number(item.salePrice || 0));
+        const itemExtra = index === 0 ? extraCostsTotal : 0;
+        const profit = roundMoney(totalAmount - (Number(item.quantity || 0) * Number(item.costPrice || 0)) - itemExtra);
         return {
           id: item.originalId || generateClientUuid(),
           saleId,
           productId: item.productId,
           size: item.size,
           quantity: Number(item.quantity || 0),
-          salePrice: roundMoney(item.salePrice || 0),
-          costPrice: roundMoney(item.costPrice || 0),
+          salePrice: Number(item.salePrice || 0),
+          costPrice: Number(item.costPrice || 0),
           date,
-          totalAmount: roundMoney(item.totalAmount || 0),
+          totalAmount,
           packagingCost: index === 0 ? packagingCost : 0,
           shippingCost: index === 0 ? shippingCost : 0,
           feeCost: index === 0 ? feeCost : 0,
           otherCost: index === 0 ? otherCost : 0,
-          extraCostsTotal: rowExtra,
-          profit: roundMoney((item.profit || 0) - (index === 0 ? extraCostsTotal : 0)),
+          extraCostsTotal: itemExtra,
+          profit,
           clientName,
           clientPhone
         };
       });
-      gestaoSales = [...rows, ...gestaoSales].sort((a,b) => (b.date || '').localeCompare(a.date || ''));
 
+      gestaoSales = [...entries, ...gestaoSales];
       try {
         await persistGestaoState();
       } catch (error) {
@@ -5490,8 +5329,8 @@ async function saveGestaoSale() {
         updateGestaoSyncUi();
       }
 
-      clearGestaoPendingSale();
       renderGestao();
+      clearGestaoPendingSale();
       showMessage('gestao-sale-message', editingGestaoSaleId ? 'Venda atualizada com sucesso.' : 'Venda registrada com sucesso.', 'success');
     }
 
@@ -5568,9 +5407,6 @@ async function saveGestaoSale() {
       document.getElementById('gestao-entry-extra')?.addEventListener('input', renderGestaoPendingOrder);
       const saleDateField = document.getElementById('gestao-sale-date');
       if (saleDateField) saleDateField.value = new Date().toISOString().slice(0,10);
-      document.getElementById('gestao-entry-product-search')?.addEventListener('blur', () => setTimeout(() => hideGestaoProductResults('entry'), 150));
-      document.getElementById('gestao-sale-product-search')?.addEventListener('blur', () => setTimeout(() => hideGestaoProductResults('sale'), 150));
-      document.getElementById('gestao-sale-size')?.addEventListener('change', updateGestaoSalePreview);
 
       supabaseClient.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_OUT') {
