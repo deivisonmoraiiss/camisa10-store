@@ -1253,10 +1253,9 @@ Camisa Real Madrid 24/25"></textarea>
                     <div class="order-item-row">
                       <div class="field">
                         <label for="gestao-entry-product-search">Buscar produto</label>
-                        <input type="text" id="gestao-entry-product-search" placeholder="Digite qualquer parte do nome da camisa" oninput="filterGestaoEntryProducts()" />
-                        <div class="small-muted">Ex.: digite “brasil” para achar todas as camisas com Brasil no nome.</div>
-                        <label for="gestao-entry-product" style="margin-top:8px;">Produto</label>
-                        <select id="gestao-entry-product" onchange="syncGestaoEntryProductSearchFromSelect()"></select>
+                        <input type="text" id="gestao-entry-product-search" placeholder="Digite por exemplo: brasil" oninput="handleGestaoProductSearch('entry')" />
+                        <label for="gestao-entry-product" style="margin-top:6px;">Produto</label>
+                        <select id="gestao-entry-product" onchange="syncGestaoProductSearchFromSelect('entry')"></select>
                       </div>
                       <div class="field">
                         <label for="gestao-entry-size">Tam.</label>
@@ -1352,10 +1351,9 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="grid-2-equal">
                   <div class="field">
                     <label for="gestao-sale-product-search">Buscar produto</label>
-                    <input type="text" id="gestao-sale-product-search" placeholder="Digite qualquer parte do nome da camisa" oninput="filterGestaoSaleProducts()" />
-                    <div class="small-muted">A busca encontra o nome no começo, no meio ou no final.</div>
-                    <label for="gestao-sale-product" style="margin-top:8px;">Produto</label>
-                    <select id="gestao-sale-product" onchange="handleGestaoSaleProductChange()"></select>
+                    <input type="text" id="gestao-sale-product-search" placeholder="Digite por exemplo: brasil" oninput="handleGestaoProductSearch('sale')" />
+                    <label for="gestao-sale-product" style="margin-top:6px;">Produto</label>
+                    <select id="gestao-sale-product" onchange="syncGestaoProductSearchFromSelect('sale'); updateGestaoSalePreview()"></select>
                   </div>
                   <div class="field">
                     <label for="gestao-sale-size">Tamanho</label>
@@ -4458,112 +4456,65 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       if (itemsInsertError) throw itemsInsertError;
     }
 
-    function normalizeSearchText(value = '') {
-      return String(value)
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase()
-        .trim();
-    }
-
-    function buildGestaoProductOptions(products, placeholder = 'Nenhum produto cadastrado') {
-      if (!products.length) return `<option value="">${placeholder}</option>`;
-      return products.map(product => `<option value="${product.id}">${escapeHtml(product.name || 'Produto')}</option>`).join('');
-    }
-
-    function filterProductsForSearch(term) {
-      const normalizedTerm = normalizeSearchText(term);
-      if (!normalizedTerm) return [...allProducts];
-      return allProducts.filter(product => normalizeSearchText(product.name || '').includes(normalizedTerm));
-    }
-
-    function syncSearchInputWithSelectedProduct(inputId, productId) {
-      const input = document.getElementById(inputId);
-      if (!input) return;
-      const product = allProducts.find(item => String(item.id) === String(productId));
-      input.value = product?.name || '';
-    }
-
-    function fillSelectWithProducts(selectId, products, preferredValue = '') {
-      const select = document.getElementById(selectId);
-      if (!select) return '';
-      const previousValue = preferredValue || select.value || '';
-      select.innerHTML = buildGestaoProductOptions(products);
-      let nextValue = '';
-      if (products.some(product => String(product.id) === String(previousValue))) {
-        nextValue = String(previousValue);
-      } else if (products[0]) {
-        nextValue = String(products[0].id);
-      }
-      if (nextValue) select.value = nextValue;
-      return nextValue;
-    }
-
-    function filterGestaoEntryProducts() {
-      const input = document.getElementById('gestao-entry-product-search');
-      const results = filterProductsForSearch(input?.value || '');
-      const selectedValue = fillSelectWithProducts('gestao-entry-product', results);
-      syncSearchInputWithSelectedProduct('gestao-entry-product-search', selectedValue);
-    }
-
-    function syncGestaoEntryProductSearchFromSelect() {
-      const selectedValue = document.getElementById('gestao-entry-product')?.value || '';
-      syncSearchInputWithSelectedProduct('gestao-entry-product-search', selectedValue);
-    }
-
-    function updateGestaoSaleSizeOptions(productId, preferredSize = '') {
-      const sizeSelect = document.getElementById('gestao-sale-size');
-      if (!sizeSelect) return;
-      const product = allProducts.find(item => String(item.id) === String(productId));
-      const availableSizes = Array.isArray(product?.product_sizes)
-        ? product.product_sizes.filter(size => size.is_available !== false).map(size => String(size.size || '').toUpperCase()).filter(Boolean)
-        : [];
-      const uniqueSizes = [...new Set(availableSizes.length ? availableSizes : ['P', 'M', 'G', 'EG'])];
-      sizeSelect.innerHTML = uniqueSizes.map(size => `<option value="${size}">${size}</option>`).join('');
-      const fallbackSize = preferredSize && uniqueSizes.includes(String(preferredSize).toUpperCase())
-        ? String(preferredSize).toUpperCase()
-        : (uniqueSizes[0] || 'M');
-      sizeSelect.value = fallbackSize;
-    }
-
-    function handleGestaoSaleProductChange(options = {}) {
-      const { preserveTypedPrice = false, preferredSize = '' } = options;
-      const saleSelect = document.getElementById('gestao-sale-product');
-      const salePriceInput = document.getElementById('gestao-sale-price');
-      const selectedValue = saleSelect?.value || '';
-      syncSearchInputWithSelectedProduct('gestao-sale-product-search', selectedValue);
-      updateGestaoSaleSizeOptions(selectedValue, preferredSize);
-      if (salePriceInput && selectedValue) {
-        const currentTyped = normalizeMoneyInput(salePriceInput.value || '');
-        if (!preserveTypedPrice || Number.isNaN(currentTyped) || currentTyped <= 0) {
-          const basePrice = getProductPriceById(selectedValue);
-          salePriceInput.value = basePrice > 0 ? formatMoneyInputValue(basePrice) : '';
-        }
-      }
-      handleGestaoSaleProductChange({ preserveTypedPrice: true, preferredSize: document.getElementById('gestao-sale-size')?.value || 'M' });
-    }
-
-    function filterGestaoSaleProducts() {
-      const input = document.getElementById('gestao-sale-product-search');
-      const saleSelect = document.getElementById('gestao-sale-product');
-      const currentValue = saleSelect?.value || '';
-      const results = filterProductsForSearch(input?.value || '');
-      const selectedValue = fillSelectWithProducts('gestao-sale-product', results, currentValue);
-      handleGestaoSaleProductChange({ preserveTypedPrice: false });
-      if (!results.length && input) {
-        input.value = '';
-      } else if (selectedValue) {
-        syncSearchInputWithSelectedProduct('gestao-sale-product-search', selectedValue);
-      }
+    function getGestaoProductMatches(term = '') {
+      const normalized = String(term || '').trim().toLowerCase();
+      const products = [...allProducts].sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      if (!normalized) return products;
+      return products.filter(product => (product.name || '').toLowerCase().includes(normalized));
     }
 
     function populateGestaoProductOptions() {
-      const all = [...allProducts];
-      const entrySelected = fillSelectWithProducts('gestao-entry-product', all);
-      const saleSelected = fillSelectWithProducts('gestao-sale-product', all);
-      syncSearchInputWithSelectedProduct('gestao-entry-product-search', entrySelected);
-      syncSearchInputWithSelectedProduct('gestao-sale-product-search', saleSelected);
-      updateGestaoSaleSizeOptions(saleSelected);
+      const select = document.getElementById('gestao-entry-product');
+      const saleSelect = document.getElementById('gestao-sale-product');
+      const entrySearchTerm = document.getElementById('gestao-entry-product-search')?.value || '';
+      const saleSearchTerm = document.getElementById('gestao-sale-product-search')?.value || '';
+
+      const fillSelect = (targetSelect, term) => {
+        if (!targetSelect) return [];
+        const currentValue = targetSelect.value;
+        const matches = getGestaoProductMatches(term);
+        targetSelect.innerHTML = matches.length
+          ? matches.map(product => `<option value="${product.id}">${escapeHtml(product.name || 'Produto')}</option>`).join('')
+          : '<option value="">Nenhum produto encontrado</option>';
+
+        if (!matches.length) {
+          targetSelect.value = '';
+          return matches;
+        }
+
+        const hasCurrent = matches.some(product => String(product.id) === String(currentValue));
+        if (hasCurrent) {
+          targetSelect.value = currentValue;
+        } else if (term && matches.length) {
+          targetSelect.value = String(matches[0].id);
+        } else if (matches.length) {
+          targetSelect.value = String(matches[0].id);
+        }
+        return matches;
+      };
+
+      fillSelect(select, entrySearchTerm);
+      fillSelect(saleSelect, saleSearchTerm);
+    }
+
+    function handleGestaoProductSearch(context) {
+      populateGestaoProductOptions();
+      syncGestaoProductSearchFromSelect(context, true);
+      if (context === 'sale') {
+        updateGestaoSalePreview();
+      }
+    }
+
+    function syncGestaoProductSearchFromSelect(context, keepTypedValue = false) {
+      const selectId = context === 'sale' ? 'gestao-sale-product' : 'gestao-entry-product';
+      const inputId = context === 'sale' ? 'gestao-sale-product-search' : 'gestao-entry-product-search';
+      const select = document.getElementById(selectId);
+      const input = document.getElementById(inputId);
+      if (!select || !input) return;
+      const selectedName = select.options[select.selectedIndex]?.text || '';
+      if (!keepTypedValue || !input.value.trim()) {
+        input.value = selectedName;
+      }
     }
 
     function getAverageCostForProductSize(productId, size) {
@@ -4954,12 +4905,10 @@ function getGestaoSaleExtraCosts() {
     }
 
     function resetGestaoSaleItemFields() {
-      const firstProductId = allProducts[0]?.id || '';
-      document.getElementById('gestao-sale-product').value = firstProductId;
-      syncSearchInputWithSelectedProduct('gestao-sale-product-search', firstProductId);
-      updateGestaoSaleSizeOptions(firstProductId, 'M');
+      document.getElementById('gestao-sale-product').value = '';
+      document.getElementById('gestao-sale-size').value = 'M';
       document.getElementById('gestao-sale-qty').value = '1';
-      document.getElementById('gestao-sale-price').value = firstProductId ? formatMoneyInputValue(getProductPriceById(firstProductId)) : '';
+      document.getElementById('gestao-sale-price').value = '';
       updateGestaoSalePreview();
     }
 
@@ -5272,7 +5221,7 @@ function renderGestaoSuppliers() {
       renderGestaoSuppliers();
       renderGestaoPendingOrder();
       renderGestaoPendingSale();
-      handleGestaoSaleProductChange({ preserveTypedPrice: true, preferredSize: document.getElementById('gestao-sale-size')?.value || 'M' });
+      updateGestaoSalePreview();
     }
 
     function activateGestaoTab(targetId) {
@@ -5513,20 +5462,10 @@ async function saveGestaoSale() {
       const entryDateField = document.getElementById('gestao-entry-date');
       if (entryDateField) entryDateField.value = new Date().toISOString().slice(0,10);
       document.getElementById('gestao-entry-extra')?.addEventListener('input', renderGestaoPendingOrder);
+      document.getElementById('gestao-entry-product-search')?.addEventListener('focus', () => syncGestaoProductSearchFromSelect('entry'));
+      document.getElementById('gestao-sale-product-search')?.addEventListener('focus', () => syncGestaoProductSearchFromSelect('sale'));
       const saleDateField = document.getElementById('gestao-sale-date');
       if (saleDateField) saleDateField.value = new Date().toISOString().slice(0,10);
-      document.getElementById('gestao-entry-product-search')?.addEventListener('keydown', event => {
-        if (event.key === 'Enter') {
-          event.preventDefault();
-          filterGestaoEntryProducts();
-        }
-      });
-      document.getElementById('gestao-sale-product-search')?.addEventListener('keydown', event => {
-        if (event.key === 'Enter') {
-          event.preventDefault();
-          filterGestaoSaleProducts();
-        }
-      });
 
       supabaseClient.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_OUT') {
