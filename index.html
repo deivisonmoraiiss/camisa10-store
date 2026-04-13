@@ -1697,7 +1697,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     let heroTouchStartX = 0;
     let heroTouchEndX = 0;
 
-    const CACHE_PREFIX = "camisa10_home_cache_v1";
+    const CACHE_PREFIX = "camisa10_home_cache_v2";
     const CACHE_TTL = {
       settings: 10 * 60 * 1000,
       slides: 10 * 60 * 1000,
@@ -1994,18 +1994,46 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       `;
     }
 
-    function renderFeaturedProducts() {
+    async function renderFeaturedProducts() {
       const grid = document.getElementById("featuredProductsGrid");
       if (!grid) return;
 
-      let featured = allProducts
-        .filter(product => product.is_featured === true)
-        .sort((a, b) => {
-          const aDate = new Date(a.created_at || 0).getTime();
-          const bDate = new Date(b.created_at || 0).getTime();
-          return bDate - aDate;
-        })
-        .slice(0, 4);
+      let featured = [];
+
+      try {
+        const { data: featuredData, error: featuredError } = await supabaseClient
+          .from("products")
+          .select(`
+            id,
+            name,
+            slug,
+            price,
+            old_price,
+            image_url,
+            is_featured,
+            badge_type,
+            sale_type,
+            category_id,
+            priority_encomenda,
+            created_at,
+            categories (
+              id,
+              name
+            )
+          `)
+          .eq("is_featured", true)
+          .order("created_at", { ascending: false })
+          .limit(4);
+
+        if (!featuredError && Array.isArray(featuredData) && featuredData.length) {
+          featured = featuredData.map(product => ({
+            ...product,
+            category_name: product.categories?.name || product.category_name || product.category || "Sem categoria"
+          }));
+        }
+      } catch (error) {
+        console.warn("Erro ao buscar Mais procuradas por is_featured:", error);
+      }
 
       if (!featured.length) {
         featured = allProducts
@@ -2430,7 +2458,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
           )
         `)
         .order("created_at", { ascending: false })
-        .limit(50);
+        .limit(200);
 
       if (error) {
         console.error("Erro real do Supabase:", error);
@@ -2485,7 +2513,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         }
 
         renderCategoryButtons();
-        renderFeaturedProducts();
+        await renderFeaturedProducts();
         renderProducts();
       } catch (error) {
         console.error("Erro geral ao iniciar o site:", error);
