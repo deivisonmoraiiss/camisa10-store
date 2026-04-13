@@ -4483,7 +4483,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     function getGestaoProductMatches(term = '') {
       const normalized = String(term || '').trim().toLowerCase();
       const products = [...allProducts].sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-      if (!normalized) return products;
+      if (!normalized) return [];
       return products.filter(product => (product.name || '').toLowerCase().includes(normalized));
     }
 
@@ -4495,8 +4495,16 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
 
       const fillSelect = (targetSelect, term) => {
         if (!targetSelect) return [];
+        const normalizedTerm = String(term || '').trim();
         const currentValue = targetSelect.value;
-        const matches = getGestaoProductMatches(term);
+
+        if (!normalizedTerm) {
+          targetSelect.innerHTML = '<option value="">Digite para buscar um produto</option>';
+          targetSelect.value = '';
+          return [];
+        }
+
+        const matches = getGestaoProductMatches(normalizedTerm);
         targetSelect.innerHTML = matches.length
           ? matches.map(product => `<option value="${product.id}">${escapeHtml(product.name || 'Produto')}</option>`).join('')
           : '<option value="">Nenhum produto encontrado</option>';
@@ -4509,9 +4517,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         const hasCurrent = matches.some(product => String(product.id) === String(currentValue));
         if (hasCurrent) {
           targetSelect.value = currentValue;
-        } else if (term && matches.length) {
-          targetSelect.value = String(matches[0].id);
-        } else if (matches.length) {
+        } else {
           targetSelect.value = String(matches[0].id);
         }
         return matches;
@@ -5492,8 +5498,6 @@ async function saveGestaoSale() {
       const entryDateField = document.getElementById('gestao-entry-date');
       if (entryDateField) entryDateField.value = new Date().toISOString().slice(0,10);
       document.getElementById('gestao-entry-extra')?.addEventListener('input', renderGestaoPendingOrder);
-      document.getElementById('gestao-entry-product-search')?.addEventListener('focus', () => syncGestaoProductSearchFromSelect('entry'));
-      document.getElementById('gestao-sale-product-search')?.addEventListener('focus', () => syncGestaoProductSearchFromSelect('sale'));
       const saleDateField = document.getElementById('gestao-sale-date');
       if (saleDateField) saleDateField.value = new Date().toISOString().slice(0,10);
 
