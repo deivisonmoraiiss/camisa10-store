@@ -161,6 +161,12 @@
     .sizes-box-premium .size-item.active{background:linear-gradient(135deg, rgba(212,175,55,.20), rgba(212,175,55,.10));border-color:rgba(212,175,55,.55);box-shadow:0 10px 24px rgba(0,0,0,.18);color:#fff6cf}
     .sizes-box-premium .size-item input{display:none}
     .sizes-box-premium .size-item span{font-size:1rem}
+
+    .product-meta-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}
+    .type-suggestions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .type-chip{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:#151515;border:1px solid var(--line);font-size:.82rem;color:#f3f3f3;cursor:pointer;transition:.2s ease}
+    .type-chip:hover{border-color:rgba(212,175,55,.4);color:#fff}
+    .size-profile-note{margin-top:8px;color:var(--muted);font-size:.82rem;line-height:1.5}
     .draft-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
     .draft-summary-card{padding:16px;border-radius:16px;background:#101010;border:1px solid var(--line);display:grid;gap:6px}
     .draft-summary-card span{color:var(--muted);font-size:.82rem}
@@ -628,6 +634,30 @@
                 </div>
               </div>
 
+              <div class="product-meta-grid">
+                <div class="field">
+                  <label for="product-kind">Tipo do item</label>
+                  <input type="text" id="product-kind" placeholder="Ex: Camisa, Kit Infantil, Sandália, Copo" />
+                  <div class="type-suggestions">
+                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Camisa')">👕 Camisa</button>
+                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Kit Infantil')">🧒 Kit Infantil</button>
+                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Sandália')">🩴 Sandália</button>
+                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Copo')">🥤 Copo</button>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="product-size-profile">Grade / variação</label>
+                  <select id="product-size-profile">
+                    <option value="adulto">Adulto (P, M, G, EG)</option>
+                    <option value="infantil">Infantil (2, 4, 6, 8, 10)</option>
+                    <option value="sandalia">Sandália (33 a 43)</option>
+                    <option value="unico">Tamanho único / sem grade</option>
+                    <option value="custom">Personalizado</option>
+                  </select>
+                  <div class="size-profile-note" id="product-size-profile-note">A grade muda automaticamente conforme o tipo do item.</div>
+                </div>
+              </div>
+
               <div class="field" style="margin-top:14px;">
                 <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
                   <input type="checkbox" id="product-visible" style="width:auto; accent-color:#d4af37;" checked />
@@ -721,13 +751,9 @@
 
             <div class="product-step" data-step="4">
               <div class="field">
-                <label>Tamanhos disponíveis</label>
-                <div class="sizes-box sizes-box-premium">
-                  <label class="size-item"><input type="checkbox" value="P" class="size-check"> <span>P</span></label>
-                  <label class="size-item"><input type="checkbox" value="M" class="size-check"> <span>M</span></label>
-                  <label class="size-item"><input type="checkbox" value="G" class="size-check"> <span>G</span></label>
-                  <label class="size-item"><input type="checkbox" value="EG" class="size-check"> <span>EG</span></label>
-                </div>
+                <label>Tamanhos / variações disponíveis</label>
+                <div class="sizes-box sizes-box-premium" id="product-sizes-container"></div>
+                <div class="size-profile-note">Para kit infantil, sandália e copo, a grade muda sozinha. Se quiser uma grade diferente, escolha “Personalizado”.</div>
               </div>
 
               <div class="draft-summary" id="product-draft-summary">
@@ -740,8 +766,16 @@
                   <strong id="summary-category">—</strong>
                 </div>
                 <div class="draft-summary-card">
+                  <span>Tipo</span>
+                  <strong id="summary-kind">—</strong>
+                </div>
+                <div class="draft-summary-card">
                   <span>Preço</span>
                   <strong id="summary-price">—</strong>
+                </div>
+                <div class="draft-summary-card">
+                  <span>Grade</span>
+                  <strong id="summary-size-profile">—</strong>
                 </div>
                 <div class="draft-summary-card">
                   <span>Tamanhos</span>
@@ -1703,6 +1737,9 @@ Camisa Real Madrid 24/25"></textarea>
     let editingGestaoOrderId = null;
     let editingGestaoSaleId = null;
     let gestaoPeriodFilter = "all";
+    const PRODUCT_META_STORAGE_KEY = "camisa10_product_meta_v1";
+    let productMetaCache = {};
+
 
 
     function generateClientUuid() {
@@ -1801,6 +1838,248 @@ Camisa Real Madrid 24/25"></textarea>
     }
 
 
+    function loadProductMetaCache() {
+      try {
+        productMetaCache = JSON.parse(localStorage.getItem(PRODUCT_META_STORAGE_KEY) || "{}") || {};
+      } catch (error) {
+        productMetaCache = {};
+      }
+    }
+
+    function persistProductMetaCache() {
+      localStorage.setItem(PRODUCT_META_STORAGE_KEY, JSON.stringify(productMetaCache));
+    }
+
+    function normalizeProductKind(value = "") {
+      return String(value || "").trim();
+    }
+
+    function inferProductKind(product = {}) {
+      const explicit = normalizeProductKind(product.product_kind || product.kind || "");
+      if (explicit) return explicit;
+      const cached = normalizeProductKind(productMetaCache?.[String(product.id || "")]?.kind || "");
+      if (cached) return cached;
+      const name = String(product.name || "").toLowerCase();
+      if (name.includes("infantil") || name.includes("kids") || name.includes("kit")) return "Kit Infantil";
+      if (name.includes("sand") || name.includes("chinelo") || name.includes("slide")) return "Sandália";
+      if (name.includes("copo") || name.includes("caneca") || name.includes("garrafa")) return "Copo";
+      return "Camisa";
+    }
+
+    function inferSizeProfile(product = {}) {
+      const explicit = String(product.size_profile || product.sizeProfile || "").trim().toLowerCase();
+      if (explicit) return explicit;
+      const cached = String(productMetaCache?.[String(product.id || "")]?.sizeProfile || "").trim().toLowerCase();
+      if (cached) return cached;
+      const kind = inferProductKind(product).toLowerCase();
+      if (kind.includes("infantil")) return "infantil";
+      if (kind.includes("sand")) return "sandalia";
+      if (kind.includes("copo")) return "unico";
+      return "adulto";
+    }
+
+    function getSizeOptionsByProfile(profile) {
+      const normalized = String(profile || "adulto").toLowerCase();
+      if (normalized === "infantil") return ["2", "4", "6", "8", "10"];
+      if (normalized === "sandalia") return ["33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43"];
+      if (normalized === "unico") return ["Único"];
+      return ["P", "M", "G", "EG"];
+    }
+
+    function getSizeProfileLabel(profile) {
+      const normalized = String(profile || "adulto").toLowerCase();
+      if (normalized === "infantil") return "Infantil";
+      if (normalized === "sandalia") return "Sandália";
+      if (normalized === "unico") return "Único / sem grade";
+      if (normalized === "custom") return "Personalizado";
+      return "Adulto";
+    }
+
+    function renderProductSizes(profile = "adulto", selectedSizes = []) {
+      const container = document.getElementById("product-sizes-container");
+      if (!container) return;
+      const currentSelected = Array.isArray(selectedSizes) ? selectedSizes : getSelectedSizes();
+      const options = getSizeOptionsByProfile(profile);
+      container.innerHTML = options.map(size => `
+        <label class="size-item ${currentSelected.includes(size) ? "active" : ""}">
+          <input type="checkbox" value="${size}" class="size-check" ${currentSelected.includes(size) ? "checked" : ""}>
+          <span>${size}</span>
+        </label>
+      `).join("");
+
+      container.querySelectorAll(".size-check").forEach(check => {
+        check.addEventListener("change", () => {
+          refreshSizeChipStates();
+          updateDraftSummary();
+        });
+      });
+
+      refreshSizeChipStates();
+      updateDraftSummary();
+    }
+
+    function syncProductTypeFromKind(force = false) {
+      const kindInput = document.getElementById("product-kind");
+      const profileSelect = document.getElementById("product-size-profile");
+      const note = document.getElementById("product-size-profile-note");
+      if (!kindInput || !profileSelect) return;
+
+      const value = kindInput.value.trim().toLowerCase();
+      let suggestedProfile = profileSelect.value || "adulto";
+
+      if (value.includes("infantil") || value.includes("kids") || value.includes("kit")) {
+        suggestedProfile = "infantil";
+      } else if (value.includes("sand") || value.includes("chinelo") || value.includes("slide")) {
+        suggestedProfile = "sandalia";
+      } else if (value.includes("copo") || value.includes("caneca") || value.includes("garrafa")) {
+        suggestedProfile = "unico";
+      } else if (value.includes("camisa")) {
+        suggestedProfile = "adulto";
+      }
+
+      if (force || profileSelect.value !== suggestedProfile) {
+        profileSelect.value = suggestedProfile;
+      }
+
+      if (note) {
+        note.textContent = suggestedProfile === "custom"
+          ? "Você controla a grade manualmente escolhendo depois os tamanhos que fizerem sentido."
+          : `Grade automática atual: ${getSizeProfileLabel(suggestedProfile)}.`;
+      }
+
+      renderProductSizes(profileSelect.value || suggestedProfile);
+    }
+
+    function applySuggestedProductKind(kind) {
+      const input = document.getElementById("product-kind");
+      if (!input) return;
+      input.value = kind;
+      syncProductTypeFromKind(true);
+      updateDraftSummary();
+    }
+
+    function persistProductMeta(productId, meta = {}) {
+      if (!productId) return;
+      productMetaCache[String(productId)] = {
+        kind: normalizeProductKind(meta.kind || ""),
+        sizeProfile: String(meta.sizeProfile || "adulto").toLowerCase()
+      };
+      persistProductMetaCache();
+    }
+
+    function shouldRetryWithoutMetaColumns(error) {
+      const message = String(error?.message || "").toLowerCase();
+      return error?.code === "42703"
+        || message.includes("product_kind")
+        || message.includes("size_profile")
+        || message.includes("column")
+        || message.includes("schema cache");
+    }
+
+    async function fetchProductsWithMeta() {
+      const baseSelect = `
+          id,
+          name,
+          slug,
+          price,
+          old_price,
+          image_url,
+          short_description,
+          priority_encomenda,
+          is_featured,
+          is_visible,
+          badge_type,
+          sale_type,
+          category_id,
+          created_at,
+          product_kind,
+          size_profile,
+          categories (
+            id,
+            name
+          ),
+          product_sizes (
+            id,
+            size,
+            is_available
+          )
+        `;
+      let response = await supabaseClient
+        .from("products")
+        .select(baseSelect)
+        .order("created_at", { ascending: false });
+
+      if (response.error && shouldRetryWithoutMetaColumns(response.error)) {
+        response = await supabaseClient
+          .from("products")
+          .select(`
+          id,
+          name,
+          slug,
+          price,
+          old_price,
+          image_url,
+          short_description,
+          priority_encomenda,
+          is_featured,
+          is_visible,
+          badge_type,
+          sale_type,
+          category_id,
+          created_at,
+          categories (
+            id,
+            name
+          ),
+          product_sizes (
+            id,
+            size,
+            is_available
+          )
+        `)
+          .order("created_at", { ascending: false });
+      }
+
+      return response;
+    }
+
+    async function fetchProductByIdWithMeta(productId) {
+      let response = await supabaseClient
+        .from("products")
+        .select(`
+          *,
+          product_kind,
+          size_profile,
+          sale_type,
+          product_sizes (
+            id,
+            size,
+            is_available
+          )
+        `)
+        .eq("id", productId)
+        .single();
+
+      if (response.error && shouldRetryWithoutMetaColumns(response.error)) {
+        response = await supabaseClient
+          .from("products")
+          .select(`
+            *,
+            sale_type,
+            product_sizes (
+              id,
+              size,
+              is_available
+            )
+          `)
+          .eq("id", productId)
+          .single();
+      }
+
+      return response;
+    }
+
+
     function syncSlugPreview() {
       const name = document.getElementById("product-name")?.value?.trim() || "";
       const slugField = document.getElementById("product-slug-preview");
@@ -1813,9 +2092,16 @@ Camisa Real Madrid 24/25"></textarea>
     function updateDraftSummary() {
       const categorySelect = document.getElementById("product-category");
       const selectedSizes = getSelectedSizes();
+      const kindInput = document.getElementById("product-kind");
+      const sizeProfile = document.getElementById("product-size-profile");
+
       document.getElementById("summary-name").textContent = document.getElementById("product-name").value.trim() || "—";
       document.getElementById("summary-category").textContent = categorySelect?.selectedOptions?.[0]?.textContent && categorySelect.value ? categorySelect.selectedOptions[0].textContent : "—";
+      const summaryKind = document.getElementById("summary-kind");
+      if (summaryKind) summaryKind.textContent = normalizeProductKind(kindInput?.value || "") || "Camisa";
       document.getElementById("summary-price").textContent = document.getElementById("product-price").value ? formatPrice(document.getElementById("product-price").value) : "—";
+      const summarySizeProfile = document.getElementById("summary-size-profile");
+      if (summarySizeProfile) summarySizeProfile.textContent = getSizeProfileLabel(sizeProfile?.value || "adulto");
       document.getElementById("summary-sizes").textContent = selectedSizes.length ? selectedSizes.join(", ") : "—";
     }
 
@@ -1958,7 +2244,11 @@ Camisa Real Madrid 24/25"></textarea>
       if (visibleCheck) visibleCheck.checked = true;
       document.getElementById("product-badge-type").value = "";
       document.getElementById("product-sale-type").value = "pronta_entrega";
-      setSelectedSizes([]);
+      const productKindField = document.getElementById("product-kind");
+      if (productKindField) productKindField.value = "Camisa";
+      const productSizeProfileField = document.getElementById("product-size-profile");
+      if (productSizeProfileField) productSizeProfileField.value = "adulto";
+      renderProductSizes("adulto", []);
       resetMainPreview();
       resetMultiPreview();
       resetGalleryBox();
@@ -2680,34 +2970,7 @@ async function uploadMultipleProductImages(productId) {
       tbody.innerHTML = `<div class="empty-state">Carregando produtos...</div>`;
       clearMessage("list-message");
 
-      const { data, error } = await supabaseClient
-        .from("products")
-        .select(`
-          id,
-          name,
-          slug,
-          price,
-          old_price,
-          image_url,
-          short_description,
-          priority_encomenda,
-          is_featured,
-          is_visible,
-          badge_type,
-          sale_type,
-          category_id,
-          created_at,
-          categories (
-            id,
-            name
-          ),
-          product_sizes (
-            id,
-            size,
-            is_available
-          )
-        `)
-        .order("created_at", { ascending: false });
+      const { data, error } = await fetchProductsWithMeta();
 
       if (error) {
         console.error("Erro ao carregar produtos:", error);
@@ -2716,7 +2979,11 @@ async function uploadMultipleProductImages(productId) {
         return;
       }
 
-      allProducts = data || [];
+      allProducts = (data || []).map(product => ({
+        ...product,
+        product_kind: normalizeProductKind(product.product_kind || productMetaCache?.[String(product.id)]?.kind || ""),
+        size_profile: String(product.size_profile || productMetaCache?.[String(product.id)]?.sizeProfile || "").toLowerCase()
+      }));
       const validIds = new Set(allProducts.map(product => String(product.id)));
       selectedProductIds = new Set([...selectedProductIds].filter(id => validIds.has(String(id))));
       filteredProducts = getFilteredProducts();
@@ -2739,6 +3006,7 @@ async function uploadMultipleProductImages(productId) {
           : [];
 
         const categoryName = product.categories?.name || "Sem categoria";
+        const productKind = inferProductKind(product);
         const saleType = product.sale_type === "sob_encomenda" ? "Sob encomenda" : "Pronta entrega";
         const visibleBadge = product.is_visible
           ? '<span class="badge">Visível</span>'
@@ -2790,6 +3058,7 @@ async function uploadMultipleProductImages(productId) {
               ${description}
 
               <div class="product-admin-meta">
+                <span class="badge">${productKind}</span>
                 <span class="badge">${categoryName}</span>
                 <span class="badge">${saleType}</span>
                 ${visibleBadge}
@@ -2888,6 +3157,8 @@ async function uploadMultipleProductImages(productId) {
       const is_visible = document.getElementById("product-visible") ? document.getElementById("product-visible").checked : true;
       const badge_type = document.getElementById("product-badge-type").value;
       const sale_type = document.getElementById("product-sale-type").value || "pronta_entrega";
+      const product_kind = normalizeProductKind(document.getElementById("product-kind")?.value || "") || "Camisa";
+      const size_profile = String(document.getElementById("product-size-profile")?.value || "adulto").toLowerCase();
       const sizes = getSelectedSizes();
 
       if (!name || !price || !category_id) {
@@ -2920,7 +3191,9 @@ async function uploadMultipleProductImages(productId) {
         is_featured: featured,
         is_visible,
         badge_type: badge_type || null,
-        sale_type
+        sale_type,
+        product_kind,
+        size_profile
       };
 
       let response;
@@ -2932,6 +3205,17 @@ async function uploadMultipleProductImages(productId) {
           .update(payload)
           .eq("id", editingProductId)
           .select();
+
+        if (response.error && shouldRetryWithoutMetaColumns(response.error)) {
+          const fallbackPayload = { ...payload };
+          delete fallbackPayload.product_kind;
+          delete fallbackPayload.size_profile;
+          response = await supabaseClient
+            .from("products")
+            .update(fallbackPayload)
+            .eq("id", editingProductId)
+            .select();
+        }
       } else {
         payload.slug = `${generateSlug(name)}-${Date.now()}`;
 
@@ -2939,6 +3223,16 @@ async function uploadMultipleProductImages(productId) {
           .from("products")
           .insert([payload])
           .select();
+
+        if (response.error && shouldRetryWithoutMetaColumns(response.error)) {
+          const fallbackPayload = { ...payload };
+          delete fallbackPayload.product_kind;
+          delete fallbackPayload.size_profile;
+          response = await supabaseClient
+            .from("products")
+            .insert([fallbackPayload])
+            .select();
+        }
       }
 
       if (response.error) {
@@ -2957,6 +3251,8 @@ async function uploadMultipleProductImages(productId) {
         showMessage("form-message", "Produto salvo, mas não foi possível recuperar o ID.", "error");
         return;
       }
+
+      persistProductMeta(savedProduct.id, { kind: product_kind, sizeProfile: size_profile });
 
       const sizeResult = await saveProductSizes(savedProduct.id, sizes);
 
@@ -2997,19 +3293,7 @@ async function uploadMultipleProductImages(productId) {
     async function editProduct(productId) {
       clearMessage("form-message");
 
-      const { data, error } = await supabaseClient
-        .from("products")
-        .select(`
-          *,
-          sale_type,
-          product_sizes (
-            id,
-            size,
-            is_available
-          )
-        `)
-        .eq("id", productId)
-        .single();
+      const { data, error } = await fetchProductByIdWithMeta(productId);
 
       if (error) {
         console.error("Erro ao buscar produto para edição:", error);
@@ -3030,6 +3314,10 @@ async function uploadMultipleProductImages(productId) {
       if (document.getElementById("product-visible")) document.getElementById("product-visible").checked = data.is_visible !== false;
       document.getElementById("product-badge-type").value = data.badge_type || "";
       document.getElementById("product-sale-type").value = data.sale_type || "pronta_entrega";
+      const resolvedKind = inferProductKind(data);
+      const resolvedSizeProfile = inferSizeProfile(data);
+      document.getElementById("product-kind").value = resolvedKind;
+      document.getElementById("product-size-profile").value = resolvedSizeProfile;
 
       if (data.image_url) {
         document.getElementById("main-image-preview").src = data.image_url;
@@ -3047,7 +3335,8 @@ async function uploadMultipleProductImages(productId) {
         ? data.product_sizes.filter(item => item.is_available).map(item => item.size)
         : [];
 
-      setSelectedSizes(availableSizes);
+      renderProductSizes(resolvedSizeProfile, availableSizes);
+      persistProductMeta(productId, { kind: resolvedKind, sizeProfile: resolvedSizeProfile });
 
       await loadProductGallery(productId);
 
@@ -3151,6 +3440,10 @@ async function uploadMultipleProductImages(productId) {
         }
       }
 
+      persistProductMeta(inserted.id, {
+        kind: inferProductKind(product),
+        sizeProfile: inferSizeProfile(product)
+      });
       showMessage("list-message", "Produto duplicado com sucesso.", "success");
       await loadProducts();
     }
@@ -5748,14 +6041,17 @@ async function saveGestaoSale() {
       setupGestaoTabs();
       setupMoneyInputs();
 
+      loadProductMetaCache();
       document.getElementById("product-name")?.addEventListener("input", syncSlugPreview);
       document.getElementById("product-price")?.addEventListener("input", updateDraftSummary);
       document.getElementById("product-category")?.addEventListener("change", updateDraftSummary);
-      document.querySelectorAll(".size-check").forEach(check => {
-        check.addEventListener("change", () => {
-          refreshSizeChipStates();
-          updateDraftSummary();
-        });
+      document.getElementById("product-kind")?.addEventListener("input", () => {
+        syncProductTypeFromKind();
+        updateDraftSummary();
+      });
+      document.getElementById("product-size-profile")?.addEventListener("change", () => {
+        syncProductTypeFromKind(true);
+        updateDraftSummary();
       });
       document.querySelectorAll(".batch-size-check").forEach(check => {
         check.addEventListener("change", refreshBatchSizeChipStates);
@@ -5773,7 +6069,10 @@ async function saveGestaoSale() {
         }
       });
       setProductStep(1);
-      refreshSizeChipStates();
+      renderProductSizes("adulto", []);
+      document.getElementById("product-kind").value = "Camisa";
+      document.getElementById("product-size-profile").value = "adulto";
+      syncProductTypeFromKind(true);
       refreshBatchSizeChipStates();
       updateDraftSummary();
       updateBatchCreateKpis();
