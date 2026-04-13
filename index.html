@@ -1867,17 +1867,30 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     function isCamisaProduct(product) {
       const categoryName = normalizeCategorySlug(normalizeCategoryName(product));
       const title = normalizeCategorySlug(product.name || product.title || "");
-      const nonCamisaKeywords = [
-        "sandalia", "sandália", "chinelo", "slide", "bone", "boné", "kit infantil", "infantil",
-        "copo", "caneca", "garrafa", "acessorio", "acessório", "mochila", "bermuda", "short", "tenis", "tênis"
+      const productKind = normalizeCategorySlug(product.product_kind || "");
+
+      const explicitOtherKinds = [
+        "sandalia", "chinelo", "slide", "bone", "copo", "caneca", "garrafa", "acessorio", "mochila", "bermuda", "tenis"
+      ];
+      const explicitOtherCategories = [
+        "sandalias", "sandalia", "bones", "bone", "acessorios", "acessorio", "copos", "canecas", "garrafas", "mochilas"
+      ];
+      const strongOtherTitleKeywords = [
+        "sandalia", "chinelo", "slide", "bone", "copo", "caneca", "garrafa", "acessorio", "mochila", "bermuda", "tenis"
       ];
 
-      if (nonCamisaKeywords.some(keyword => categoryName.includes(normalizeCategorySlug(keyword)) || title.includes(normalizeCategorySlug(keyword)))) {
+      if (productKind && explicitOtherKinds.some(keyword => productKind.includes(keyword))) {
         return false;
       }
 
-      // Regra segura para a Camisa 10: se não for identificado claramente como outro produto,
-      // o item continua sendo tratado como camisa. Isso evita sumir com a vitrine principal.
+      if (explicitOtherCategories.some(keyword => categoryName.includes(keyword))) {
+        return false;
+      }
+
+      if (strongOtherTitleKeywords.some(keyword => title.includes(keyword))) {
+        return false;
+      }
+
       return true;
     }
 
@@ -2098,9 +2111,15 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
     function renderFeaturedProducts() {
       const grid = document.getElementById("featuredProductsGrid");
-      const featured = sortProductsForHome(
+      let featured = sortProductsForHome(
         allProducts.filter(product => isCamisaProduct(product) && (product.featured === true || product.is_featured === true))
       ).slice(0, 4);
+
+      if (!featured.length) {
+        featured = sortProductsForHome(
+          allProducts.filter(product => product.featured === true || product.is_featured === true)
+        ).slice(0, 4);
+      }
 
       if (!featured.length) {
         grid.innerHTML = `<div class="state-box">Nenhuma camisa em destaque disponível no momento.</div>`;
@@ -2485,18 +2504,22 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
           old_price,
           image_url,
           featured,
+          is_featured,
           badge_type,
           sale_type,
           category_id,
           priority_encomenda,
           created_at,
+          product_kind,
+          is_visible,
+          visible,
           categories (
             id,
             name
           )
         `)
         .order("created_at", { ascending: false })
-        .limit(50);
+        .limit(100);
 
       if (error) {
         console.error("Erro real do Supabase:", error);
@@ -2504,10 +2527,12 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         return;
       }
 
-      allProducts = (data || []).map(product => ({
-        ...product,
-        category_name: product.categories?.name || product.category_name || product.category || "Sem categoria"
-      }));
+      allProducts = (data || [])
+        .filter(product => product.is_visible !== false && product.visible !== false)
+        .map(product => ({
+          ...product,
+          category_name: product.categories?.name || product.category_name || product.category || "Sem categoria"
+        }));
 
       saveCache("products", allProducts);
     }
