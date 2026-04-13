@@ -463,8 +463,140 @@
     .stock-status.is-low .stock-status-dot{background:#db5c58}
 
 
+
+    .type-manager{
+      margin-top:12px;
+      display:grid;
+      gap:10px;
+      padding:12px;
+      border-radius:16px;
+      background:#0f0f0f;
+      border:1px solid rgba(255,255,255,.06)
+    }
+    .type-manager-row{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:10px;
+      align-items:center
+    }
+    .type-manager-help{color:var(--muted);font-size:.8rem;line-height:1.5}
+    .variations-shell{
+      display:grid;
+      gap:14px;
+      margin-top:16px;
+      padding:16px;
+      border-radius:18px;
+      background:linear-gradient(180deg,rgba(212,175,55,.08),rgba(255,255,255,.02));
+      border:1px solid rgba(212,175,55,.16)
+    }
+    .variation-card{
+      display:grid;
+      gap:14px;
+      padding:16px;
+      border-radius:18px;
+      background:#101010;
+      border:1px solid rgba(255,255,255,.06)
+    }
+    .variation-card-head{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      flex-wrap:wrap
+    }
+    .variation-card-title{
+      font-size:1rem;
+      font-weight:900;
+      color:#fff
+    }
+    .variation-card-sub{
+      color:var(--muted);
+      font-size:.82rem;
+      line-height:1.45;
+      margin-top:4px
+    }
+    .variation-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px
+    }
+    .variation-media-grid{
+      display:grid;
+      grid-template-columns:110px minmax(0,1fr);
+      gap:14px;
+      align-items:start
+    }
+    .variation-preview-main{
+      width:110px;
+      height:110px;
+      object-fit:cover;
+      border-radius:14px;
+      border:1px solid #2b2b2b;
+      background:#0f0f0f
+    }
+    .variation-gallery-preview{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px
+    }
+    .variation-gallery-preview img{
+      width:74px;
+      height:74px;
+      object-fit:cover;
+      border-radius:12px;
+      border:1px solid #2b2b2b;
+      background:#0f0f0f
+    }
+    .variation-size-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(74px,1fr));
+      gap:10px
+    }
+    .variation-size-chip{
+      min-height:52px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid #2b2b2b;
+      background:#151515;
+      color:#f2f2f2;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition:.2s ease
+    }
+    .variation-size-chip.active{
+      background:linear-gradient(135deg, rgba(212,175,55,.20), rgba(212,175,55,.10));
+      border-color:rgba(212,175,55,.55);
+      color:#fff6cf
+    }
+    .variation-empty{
+      padding:16px;
+      border-radius:16px;
+      border:1px dashed rgba(212,175,55,.22);
+      color:var(--muted);
+      background:#0d0d0d
+    }
+    .variation-topbar{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap
+    }
+    .variation-toggle-box{
+      display:grid;
+      gap:8px;
+      padding:14px;
+      border-radius:16px;
+      background:#101010;
+      border:1px solid rgba(255,255,255,.06);
+      margin-top:14px
+    }
+
     @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline{grid-template-columns:1fr}}
-    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
+    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}.type-manager-row,.variation-grid,.variation-media-grid{grid-template-columns:1fr}.variation-preview-main{width:100%;max-width:140px;height:auto;aspect-ratio:1/1}}
   </style>
 </head>
 <body>
@@ -638,11 +770,18 @@
                 <div class="field">
                   <label for="product-kind">Tipo do item</label>
                   <input type="text" id="product-kind" placeholder="Ex: Camisa, Kit Infantil, Sandália, Copo" />
-                  <div class="type-suggestions">
+                  <div class="type-suggestions" id="product-type-suggestions">
                     <button class="type-chip" type="button" onclick="applySuggestedProductKind('Camisa')">👕 Camisa</button>
                     <button class="type-chip" type="button" onclick="applySuggestedProductKind('Kit Infantil')">🧒 Kit Infantil</button>
                     <button class="type-chip" type="button" onclick="applySuggestedProductKind('Sandália')">🩴 Sandália</button>
                     <button class="type-chip" type="button" onclick="applySuggestedProductKind('Copo')">🥤 Copo</button>
+                  </div>
+                  <div class="type-manager">
+                    <div class="type-manager-row">
+                      <input type="text" id="new-product-kind" placeholder="Adicionar novo tipo rápido. Ex: Boné" />
+                      <button class="btn btn-secondary" type="button" onclick="addCustomProductKind()">Adicionar tipo</button>
+                    </div>
+                    <div class="type-manager-help">Você não fica preso a uma lista fixa. Pode criar novos tipos rápidos sempre que surgir um produto novo.</div>
                   </div>
                 </div>
                 <div class="field">
@@ -750,10 +889,31 @@
             </div>
 
             <div class="product-step" data-step="4">
-              <div class="field">
+              <div class="field" id="base-size-box">
                 <label>Tamanhos / variações disponíveis</label>
                 <div class="sizes-box sizes-box-premium" id="product-sizes-container"></div>
-                <div class="size-profile-note">Para kit infantil, sandália e copo, a grade muda sozinha. Se quiser uma grade diferente, escolha “Personalizado”.</div>
+                <div class="size-profile-note" id="base-size-note">Para kit infantil, sandália e copo, a grade muda sozinha. Se quiser uma grade diferente, escolha “Personalizado”.</div>
+              </div>
+
+              <div class="variation-toggle-box">
+                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                  <input type="checkbox" id="product-has-variations" style="width:auto; accent-color:#d4af37;" onchange="toggleProductVariations(this.checked)" />
+                  <span>Esse produto tem variações de modelo / cor / versão</span>
+                </label>
+                <div class="small-muted">Use isso quando o mesmo produto tiver versões diferentes, cada uma com foto e grade própria. Ex.: sandália preta e sandália branca com tamanhos diferentes.</div>
+              </div>
+
+              <div id="product-variations-shell" class="variations-shell hidden">
+                <div class="variation-topbar">
+                  <div>
+                    <strong style="display:block;color:#fff;">Variações do produto</strong>
+                    <div class="small-muted" style="margin-top:4px;">Cada variação pode ter foto principal, galeria e tamanhos próprios.</div>
+                  </div>
+                  <button class="btn btn-secondary" type="button" onclick="addProductVariation()">Adicionar variação</button>
+                </div>
+                <div id="product-variations-list" class="stack">
+                  <div class="variation-empty">Nenhuma variação adicionada ainda.</div>
+                </div>
               </div>
 
               <div class="draft-summary" id="product-draft-summary">
@@ -776,6 +936,10 @@
                 <div class="draft-summary-card">
                   <span>Grade</span>
                   <strong id="summary-size-profile">—</strong>
+                </div>
+                <div class="draft-summary-card">
+                  <span>Variações</span>
+                  <strong id="summary-variations">Sem variações</strong>
                 </div>
                 <div class="draft-summary-card">
                   <span>Tamanhos</span>
@@ -1738,7 +1902,12 @@ Camisa Real Madrid 24/25"></textarea>
     let editingGestaoSaleId = null;
     let gestaoPeriodFilter = "all";
     const PRODUCT_META_STORAGE_KEY = "camisa10_product_meta_v1";
+    const PRODUCT_VARIATIONS_STORAGE_KEY = "camisa10_product_variations_v1";
+    const PRODUCT_TYPE_OPTIONS_KEY = "camisa10_product_type_options_v1";
     let productMetaCache = {};
+    let productVariationsCache = {};
+    let productVariationsDraft = [];
+    let productTypeOptions = [];
 
 
 
@@ -1799,6 +1968,7 @@ Camisa Real Madrid 24/25"></textarea>
     }
 
     function getSelectedSizes() {
+      if (hasProductVariationsEnabled()) return getVariationUnionSizes();
       return [...document.querySelectorAll(".size-check:checked")].map(item => item.value);
     }
 
@@ -1848,6 +2018,310 @@ Camisa Real Madrid 24/25"></textarea>
 
     function persistProductMetaCache() {
       localStorage.setItem(PRODUCT_META_STORAGE_KEY, JSON.stringify(productMetaCache));
+    }
+
+    function loadProductVariationsCache() {
+      try {
+        productVariationsCache = JSON.parse(localStorage.getItem(PRODUCT_VARIATIONS_STORAGE_KEY) || "{}") || {};
+      } catch (error) {
+        productVariationsCache = {};
+      }
+    }
+
+    function persistProductVariationsCache() {
+      localStorage.setItem(PRODUCT_VARIATIONS_STORAGE_KEY, JSON.stringify(productVariationsCache));
+    }
+
+    function loadProductTypeOptions() {
+      try {
+        productTypeOptions = JSON.parse(localStorage.getItem(PRODUCT_TYPE_OPTIONS_KEY) || "[]") || [];
+      } catch (error) {
+        productTypeOptions = [];
+      }
+      renderProductTypeSuggestions();
+    }
+
+    function persistProductTypeOptions() {
+      localStorage.setItem(PRODUCT_TYPE_OPTIONS_KEY, JSON.stringify(productTypeOptions));
+      renderProductTypeSuggestions();
+    }
+
+    function renderProductTypeSuggestions() {
+      const container = document.getElementById("product-type-suggestions");
+      if (!container) return;
+
+      const defaultTypes = ["Camisa", "Kit Infantil", "Sandália", "Copo"];
+      const mergedTypes = [...new Set([...defaultTypes, ...productTypeOptions.map(item => String(item || "").trim()).filter(Boolean)])];
+      const icons = { Camisa: "👕", "Kit Infantil": "🧒", "Sandália": "🩴", Copo: "🥤", "Boné": "🧢" };
+
+      container.innerHTML = mergedTypes.map(type => `
+        <button class="type-chip" type="button" onclick="applySuggestedProductKind('${escapeHtml(type)}')">${icons[type] || "✨"} ${escapeHtml(type)}</button>
+      `).join("");
+    }
+
+    function addCustomProductKind() {
+      const input = document.getElementById("new-product-kind");
+      if (!input) return;
+      const value = normalizeProductKind(input.value);
+      if (!value) return;
+      if (!productTypeOptions.includes(value)) {
+        productTypeOptions.push(value);
+        productTypeOptions.sort((a, b) => a.localeCompare(b, "pt-BR"));
+        persistProductTypeOptions();
+      }
+      input.value = "";
+      applySuggestedProductKind(value);
+    }
+
+    function getStoredProductVariations(productId) {
+      if (!productId) return [];
+      const variations = productVariationsCache[String(productId)];
+      return Array.isArray(variations) ? JSON.parse(JSON.stringify(variations)) : [];
+    }
+
+    function createVariationDraft(overrides = {}) {
+      return {
+        id: overrides.id || generateClientUuid(),
+        name: overrides.name || "",
+        reference: overrides.reference || "",
+        price: overrides.price || "",
+        oldPrice: overrides.oldPrice || "",
+        image_url: overrides.image_url || "",
+        gallery_urls: Array.isArray(overrides.gallery_urls) ? [...overrides.gallery_urls] : [],
+        sizes: Array.isArray(overrides.sizes) ? [...overrides.sizes] : [],
+        mainFile: null,
+        extraFiles: []
+      };
+    }
+
+    function getVariationUnionSizes() {
+      const union = new Set();
+      productVariationsDraft.forEach(item => (item.sizes || []).forEach(size => union.add(size)));
+      return [...union];
+    }
+
+    function hasProductVariationsEnabled() {
+      return !!document.getElementById("product-has-variations")?.checked;
+    }
+
+    function toggleProductVariations(checked) {
+      const shell = document.getElementById("product-variations-shell");
+      const baseBox = document.getElementById("base-size-box");
+      if (shell) shell.classList.toggle("hidden", !checked);
+      if (baseBox) baseBox.classList.toggle("hidden", !!checked);
+      if (checked && !productVariationsDraft.length) {
+        addProductVariation();
+        return;
+      }
+      renderProductVariations();
+      updateDraftSummary();
+    }
+
+    function addProductVariation(prefill = {}) {
+      productVariationsDraft.push(createVariationDraft(prefill));
+      document.getElementById("product-has-variations").checked = true;
+      toggleProductVariations(true);
+    }
+
+    function removeProductVariation(index) {
+      productVariationsDraft.splice(index, 1);
+      if (!productVariationsDraft.length) {
+        document.getElementById("product-has-variations").checked = false;
+        toggleProductVariations(false);
+      } else {
+        renderProductVariations();
+      }
+      updateDraftSummary();
+    }
+
+    function updateProductVariationField(index, field, value) {
+      if (!productVariationsDraft[index]) return;
+      productVariationsDraft[index][field] = value;
+      updateDraftSummary();
+    }
+
+    function toggleVariationSize(index, size, checked) {
+      const item = productVariationsDraft[index];
+      if (!item) return;
+      const current = new Set(item.sizes || []);
+      if (checked) current.add(size); else current.delete(size);
+      item.sizes = [...current];
+      renderProductVariations();
+      updateDraftSummary();
+    }
+
+    function handleVariationMainFile(index, event) {
+      if (!productVariationsDraft[index]) return;
+      productVariationsDraft[index].mainFile = event.target?.files?.[0] || null;
+      renderProductVariations();
+    }
+
+    function handleVariationExtraFiles(index, event) {
+      if (!productVariationsDraft[index]) return;
+      productVariationsDraft[index].extraFiles = [...(event.target?.files || [])];
+      renderProductVariations();
+    }
+
+    async function renderProductVariations() {
+      const list = document.getElementById("product-variations-list");
+      if (!list) return;
+      if (!hasProductVariationsEnabled()) {
+        list.innerHTML = '<div class="variation-empty">Ative as variações para cadastrar versões separadas deste produto.</div>';
+        return;
+      }
+      if (!productVariationsDraft.length) {
+        list.innerHTML = '<div class="variation-empty">Nenhuma variação adicionada ainda.</div>';
+        return;
+      }
+      const profile = document.getElementById("product-size-profile")?.value || "adulto";
+      const sizeOptions = getSizeOptionsByProfile(profile);
+      list.innerHTML = productVariationsDraft.map((variation, index) => {
+        const variationName = (variation.name || '').trim() || `Variação ${index + 1}`;
+        const sizesCount = Array.isArray(variation.sizes) ? variation.sizes.length : 0;
+        const extrasCount = (variation.extraFiles || []).length + ((variation.gallery_urls || []).length || 0);
+        return `
+        <details class="variation-card" ${index === 0 ? 'open' : ''}>
+          <summary class="variation-card-head">
+            <div>
+              <div class="variation-card-title">${escapeHtml(variationName)}</div>
+              <div class="variation-card-sub">Abra para editar fotos, tamanhos e preço desta variação.</div>
+            </div>
+            <div class="variation-summary-badges">
+              <span class="variation-summary-pill">${sizesCount} tamanho(s)</span>
+              <span class="variation-summary-pill">${extrasCount} extra(s)</span>
+              <button class="btn btn-danger" type="button" onclick="event.preventDefault(); event.stopPropagation(); removeProductVariation(${index})">Remover</button>
+            </div>
+          </summary>
+          <div class="variation-card-body">
+          <div class="variation-grid">
+            <div class="field">
+              <label>Nome da variação</label>
+              <input type="text" value="${escapeHtml(variation.name || "")}" placeholder="Ex: Preta" oninput="updateProductVariationField(${index}, 'name', this.value)" />
+            </div>
+            <div class="field">
+              <label>Referência / observação</label>
+              <input type="text" value="${escapeHtml(variation.reference || "")}" placeholder="Ex: sola branca, tiras douradas..." oninput="updateProductVariationField(${index}, 'reference', this.value)" />
+            </div>
+          </div>
+          <div class="variation-grid">
+            <div class="field">
+              <label>Preço da variação (opcional)</label>
+              <input type="number" step="0.01" value="${escapeHtml(variation.price || "")}" placeholder="Se ficar vazio, usa o preço do produto" oninput="updateProductVariationField(${index}, 'price', this.value)" />
+            </div>
+            <div class="field">
+              <label>Preço antigo (opcional)</label>
+              <input type="number" step="0.01" value="${escapeHtml(variation.oldPrice || "")}" placeholder="Se ficar vazio, usa o preço antigo do produto" oninput="updateProductVariationField(${index}, 'oldPrice', this.value)" />
+            </div>
+          </div>
+          <div class="variation-grid">
+            <div class="field">
+              <label>Imagem principal da variação</label>
+              <input type="file" accept="image/*" onchange="handleVariationMainFile(${index}, event)" />
+            </div>
+            <div class="field">
+              <label>Ou URL da imagem principal</label>
+              <input type="text" value="${escapeHtml(variation.image_url || "")}" placeholder="Cole uma URL se preferir" oninput="updateProductVariationField(${index}, 'image_url', this.value)" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Fotos adicionais da variação</label>
+            <input type="file" accept="image/*" multiple onchange="handleVariationExtraFiles(${index}, event)" />
+          </div>
+          <div class="variation-media-grid">
+            <div>
+              <div class="small-muted" style="margin-bottom:8px;">Preview principal</div>
+              <img id="variation-main-preview-${index}" class="variation-preview-main" src="https://via.placeholder.com/300x300?text=Variação" alt="Preview variação">
+            </div>
+            <div>
+              <div class="small-muted" style="margin-bottom:8px;">Galeria da variação</div>
+              <div id="variation-gallery-preview-${index}" class="variation-gallery-preview"></div>
+            </div>
+          </div>
+          <div class="field">
+            <label>Tamanhos dessa variação</label>
+            <div class="variation-size-grid">
+              ${sizeOptions.map(size => `
+                <label class="variation-size-chip ${(variation.sizes || []).includes(size) ? "active" : ""}">
+                  <input type="checkbox" style="display:none" ${(variation.sizes || []).includes(size) ? "checked" : ""} onchange="toggleVariationSize(${index}, '${escapeHtml(size)}', this.checked)" />
+                  <span>${escapeHtml(size)}</span>
+                </label>
+              `).join("")}
+            </div>
+          </div>
+          </div>
+        </details>
+      `}).join("");
+
+      for (const [index, variation] of productVariationsDraft.entries()) {
+        const mainPreview = document.getElementById(`variation-main-preview-${index}`);
+        if (mainPreview) {
+          if (variation.mainFile) {
+            mainPreview.src = await getFilePreview(variation.mainFile);
+          } else if ((variation.image_url || '').trim()) {
+            mainPreview.src = variation.image_url.trim();
+          } else {
+            mainPreview.src = document.getElementById('main-image-preview')?.src || 'https://via.placeholder.com/300x300?text=Variação';
+          }
+        }
+        const galleryPreview = document.getElementById(`variation-gallery-preview-${index}`);
+        if (galleryPreview) {
+          galleryPreview.innerHTML = '';
+          (Array.isArray(variation.gallery_urls) ? variation.gallery_urls : []).forEach(url => {
+            const img = document.createElement('img');
+            img.src = url;
+            galleryPreview.appendChild(img);
+          });
+          for (const file of (variation.extraFiles || [])) {
+            const img = document.createElement('img');
+            img.src = await getFilePreview(file);
+            galleryPreview.appendChild(img);
+          }
+        }
+      }
+    }
+
+    async function uploadVariationMainImage(variation) {
+      if (variation.mainFile) {
+        const compressedFile = await compressImageToTarget(variation.mainFile, { maxWidth: 1000, maxHeight: 1000, targetSizeKB: 400 });
+        return await uploadToCloudinary(compressedFile, 'camisa10-store/produtos/variacoes/main');
+      }
+      return (variation.image_url || '').trim();
+    }
+
+    async function uploadVariationGalleryImages(variation, existingUrls = []) {
+      const urls = Array.isArray(existingUrls) ? [...existingUrls] : [];
+      for (const file of (variation.extraFiles || [])) {
+        const compressedFile = await compressImageToTarget(file, { maxWidth: 1000, maxHeight: 1000, targetSizeKB: 300 });
+        urls.push(await uploadToCloudinary(compressedFile, 'camisa10-store/produtos/variacoes/galeria'));
+      }
+      return urls;
+    }
+
+    async function saveProductVariations(productId) {
+      if (!productId) return;
+      if (!hasProductVariationsEnabled()) {
+        delete productVariationsCache[String(productId)];
+        persistProductVariationsCache();
+        return;
+      }
+      const sanitized = [];
+      for (const variation of productVariationsDraft) {
+        const name = String(variation.name || '').trim();
+        const sizes = Array.isArray(variation.sizes) ? variation.sizes.filter(Boolean) : [];
+        if (!name || !sizes.length) continue;
+        sanitized.push({
+          id: variation.id || generateClientUuid(),
+          name,
+          reference: String(variation.reference || '').trim(),
+          price: variation.price ? Number(variation.price) : null,
+          oldPrice: variation.oldPrice ? Number(variation.oldPrice) : null,
+          image_url: await uploadVariationMainImage(variation),
+          gallery_urls: await uploadVariationGalleryImages(variation, variation.gallery_urls || []),
+          sizes
+        });
+      }
+      productVariationsCache[String(productId)] = sanitized;
+      persistProductVariationsCache();
     }
 
     function normalizeProductKind(value = "") {
@@ -1948,6 +2422,7 @@ Camisa Real Madrid 24/25"></textarea>
       }
 
       renderProductSizes(profileSelect.value || suggestedProfile);
+      renderProductVariations();
     }
 
     function applySuggestedProductKind(kind) {
@@ -2102,6 +2577,8 @@ Camisa Real Madrid 24/25"></textarea>
       document.getElementById("summary-price").textContent = document.getElementById("product-price").value ? formatPrice(document.getElementById("product-price").value) : "—";
       const summarySizeProfile = document.getElementById("summary-size-profile");
       if (summarySizeProfile) summarySizeProfile.textContent = getSizeProfileLabel(sizeProfile?.value || "adulto");
+      const summaryVariations = document.getElementById("summary-variations");
+      if (summaryVariations) summaryVariations.textContent = hasProductVariationsEnabled() ? `${productVariationsDraft.filter(item => (item.name || '').trim()).length} variação(ões)` : 'Sem variações';
       document.getElementById("summary-sizes").textContent = selectedSizes.length ? selectedSizes.join(", ") : "—";
     }
 
@@ -2248,7 +2725,11 @@ Camisa Real Madrid 24/25"></textarea>
       if (productKindField) productKindField.value = "Camisa";
       const productSizeProfileField = document.getElementById("product-size-profile");
       if (productSizeProfileField) productSizeProfileField.value = "adulto";
+      const variationToggle = document.getElementById("product-has-variations");
+      if (variationToggle) variationToggle.checked = false;
+      productVariationsDraft = [];
       renderProductSizes("adulto", []);
+      toggleProductVariations(false);
       resetMainPreview();
       resetMultiPreview();
       resetGalleryBox();
@@ -3016,6 +3497,8 @@ async function uploadMultipleProductImages(productId) {
           ? `<span class="badge">Home sob encomenda: ${product.priority_encomenda}</span>`
           : '';
         const badgeType = product.badge_type ? `<span class="badge">${formatBadgeLabel(product.badge_type)}</span>` : '';
+        const variationsCount = getStoredProductVariations(product.id).length;
+        const variationsBadge = variationsCount ? `<span class="badge">${variationsCount} variação(ões)</span>` : '';
         const sizesHtml = sizes.length
           ? sizes.map(size => `<span class="badge">${size}</span>`).join("")
           : '<span class="small-muted">Sem tamanhos</span>';
@@ -3063,6 +3546,7 @@ async function uploadMultipleProductImages(productId) {
                 <span class="badge">${saleType}</span>
                 ${visibleBadge}
                 ${badgeType}
+                ${variationsBadge}
                 ${encomendaOrderBadge}
               </div>
 
@@ -3276,6 +3760,8 @@ async function uploadMultipleProductImages(productId) {
         return;
       }
 
+      await saveProductVariations(savedProduct.id);
+
       showMessage(
         "form-message",
         currentEditingProductId
@@ -3337,6 +3823,12 @@ async function uploadMultipleProductImages(productId) {
 
       renderProductSizes(resolvedSizeProfile, availableSizes);
       persistProductMeta(productId, { kind: resolvedKind, sizeProfile: resolvedSizeProfile });
+
+      const storedVariations = getStoredProductVariations(productId).map(item => createVariationDraft(item));
+      productVariationsDraft = storedVariations;
+      const variationToggle = document.getElementById("product-has-variations");
+      if (variationToggle) variationToggle.checked = storedVariations.length > 0;
+      toggleProductVariations(storedVariations.length > 0);
 
       await loadProductGallery(productId);
 
@@ -3444,6 +3936,11 @@ async function uploadMultipleProductImages(productId) {
         kind: inferProductKind(product),
         sizeProfile: inferSizeProfile(product)
       });
+      const sourceVariations = getStoredProductVariations(productId);
+      if (sourceVariations.length) {
+        productVariationsCache[String(inserted.id)] = sourceVariations.map(item => ({ ...item, id: generateClientUuid() }));
+        persistProductVariationsCache();
+      }
       showMessage("list-message", "Produto duplicado com sucesso.", "success");
       await loadProducts();
     }
@@ -3482,6 +3979,8 @@ async function uploadMultipleProductImages(productId) {
         return;
       }
 
+      delete productVariationsCache[String(productId)];
+      persistProductVariationsCache();
       showMessage("list-message", "Produto excluído com sucesso.", "success");
       await loadProducts();
 
@@ -6010,6 +6509,7 @@ async function saveGestaoSale() {
       if (adminInitialized && !force) return;
 
       adminInitPromise = (async () => {
+        loadProductTypeOptions();
         await loadCategories();
         await loadCategoriesList();
         await loadProducts();
@@ -6042,6 +6542,8 @@ async function saveGestaoSale() {
       setupMoneyInputs();
 
       loadProductMetaCache();
+      loadProductVariationsCache();
+      loadProductTypeOptions();
       document.getElementById("product-name")?.addEventListener("input", syncSlugPreview);
       document.getElementById("product-price")?.addEventListener("input", updateDraftSummary);
       document.getElementById("product-category")?.addEventListener("change", updateDraftSummary);
@@ -6057,6 +6559,12 @@ async function saveGestaoSale() {
         check.addEventListener("change", refreshBatchSizeChipStates);
       });
       document.getElementById("batch-create-names")?.addEventListener("input", updateBatchCreateKpis);
+      document.getElementById("new-product-kind")?.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          addCustomProductKind();
+        }
+      });
       document.querySelectorAll(".step-chip").forEach(button => {
         button.addEventListener("click", () => setProductStep(Number(button.dataset.stepTarget)));
       });
@@ -6072,7 +6580,10 @@ async function saveGestaoSale() {
       renderProductSizes("adulto", []);
       document.getElementById("product-kind").value = "Camisa";
       document.getElementById("product-size-profile").value = "adulto";
+      document.getElementById("product-has-variations").checked = false;
+      productVariationsDraft = [];
       syncProductTypeFromKind(true);
+      toggleProductVariations(false);
       refreshBatchSizeChipStates();
       updateDraftSummary();
       updateBatchCreateKpis();
