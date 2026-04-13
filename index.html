@@ -1588,7 +1588,7 @@
                 type="text"
                 id="catalogSearchInput"
                 class="search-input"
-                placeholder="Buscar produto no catálogo..."
+                placeholder="Buscar camisa no catálogo..."
                 autocomplete="off"
                 inputmode="search"
               />
@@ -1627,23 +1627,7 @@
             </div>
           </div>
 
-          
-          <div class="other-products-wrap" id="other-products-wrap" style="margin-top:28px;">
-            <div class="section-head" style="margin-bottom:12px;">
-              <div>
-                <h3 class="section-title" style="font-size:1.4rem;">🛍️ Outros produtos</h3>
-                <p class="section-subtitle">Sandálias, kits infantis, bonés e outras categorias ficam separados das camisas para a vitrine não ficar misturada.</p>
-              </div>
-            </div>
-
-            <div class="category-chip-row" id="otherCategoryButtons"></div>
-
-            <div class="products-grid" id="grid-outros" style="margin-top:18px;">
-              <div class="state-box">Carregando outros produtos...</div>
-            </div>
-          </div>
-
-<div class="contact-strip">
+          <div class="contact-strip">
             <div>
               <h3>Achou sua camisa?</h3>
               <p id="contactText">Fale com a Camisa 10 Store no WhatsApp e finalize seu pedido de forma rápida e simples.</p>
@@ -1704,8 +1688,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     let allCategories = [];
     let activeCategory = "all";
     let activeCategoryId = "";
-    let activeOtherCategory = "all";
-    let activeOtherCategoryId = "";
     let searchTerm = "";
     let siteSettings = null;
     let heroSlides = [];
@@ -1862,80 +1844,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         .toLowerCase();
     }
 
-    
-
-    function isCamisaProduct(product) {
-      const categoryName = normalizeCategorySlug(normalizeCategoryName(product));
-      const title = normalizeCategorySlug(product.name || product.title || "");
-      const productKind = normalizeCategorySlug(product.product_kind || "");
-
-      const explicitOtherKinds = [
-        "sandalia", "chinelo", "slide", "bone", "copo", "caneca", "garrafa", "acessorio", "mochila", "bermuda", "tenis"
-      ];
-      const explicitOtherCategories = [
-        "sandalias", "sandalia", "bones", "bone", "acessorios", "acessorio", "copos", "canecas", "garrafas", "mochilas"
-      ];
-      const strongOtherTitleKeywords = [
-        "sandalia", "chinelo", "slide", "bone", "copo", "caneca", "garrafa", "acessorio", "mochila", "bermuda", "tenis"
-      ];
-
-      if (productKind && explicitOtherKinds.some(keyword => productKind.includes(keyword))) {
-        return false;
-      }
-
-      if (explicitOtherCategories.some(keyword => categoryName.includes(keyword))) {
-        return false;
-      }
-
-      if (strongOtherTitleKeywords.some(keyword => title.includes(keyword))) {
-        return false;
-      }
-
-      return true;
-    }
-
-    function sortProductsForHome(products) {
-      return [...products].sort((a, b) => {
-        const aFeatured = a.featured === true || a.is_featured === true;
-        const bFeatured = b.featured === true || b.is_featured === true;
-        if (aFeatured !== bFeatured) return aFeatured ? -1 : 1;
-
-        const aSale = (a.sale_type || "pronta_entrega") === "sob_encomenda" ? Number(a.priority_encomenda ?? 9999) : 0;
-        const bSale = (b.sale_type || "pronta_entrega") === "sob_encomenda" ? Number(b.priority_encomenda ?? 9999) : 0;
-        if (aSale !== bSale) return aSale - bSale;
-
-        const aDate = new Date(a.created_at || 0).getTime();
-        const bDate = new Date(b.created_at || 0).getTime();
-        return bDate - aDate;
-      });
-    }
-
-    function getCamisaCategories() {
-      const map = new Map();
-      allProducts.filter(isCamisaProduct).forEach(product => {
-        const name = normalizeCategoryName(product);
-        const slug = normalizeCategorySlug(name);
-        if (!slug) return;
-        if (!map.has(slug)) {
-          map.set(slug, { slug, name, id: product.category_id || product.categories?.id || "" });
-        }
-      });
-      return [...map.values()].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
-    }
-
-    function getOtherCategories() {
-      const map = new Map();
-      allProducts.filter(product => !isCamisaProduct(product)).forEach(product => {
-        const name = normalizeCategoryName(product);
-        const slug = normalizeCategorySlug(name);
-        if (!slug) return;
-        if (!map.has(slug)) {
-          map.set(slug, { slug, name, id: product.category_id || product.categories?.id || "" });
-        }
-      });
-      return [...map.values()].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
-    }
-
     function optimizeCloudinaryImage(url, width = 500) {
       if (!url || !url.includes("res.cloudinary.com")) return url;
       return url.replace("/upload/", `/upload/f_auto,q_auto,w_${width}/`);
@@ -1963,46 +1871,39 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     }
 
     function renderCategoryButtons() {
-      const camisaCategories = [
-        { slug: "all", name: "Todas as camisas", id: "" },
-        ...getCamisaCategories()
-      ];
-
-      const otherCategories = [
-        { slug: "all", name: "Todos os outros", id: "" },
-        ...getOtherCategories()
+      const categories = [
+        { slug: "all", name: "Todas", id: "" },
+        ...allCategories.map(cat => ({
+          slug: normalizeCategorySlug(cat.name),
+          name: cat.name,
+          id: cat.id || ""
+        }))
       ];
 
       const desktopRail = document.getElementById("desktopCategoryRail");
+      const heroButtons = document.getElementById("heroCategoryButtons");
       const catalogButtons = document.getElementById("catalogCategoryButtons");
       const drawerButtons = document.getElementById("drawerCategories");
-      const otherButtons = document.getElementById("otherCategoryButtons");
 
       if (desktopRail) {
-        desktopRail.innerHTML = camisaCategories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, cat.id || "")).join("");
+        desktopRail.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, cat.id || "")).join("");
+      }
+
+      if (heroButtons) {
+        heroButtons.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, cat.id || "")).join("");
       }
 
       if (catalogButtons) {
-        catalogButtons.innerHTML = camisaCategories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, cat.id || "")).join("");
+        catalogButtons.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, cat.id || "")).join("");
       }
 
       if (drawerButtons) {
-        drawerButtons.innerHTML = camisaCategories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, cat.id || "", "drawer")).join("");
-      }
-
-      if (otherButtons) {
-        otherButtons.innerHTML = otherCategories.map(cat => {
-          const active = cat.slug === activeOtherCategory ? "active" : "";
-          const safeCategoryId = String(cat.id || "").replace(/'/g, "\'");
-          return `<button class="category-chip ${active}" type="button" onclick="setOtherCategory('${cat.slug}', '${safeCategoryId}')">${cat.name}</button>`;
-        }).join("");
+        drawerButtons.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, cat.id || "", "drawer")).join("");
       }
     }
 
-    function getFilteredCamisaProducts() {
+    function getFilteredProducts() {
       return allProducts.filter(product => {
-        if (!isCamisaProduct(product)) return false;
-
         const title = String(product.name || product.title || "").toLowerCase();
         const categoryName = normalizeCategoryName(product);
         const categorySlug = normalizeCategorySlug(categoryName);
@@ -2013,24 +1914,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
           || (!activeCategoryId && categorySlug === activeCategory);
 
         const searchMatches = !searchTerm || title.includes(searchTerm);
-        return categoryMatches && searchMatches;
-      });
-    }
 
-    function getFilteredOtherProducts() {
-      return allProducts.filter(product => {
-        if (isCamisaProduct(product)) return false;
-
-        const title = String(product.name || product.title || "").toLowerCase();
-        const categoryName = normalizeCategoryName(product);
-        const categorySlug = normalizeCategorySlug(categoryName);
-        const productCategoryId = String(product.category_id || product.categories?.id || "");
-
-        const categoryMatches = activeOtherCategory === "all"
-          || (activeOtherCategoryId && productCategoryId === String(activeOtherCategoryId))
-          || (!activeOtherCategoryId && categorySlug === activeOtherCategory);
-
-        const searchMatches = !searchTerm || title.includes(searchTerm);
         return categoryMatches && searchMatches;
       });
     }
@@ -2111,14 +1995,51 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
     function renderFeaturedProducts() {
       const grid = document.getElementById("featuredProductsGrid");
-      let featured = sortProductsForHome(
-        allProducts.filter(product => isCamisaProduct(product) && (product.featured === true || product.is_featured === true))
-      ).slice(0, 4);
+      if (!grid) return;
+
+      const isShirtProduct = (product) => {
+        const name = String(product?.name || "").toLowerCase();
+        const categoryName = normalizeCategoryName(product).toLowerCase();
+        const kind = String(product?.product_kind || "").toLowerCase();
+
+        const otherKeywords = [
+          "sand", "chinelo", "slide", "boné", "bone", "kit infantil", "infantil",
+          "copo", "caneca", "garrafa", "acessório", "acessorio", "mochila"
+        ];
+
+        const isClearlyOther = otherKeywords.some(keyword =>
+          name.includes(keyword) || categoryName.includes(keyword) || kind.includes(keyword)
+        );
+
+        return !isClearlyOther;
+      };
+
+      let featured = allProducts
+        .filter(product => isShirtProduct(product))
+        .filter(product =>
+          product.featured === true ||
+          product.is_featured === true ||
+          product.badge_type === "destaque"
+        );
 
       if (!featured.length) {
-        featured = sortProductsForHome(
-          allProducts.filter(product => product.featured === true || product.is_featured === true)
-        ).slice(0, 4);
+        featured = allProducts
+          .filter(product => isShirtProduct(product))
+          .filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega")
+          .sort((a, b) => {
+            const aDate = new Date(a.created_at || 0).getTime();
+            const bDate = new Date(b.created_at || 0).getTime();
+            return bDate - aDate;
+          })
+          .slice(0, 4);
+      } else {
+        featured = [...featured]
+          .sort((a, b) => {
+            const aDate = new Date(a.created_at || 0).getTime();
+            const bDate = new Date(b.created_at || 0).getTime();
+            return bDate - aDate;
+          })
+          .slice(0, 4);
       }
 
       if (!featured.length) {
@@ -2136,54 +2057,70 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       const encomendaWrap = document.getElementById("encomenda-wrap");
       const prontaTitle = document.getElementById("pronta-section-title");
       const prontaSubtitle = document.getElementById("pronta-section-subtitle");
-      const otherGrid = document.getElementById("grid-outros");
-      const otherWrap = document.getElementById("other-products-wrap");
+      const filtered = getFilteredProducts();
 
-      const camisaFiltered = sortProductsForHome(getFilteredCamisaProducts());
-      const otherFiltered = sortProductsForHome(getFilteredOtherProducts());
-
-      const pronta = camisaFiltered
+      const pronta = filtered
         .filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega")
         .slice(0, 8);
-      const encomenda = camisaFiltered
+      const encomenda = filtered
         .filter(product => product.sale_type === "sob_encomenda")
+        .sort((a, b) => {
+          const aPriority = a.priority_encomenda ?? 9999;
+          const bPriority = b.priority_encomenda ?? 9999;
+          if (aPriority !== bPriority) return aPriority - bPriority;
+
+          const aDate = new Date(a.created_at || 0).getTime();
+          const bDate = new Date(b.created_at || 0).getTime();
+          return bDate - aDate;
+        })
         .slice(0, 10);
 
-      const usingCamisaFilterView = activeCategory !== "all" || !!searchTerm;
+      const usingFilterView = activeCategory !== "all" || !!searchTerm;
 
-      if (usingCamisaFilterView) {
-        if (prontaTitle) prontaTitle.textContent = "Resultados em camisas";
-        if (prontaSubtitle) prontaSubtitle.textContent = "As camisas continuam separadas das outras categorias para a home ficar mais organizada.";
+      if (usingFilterView) {
+        const allFilteredSorted = [...filtered].sort((a, b) => {
+          const aIsPronta = (a.sale_type || "pronta_entrega") === "pronta_entrega";
+          const bIsPronta = (b.sale_type || "pronta_entrega") === "pronta_entrega";
+
+          if (aIsPronta !== bIsPronta) return aIsPronta ? -1 : 1;
+
+          const aPriority = a.sale_type === "sob_encomenda" ? (a.priority_encomenda ?? 9999) : 0;
+          const bPriority = b.sale_type === "sob_encomenda" ? (b.priority_encomenda ?? 9999) : 0;
+          if (aPriority !== bPriority) return aPriority - bPriority;
+
+          const aDate = new Date(a.created_at || 0).getTime();
+          const bDate = new Date(b.created_at || 0).getTime();
+          return bDate - aDate;
+        });
+
+        if (prontaTitle) prontaTitle.textContent = "Resultados da categoria";
+        if (prontaSubtitle) prontaSubtitle.textContent = "Todos os produtos desta categoria aparecem juntos aqui, sem separar por tipo de venda.";
         if (encomendaWrap) encomendaWrap.style.display = "none";
 
         if (prontaGrid) {
-          prontaGrid.innerHTML = camisaFiltered.length
-            ? camisaFiltered.map(product => buildProductCard(product)).join("")
-            : `<div class="state-box">Nenhum produto de camisa encontrado com esse filtro.</div>`;
-        }
-      } else {
-        if (prontaTitle) prontaTitle.textContent = "🔥 Camisas à pronta entrega";
-        if (prontaSubtitle) prontaSubtitle.textContent = "As camisas continuam como foco principal da loja, separadas dos outros produtos.";
-        if (encomendaWrap) encomendaWrap.style.display = "";
-
-        if (prontaGrid) {
-          prontaGrid.innerHTML = pronta.length
-            ? pronta.map(product => buildProductCard(product)).join("")
-            : `<div class="state-box">Nenhuma camisa à pronta entrega com esse filtro.</div>`;
+          prontaGrid.innerHTML = allFilteredSorted.length
+            ? allFilteredSorted.map(product => buildProductCard(product)).join("")
+            : `<div class="state-box">Nenhum produto encontrado com esse filtro.</div>`;
         }
 
-        if (encomendaGrid) {
-          encomendaGrid.innerHTML = encomenda.length
-            ? encomenda.map(product => buildProductCard(product)).join("")
-            : `<div class="state-box">Nenhuma camisa sob encomenda com esse filtro.</div>`;
-        }
+        if (encomendaGrid) encomendaGrid.innerHTML = "";
+        return;
       }
 
-      if (otherWrap) otherWrap.style.display = otherFiltered.length ? "" : "none";
-      if (otherGrid) {
-        otherGrid.innerHTML = otherFiltered.length
-          ? otherFiltered.slice(0, 8).map(product => buildProductCard(product)).join("")
-          : `<div class="state-box">Nenhum outro produto disponível no momento.</div>`;
+      if (prontaTitle) prontaTitle.textContent = "🔥 Pronta entrega";
+      if (prontaSubtitle) prontaSubtitle.textContent = "Camisas disponíveis para pedido imediato.";
+      if (encomendaWrap) encomendaWrap.style.display = "";
+
+      if (prontaGrid) {
+        prontaGrid.innerHTML = pronta.length
+          ? pronta.map(product => buildProductCard(product)).join("")
+          : `<div class="state-box">Nenhum produto à pronta entrega com esse filtro.</div>`;
+      }
+
+      if (encomendaGrid) {
+        encomendaGrid.innerHTML = encomenda.length
+          ? encomenda.map(product => buildProductCard(product)).join("")
+          : `<div class="state-box">Nenhum produto sob encomenda com esse filtro.</div>`;
       }
 
       setupLazyLoad();
@@ -2212,15 +2149,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       document.getElementById("catalogo")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     window.setCategory = setCategory;
-
-    function setOtherCategory(slug, categoryId = "") {
-      activeOtherCategory = slug || "all";
-      activeOtherCategoryId = categoryId || "";
-      renderCategoryButtons();
-      renderProducts();
-      document.getElementById("other-products-wrap")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-    window.setOtherCategory = setOtherCategory;
 
     function setupSearch() {
       const heroInput = document.getElementById("heroSearchInput");
@@ -2504,22 +2432,18 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
           old_price,
           image_url,
           featured,
-          is_featured,
           badge_type,
           sale_type,
           category_id,
           priority_encomenda,
           created_at,
-          product_kind,
-          is_visible,
-          visible,
           categories (
             id,
             name
           )
         `)
         .order("created_at", { ascending: false })
-        .limit(100);
+        .limit(50);
 
       if (error) {
         console.error("Erro real do Supabase:", error);
@@ -2527,12 +2451,10 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         return;
       }
 
-      allProducts = (data || [])
-        .filter(product => product.is_visible !== false && product.visible !== false)
-        .map(product => ({
-          ...product,
-          category_name: product.categories?.name || product.category_name || product.category || "Sem categoria"
-        }));
+      allProducts = (data || []).map(product => ({
+        ...product,
+        category_name: product.categories?.name || product.category_name || product.category || "Sem categoria"
+      }));
 
       saveCache("products", allProducts);
     }
