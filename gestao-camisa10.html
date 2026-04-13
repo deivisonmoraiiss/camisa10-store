@@ -352,21 +352,6 @@
     .metric-card{padding:18px;border-radius:18px;background:#101010;border:1px solid var(--line);display:grid;gap:8px}
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
-    .dashboard-hero-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:18px}
-    .dashboard-hero-card{padding:18px;border-radius:20px;background:linear-gradient(180deg,#151515 0%, #101010 100%);border:1px solid rgba(212,175,55,.14);display:grid;gap:10px;min-height:138px;box-shadow:0 14px 30px rgba(0,0,0,.18)}
-    .dashboard-hero-label{color:var(--muted);font-size:.82rem;letter-spacing:.02em}
-    .dashboard-hero-value{font-size:1.55rem;font-weight:900;color:#fff;line-height:1.1}
-    .dashboard-hero-card.is-gold{background:radial-gradient(circle at top right, rgba(212,175,55,.16), transparent 34%), linear-gradient(180deg,#171411 0%, #100f0d 100%);border-color:rgba(212,175,55,.26)}
-    .dashboard-hero-card.is-gold .dashboard-hero-value{color:var(--gold-2)}
-    .dashboard-hero-card.is-soft{background:linear-gradient(180deg,#131313 0%, #0d0d0d 100%)}
-    .dashboard-hero-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:rgba(212,175,55,.10);border:1px solid rgba(212,175,55,.18);font-size:1rem}
-    .dashboard-summary-card{padding:18px;border-radius:20px;background:linear-gradient(180deg,#121212 0%, #0d0d0d 100%);border:1px solid rgba(255,255,255,.06)}
-    .dashboard-summary-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px}
-    .dashboard-summary-copy{color:var(--muted);font-size:.9rem;line-height:1.6;max-width:700px}
-    .dashboard-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-    .dashboard-summary-item{padding:14px;border-radius:16px;background:#101010;border:1px solid rgba(255,255,255,.06);display:grid;gap:6px}
-    .dashboard-summary-item span{color:var(--muted);font-size:.8rem}
-    .dashboard-summary-item strong{font-size:1rem;color:#fff}
 
     .order-collapsible{border:1px solid var(--line);border-radius:18px;background:#101010;overflow:hidden}
     .order-collapsible summary{list-style:none;cursor:pointer;padding:16px;display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:flex-start}
@@ -390,8 +375,25 @@
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
 
-    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline,.dashboard-summary-grid{grid-template-columns:1fr}.dashboard-hero-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}.dashboard-hero-grid{grid-template-columns:1fr 1fr}.dashboard-hero-card{padding:14px;min-height:124px}.dashboard-hero-value{font-size:1.18rem}}
+
+    .period-filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .period-filter-btn{
+      border:none;
+      background:#171717;
+      color:#f1f1f1;
+      border:1px solid var(--line);
+      padding:10px 14px;
+      border-radius:999px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.2s ease;
+      font-size:.82rem
+    }
+    .period-filter-btn.active{background:var(--gold);color:#111;border-color:var(--gold)}
+    .period-filter-note{color:var(--muted);font-size:.82rem;line-height:1.5}
+
+    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline{grid-template-columns:1fr}}
+    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:154px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:0}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}}
   </style>
 </head>
 <body>
@@ -1145,46 +1147,37 @@ Camisa Real Madrid 24/25"></textarea>
           </div>
 
           <section id="gestao-dashboard" class="gestao-subpanel">
-            <div class="dashboard-hero-grid">
-              <div class="dashboard-hero-card is-gold">
-                <div class="dashboard-hero-icon">💰</div>
-                <div class="dashboard-hero-label">Receita real</div>
-                <div class="dashboard-hero-value" id="gestaoDashRevenue">R$ 0,00</div>
+            <div class="gestao-grid" style="margin-bottom:18px;">
+              <div class="gestao-card">
+                <div class="gestao-icon">1</div>
+                <strong>Entradas</strong>
+                <p>Registre o que chegou, com fornecedor, tamanho, quantidade e custo por peça.</p>
+                <span class="badge">Já ativo</span>
               </div>
-              <div class="dashboard-hero-card">
-                <div class="dashboard-hero-icon">📈</div>
-                <div class="dashboard-hero-label">Lucro real</div>
-                <div class="dashboard-hero-value" id="gestaoDashProfit">R$ 0,00</div>
+              <div class="gestao-card">
+                <div class="gestao-icon">2</div>
+                <strong>Estoque</strong>
+                <p>Veja o saldo por produto e tamanho, com custo médio estimado e total investido.</p>
+                <span class="badge">Já ativo</span>
               </div>
-              <div class="dashboard-hero-card is-soft">
-                <div class="dashboard-hero-icon">📦</div>
-                <div class="dashboard-hero-label">Investido agora</div>
-                <div class="dashboard-hero-value" id="gestaoDashInvested">R$ 0,00</div>
+              <div class="gestao-card">
+                <div class="gestao-icon">3</div>
+                <strong>Fornecedores</strong>
+                <p>Cadastre seus principais fornecedores para agilizar os lançamentos.</p>
+                <span class="badge">Já ativo</span>
               </div>
-              <div class="dashboard-hero-card">
-                <div class="dashboard-hero-icon">🔮</div>
-                <div class="dashboard-hero-label">Lucro potencial</div>
-                <div class="dashboard-hero-value" id="gestaoDashPotentialProfit">R$ 0,00</div>
+              <div class="gestao-card">
+                <div class="gestao-icon">4</div>
+                <strong>Vendas</strong>
+                <p>Registre a venda, baixe o estoque automaticamente e acompanhe faturamento e lucro estimado.</p>
+                <span class="badge">Já ativo</span>
               </div>
             </div>
 
             <div class="grid-2-equal">
-              <div class="dashboard-summary-card finance-highlight-card">
-                <div class="dashboard-summary-head">
-                  <div>
-                    <h3 class="section-title" style="margin-bottom:8px;">Resumo da operação</h3>
-                    <div class="dashboard-summary-copy">Bate o olho e entende o cenário da loja: venda, estoque, receita estimada e ritmo da operação.</div>
-                  </div>
-                  <span class="badge">Fase 1</span>
-                </div>
-                <div id="gestaoResumoRapido" class="dashboard-summary-grid">
-                  <div class="dashboard-summary-item"><span>Receita potencial</span><strong>R$ 0,00</strong></div>
-                  <div class="dashboard-summary-item"><span>Peças em estoque</span><strong>0</strong></div>
-                  <div class="dashboard-summary-item"><span>Vendas registradas</span><strong>0</strong></div>
-                  <div class="dashboard-summary-item"><span>Camisas vendidas</span><strong>0</strong></div>
-                  <div class="dashboard-summary-item"><span>Ticket médio</span><strong>R$ 0,00</strong></div>
-                  <div class="dashboard-summary-item"><span>Pedidos lançados</span><strong>0</strong></div>
-                </div>
+              <div class="card finance-highlight-card">
+                <h3 class="section-title">Resumo rápido</h3>
+                <div id="gestaoResumoRapido" class="gestao-empty">Nenhuma entrada registrada ainda. Comece pela aba <strong>Pedidos / Entradas</strong>.</div>
               </div>
               <div class="card">
                 <h3 class="section-title">Atalhos</h3>
@@ -1204,6 +1197,13 @@ Camisa Real Madrid 24/25"></textarea>
                   <div>
                     <h3 class="section-title" style="margin-bottom:6px;">Indicadores da gestão</h3>
                     <div class="small-muted">Uma área separada para enxergar estoque total, lucro real já realizado e potencial da vitrine sem poluir o resumo principal.</div>
+                    <div class="period-filter-bar" id="gestao-indicators-period-bar">
+                      <button class="period-filter-btn active" type="button" data-period-filter="all">Tudo</button>
+                      <button class="period-filter-btn" type="button" data-period-filter="today">Hoje</button>
+                      <button class="period-filter-btn" type="button" data-period-filter="7d">7 dias</button>
+                      <button class="period-filter-btn" type="button" data-period-filter="30d">30 dias</button>
+                      <button class="period-filter-btn" type="button" data-period-filter="month">Mês atual</button>
+                    </div>
                   </div>
                   <button class="btn btn-secondary" type="button" onclick="renderGestao()">Atualizar</button>
                 </div>
@@ -1634,6 +1634,7 @@ Camisa Real Madrid 24/25"></textarea>
     let editingGestaoSupplierId = null;
     let editingGestaoOrderId = null;
     let editingGestaoSaleId = null;
+    let gestaoPeriodFilter = "all";
 
 
     function generateClientUuid() {
@@ -4483,7 +4484,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     function getGestaoProductMatches(term = '') {
       const normalized = String(term || '').trim().toLowerCase();
       const products = [...allProducts].sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-      if (!normalized) return [];
+      if (!normalized) return products;
       return products.filter(product => (product.name || '').toLowerCase().includes(normalized));
     }
 
@@ -4495,16 +4496,8 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
 
       const fillSelect = (targetSelect, term) => {
         if (!targetSelect) return [];
-        const normalizedTerm = String(term || '').trim();
         const currentValue = targetSelect.value;
-
-        if (!normalizedTerm) {
-          targetSelect.innerHTML = '<option value="">Digite para buscar um produto</option>';
-          targetSelect.value = '';
-          return [];
-        }
-
-        const matches = getGestaoProductMatches(normalizedTerm);
+        const matches = getGestaoProductMatches(term);
         targetSelect.innerHTML = matches.length
           ? matches.map(product => `<option value="${product.id}">${escapeHtml(product.name || 'Produto')}</option>`).join('')
           : '<option value="">Nenhum produto encontrado</option>';
@@ -4517,7 +4510,9 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         const hasCurrent = matches.some(product => String(product.id) === String(currentValue));
         if (hasCurrent) {
           targetSelect.value = currentValue;
-        } else {
+        } else if (term && matches.length) {
+          targetSelect.value = String(matches[0].id);
+        } else if (matches.length) {
           targetSelect.value = String(matches[0].id);
         }
         return matches;
@@ -4578,13 +4573,69 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       return gestaoSuppliers.find(item => String(item.id) === String(supplierId))?.name || 'Fornecedor';
     }
 
-    function getGestaoMetrics() {
+    function getPeriodDateRange(period = gestaoPeriodFilter) {
+      const now = new Date();
+      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+
+      if (period === 'today') {
+        return { start: startOfToday, end: endOfToday, label: 'Hoje' };
+      }
+      if (period === '7d') {
+        const start = new Date(startOfToday);
+        start.setDate(start.getDate() - 6);
+        return { start, end: endOfToday, label: 'Últimos 7 dias' };
+      }
+      if (period === '30d') {
+        const start = new Date(startOfToday);
+        start.setDate(start.getDate() - 29);
+        return { start, end: endOfToday, label: 'Últimos 30 dias' };
+      }
+      if (period === 'month') {
+        const start = new Date(now.getFullYear(), now.getMonth(), 1);
+        const end = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+        return { start, end, label: 'Mês atual' };
+      }
+      return { start: null, end: null, label: 'Visão geral completa' };
+    }
+
+    function getSaleDateAsDate(dateValue) {
+      if (!dateValue) return null;
+      const normalized = String(dateValue).slice(0, 10);
+      const parts = normalized.split('-').map(Number);
+      if (parts.length !== 3 || parts.some(Number.isNaN)) return null;
+      return new Date(parts[0], parts[1] - 1, parts[2], 12, 0, 0, 0);
+    }
+
+    function filterItemsByPeriod(items, dateGetter, period = gestaoPeriodFilter) {
+      const { start, end } = getPeriodDateRange(period);
+      if (!start || !end) return [...items];
+      return items.filter(item => {
+        const date = dateGetter(item);
+        return date && date >= start && date <= end;
+      });
+    }
+
+    function getFilteredGestaoSales(period = gestaoPeriodFilter) {
+      return filterItemsByPeriod(gestaoSales, item => getSaleDateAsDate(item.date), period);
+    }
+
+    function getFilteredGestaoSaleGroups(period = gestaoPeriodFilter) {
+      return filterItemsByPeriod(getGroupedGestaoSales(), item => getSaleDateAsDate(item.date), period);
+    }
+
+    function getFilteredGestaoOrders(period = gestaoPeriodFilter) {
+      return filterItemsByPeriod(getGroupedGestaoOrders(), item => getSaleDateAsDate(item.date), period);
+    }
+
+    function getGestaoMetrics(period = gestaoPeriodFilter) {
       const stock = calculateGestaoStock();
+      const filteredSales = getFilteredGestaoSales(period);
       const totalStockPieces = stock.reduce((sum, item) => sum + Math.max(0, Number(item.currentQty || 0)), 0);
-      const totalRevenue = roundMoney(gestaoSales.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0));
-      const realProfit = roundMoney(gestaoSales.reduce((sum, item) => sum + Number(item.profit || 0), 0));
-      const shirtsSold = gestaoSales.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-      const saleGroups = getGroupedGestaoSales();
+      const totalRevenue = roundMoney(filteredSales.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0));
+      const realProfit = roundMoney(filteredSales.reduce((sum, item) => sum + Number(item.profit || 0), 0));
+      const shirtsSold = filteredSales.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+      const saleGroups = getFilteredGestaoSaleGroups(period);
       const salesCount = saleGroups.length;
       const ticketAverage = salesCount ? roundMoney(totalRevenue / salesCount) : 0;
       const potentialRevenue = roundMoney(stock.reduce((sum, item) => sum + (Math.max(0, Number(item.currentQty || 0)) * getProductPriceById(item.productId)), 0));
@@ -4596,7 +4647,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
 
       const bySold = new Map();
       const byProfit = new Map();
-      gestaoSales.forEach(item => {
+      filteredSales.forEach(item => {
         const key = String(item.productId);
         bySold.set(key, (bySold.get(key) || 0) + Number(item.quantity || 0));
         byProfit.set(key, roundMoney((byProfit.get(key) || 0) + Number(item.profit || 0)));
@@ -4613,12 +4664,15 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         ticketAverage,
         potentialRevenue,
         potentialProfit,
+        totalCombinedRevenue: roundMoney(totalRevenue + potentialRevenue),
         topProductName: topProductId ? getProductNameById(topProductId) : '—',
-        topProfitProductName: topProfitProductId ? getProductNameById(topProfitProductId) : '—'
+        topProfitProductName: topProfitProductId ? getProductNameById(topProfitProductId) : '—',
+        periodLabel: getPeriodDateRange(period).label,
+        ordersCount: getFilteredGestaoOrders(period).length
       };
     }
 
-    function calculateGestaoStock() {
+        function calculateGestaoStock() {
       const map = new Map();
       gestaoEntries.forEach(entry => {
         const key = `${entry.productId}__${entry.size}`;
@@ -4767,13 +4821,31 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       document.getElementById('gestaoKpiFornecedores').textContent = String(gestaoSuppliers.length);
     }
 
+    function syncGestaoPeriodButtons() {
+      document.querySelectorAll('[data-period-filter]').forEach(button => {
+        button.classList.toggle('active', button.dataset.periodFilter === gestaoPeriodFilter);
+      });
+      const label = document.getElementById('gestaoPeriodLabel');
+      if (label) {
+        const textLabel = getPeriodDateRange(gestaoPeriodFilter).label;
+        label.textContent = gestaoPeriodFilter === 'all'
+          ? 'Período atual: visão geral completa.'
+          : `Período atual: ${textLabel}.`;
+      }
+    }
+
+    function setGestaoPeriodFilter(period) {
+      gestaoPeriodFilter = period || 'all';
+      syncGestaoPeriodButtons();
+      renderGestaoSummary();
+      renderGestaoMetrics();
+    }
+
     function renderGestaoSummary() {
       const box = document.getElementById('gestaoResumoRapido');
       if (!box) return;
-      const orders = getGroupedGestaoOrders();
       const metrics = getGestaoMetrics();
       const totalInvested = roundMoney(calculateGestaoStock().reduce((sum, item) => sum + Number(item.currentInvestment || 0), 0) + getGestaoExtraInvestedTotal());
-      const totalOrders = orders.length;
 
       const revenueEl = document.getElementById('gestaoDashRevenue');
       const profitEl = document.getElementById('gestaoDashProfit');
@@ -4785,32 +4857,35 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       if (potentialProfitEl) potentialProfitEl.textContent = formatPrice(metrics.potentialProfit);
 
       box.innerHTML = `
+        <div class="dashboard-summary-item"><span>Receita real (${metrics.periodLabel})</span><strong>${formatPrice(metrics.totalRevenue)}</strong></div>
         <div class="dashboard-summary-item"><span>Receita potencial</span><strong>${formatPrice(metrics.potentialRevenue)}</strong></div>
+        <div class="dashboard-summary-item"><span>Total combinado</span><strong>${formatPrice(metrics.totalCombinedRevenue)}</strong></div>
         <div class="dashboard-summary-item"><span>Peças em estoque</span><strong>${metrics.totalStockPieces}</strong></div>
         <div class="dashboard-summary-item"><span>Vendas registradas</span><strong>${metrics.salesCount}</strong></div>
         <div class="dashboard-summary-item"><span>Camisas vendidas</span><strong>${metrics.shirtsSold}</strong></div>
         <div class="dashboard-summary-item"><span>Ticket médio</span><strong>${formatPrice(metrics.ticketAverage)}</strong></div>
-        <div class="dashboard-summary-item"><span>Pedidos lançados</span><strong>${totalOrders}</strong></div>
+        <div class="dashboard-summary-item"><span>Pedidos lançados (${metrics.periodLabel})</span><strong>${metrics.ordersCount}</strong></div>
+        <div class="dashboard-summary-item"><span>Lucro potencial</span><strong>${formatPrice(metrics.potentialProfit)}</strong></div>
       `;
     }
 
-    function renderGestaoMetrics() {
+        function renderGestaoMetrics() {
       const box = document.getElementById('gestaoMetricsGrid');
       if (!box) return;
       const metrics = getGestaoMetrics();
       box.innerHTML = `
-        <div class="metric-card"><span>Camisas vendidas</span><strong>${metrics.shirtsSold}</strong></div>
-        <div class="metric-card"><span>Receita real</span><strong>${formatPrice(metrics.totalRevenue)}</strong></div>
+        <div class="metric-card"><span>Receita real (${metrics.periodLabel})</span><strong>${formatPrice(metrics.totalRevenue)}</strong></div>
+        <div class="metric-card"><span>Receita potencial</span><strong>${formatPrice(metrics.potentialRevenue)}</strong></div>
+        <div class="metric-card"><span>Total combinado</span><strong>${formatPrice(metrics.totalCombinedRevenue)}</strong></div>
         <div class="metric-card"><span>Lucro real</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
-        <div class="metric-card"><span>Vendas registradas</span><strong>${metrics.salesCount}</strong></div>
-        <div class="metric-card"><span>Ticket médio</span><strong>${formatPrice(metrics.ticketAverage)}</strong></div>
+        <div class="metric-card"><span>Lucro potencial</span><strong>${formatPrice(metrics.potentialProfit)}</strong></div>
         <div class="metric-card"><span>Camisas em estoque</span><strong>${metrics.totalStockPieces}</strong></div>
         <div class="metric-card"><span>Produto mais vendido</span><strong>${escapeHtml(metrics.topProductName)}</strong></div>
         <div class="metric-card"><span>Maior lucro acumulado</span><strong>${escapeHtml(metrics.topProfitProductName)}</strong></div>
       `;
     }
 
-    function renderGestaoEntries() {
+        function renderGestaoEntries() {
       const container = document.getElementById('gestaoEntriesList');
       if (!container) return;
       const orders = getGroupedGestaoOrders();
@@ -5249,6 +5324,7 @@ function renderGestaoSuppliers() {
       populateGestaoProductOptions();
       populateGestaoSupplierOptions();
       renderGestaoKpis();
+      syncGestaoPeriodButtons();
       renderGestaoSummary();
       renderGestaoMetrics();
       renderGestaoEntries();
@@ -5270,6 +5346,10 @@ function renderGestaoSuppliers() {
       document.querySelectorAll('.gestao-subtab').forEach(button => {
         button.addEventListener('click', () => activateGestaoTab(button.dataset.gestaoTab));
       });
+      document.querySelectorAll('[data-period-filter]').forEach(button => {
+        button.addEventListener('click', () => setGestaoPeriodFilter(button.dataset.periodFilter));
+      });
+      syncGestaoPeriodButtons();
     }
 
     async function saveGestaoSupplier() {
@@ -5498,6 +5578,8 @@ async function saveGestaoSale() {
       const entryDateField = document.getElementById('gestao-entry-date');
       if (entryDateField) entryDateField.value = new Date().toISOString().slice(0,10);
       document.getElementById('gestao-entry-extra')?.addEventListener('input', renderGestaoPendingOrder);
+      document.getElementById('gestao-entry-product-search')?.addEventListener('focus', () => syncGestaoProductSearchFromSelect('entry'));
+      document.getElementById('gestao-sale-product-search')?.addEventListener('focus', () => syncGestaoProductSearchFromSelect('sale'));
       const saleDateField = document.getElementById('gestao-sale-date');
       if (saleDateField) saleDateField.value = new Date().toISOString().slice(0,10);
 
