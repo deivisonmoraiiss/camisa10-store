@@ -1867,24 +1867,18 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     function isCamisaProduct(product) {
       const categoryName = normalizeCategorySlug(normalizeCategoryName(product));
       const title = normalizeCategorySlug(product.name || product.title || "");
-      const camisaCategoryKeywords = [
-        "brasileirao", "brasileirão", "internacionais", "internacional", "selecoes", "seleções",
-        "retro", "retrô", "femininas", "times", "camisas", "camisa"
-      ];
       const nonCamisaKeywords = [
         "sandalia", "sandália", "chinelo", "slide", "bone", "boné", "kit infantil", "infantil",
-        "copo", "caneca", "garrafa", "acessorio", "acessório", "mochila", "bermuda"
+        "copo", "caneca", "garrafa", "acessorio", "acessório", "mochila", "bermuda", "short", "tenis", "tênis"
       ];
 
       if (nonCamisaKeywords.some(keyword => categoryName.includes(normalizeCategorySlug(keyword)) || title.includes(normalizeCategorySlug(keyword)))) {
         return false;
       }
 
-      if (camisaCategoryKeywords.some(keyword => categoryName.includes(normalizeCategorySlug(keyword)))) {
-        return true;
-      }
-
-      return title.includes("camisa") || title.includes("manto") || title.includes("uniforme");
+      // Regra segura para a Camisa 10: se não for identificado claramente como outro produto,
+      // o item continua sendo tratado como camisa. Isso evita sumir com a vitrine principal.
+      return true;
     }
 
     function sortProductsForHome(products) {
@@ -2146,7 +2140,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         if (prontaGrid) {
           prontaGrid.innerHTML = camisaFiltered.length
             ? camisaFiltered.map(product => buildProductCard(product)).join("")
-            : `<div class="state-box">Nenhuma camisa encontrada com esse filtro.</div>`;
+            : `<div class="state-box">Nenhum produto de camisa encontrado com esse filtro.</div>`;
         }
       } else {
         if (prontaTitle) prontaTitle.textContent = "🔥 Camisas à pronta entrega";
