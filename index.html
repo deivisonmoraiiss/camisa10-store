@@ -2016,11 +2016,13 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       };
 
       let featured = allProducts
-        .filter(product =>
-          product.featured === true ||
-          product.is_featured === true ||
-          product.badge_type === "destaque"
-        );
+        .filter(product => product.badge_type === "destaque")
+        .sort((a, b) => {
+          const aDate = new Date(a.created_at || 0).getTime();
+          const bDate = new Date(b.created_at || 0).getTime();
+          return bDate - aDate;
+        })
+        .slice(0, 4);
 
       if (!featured.length) {
         featured = allProducts
@@ -2031,6 +2033,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
             return bDate - aDate;
           })
           .slice(0, 4);
+      }
       } else {
         featured = [...featured]
           .sort((a, b) => {
@@ -2442,7 +2445,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
           )
         `)
         .order("created_at", { ascending: false })
-        .limit(100);
+        .limit(50);
 
       if (error) {
         console.error("Erro real do Supabase:", error);
