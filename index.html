@@ -1998,23 +1998,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       const grid = document.getElementById("featuredProductsGrid");
       if (!grid) return;
 
-      const isShirtProduct = (product) => {
-        const name = String(product?.name || "").toLowerCase();
-        const categoryName = normalizeCategoryName(product).toLowerCase();
-        const kind = String(product?.product_kind || "").toLowerCase();
-
-        const otherKeywords = [
-          "sand", "chinelo", "slide", "boné", "bone", "kit infantil", "infantil",
-          "copo", "caneca", "garrafa", "acessório", "acessorio", "mochila"
-        ];
-
-        const isClearlyOther = otherKeywords.some(keyword =>
-          name.includes(keyword) || categoryName.includes(keyword) || kind.includes(keyword)
-        );
-
-        return !isClearlyOther;
-      };
-
       let featured = allProducts
         .filter(product => product.badge_type === "destaque")
         .sort((a, b) => {
@@ -2027,15 +2010,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       if (!featured.length) {
         featured = allProducts
           .filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega")
-          .sort((a, b) => {
-            const aDate = new Date(a.created_at || 0).getTime();
-            const bDate = new Date(b.created_at || 0).getTime();
-            return bDate - aDate;
-          })
-          .slice(0, 4);
-      }
-      } else {
-        featured = [...featured]
           .sort((a, b) => {
             const aDate = new Date(a.created_at || 0).getTime();
             const bDate = new Date(b.created_at || 0).getTime();
