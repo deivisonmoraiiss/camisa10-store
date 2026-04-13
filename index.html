@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -2015,7 +2016,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       };
 
       let featured = allProducts
-        .filter(product => isShirtProduct(product))
         .filter(product =>
           product.featured === true ||
           product.is_featured === true ||
@@ -2024,7 +2024,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
       if (!featured.length) {
         featured = allProducts
-          .filter(product => isShirtProduct(product))
           .filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega")
           .sort((a, b) => {
             const aDate = new Date(a.created_at || 0).getTime();
@@ -2443,7 +2442,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
           )
         `)
         .order("created_at", { ascending: false })
-        .limit(50);
+        .limit(100);
 
       if (error) {
         console.error("Erro real do Supabase:", error);
