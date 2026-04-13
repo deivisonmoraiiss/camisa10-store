@@ -650,7 +650,7 @@
                   <select id="product-size-profile">
                     <option value="adulto">Adulto (P, M, G, EG)</option>
                     <option value="infantil">Infantil (2, 4, 6, 8, 10)</option>
-                    <option value="sandalia">Sandália (33 a 43)</option>
+                    <option value="sandalia">Sandália (25 a 43)</option>
                     <option value="unico">Tamanho único / sem grade</option>
                     <option value="custom">Personalizado</option>
                   </select>
@@ -1881,7 +1881,7 @@ Camisa Real Madrid 24/25"></textarea>
     function getSizeOptionsByProfile(profile) {
       const normalized = String(profile || "adulto").toLowerCase();
       if (normalized === "infantil") return ["2", "4", "6", "8", "10"];
-      if (normalized === "sandalia") return ["33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43"];
+      if (normalized === "sandalia") return ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43"];
       if (normalized === "unico") return ["Único"];
       return ["P", "M", "G", "EG"];
     }
