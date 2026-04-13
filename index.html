@@ -1999,13 +1999,24 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       if (!grid) return;
 
       let featured = allProducts
-        .filter(product => product.badge_type === "destaque")
+        .filter(product => product.is_featured === true)
         .sort((a, b) => {
           const aDate = new Date(a.created_at || 0).getTime();
           const bDate = new Date(b.created_at || 0).getTime();
           return bDate - aDate;
         })
         .slice(0, 4);
+
+      if (!featured.length) {
+        featured = allProducts
+          .filter(product => product.badge_type === "destaque")
+          .sort((a, b) => {
+            const aDate = new Date(a.created_at || 0).getTime();
+            const bDate = new Date(b.created_at || 0).getTime();
+            return bDate - aDate;
+          })
+          .slice(0, 4);
+      }
 
       if (!featured.length) {
         featured = allProducts
@@ -2407,7 +2418,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
           price,
           old_price,
           image_url,
-          featured,
+          is_featured,
           badge_type,
           sale_type,
           category_id,
