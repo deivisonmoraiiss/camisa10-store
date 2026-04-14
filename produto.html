@@ -1538,39 +1538,94 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       updatePurchaseSummary();
     }
 
+    function getDynamicSizeLabel(sizeRows) {
+      const values = (sizeRows || [])
+        .map(item => String(item?.size || "").trim())
+        .filter(Boolean);
+
+      if (!values.length) return "Escolha seu tamanho";
+
+      const numericCount = values.filter(value => /^\d{2,3}$/.test(value)).length;
+      return numericCount >= Math.ceil(values.length / 2) ? "Escolha sua numeração" : "Escolha seu tamanho";
+    }
+
+    function getDisplaySizes(sizeRows) {
+      const values = (sizeRows || [])
+        .map(item => String(item?.size || "").trim().toUpperCase())
+        .filter(Boolean);
+
+      const uniqueValues = [...new Set(values)];
+      if (!uniqueValues.length) return [];
+
+      const allNumeric = uniqueValues.every(value => /^\d{2,3}$/.test(value));
+      if (allNumeric) {
+        return uniqueValues.sort((a, b) => Number(a) - Number(b));
+      }
+
+      const preferredOrder = ["PP", "P", "M", "G", "GG", "XG", "XGG", "EG", "EXG", "ÚNICO", "UNICO"];
+      return uniqueValues.sort((a, b) => {
+        const aIndex = preferredOrder.indexOf(a);
+        const bIndex = preferredOrder.indexOf(b);
+
+        if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+        if (aIndex !== -1) return -1;
+        if (bIndex !== -1) return 1;
+        return a.localeCompare(b, "pt-BR", { numeric: true });
+      });
+    }
+
     function renderSizes(sizeRows) {
       const box = document.getElementById("sizes-box");
+      const blockTitleEl = document.querySelector(".block-title");
+      const purchaseLabels = Array.from(document.querySelectorAll(".purchase-info-item span:first-child"));
+      const sizeInfoLabel = purchaseLabels.find(el => {
+        const text = el.textContent.trim();
+        return text === "Tamanho" || text === "Numeração";
+      });
+      const dynamicLabel = getDynamicSizeLabel(sizeRows);
 
-      const defaultSizes = ["P", "M", "G", "EG"];
+      if (blockTitleEl) {
+        blockTitleEl.textContent = dynamicLabel;
+      }
+
+      if (sizeInfoLabel) {
+        sizeInfoLabel.textContent = dynamicLabel.includes("numeração") ? "Numeração" : "Tamanho";
+      }
+
       const availableMap = {};
 
       (sizeRows || []).forEach(item => {
-        if (item.size) {
-          availableMap[item.size] = getAvailableFlag(item);
+        const sizeValue = String(item?.size || "").trim().toUpperCase();
+        if (sizeValue) {
+          availableMap[sizeValue] = getAvailableFlag(item);
         }
       });
 
+      const displaySizes = getDisplaySizes(sizeRows);
       const hasAnyAvailable = Object.values(availableMap).some(Boolean);
 
-      if (!sizeRows || !sizeRows.length) {
+      if (!sizeRows || !sizeRows.length || !displaySizes.length) {
         box.innerHTML = `<div style="color:#b8b8b8; font-size:14px;">Consulte os tamanhos disponíveis pelo WhatsApp.</div>`;
         return;
       }
 
-      box.innerHTML = defaultSizes.map(size => {
+      box.innerHTML = displaySizes.map(size => {
         const isAvailable = availableMap[size] === true;
         return `
           <button
             class="size-btn ${isAvailable ? "" : "disabled"}"
             ${isAvailable ? `onclick="selectSize('${size}', this)"` : "type='button' disabled"}
           >
-            ${size}
+            <span class="size-code">${size}</span>
+            <span class="size-status">${isAvailable ? "Disponível" : "Indisponível"}</span>
           </button>
         `;
       }).join("");
 
       if (!hasAnyAvailable) {
-        setSizeMessage("Nenhum tamanho disponível no momento.");
+        setSizeMessage(dynamicLabel.includes("numeração")
+          ? "Nenhuma numeração disponível no momento."
+          : "Nenhum tamanho disponível no momento.");
       } else {
         clearSizeMessage();
       }
