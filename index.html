@@ -2076,6 +2076,15 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
       const pronta = filtered
         .filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega")
+        .sort((a, b) => {
+          const aPriority = Number(a.priority_pronta_entrega ?? 9999);
+          const bPriority = Number(b.priority_pronta_entrega ?? 9999);
+          if (aPriority !== bPriority) return aPriority - bPriority;
+
+          const aDate = new Date(a.created_at || 0).getTime();
+          const bDate = new Date(b.created_at || 0).getTime();
+          return bDate - aDate;
+        })
         .slice(0, 8);
       const encomenda = filtered
         .filter(product => product.sale_type === "sob_encomenda")
