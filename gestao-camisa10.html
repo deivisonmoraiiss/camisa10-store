@@ -408,6 +408,14 @@
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
 
+    .dashboard-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .dashboard-summary-item{
+      padding:14px 16px;border-radius:16px;background:#101010;border:1px solid rgba(255,255,255,.05);
+      display:grid;gap:6px
+    }
+    .dashboard-summary-item span{color:var(--muted);font-size:.82rem;line-height:1.45}
+    .dashboard-summary-item strong{color:#fff;font-size:1rem}
+
     .order-collapsible{border:1px solid var(--line);border-radius:18px;background:#101010;overflow:hidden}
     .order-collapsible summary{list-style:none;cursor:pointer;padding:16px;display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:flex-start}
     .order-collapsible summary::-webkit-details-marker{display:none}
@@ -429,6 +437,14 @@
     .metric-card{padding:16px;border-radius:16px;background:#101010;border:1px solid rgba(255,255,255,.05);display:grid;gap:8px}
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
+
+    .dashboard-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .dashboard-summary-item{
+      padding:14px 16px;border-radius:16px;background:#101010;border:1px solid rgba(255,255,255,.05);
+      display:grid;gap:6px
+    }
+    .dashboard-summary-item span{color:var(--muted);font-size:.82rem;line-height:1.45}
+    .dashboard-summary-item strong{color:#fff;font-size:1rem}
 
 
     .period-filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
@@ -5710,7 +5726,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       const entrySearchTerm = document.getElementById('gestao-entry-product-search')?.value || '';
       const saleSearchTerm = document.getElementById('gestao-sale-product-search')?.value || '';
 
-      const fillSelect = (targetSelect, term) => {
+      const fillSelect = (targetSelect, term, context) => {
         if (!targetSelect) return [];
         const currentValue = targetSelect.value;
         const matches = getGestaoProductMatches(term);
@@ -5720,6 +5736,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
 
         if (!matches.length) {
           targetSelect.value = '';
+          renderGestaoSizeOptions(context);
           return matches;
         }
 
@@ -5731,11 +5748,13 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         } else if (matches.length) {
           targetSelect.value = String(matches[0].id);
         }
+
+        renderGestaoSizeOptions(context);
         return matches;
       };
 
-      fillSelect(select, entrySearchTerm);
-      fillSelect(saleSelect, saleSearchTerm);
+      fillSelect(select, entrySearchTerm, 'entry');
+      fillSelect(saleSelect, saleSearchTerm, 'sale');
     }
 
     function handleGestaoProductSearch(context) {
@@ -5756,6 +5775,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       if (!keepTypedValue || !input.value.trim()) {
         input.value = selectedName;
       }
+      renderGestaoSizeOptions(context);
     }
 
     function getAverageCostForProductSize(productId, size) {
@@ -5763,6 +5783,78 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       const totalQty = relevant.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
       const totalCost = relevant.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.cost || 0)), 0);
       return totalQty ? (totalCost / totalQty) : 0;
+    }
+
+    function getSizeOptionsForProduct(productId, context = 'entry') {
+      const product = allProducts.find(item => String(item.id) === String(productId));
+      const profile = inferSizeProfile(product || {});
+      const preferredOrder = getSizeOptionsByProfile(profile);
+      const optionsSet = new Set();
+
+      if (Array.isArray(product?.product_sizes)) {
+        product.product_sizes
+          .filter(item => item && item.is_available !== false && item.size)
+          .forEach(item => optionsSet.add(String(item.size)));
+      }
+
+      const variationSizes = getStoredProductVariations(productId).flatMap(item => Array.isArray(item.sizes) ? item.sizes : []);
+      variationSizes.forEach(size => optionsSet.add(String(size)));
+
+      if (context === 'sale') {
+        calculateGestaoStock()
+          .filter(item => String(item.productId) === String(productId) && Number(item.currentQty || 0) > 0)
+          .forEach(item => optionsSet.add(String(item.size)));
+      }
+
+      if (!optionsSet.size) {
+        preferredOrder.forEach(size => optionsSet.add(String(size)));
+      }
+
+      const ordered = [];
+      preferredOrder.forEach(size => {
+        if (optionsSet.has(String(size))) ordered.push(String(size));
+      });
+      [...optionsSet].forEach(size => {
+        if (!ordered.includes(String(size))) ordered.push(String(size));
+      });
+
+      return ordered;
+    }
+
+    function renderGestaoSizeOptions(context = 'entry', preferredSize = '') {
+      const productSelectId = context === 'sale' ? 'gestao-sale-product' : 'gestao-entry-product';
+      const sizeSelectId = context === 'sale' ? 'gestao-sale-size' : 'gestao-entry-size';
+      const productId = document.getElementById(productSelectId)?.value || '';
+      const sizeSelect = document.getElementById(sizeSelectId);
+      if (!sizeSelect) return;
+
+      const options = productId ? getSizeOptionsForProduct(productId, context) : ['P', 'M', 'G', 'EG'];
+      const currentValue = preferredSize || sizeSelect.value || '';
+      sizeSelect.innerHTML = options.map(size => `<option value="${escapeHtml(String(size))}">${escapeHtml(String(size))}</option>`).join('');
+      const nextValue = options.includes(String(currentValue)) ? String(currentValue) : (options[0] || '');
+      sizeSelect.value = nextValue;
+
+      if (context === 'sale') {
+        updateGestaoSalePreview();
+      }
+    }
+
+    function getGestaoInvestmentTotals() {
+      const productsPurchasedTotal = roundMoney(gestaoEntries.reduce((sum, item) => {
+        return sum + (Number(item.quantity || 0) * Number(item.cost || 0));
+      }, 0));
+      const extraInvestedTotal = roundMoney(getGestaoExtraInvestedTotal());
+      const historicalInvestedTotal = roundMoney(productsPurchasedTotal + extraInvestedTotal);
+      const currentStockInvestment = roundMoney(calculateGestaoStock().reduce((sum, item) => {
+        return sum + Number(item.currentInvestment || 0);
+      }, 0));
+
+      return {
+        productsPurchasedTotal,
+        extraInvestedTotal,
+        historicalInvestedTotal,
+        currentStockInvestment
+      };
     }
 
     function populateGestaoSupplierOptions() {
@@ -5937,10 +6029,9 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     function resetGestaoEntryItemFields() {
       const qty = document.getElementById('gestao-entry-qty');
       const cost = document.getElementById('gestao-entry-cost');
-      const size = document.getElementById('gestao-entry-size');
       if (qty) qty.value = '';
       if (cost) cost.value = '';
-      if (size) size.value = 'M';
+      renderGestaoSizeOptions('entry');
     }
 
     function clearGestaoPendingOrder() {
@@ -6029,11 +6120,10 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     function renderGestaoKpis() {
       const totalOrders = getGroupedGestaoOrders().length;
       const totalPieces = gestaoEntries.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-      const stock = calculateGestaoStock();
-      const totalInvested = stock.reduce((sum, item) => sum + Number(item.currentInvestment || 0), 0) + getGestaoExtraInvestedTotal();
+      const investments = getGestaoInvestmentTotals();
       document.getElementById('gestaoKpiEntradas').textContent = String(totalOrders);
       document.getElementById('gestaoKpiPecas').textContent = String(totalPieces);
-      document.getElementById('gestaoKpiInvestido').textContent = formatPrice(totalInvested);
+      document.getElementById('gestaoKpiInvestido').textContent = formatPrice(investments.historicalInvestedTotal);
       document.getElementById('gestaoKpiFornecedores').textContent = String(gestaoSuppliers.length);
     }
 
@@ -6061,7 +6151,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       const box = document.getElementById('gestaoResumoRapido');
       if (!box) return;
       const metrics = getGestaoMetrics();
-      const totalInvested = roundMoney(calculateGestaoStock().reduce((sum, item) => sum + Number(item.currentInvestment || 0), 0) + getGestaoExtraInvestedTotal());
+      const investments = getGestaoInvestmentTotals();
 
       const revenueEl = document.getElementById('gestaoDashRevenue');
       const profitEl = document.getElementById('gestaoDashProfit');
@@ -6069,19 +6159,24 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       const potentialProfitEl = document.getElementById('gestaoDashPotentialProfit');
       if (revenueEl) revenueEl.textContent = formatPrice(metrics.totalRevenue);
       if (profitEl) profitEl.textContent = formatPrice(metrics.realProfit);
-      if (investedEl) investedEl.textContent = formatPrice(totalInvested);
+      if (investedEl) investedEl.textContent = formatPrice(investments.historicalInvestedTotal);
       if (potentialProfitEl) potentialProfitEl.textContent = formatPrice(metrics.potentialProfit);
 
       box.innerHTML = `
-        <div class="dashboard-summary-item"><span>Receita real (${metrics.periodLabel})</span><strong>${formatPrice(metrics.totalRevenue)}</strong></div>
-        <div class="dashboard-summary-item"><span>Receita potencial</span><strong>${formatPrice(metrics.potentialRevenue)}</strong></div>
-        <div class="dashboard-summary-item"><span>Total combinado</span><strong>${formatPrice(metrics.totalCombinedRevenue)}</strong></div>
-        <div class="dashboard-summary-item"><span>Peças em estoque</span><strong>${metrics.totalStockPieces}</strong></div>
-        <div class="dashboard-summary-item"><span>Vendas registradas</span><strong>${metrics.salesCount}</strong></div>
-        <div class="dashboard-summary-item"><span>Camisas vendidas</span><strong>${metrics.shirtsSold}</strong></div>
-        <div class="dashboard-summary-item"><span>Ticket médio</span><strong>${formatPrice(metrics.ticketAverage)}</strong></div>
-        <div class="dashboard-summary-item"><span>Pedidos lançados (${metrics.periodLabel})</span><strong>${metrics.ordersCount}</strong></div>
-        <div class="dashboard-summary-item"><span>Lucro potencial</span><strong>${formatPrice(metrics.potentialProfit)}</strong></div>
+        <div class="dashboard-summary-grid">
+          <div class="dashboard-summary-item"><span>Investimento total</span><strong>${formatPrice(investments.historicalInvestedTotal)}</strong></div>
+          <div class="dashboard-summary-item"><span>Estoque atual</span><strong>${formatPrice(investments.currentStockInvestment)}</strong></div>
+          <div class="dashboard-summary-item"><span>Receita real (${metrics.periodLabel})</span><strong>${formatPrice(metrics.totalRevenue)}</strong></div>
+          <div class="dashboard-summary-item"><span>Lucro real</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
+          <div class="dashboard-summary-item"><span>Receita potencial</span><strong>${formatPrice(metrics.potentialRevenue)}</strong></div>
+          <div class="dashboard-summary-item"><span>Lucro potencial</span><strong>${formatPrice(metrics.potentialProfit)}</strong></div>
+          <div class="dashboard-summary-item"><span>Peças em estoque</span><strong>${metrics.totalStockPieces}</strong></div>
+          <div class="dashboard-summary-item"><span>Vendas registradas</span><strong>${metrics.salesCount}</strong></div>
+          <div class="dashboard-summary-item"><span>Camisas vendidas</span><strong>${metrics.shirtsSold}</strong></div>
+          <div class="dashboard-summary-item"><span>Ticket médio</span><strong>${formatPrice(metrics.ticketAverage)}</strong></div>
+          <div class="dashboard-summary-item"><span>Pedidos lançados (${metrics.periodLabel})</span><strong>${metrics.ordersCount}</strong></div>
+          <div class="dashboard-summary-item"><span>Total combinado</span><strong>${formatPrice(metrics.totalCombinedRevenue)}</strong></div>
+        </div>
       `;
     }
 
@@ -6217,13 +6312,16 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       const box = document.getElementById('gestaoMetricsGrid');
       if (!box) return;
       const metrics = getGestaoMetrics();
+      const investments = getGestaoInvestmentTotals();
       box.innerHTML = `
+        <div class="metric-card"><span>Investimento total</span><strong>${formatPrice(investments.historicalInvestedTotal)}</strong></div>
+        <div class="metric-card"><span>Estoque atual</span><strong>${formatPrice(investments.currentStockInvestment)}</strong></div>
         <div class="metric-card"><span>Receita real (${metrics.periodLabel})</span><strong>${formatPrice(metrics.totalRevenue)}</strong></div>
-        <div class="metric-card"><span>Receita potencial</span><strong>${formatPrice(metrics.potentialRevenue)}</strong></div>
-        <div class="metric-card"><span>Total combinado</span><strong>${formatPrice(metrics.totalCombinedRevenue)}</strong></div>
         <div class="metric-card"><span>Lucro real</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
+        <div class="metric-card"><span>Receita potencial</span><strong>${formatPrice(metrics.potentialRevenue)}</strong></div>
         <div class="metric-card"><span>Lucro potencial</span><strong>${formatPrice(metrics.potentialProfit)}</strong></div>
         <div class="metric-card"><span>Camisas em estoque</span><strong>${metrics.totalStockPieces}</strong></div>
+        <div class="metric-card"><span>Total combinado</span><strong>${formatPrice(metrics.totalCombinedRevenue)}</strong></div>
         <div class="metric-card"><span>Produto mais vendido</span><strong>${escapeHtml(metrics.topProductName)}</strong></div>
         <div class="metric-card"><span>Maior lucro acumulado</span><strong>${escapeHtml(metrics.topProfitProductName)}</strong></div>
       `;
@@ -6366,9 +6464,9 @@ function getGestaoSaleExtraCosts() {
 
     function resetGestaoSaleItemFields() {
       document.getElementById('gestao-sale-product').value = '';
-      document.getElementById('gestao-sale-size').value = 'M';
       document.getElementById('gestao-sale-qty').value = '1';
       document.getElementById('gestao-sale-price').value = '';
+      renderGestaoSizeOptions('sale');
       updateGestaoSalePreview();
     }
 
@@ -6600,6 +6698,7 @@ function updateGestaoSalePreview() {
       const cancelBtn = document.getElementById('gestao-entry-cancel-btn');
       if (saveBtn) saveBtn.textContent = 'Atualizar pedido';
       if (cancelBtn) cancelBtn.classList.remove('hidden');
+      renderGestaoSizeOptions('entry', gestaoPendingOrderItems[0]?.size || '');
       renderGestaoPendingOrder();
       activateGestaoTab('gestao-entradas');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -6683,6 +6782,8 @@ function renderGestaoSuppliers() {
       renderGestaoSuppliers();
       renderGestaoPendingOrder();
       renderGestaoPendingSale();
+      renderGestaoSizeOptions('entry');
+      renderGestaoSizeOptions('sale');
       updateGestaoSalePreview();
     }
 
