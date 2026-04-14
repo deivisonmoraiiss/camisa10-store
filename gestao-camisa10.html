@@ -855,6 +855,7 @@
                 <label for="priority_pronta_entrega">Ordem na “Pronta entrega”</label>
                 <input type="number" id="priority_pronta_entrega" min="1" step="1" placeholder="Ex: 1, 2, 3..." />
                 <div class="small-muted">Número menor aparece antes na vitrine de pronta entrega. Deixe vazio para seguir a ordem normal.</div>
+                <div class="small-muted">Se a coluna ainda não existir no banco, o painel salva essa ordem localmente para não travar sua edição.</div>
               </div>
 
               <div class="field">
@@ -2500,6 +2501,7 @@ Camisa Real Madrid 24/25"></textarea>
       return error?.code === "42703"
         || message.includes("product_kind")
         || message.includes("size_profile")
+        || message.includes("priority_pronta_entrega")
         || message.includes("column")
         || message.includes("schema cache");
     }
@@ -3836,6 +3838,7 @@ async function uploadMultipleProductImages(productId) {
           const fallbackPayload = { ...payload };
           delete fallbackPayload.product_kind;
           delete fallbackPayload.size_profile;
+          delete fallbackPayload.priority_pronta_entrega;
           response = await supabaseClient
             .from("products")
             .update(fallbackPayload)
@@ -3854,6 +3857,7 @@ async function uploadMultipleProductImages(productId) {
           const fallbackPayload = { ...payload };
           delete fallbackPayload.product_kind;
           delete fallbackPayload.size_profile;
+          delete fallbackPayload.priority_pronta_entrega;
           response = await supabaseClient
             .from("products")
             .insert([fallbackPayload])
@@ -3905,11 +3909,12 @@ async function uploadMultipleProductImages(productId) {
 
       await saveProductVariations(savedProduct.id);
 
+      const prioritySavedLocallyOnly = !!priority_pronta_entrega_raw && (savedProduct.priority_pronta_entrega === null || savedProduct.priority_pronta_entrega === undefined);
       showMessage(
         "form-message",
         currentEditingProductId
-          ? `Produto atualizado com sucesso. ${uploadResult.uploaded} foto(s) adicional(is) enviada(s).`
-          : `Produto cadastrado com sucesso. ${uploadResult.uploaded} foto(s) adicional(is) enviada(s).`,
+          ? `Produto atualizado com sucesso. ${uploadResult.uploaded} foto(s) adicional(is) enviada(s).${prioritySavedLocallyOnly ? " A ordem da pronta entrega ficou salva neste painel e depende da coluna online no banco para refletir no site." : ""}`
+          : `Produto cadastrado com sucesso. ${uploadResult.uploaded} foto(s) adicional(is) enviada(s).${prioritySavedLocallyOnly ? " A ordem da pronta entrega ficou salva neste painel e depende da coluna online no banco para refletir no site." : ""}`,
         "success"
       );
 
@@ -4034,11 +4039,23 @@ async function uploadMultipleProductImages(productId) {
         category_id: product.category_id
       };
 
-      const { data: inserted, error: insertError } = await supabaseClient
+      let duplicateResponse = await supabaseClient
         .from("products")
         .insert([clonePayload])
         .select()
         .single();
+
+      if (duplicateResponse.error && shouldRetryWithoutMetaColumns(duplicateResponse.error)) {
+        const fallbackClonePayload = { ...clonePayload };
+        delete fallbackClonePayload.priority_pronta_entrega;
+        duplicateResponse = await supabaseClient
+          .from("products")
+          .insert([fallbackClonePayload])
+          .select()
+          .single();
+      }
+
+      const { data: inserted, error: insertError } = duplicateResponse;
 
       if (insertError || !inserted) {
         console.error("Erro ao salvar cópia:", insertError);
