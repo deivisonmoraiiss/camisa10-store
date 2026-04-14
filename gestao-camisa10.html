@@ -196,6 +196,33 @@
     .quick-priority-input{
       width:100%;padding:9px 12px;border-radius:12px;border:1px solid #2d2d2d;background:#101010;color:#fff;font-size:.84rem
     }
+    .quick-order-box{display:grid;grid-template-columns:auto auto 1fr;gap:8px;align-items:center}
+    .quick-order-badge{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-width:68px;padding:9px 12px;border-radius:12px;
+      background:linear-gradient(135deg,rgba(212,175,55,.20),rgba(212,175,55,.08));
+      border:1px solid rgba(212,175,55,.24);color:#f6df95;font-size:.82rem;font-weight:900
+    }
+    .quick-order-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .quick-icon-btn{
+      min-width:42px;padding:9px 10px;border-radius:12px;border:1px solid #343434;background:#191919;color:#fff;cursor:pointer;font-weight:900
+    }
+    .quick-icon-btn:hover{transform:translateY(-1px)}
+    .quick-icon-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .collapsible-card{overflow:hidden}
+    .collapsible-summary{
+      list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:12px
+    }
+    .collapsible-summary::-webkit-details-marker{display:none}
+    .collapsible-summary::after{
+      content:"Abrir";font-size:.78rem;font-weight:900;color:#111;
+      background:linear-gradient(135deg,var(--gold),var(--gold-2));
+      padding:8px 12px;border-radius:999px;flex-shrink:0
+    }
+    .collapsible-card[open] .collapsible-summary::after{content:"Recolher"}
+    .collapsible-intro{color:var(--muted);line-height:1.6;max-width:760px}
+    .collapsible-body{padding-top:16px}
+    .form-collapsed-hint{margin-top:8px;color:var(--muted);font-size:.84rem}
     .product-admin-desc{color:#d9d9d9;font-size:.88rem;line-height:1.5}
     
     .batch-card{margin-top:16px;border-radius:18px;background:linear-gradient(180deg,rgba(212,175,55,.10),rgba(212,175,55,.04));border:1px solid rgba(212,175,55,.18);overflow:hidden}
@@ -720,16 +747,20 @@
 
           <section id="tab-products" class="tab-panel active">
         <div class="stack">
-          <div class="card product-form-card">
-            <div class="form-header-row">
-              <div>
-                <h3 class="section-title" id="form-title">Cadastrar Produto</h3>
-                <p class="section-copy" style="margin-bottom:0;">Fluxo em etapas, com visual mais limpo e organizado para cadastrar produto sem embolar.</p>
+          <details class="card product-form-card collapsible-card" id="product-form-card" open>
+            <summary class="collapsible-summary">
+              <div class="form-header-row" style="width:100%;">
+                <div>
+                  <h3 class="section-title" id="form-title" style="margin-bottom:6px;">Cadastrar Produto</h3>
+                  <p class="collapsible-intro">Fluxo em etapas, com visual mais limpo e organizado para cadastrar produto sem embolar.</p>
+                  <div class="form-collapsed-hint">Você pode recolher este bloco e focar só nos produtos cadastrados.</div>
+                </div>
+                <div class="inline-status">
+                  <span class="mini-kpi"><strong id="draft-step-indicator">Etapa 1/4</strong><span>Progresso do cadastro</span></span>
+                </div>
               </div>
-              <div class="inline-status">
-                <span class="mini-kpi"><strong id="draft-step-indicator">Etapa 1/4</strong><span>Progresso do cadastro</span></span>
-              </div>
-            </div>
+            </summary>
+            <div class="collapsible-body">
 
             <div class="stepper-nav" id="product-stepper-nav">
               <button type="button" class="step-chip active" data-step-target="1">1. Básico</button>
@@ -855,7 +886,6 @@
                 <label for="priority_pronta_entrega">Ordem na “Pronta entrega”</label>
                 <input type="number" id="priority_pronta_entrega" min="1" step="1" placeholder="Ex: 1, 2, 3..." />
                 <div class="small-muted">Número menor aparece antes na vitrine de pronta entrega. Deixe vazio para seguir a ordem normal.</div>
-                <div class="small-muted">Se a coluna ainda não existir no banco, o painel salva essa ordem localmente para não travar sua edição.</div>
               </div>
 
               <div class="field">
@@ -973,7 +1003,8 @@
             </div>
 
             <div id="form-message" class="message"></div>
-          </div>
+            </div>
+          </details>
 
           <div class="card product-list-card">
             <div class="list-header-row">
@@ -2406,6 +2437,26 @@ Camisa Real Madrid 24/25"></textarea>
       return null;
     }
 
+    function getProntaEntregaProductsSorted() {
+      return allProducts
+        .filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega")
+        .sort((a, b) => {
+          const aPriority = inferProntaPriority(a) ?? 999999;
+          const bPriority = inferProntaPriority(b) ?? 999999;
+          if (aPriority !== bPriority) return aPriority - bPriority;
+
+          const aDate = new Date(a.created_at || 0).getTime();
+          const bDate = new Date(b.created_at || 0).getTime();
+          return bDate - aDate;
+        });
+    }
+
+    function getProntaEntregaPosition(productId) {
+      const sorted = getProntaEntregaProductsSorted();
+      const index = sorted.findIndex(product => String(product.id) === String(productId));
+      return index >= 0 ? index + 1 : null;
+    }
+
     function getSizeOptionsByProfile(profile) {
       const normalized = String(profile || "adulto").toLowerCase();
       if (normalized === "infantil") return ["2", "4", "6", "8", "10"];
@@ -2501,7 +2552,6 @@ Camisa Real Madrid 24/25"></textarea>
       return error?.code === "42703"
         || message.includes("product_kind")
         || message.includes("size_profile")
-        || message.includes("priority_pronta_entrega")
         || message.includes("column")
         || message.includes("schema cache");
     }
@@ -2677,6 +2727,8 @@ Camisa Real Madrid 24/25"></textarea>
       loadCategories();
       setProductStep(1);
       document.querySelector('.tab-btn[data-tab="tab-products"]')?.click();
+      const productFormCard = document.getElementById("product-form-card");
+      if (productFormCard) productFormCard.open = true;
       setProductStep(1);
       updateDraftSummary();
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -3634,9 +3686,16 @@ async function uploadMultipleProductImages(productId) {
                   ${product.is_featured ? "Remover de Mais procuradas" : "Colocar em Mais procuradas"}
                 </button>
                 ${(product.sale_type || "pronta_entrega") === "pronta_entrega" ? `
-                  <div class="quick-priority-box">
-                    <input class="quick-priority-input" type="number" min="1" step="1" id="quick-priority-${product.id}" value="${prontaPriority ?? ""}" placeholder="Ordem pronta entrega" />
-                    <button class="btn btn-secondary" onclick="saveQuickProntaPriority('${product.id}')">Salvar</button>
+                  <div class="quick-order-box">
+                    <span class="quick-order-badge">Posição #${getProntaEntregaPosition(product.id) || "—"}</span>
+                    <div class="quick-order-actions">
+                      <button class="quick-icon-btn" type="button" onclick="moveProntaEntregaPriority('${product.id}', 'up')" ${getProntaEntregaPosition(product.id) === 1 ? "disabled" : ""}>↑</button>
+                      <button class="quick-icon-btn" type="button" onclick="moveProntaEntregaPriority('${product.id}', 'down')">↓</button>
+                    </div>
+                    <div class="quick-priority-box">
+                      <input class="quick-priority-input" type="number" min="1" step="1" id="quick-priority-${product.id}" value="${prontaPriority ?? ""}" placeholder="Ordem pronta entrega" />
+                      <button class="btn btn-secondary" onclick="saveQuickProntaPriority('${product.id}')">Salvar</button>
+                    </div>
                   </div>
                 ` : `<div class="small-muted" style="display:flex;align-items:center;">Esse controle aparece só para pronta entrega.</div>`}
               </div>
@@ -3706,6 +3765,56 @@ async function uploadMultipleProductImages(productId) {
 
       persistStoredProntaPriority(productId, numericValue ?? "");
       showMessage("list-message", "Ordem da pronta entrega atualizada com sucesso.", "success");
+      await loadProducts();
+    }
+
+    async function moveProntaEntregaPriority(productId, direction) {
+      clearMessage("list-message");
+      const sorted = getProntaEntregaProductsSorted();
+      const currentIndex = sorted.findIndex(product => String(product.id) === String(productId));
+
+      if (currentIndex === -1) return;
+
+      const targetIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+      if (targetIndex < 0 || targetIndex >= sorted.length) return;
+
+      const currentProduct = sorted[currentIndex];
+      const targetProduct = sorted[targetIndex];
+
+      const currentPriority = inferProntaPriority(currentProduct) ?? (currentIndex + 1);
+      const targetPriority = inferProntaPriority(targetProduct) ?? (targetIndex + 1);
+
+      let currentResponse = await supabaseClient
+        .from("products")
+        .update({ priority_pronta_entrega: targetPriority })
+        .eq("id", currentProduct.id);
+
+      let targetResponse = await supabaseClient
+        .from("products")
+        .update({ priority_pronta_entrega: currentPriority })
+        .eq("id", targetProduct.id);
+
+      const fallbackNeeded =
+        currentResponse.error && shouldRetryWithoutMetaColumns(currentResponse.error) ||
+        targetResponse.error && shouldRetryWithoutMetaColumns(targetResponse.error);
+
+      if (fallbackNeeded) {
+        persistStoredProntaPriority(currentProduct.id, targetPriority);
+        persistStoredProntaPriority(targetProduct.id, currentPriority);
+        showMessage("list-message", "Ordem visual da pronta entrega atualizada neste painel.", "success");
+        await loadProducts();
+        return;
+      }
+
+      if (currentResponse.error || targetResponse.error) {
+        const errorMessage = currentResponse.error?.message || targetResponse.error?.message || "Erro ao reordenar";
+        showMessage("list-message", `Erro ao reordenar pronta entrega: ${errorMessage}`, "error");
+        return;
+      }
+
+      persistStoredProntaPriority(currentProduct.id, targetPriority);
+      persistStoredProntaPriority(targetProduct.id, currentPriority);
+      showMessage("list-message", "Ordem visual da pronta entrega atualizada com sucesso.", "success");
       await loadProducts();
     }
 
@@ -3838,7 +3947,6 @@ async function uploadMultipleProductImages(productId) {
           const fallbackPayload = { ...payload };
           delete fallbackPayload.product_kind;
           delete fallbackPayload.size_profile;
-          delete fallbackPayload.priority_pronta_entrega;
           response = await supabaseClient
             .from("products")
             .update(fallbackPayload)
@@ -3857,7 +3965,6 @@ async function uploadMultipleProductImages(productId) {
           const fallbackPayload = { ...payload };
           delete fallbackPayload.product_kind;
           delete fallbackPayload.size_profile;
-          delete fallbackPayload.priority_pronta_entrega;
           response = await supabaseClient
             .from("products")
             .insert([fallbackPayload])
@@ -3909,12 +4016,11 @@ async function uploadMultipleProductImages(productId) {
 
       await saveProductVariations(savedProduct.id);
 
-      const prioritySavedLocallyOnly = !!priority_pronta_entrega_raw && (savedProduct.priority_pronta_entrega === null || savedProduct.priority_pronta_entrega === undefined);
       showMessage(
         "form-message",
         currentEditingProductId
-          ? `Produto atualizado com sucesso. ${uploadResult.uploaded} foto(s) adicional(is) enviada(s).${prioritySavedLocallyOnly ? " A ordem da pronta entrega ficou salva neste painel e depende da coluna online no banco para refletir no site." : ""}`
-          : `Produto cadastrado com sucesso. ${uploadResult.uploaded} foto(s) adicional(is) enviada(s).${prioritySavedLocallyOnly ? " A ordem da pronta entrega ficou salva neste painel e depende da coluna online no banco para refletir no site." : ""}`,
+          ? `Produto atualizado com sucesso. ${uploadResult.uploaded} foto(s) adicional(is) enviada(s).`
+          : `Produto cadastrado com sucesso. ${uploadResult.uploaded} foto(s) adicional(is) enviada(s).`,
         "success"
       );
 
@@ -3985,6 +4091,8 @@ async function uploadMultipleProductImages(productId) {
       document.getElementById("form-title").textContent = "Editar Produto";
       document.getElementById("save-product-btn").textContent = "Atualizar produto";
       document.getElementById("cancel-edit-btn").classList.remove("hidden");
+      const productFormCard = document.getElementById("product-form-card");
+      if (productFormCard) productFormCard.open = true;
 
       setProductStep(1);
       updateDraftSummary();
@@ -4039,23 +4147,11 @@ async function uploadMultipleProductImages(productId) {
         category_id: product.category_id
       };
 
-      let duplicateResponse = await supabaseClient
+      const { data: inserted, error: insertError } = await supabaseClient
         .from("products")
         .insert([clonePayload])
         .select()
         .single();
-
-      if (duplicateResponse.error && shouldRetryWithoutMetaColumns(duplicateResponse.error)) {
-        const fallbackClonePayload = { ...clonePayload };
-        delete fallbackClonePayload.priority_pronta_entrega;
-        duplicateResponse = await supabaseClient
-          .from("products")
-          .insert([fallbackClonePayload])
-          .select()
-          .single();
-      }
-
-      const { data: inserted, error: insertError } = duplicateResponse;
 
       if (insertError || !inserted) {
         console.error("Erro ao salvar cópia:", insertError);
