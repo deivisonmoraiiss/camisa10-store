@@ -1628,6 +1628,19 @@
             </div>
           </div>
 
+          <div class="encomenda-wrap" id="outros-produtos-wrap">
+            <div class="section-head" style="margin-bottom:12px;">
+              <div>
+                <h3 class="section-title" style="font-size:1.4rem;">🧩 Outros produtos</h3>
+                <p class="section-subtitle">Sandálias, kits infantis, bonés e outros itens da loja em uma seção separada.</p>
+              </div>
+            </div>
+
+            <div class="products-grid" id="grid-outros-produtos">
+              <div class="state-box">Carregando outros produtos...</div>
+            </div>
+          </div>
+
           <div class="contact-strip">
             <div>
               <h3>Achou sua camisa?</h3>
@@ -1920,6 +1933,30 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       });
     }
 
+    function isShirtCategoryProduct(product) {
+      const categoryName = normalizeCategoryName(product);
+      const normalized = normalizeCategorySlug(categoryName);
+
+      const shirtKeywords = [
+        "brasileirao",
+        "brasileirão",
+        "internacional",
+        "internacionais",
+        "selecao",
+        "seleção",
+        "selecoes",
+        "seleções",
+        "retro",
+        "retrô",
+        "feminina",
+        "camisa",
+        "camisas",
+        "times"
+      ];
+
+      return shirtKeywords.some(keyword => normalized.includes(normalizeCategorySlug(keyword)));
+    }
+
     function getProductBadge(product, isFeatured = false) {
       const badgeType = product.badge_type || (isFeatured ? "destaque" : "");
       if (!badgeType) return "";
@@ -2069,12 +2106,17 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     function renderProducts() {
       const prontaGrid = document.getElementById("grid-pronta");
       const encomendaGrid = document.getElementById("grid-encomenda");
+      const outrosGrid = document.getElementById("grid-outros-produtos");
+      const outrosWrap = document.getElementById("outros-produtos-wrap");
       const encomendaWrap = document.getElementById("encomenda-wrap");
       const prontaTitle = document.getElementById("pronta-section-title");
       const prontaSubtitle = document.getElementById("pronta-section-subtitle");
       const filtered = getFilteredProducts();
 
-      const pronta = filtered
+      const camisas = filtered.filter(product => isShirtCategoryProduct(product));
+      const outrosProdutos = filtered.filter(product => !isShirtCategoryProduct(product));
+
+      const pronta = camisas
         .filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega")
         .sort((a, b) => {
           const aPriority = Number(a.priority_pronta_entrega ?? 9999);
@@ -2086,7 +2128,8 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
           return bDate - aDate;
         })
         .slice(0, 8);
-      const encomenda = filtered
+
+      const encomenda = camisas
         .filter(product => product.sale_type === "sob_encomenda")
         .sort((a, b) => {
           const aPriority = a.priority_encomenda ?? 9999;
@@ -2099,17 +2142,28 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         })
         .slice(0, 10);
 
+      const outrosOrdenados = [...outrosProdutos].sort((a, b) => {
+        const aIsPronta = (a.sale_type || "pronta_entrega") === "pronta_entrega";
+        const bIsPronta = (b.sale_type || "pronta_entrega") === "pronta_entrega";
+
+        if (aIsPronta !== bIsPronta) return aIsPronta ? -1 : 1;
+
+        const aDate = new Date(a.created_at || 0).getTime();
+        const bDate = new Date(b.created_at || 0).getTime();
+        return bDate - aDate;
+      }).slice(0, 12);
+
       const usingFilterView = activeCategory !== "all" || !!searchTerm;
 
       if (usingFilterView) {
-        const allFilteredSorted = [...filtered].sort((a, b) => {
+        const filteredShirts = [...camisas].sort((a, b) => {
           const aIsPronta = (a.sale_type || "pronta_entrega") === "pronta_entrega";
           const bIsPronta = (b.sale_type || "pronta_entrega") === "pronta_entrega";
 
           if (aIsPronta !== bIsPronta) return aIsPronta ? -1 : 1;
 
-          const aPriority = a.sale_type === "sob_encomenda" ? (a.priority_encomenda ?? 9999) : 0;
-          const bPriority = b.sale_type === "sob_encomenda" ? (b.priority_encomenda ?? 9999) : 0;
+          const aPriority = a.sale_type === "sob_encomenda" ? (a.priority_encomenda ?? 9999) : Number(a.priority_pronta_entrega ?? 9999);
+          const bPriority = b.sale_type === "sob_encomenda" ? (b.priority_encomenda ?? 9999) : Number(b.priority_pronta_entrega ?? 9999);
           if (aPriority !== bPriority) return aPriority - bPriority;
 
           const aDate = new Date(a.created_at || 0).getTime();
@@ -2117,34 +2171,55 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
           return bDate - aDate;
         });
 
-        if (prontaTitle) prontaTitle.textContent = "Resultados da categoria";
-        if (prontaSubtitle) prontaSubtitle.textContent = "Todos os produtos desta categoria aparecem juntos aqui, sem separar por tipo de venda.";
-        if (encomendaWrap) encomendaWrap.style.display = "none";
+        if (prontaTitle) prontaTitle.textContent = "Catálogo de camisas";
+        if (prontaSubtitle) prontaSubtitle.textContent = "As camisas desta categoria aparecem aqui, separadas dos outros tipos de produto.";
+        if (encomendaWrap) encomendaWrap.style.display = filteredShirts.some(product => product.sale_type === "sob_encomenda") ? "" : "none";
+        if (outrosWrap) outrosWrap.style.display = outrosOrdenados.length ? "" : "none";
 
         if (prontaGrid) {
-          prontaGrid.innerHTML = allFilteredSorted.length
-            ? allFilteredSorted.map(product => buildProductCard(product)).join("")
-            : `<div class="state-box">Nenhum produto encontrado com esse filtro.</div>`;
+          prontaGrid.innerHTML = filteredShirts.length
+            ? filteredShirts.map(product => buildProductCard(product)).join("")
+            : `<div class="state-box">Nenhuma camisa encontrada com esse filtro.</div>`;
         }
 
-        if (encomendaGrid) encomendaGrid.innerHTML = "";
+        if (encomendaGrid) {
+          const filteredEncomenda = filteredShirts.filter(product => product.sale_type === "sob_encomenda").slice(0, 10);
+          encomendaGrid.innerHTML = filteredEncomenda.length
+            ? filteredEncomenda.map(product => buildProductCard(product)).join("")
+            : `<div class="state-box">Nenhuma camisa sob encomenda com esse filtro.</div>`;
+        }
+
+        if (outrosGrid) {
+          outrosGrid.innerHTML = outrosOrdenados.length
+            ? outrosOrdenados.map(product => buildProductCard(product)).join("")
+            : `<div class="state-box">Nenhum outro produto encontrado com esse filtro.</div>`;
+        }
+
+        setupLazyLoad();
         return;
       }
 
       if (prontaTitle) prontaTitle.textContent = "🔥 Pronta entrega";
       if (prontaSubtitle) prontaSubtitle.textContent = "Camisas disponíveis para pedido imediato.";
       if (encomendaWrap) encomendaWrap.style.display = "";
+      if (outrosWrap) outrosWrap.style.display = outrosOrdenados.length ? "" : "none";
 
       if (prontaGrid) {
         prontaGrid.innerHTML = pronta.length
           ? pronta.map(product => buildProductCard(product)).join("")
-          : `<div class="state-box">Nenhum produto à pronta entrega com esse filtro.</div>`;
+          : `<div class="state-box">Nenhuma camisa à pronta entrega com esse filtro.</div>`;
       }
 
       if (encomendaGrid) {
         encomendaGrid.innerHTML = encomenda.length
           ? encomenda.map(product => buildProductCard(product)).join("")
-          : `<div class="state-box">Nenhum produto sob encomenda com esse filtro.</div>`;
+          : `<div class="state-box">Nenhuma camisa sob encomenda com esse filtro.</div>`;
+      }
+
+      if (outrosGrid) {
+        outrosGrid.innerHTML = outrosOrdenados.length
+          ? outrosOrdenados.map(product => buildProductCard(product)).join("")
+          : `<div class="state-box">Nenhum outro produto disponível no momento.</div>`;
       }
 
       setupLazyLoad();
