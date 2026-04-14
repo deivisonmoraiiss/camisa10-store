@@ -408,14 +408,6 @@
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
 
-    .dashboard-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-    .dashboard-summary-item{
-      padding:14px 16px;border-radius:16px;background:#101010;border:1px solid rgba(255,255,255,.05);
-      display:grid;gap:6px
-    }
-    .dashboard-summary-item span{color:var(--muted);font-size:.82rem;line-height:1.45}
-    .dashboard-summary-item strong{color:#fff;font-size:1rem}
-
     .order-collapsible{border:1px solid var(--line);border-radius:18px;background:#101010;overflow:hidden}
     .order-collapsible summary{list-style:none;cursor:pointer;padding:16px;display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:flex-start}
     .order-collapsible summary::-webkit-details-marker{display:none}
@@ -437,14 +429,6 @@
     .metric-card{padding:16px;border-radius:16px;background:#101010;border:1px solid rgba(255,255,255,.05);display:grid;gap:8px}
     .metric-card span{color:var(--muted);font-size:.84rem}
     .metric-card strong{font-size:1.2rem;color:#fff}
-
-    .dashboard-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-    .dashboard-summary-item{
-      padding:14px 16px;border-radius:16px;background:#101010;border:1px solid rgba(255,255,255,.05);
-      display:grid;gap:6px
-    }
-    .dashboard-summary-item span{color:var(--muted);font-size:.82rem;line-height:1.45}
-    .dashboard-summary-item strong{color:#fff;font-size:1rem}
 
 
     .period-filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
@@ -527,6 +511,38 @@
     .stock-status.is-low{background:rgba(219,92,88,.16);color:#ffd2d0;border:1px solid rgba(219,92,88,.26)}
     .stock-status.is-low .stock-status-dot{background:#db5c58}
 
+    .admin-insight-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 16px}
+    .admin-insight-card{padding:14px 16px;border-radius:16px;background:#0c0c0c;border:1px solid rgba(255,255,255,.05);display:grid;gap:6px}
+    .admin-insight-card span{color:var(--muted);font-size:.8rem}
+    .admin-insight-card strong{color:#fff;font-size:1rem}
+    .admin-insight-card strong.gold{color:var(--gold-2)}
+
+    .gestao-performance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .performance-card{padding:16px;border-radius:18px;background:#101010;border:1px solid rgba(255,255,255,.05);display:grid;gap:12px}
+    .performance-card-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+    .performance-card-head strong{font-size:1rem;color:#fff}
+    .performance-card-head span{color:var(--muted);font-size:.82rem;line-height:1.45}
+    .performance-highlight{display:grid;gap:6px;padding:14px;border-radius:16px;background:linear-gradient(180deg,rgba(212,175,55,.10),rgba(255,255,255,.02));border:1px solid rgba(212,175,55,.16)}
+    .performance-highlight span{color:var(--muted);font-size:.8rem}
+    .performance-highlight strong{font-size:1.08rem;color:#fff}
+    .performance-meta{display:flex;gap:8px;flex-wrap:wrap}
+    .performance-meta .badge{margin:0}
+    .performance-list{display:grid;gap:10px}
+    .performance-list-item{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:#0c0c0c;border:1px solid rgba(255,255,255,.04)}
+    .performance-rank{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:rgba(212,175,55,.12);color:var(--gold-2);font-weight:900}
+    .performance-list-item strong{color:#fff;font-size:.92rem}
+    .performance-list-item span{color:var(--muted);font-size:.8rem}
+    .performance-value{color:#fff;font-weight:900;font-size:.9rem;text-align:right}
+
+    .order-summary-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+    .order-summary-kpi{padding:12px 14px;border-radius:16px;background:#0c0c0c;border:1px solid rgba(255,255,255,.05);display:grid;gap:4px}
+    .order-summary-kpi span{color:var(--muted);font-size:.78rem}
+    .order-summary-kpi strong{color:#fff;font-size:1rem}
+
+    .stock-size-profile{display:flex;gap:8px;flex-wrap:wrap}
+    .stock-profile-pill{padding:6px 10px;border-radius:999px;background:#171717;border:1px solid rgba(255,255,255,.06);color:#efefef;font-size:.76rem;font-weight:800}
+    .stock-profile-pill.is-zero{opacity:.45}
+    .stock-profile-pill.is-active{border-color:rgba(212,175,55,.24);background:rgba(212,175,55,.10);color:#f6df95}
 
 
     .type-manager{
@@ -697,7 +713,7 @@
     ::placeholder{color:#7f7f7f;opacity:1}
 
 
-    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline{grid-template-columns:1fr}}
+    @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline,.admin-insight-strip,.gestao-performance-grid,.order-summary-kpis{grid-template-columns:1fr}}
     @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.admin-header{padding:16px}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:168px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:8px}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding:8px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}.type-manager-row,.variation-grid,.variation-media-grid{grid-template-columns:1fr}.variation-preview-main{width:100%;max-width:140px;height:auto;aspect-ratio:1/1}}
   </style>
 </head>
@@ -1082,6 +1098,13 @@
                 <div class="small-muted">Busque, filtre e duplique produtos para cadastrar muito mais rápido.</div>
               </div>
               <button class="btn btn-primary" type="button" onclick="startNewProduct()">Novo produto</button>
+            </div>
+
+            <div class="admin-insight-strip" id="product-admin-insights">
+              <div class="admin-insight-card"><span>Produtos filtrados</span><strong id="productsInsightFiltered">0</strong></div>
+              <div class="admin-insight-card"><span>Pronta entrega visíveis</span><strong id="productsInsightReady">0</strong></div>
+              <div class="admin-insight-card"><span>Sob encomenda</span><strong id="productsInsightOnDemand">0</strong></div>
+              <div class="admin-insight-card"><span>Mais procuradas</span><strong class="gold" id="productsInsightFeatured">0</strong></div>
             </div>
 
             <div class="products-toolbar products-toolbar-advanced">
@@ -1569,6 +1592,35 @@ Camisa Real Madrid 24/25"></textarea>
                 </div>
               </div>
             </div>
+
+            <div class="gestao-performance-grid" style="margin-top:18px;">
+              <div class="performance-card">
+                <div class="performance-card-head">
+                  <div>
+                    <strong>Produto em destaque na gestão</strong>
+                    <span>Visão rápida do item que mais gira ou mais lucra no período.</span>
+                  </div>
+                  <span class="badge" id="gestaoPeriodLabel">Período atual: visão geral completa.</span>
+                </div>
+                <div id="gestaoTopSpotlight" class="performance-highlight">
+                  <span>Nenhum dado suficiente ainda.</span>
+                  <strong>Comece registrando entradas e vendas.</strong>
+                </div>
+              </div>
+
+              <div class="performance-card">
+                <div class="performance-card-head">
+                  <div>
+                    <strong>Rankings rápidos</strong>
+                    <span>O que mais vende e o que mais dá retorno.</span>
+                  </div>
+                  <span class="badge">Leitura rápida</span>
+                </div>
+                <div id="gestaoRankingsList" class="performance-list">
+                  <div class="gestao-empty">Ainda sem ranking para mostrar.</div>
+                </div>
+              </div>
+            </div>
           </section>
 
           <section id="gestao-indicadores" class="gestao-subpanel">
@@ -1723,6 +1775,12 @@ Camisa Real Madrid 24/25"></textarea>
                     <h3 class="section-title" style="margin-bottom:6px;">Pedidos recentes</h3>
                     <div class="small-muted">Toque no pedido para abrir os detalhes.</div>
                   </div>
+                </div>
+                <div class="order-summary-kpis" id="gestaoOrderStats">
+                  <div class="order-summary-kpi"><span>Pedidos</span><strong>0</strong></div>
+                  <div class="order-summary-kpi"><span>Peças compradas</span><strong>0</strong></div>
+                  <div class="order-summary-kpi"><span>Investimento total</span><strong>R$ 0,00</strong></div>
+                  <div class="order-summary-kpi"><span>Ticket médio pedido</span><strong>R$ 0,00</strong></div>
                 </div>
                 <div id="gestaoEntriesList" class="gestao-list">
                   <div class="gestao-empty">Nenhum pedido lançado ainda.</div>
@@ -3466,12 +3524,14 @@ async function uploadMultipleProductImages(productId) {
         selectedProductIds.delete(normalizedId);
       }
       renderProducts(filteredProducts);
+      renderProductsInsights(filteredProducts, allProducts);
       updateBatchPreview();
     }
 
     function selectFilteredProducts() {
       filteredProducts.forEach(product => selectedProductIds.add(String(product.id)));
       renderProducts(filteredProducts);
+      renderProductsInsights(filteredProducts, allProducts);
       updateBatchPreview();
     }
 
@@ -3644,6 +3704,17 @@ async function uploadMultipleProductImages(productId) {
       document.getElementById("batch-description-value").value = "";
       showMessage("list-message", `${targetProducts.length} produto(s) tiveram a descrição atualizada com sucesso.`, "success");
       await loadProducts();
+    }
+
+    function renderProductsInsights(products = filteredProducts, all = allProducts) {
+      const filteredEl = document.getElementById('productsInsightFiltered');
+      const readyEl = document.getElementById('productsInsightReady');
+      const onDemandEl = document.getElementById('productsInsightOnDemand');
+      const featuredEl = document.getElementById('productsInsightFeatured');
+      if (filteredEl) filteredEl.textContent = String(products.length);
+      if (readyEl) readyEl.textContent = String(all.filter(product => (product.sale_type || 'pronta_entrega') === 'pronta_entrega' && product.is_visible !== false).length);
+      if (onDemandEl) onDemandEl.textContent = String(all.filter(product => (product.sale_type || 'pronta_entrega') === 'sob_encomenda').length);
+      if (featuredEl) featuredEl.textContent = String(all.filter(product => !!product.is_featured).length);
     }
 
     async function loadProducts() {
@@ -5726,7 +5797,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       const entrySearchTerm = document.getElementById('gestao-entry-product-search')?.value || '';
       const saleSearchTerm = document.getElementById('gestao-sale-product-search')?.value || '';
 
-      const fillSelect = (targetSelect, term, context) => {
+      const fillSelect = (targetSelect, term) => {
         if (!targetSelect) return [];
         const currentValue = targetSelect.value;
         const matches = getGestaoProductMatches(term);
@@ -5736,7 +5807,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
 
         if (!matches.length) {
           targetSelect.value = '';
-          renderGestaoSizeOptions(context);
           return matches;
         }
 
@@ -5748,13 +5818,11 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         } else if (matches.length) {
           targetSelect.value = String(matches[0].id);
         }
-
-        renderGestaoSizeOptions(context);
         return matches;
       };
 
-      fillSelect(select, entrySearchTerm, 'entry');
-      fillSelect(saleSelect, saleSearchTerm, 'sale');
+      fillSelect(select, entrySearchTerm);
+      fillSelect(saleSelect, saleSearchTerm);
     }
 
     function handleGestaoProductSearch(context) {
@@ -5775,7 +5843,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       if (!keepTypedValue || !input.value.trim()) {
         input.value = selectedName;
       }
-      renderGestaoSizeOptions(context);
     }
 
     function getAverageCostForProductSize(productId, size) {
@@ -5783,78 +5850,6 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       const totalQty = relevant.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
       const totalCost = relevant.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.cost || 0)), 0);
       return totalQty ? (totalCost / totalQty) : 0;
-    }
-
-    function getSizeOptionsForProduct(productId, context = 'entry') {
-      const product = allProducts.find(item => String(item.id) === String(productId));
-      const profile = inferSizeProfile(product || {});
-      const preferredOrder = getSizeOptionsByProfile(profile);
-      const optionsSet = new Set();
-
-      if (Array.isArray(product?.product_sizes)) {
-        product.product_sizes
-          .filter(item => item && item.is_available !== false && item.size)
-          .forEach(item => optionsSet.add(String(item.size)));
-      }
-
-      const variationSizes = getStoredProductVariations(productId).flatMap(item => Array.isArray(item.sizes) ? item.sizes : []);
-      variationSizes.forEach(size => optionsSet.add(String(size)));
-
-      if (context === 'sale') {
-        calculateGestaoStock()
-          .filter(item => String(item.productId) === String(productId) && Number(item.currentQty || 0) > 0)
-          .forEach(item => optionsSet.add(String(item.size)));
-      }
-
-      if (!optionsSet.size) {
-        preferredOrder.forEach(size => optionsSet.add(String(size)));
-      }
-
-      const ordered = [];
-      preferredOrder.forEach(size => {
-        if (optionsSet.has(String(size))) ordered.push(String(size));
-      });
-      [...optionsSet].forEach(size => {
-        if (!ordered.includes(String(size))) ordered.push(String(size));
-      });
-
-      return ordered;
-    }
-
-    function renderGestaoSizeOptions(context = 'entry', preferredSize = '') {
-      const productSelectId = context === 'sale' ? 'gestao-sale-product' : 'gestao-entry-product';
-      const sizeSelectId = context === 'sale' ? 'gestao-sale-size' : 'gestao-entry-size';
-      const productId = document.getElementById(productSelectId)?.value || '';
-      const sizeSelect = document.getElementById(sizeSelectId);
-      if (!sizeSelect) return;
-
-      const options = productId ? getSizeOptionsForProduct(productId, context) : ['P', 'M', 'G', 'EG'];
-      const currentValue = preferredSize || sizeSelect.value || '';
-      sizeSelect.innerHTML = options.map(size => `<option value="${escapeHtml(String(size))}">${escapeHtml(String(size))}</option>`).join('');
-      const nextValue = options.includes(String(currentValue)) ? String(currentValue) : (options[0] || '');
-      sizeSelect.value = nextValue;
-
-      if (context === 'sale') {
-        updateGestaoSalePreview();
-      }
-    }
-
-    function getGestaoInvestmentTotals() {
-      const productsPurchasedTotal = roundMoney(gestaoEntries.reduce((sum, item) => {
-        return sum + (Number(item.quantity || 0) * Number(item.cost || 0));
-      }, 0));
-      const extraInvestedTotal = roundMoney(getGestaoExtraInvestedTotal());
-      const historicalInvestedTotal = roundMoney(productsPurchasedTotal + extraInvestedTotal);
-      const currentStockInvestment = roundMoney(calculateGestaoStock().reduce((sum, item) => {
-        return sum + Number(item.currentInvestment || 0);
-      }, 0));
-
-      return {
-        productsPurchasedTotal,
-        extraInvestedTotal,
-        historicalInvestedTotal,
-        currentStockInvestment
-      };
     }
 
     function populateGestaoSupplierOptions() {
@@ -5958,10 +5953,19 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       filteredSales.forEach(item => {
         const key = String(item.productId);
         bySold.set(key, (bySold.get(key) || 0) + Number(item.quantity || 0));
-        byProfit.set(key, roundMoney((byProfit.get(key) || 0) + Number(item.profit || 0)));
+        byProfit.set(key, (byProfit.get(key) || 0) + Number(item.profit || 0));
       });
-      const topProductId = [...bySold.entries()].sort((a,b) => b[1]-a[1])[0]?.[0] || '';
-      const topProfitProductId = [...byProfit.entries()].sort((a,b) => b[1]-a[1])[0]?.[0] || '';
+
+      const topSoldEntry = [...bySold.entries()].sort((a, b) => b[1] - a[1])[0];
+      const topProfitEntry = [...byProfit.entries()].sort((a, b) => b[1] - a[1])[0];
+
+      const categoryMap = new Map();
+      stock.forEach(item => {
+        const product = allProducts.find(prod => String(prod.id) === String(item.productId)) || {};
+        const categoryName = product.categories?.name || 'Sem categoria';
+        categoryMap.set(categoryName, (categoryMap.get(categoryName) || 0) + Number(item.currentInvestment || 0));
+      });
+      const topCategoryEntry = [...categoryMap.entries()].sort((a, b) => b[1] - a[1])[0];
 
       return {
         totalStockPieces,
@@ -5973,10 +5977,14 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         potentialRevenue,
         potentialProfit,
         totalCombinedRevenue: roundMoney(totalRevenue + potentialRevenue),
-        topProductName: topProductId ? getProductNameById(topProductId) : '—',
-        topProfitProductName: topProfitProductId ? getProductNameById(topProfitProductId) : '—',
-        periodLabel: getPeriodDateRange(period).label,
-        ordersCount: getFilteredGestaoOrders(period).length
+        ordersCount: getFilteredGestaoOrders(period).length,
+        topProductName: topSoldEntry ? getProductNameById(topSoldEntry[0]) : '',
+        topProductQty: topSoldEntry ? Number(topSoldEntry[1] || 0) : 0,
+        topProfitProductName: topProfitEntry ? getProductNameById(topProfitEntry[0]) : '',
+        topProfitProductValue: topProfitEntry ? Number(topProfitEntry[1] || 0) : 0,
+        topCategoryName: topCategoryEntry ? topCategoryEntry[0] : '',
+        topCategoryInvestment: topCategoryEntry ? roundMoney(topCategoryEntry[1]) : 0,
+        periodLabel: getPeriodDateRange(period).label
       };
     }
 
@@ -6029,9 +6037,10 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     function resetGestaoEntryItemFields() {
       const qty = document.getElementById('gestao-entry-qty');
       const cost = document.getElementById('gestao-entry-cost');
+      const size = document.getElementById('gestao-entry-size');
       if (qty) qty.value = '';
       if (cost) cost.value = '';
-      renderGestaoSizeOptions('entry');
+      if (size) size.value = 'M';
     }
 
     function clearGestaoPendingOrder() {
@@ -6120,10 +6129,11 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     function renderGestaoKpis() {
       const totalOrders = getGroupedGestaoOrders().length;
       const totalPieces = gestaoEntries.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-      const investments = getGestaoInvestmentTotals();
+      const stock = calculateGestaoStock();
+      const totalInvested = stock.reduce((sum, item) => sum + Number(item.currentInvestment || 0), 0) + getGestaoExtraInvestedTotal();
       document.getElementById('gestaoKpiEntradas').textContent = String(totalOrders);
       document.getElementById('gestaoKpiPecas').textContent = String(totalPieces);
-      document.getElementById('gestaoKpiInvestido').textContent = formatPrice(investments.historicalInvestedTotal);
+      document.getElementById('gestaoKpiInvestido').textContent = formatPrice(totalInvested);
       document.getElementById('gestaoKpiFornecedores').textContent = String(gestaoSuppliers.length);
     }
 
@@ -6145,6 +6155,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       syncGestaoPeriodButtons();
       renderGestaoSummary();
       renderGestaoMetrics();
+      renderGestaoAlerts();
     }
 
     function renderGestaoSummary() {
@@ -6178,9 +6189,63 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
           <div class="dashboard-summary-item"><span>Total combinado</span><strong>${formatPrice(metrics.totalCombinedRevenue)}</strong></div>
         </div>
       `;
+
+      renderGestaoDashboardHighlights(metrics, investments);
     }
 
-    
+    function renderGestaoDashboardHighlights(metrics = getGestaoMetrics(), investments = getGestaoInvestmentTotals()) {
+      const spotlight = document.getElementById('gestaoTopSpotlight');
+      const rankings = document.getElementById('gestaoRankingsList');
+      if (spotlight) {
+        const spotlightName = metrics.topProductName || metrics.topProfitProductName || 'Sem destaque ainda';
+        const spotlightSecondary = metrics.topProductName && metrics.topProfitProductName && metrics.topProductName !== metrics.topProfitProductName
+          ? `Maior lucro: ${metrics.topProfitProductName}`
+          : `Estoque atual: ${formatPrice(investments.currentStockInvestment)}`;
+        spotlight.innerHTML = `
+          <span>Período analisado: ${metrics.periodLabel}</span>
+          <strong>${escapeHtml(spotlightName)}</strong>
+          <div class="performance-meta">
+            <span class="badge">Receita real: ${formatPrice(metrics.totalRevenue)}</span>
+            <span class="badge">Lucro real: ${formatPrice(metrics.realProfit)}</span>
+            <span class="badge">Ticket médio: ${formatPrice(metrics.ticketAverage)}</span>
+            <span class="badge">${escapeHtml(spotlightSecondary)}</span>
+          </div>
+        `;
+      }
+      if (rankings) {
+        const rankingRows = [
+          {
+            rank: '01',
+            title: metrics.topProductName || 'Sem vendas ainda',
+            subtitle: 'Produto mais vendido no período',
+            value: metrics.topProductName ? `${metrics.topProductQty || 0} peça(s)` : '—'
+          },
+          {
+            rank: '02',
+            title: metrics.topProfitProductName || 'Sem lucro acumulado ainda',
+            subtitle: 'Maior lucro acumulado',
+            value: metrics.topProfitProductName ? formatPrice(metrics.topProfitProductValue || 0) : '—'
+          },
+          {
+            rank: '03',
+            title: metrics.topCategoryName || 'Sem categoria líder ainda',
+            subtitle: 'Categoria com maior valor em estoque',
+            value: metrics.topCategoryName ? formatPrice(metrics.topCategoryInvestment || 0) : '—'
+          }
+        ];
+        rankings.innerHTML = rankingRows.map(item => `
+          <article class="performance-list-item">
+            <div class="performance-rank">${item.rank}</div>
+            <div>
+              <strong>${escapeHtml(item.title)}</strong>
+              <span>${escapeHtml(item.subtitle)}</span>
+            </div>
+            <div class="performance-value">${escapeHtml(String(item.value))}</div>
+          </article>
+        `).join('');
+      }
+    }
+
     function getStockLevelMeta(totalQty) {
       const qty = Number(totalQty || 0);
       if (qty <= 2) return { key: 'low', label: 'Estoque baixo' };
@@ -6312,16 +6377,13 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       const box = document.getElementById('gestaoMetricsGrid');
       if (!box) return;
       const metrics = getGestaoMetrics();
-      const investments = getGestaoInvestmentTotals();
       box.innerHTML = `
-        <div class="metric-card"><span>Investimento total</span><strong>${formatPrice(investments.historicalInvestedTotal)}</strong></div>
-        <div class="metric-card"><span>Estoque atual</span><strong>${formatPrice(investments.currentStockInvestment)}</strong></div>
         <div class="metric-card"><span>Receita real (${metrics.periodLabel})</span><strong>${formatPrice(metrics.totalRevenue)}</strong></div>
-        <div class="metric-card"><span>Lucro real</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
         <div class="metric-card"><span>Receita potencial</span><strong>${formatPrice(metrics.potentialRevenue)}</strong></div>
+        <div class="metric-card"><span>Total combinado</span><strong>${formatPrice(metrics.totalCombinedRevenue)}</strong></div>
+        <div class="metric-card"><span>Lucro real</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
         <div class="metric-card"><span>Lucro potencial</span><strong>${formatPrice(metrics.potentialProfit)}</strong></div>
         <div class="metric-card"><span>Camisas em estoque</span><strong>${metrics.totalStockPieces}</strong></div>
-        <div class="metric-card"><span>Total combinado</span><strong>${formatPrice(metrics.totalCombinedRevenue)}</strong></div>
         <div class="metric-card"><span>Produto mais vendido</span><strong>${escapeHtml(metrics.topProductName)}</strong></div>
         <div class="metric-card"><span>Maior lucro acumulado</span><strong>${escapeHtml(metrics.topProfitProductName)}</strong></div>
       `;
@@ -6329,8 +6391,25 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
 
         function renderGestaoEntries() {
       const container = document.getElementById('gestaoEntriesList');
+      const statsBox = document.getElementById('gestaoOrderStats');
       if (!container) return;
       const orders = getGroupedGestaoOrders();
+      const totalInvested = roundMoney(orders.reduce((sum, order) => {
+        const itemsTotal = order.items.reduce((subtotal, item) => subtotal + (Number(item.cost || 0) * Number(item.quantity || 0)), 0);
+        return sum + itemsTotal + Number(order.extraCost || 0);
+      }, 0));
+      const totalPieces = orders.reduce((sum, order) => sum + order.items.reduce((subtotal, item) => subtotal + Number(item.quantity || 0), 0), 0);
+      const averageTicket = orders.length ? roundMoney(totalInvested / orders.length) : 0;
+
+      if (statsBox) {
+        statsBox.innerHTML = `
+          <div class="order-summary-kpi"><span>Pedidos</span><strong>${orders.length}</strong></div>
+          <div class="order-summary-kpi"><span>Peças compradas</span><strong>${totalPieces}</strong></div>
+          <div class="order-summary-kpi"><span>Investimento total</span><strong>${formatPrice(totalInvested)}</strong></div>
+          <div class="order-summary-kpi"><span>Ticket médio pedido</span><strong>${formatPrice(averageTicket)}</strong></div>
+        `;
+      }
+
       if (!orders.length) {
         container.innerHTML = '<div class="gestao-empty">Nenhum pedido lançado ainda.</div>';
         return;
@@ -6338,9 +6417,10 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       container.innerHTML = orders.map(order => {
         const totalPieces = order.items.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
         const itemsTotal = order.items.reduce((sum, item) => sum + (Number(item.cost || 0) * Number(item.quantity || 0)), 0);
-        const grandTotal = itemsTotal + Number(order.extraCost || 0);
+        const grandTotal = roundMoney(itemsTotal + Number(order.extraCost || 0));
         const contact = gestaoSuppliers.find(s => String(s.id) === String(order.supplierId))?.contact || '—';
         const coverImage = getProductImageById(order.items[0]?.productId);
+        const averagePerPiece = totalPieces ? roundMoney(itemsTotal / totalPieces) : 0;
         const itemsHtml = order.items.map(entry => `
           <div class="order-detail-item">
             <img src="${escapeHtml(getProductImageById(entry.productId))}" alt="${escapeHtml(getProductNameById(entry.productId))}" onerror="this.src='https://via.placeholder.com/240x240?text=Camisa';" />
@@ -6357,6 +6437,11 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
               <div class="order-summary-main">
                 <div class="gestao-list-title">Pedido • ${escapeHtml(order.supplierName)}</div>
                 <div class="gestao-list-sub">${escapeHtml(order.date || '')} • ${totalPieces} peça(s) • ${order.items.length} item(ns)</div>
+                <div class="performance-meta">
+                  <span class="badge">Produtos: ${formatPrice(itemsTotal)}</span>
+                  <span class="badge">Extras: ${formatPrice(order.extraCost)}</span>
+                  <span class="badge">Média por peça: ${formatPrice(averagePerPiece)}</span>
+                </div>
               </div>
               <div class="order-summary-side">
                 <span class="badge">${formatPrice(grandTotal)}</span>
@@ -6395,7 +6480,8 @@ function renderGestaoStock() {
             productId: item.productId,
             name: item.name,
             image: getProductImageById(item.productId),
-            sizes: { P: 0, M: 0, G: 0, EG: 0, GG: 0 },
+            profile: inferSizeProfile(allProducts.find(prod => String(prod.id) === String(item.productId)) || {}),
+            sizes: {},
             totalQty: 0,
             totalInvestment: 0,
             weightedCost: 0
@@ -6428,11 +6514,16 @@ function renderGestaoStock() {
         return;
       }
 
-      const sizeOrder = ['P','M','G','GG','EG'];
       container.innerHTML = `<div class="stock-list-shell">${grouped.map(item => {
-        const sizeSummary = sizeOrder
-          .filter(size => Number(item.sizes[size] || 0) > 0)
-          .map(size => `<span class="stock-size-chip">${size}: ${item.sizes[size]}</span>`)
+        const preferredOrder = getSizeOptionsByProfile(item.profile || 'adulto').map(size => String(size).toUpperCase());
+        const actualSizes = Object.keys(item.sizes || {});
+        const orderedSizes = [...preferredOrder.filter(size => actualSizes.includes(size)), ...actualSizes.filter(size => !preferredOrder.includes(size)).sort((a, b) => a.localeCompare(b, 'pt-BR', { numeric: true }))];
+        const sizeSummary = orderedSizes
+          .map(size => {
+            const qty = Number(item.sizes[size] || 0);
+            const activeClass = qty > 0 ? 'is-active' : 'is-zero';
+            return `<span class="stock-profile-pill ${activeClass}">${escapeHtml(size)}: ${qty}</span>`;
+          })
           .join('');
         const level = getStockLevelMeta(item.totalQty);
 
@@ -6443,11 +6534,11 @@ function renderGestaoStock() {
               <div class="stock-main-top">
                 <div>
                   <div class="stock-name">${escapeHtml(item.name)}</div>
-                  <div class="stock-sub">Custo médio: ${formatPrice(item.averageCost)} • Investido: ${formatPrice(item.totalInvestment)}</div>
+                  <div class="stock-sub">Grade ${escapeHtml(getSizeProfileLabel(item.profile || 'adulto'))} • Custo médio: ${formatPrice(item.averageCost)} • Investido: ${formatPrice(item.totalInvestment)}</div>
                 </div>
                 <span class="stock-status is-${level.key}"><span class="stock-status-dot"></span>${level.label}</span>
               </div>
-              <div class="stock-size-line">${sizeSummary || '<span class="small-muted">Sem saldo por tamanho</span>'}</div>
+              <div class="stock-size-profile">${sizeSummary || '<span class="small-muted">Sem saldo por tamanho</span>'}</div>
             </div>
             <div class="stock-side">
               <div class="stock-total">${item.totalQty} peça(s)</div>
@@ -6464,9 +6555,9 @@ function getGestaoSaleExtraCosts() {
 
     function resetGestaoSaleItemFields() {
       document.getElementById('gestao-sale-product').value = '';
+      document.getElementById('gestao-sale-size').value = 'M';
       document.getElementById('gestao-sale-qty').value = '1';
       document.getElementById('gestao-sale-price').value = '';
-      renderGestaoSizeOptions('sale');
       updateGestaoSalePreview();
     }
 
@@ -6698,7 +6789,6 @@ function updateGestaoSalePreview() {
       const cancelBtn = document.getElementById('gestao-entry-cancel-btn');
       if (saveBtn) saveBtn.textContent = 'Atualizar pedido';
       if (cancelBtn) cancelBtn.classList.remove('hidden');
-      renderGestaoSizeOptions('entry', gestaoPendingOrderItems[0]?.size || '');
       renderGestaoPendingOrder();
       activateGestaoTab('gestao-entradas');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -6782,8 +6872,6 @@ function renderGestaoSuppliers() {
       renderGestaoSuppliers();
       renderGestaoPendingOrder();
       renderGestaoPendingSale();
-      renderGestaoSizeOptions('entry');
-      renderGestaoSizeOptions('sale');
       updateGestaoSalePreview();
     }
 
