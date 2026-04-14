@@ -171,7 +171,7 @@
     .draft-summary-card{padding:16px;border-radius:16px;background:#101010;border:1px solid var(--line);display:grid;gap:6px}
     .draft-summary-card span{color:var(--muted);font-size:.82rem}
     .draft-summary-card strong{color:#fff;font-size:1rem}
-    .products-toolbar-advanced{display:grid;grid-template-columns:minmax(180px,1.2fr) minmax(160px,.9fr) minmax(160px,.9fr) auto;align-items:center}
+    .products-toolbar-advanced{display:grid;grid-template-columns:minmax(180px,1.2fr) minmax(160px,.9fr) minmax(160px,.9fr) minmax(170px,.95fr) auto;align-items:center}
     .products-toolbar-advanced select{padding:12px 14px;border-radius:14px;border:1px solid #2d2d2d;background:#101010;color:#fff}
     .product-admin-list{display:grid;grid-template-columns:1fr;gap:12px}
     .product-admin-card{position:relative;display:grid;grid-template-columns:88px minmax(0,1fr);gap:12px;padding:12px;border-radius:18px;background:linear-gradient(180deg,#111 0%, #0d0d0d 100%);border:1px solid var(--line);overflow:visible;align-items:start}
@@ -190,6 +190,22 @@
     .product-admin-meta{display:flex;gap:6px;flex-wrap:wrap}
     .product-admin-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
     .product-admin-actions .btn{padding:9px 12px;font-size:.84rem}
+    .product-admin-actions .btn-primary-soft{
+      background:rgba(212,175,55,.10);
+      color:#f6df95;
+      border:1px solid rgba(212,175,55,.24)
+    }
+    .product-admin-actions .btn-primary-soft:hover{background:rgba(212,175,55,.16)}
+    .product-admin-actions .btn-visibility-show{
+      background:rgba(46,139,87,.14);
+      color:#b9f0cf;
+      border:1px solid rgba(46,139,87,.24)
+    }
+    .product-admin-actions .btn-visibility-hide{
+      background:rgba(255,255,255,.06);
+      color:#e9e9e9;
+      border:1px solid rgba(255,255,255,.10)
+    }
     .product-admin-quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
     .quick-toggle-btn.active{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#111;border:1px solid transparent}
     .quick-priority-box{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
@@ -1024,6 +1040,11 @@
                 <option value="">Todos os tipos</option>
                 <option value="pronta_entrega">Pronta entrega</option>
                 <option value="sob_encomenda">Sob encomenda</option>
+              </select>
+              <select id="product-filter-visibility" onchange="filterProducts()">
+                <option value="">Todos</option>
+                <option value="visible">Visíveis no site</option>
+                <option value="hidden">Ocultos do site</option>
               </select>
               <button class="btn btn-secondary" onclick="loadProducts()">Atualizar</button>
             </div>
@@ -3331,13 +3352,18 @@ async function uploadMultipleProductImages(productId) {
       const term = document.getElementById("search-input").value.trim().toLowerCase();
       const categoryFilter = document.getElementById("product-filter-category")?.value || "";
       const saleTypeFilter = document.getElementById("product-filter-sale-type")?.value || "";
+      const visibilityFilter = document.getElementById("product-filter-visibility")?.value || "";
 
       return allProducts
         .filter(product => {
           const matchName = !term || (product.name || "").toLowerCase().includes(term);
           const matchCategory = !categoryFilter || String(product.category_id) === String(categoryFilter);
           const matchSaleType = !saleTypeFilter || (product.sale_type || "pronta_entrega") === saleTypeFilter;
-          return matchName && matchCategory && matchSaleType;
+          const isVisible = product.is_visible !== false;
+          const matchVisibility = !visibilityFilter
+            || (visibilityFilter === "visible" && isVisible)
+            || (visibilityFilter === "hidden" && !isVisible);
+          return matchName && matchCategory && matchSaleType && matchVisibility;
         })
         .sort((a, b) => {
           const aSaleType = a.sale_type || "pronta_entrega";
@@ -3702,7 +3728,13 @@ async function uploadMultipleProductImages(productId) {
 
               <div class="product-admin-actions">
                 <button class="btn btn-success" onclick="editProduct('${product.id}')">Editar</button>
-                <button class="btn btn-secondary" onclick="duplicateProduct('${product.id}')">Duplicar</button>
+                <button
+                  class="btn ${product.is_visible !== false ? "btn-visibility-hide" : "btn-visibility-show"}"
+                  onclick="toggleProductVisibility('${product.id}', ${product.is_visible !== false ? "false" : "true"})"
+                >
+                  ${product.is_visible !== false ? "Ocultar do site" : "Mostrar no site"}
+                </button>
+                <button class="btn btn-primary-soft" onclick="duplicateProduct('${product.id}')">Duplicar</button>
                 <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">Excluir</button>
               </div>
             </div>
@@ -4105,6 +4137,31 @@ async function uploadMultipleProductImages(productId) {
       setProductStep(1);
     }
 
+
+    async function toggleProductVisibility(productId, nextState) {
+      clearMessage("list-message");
+
+      const normalizedState = nextState === true || nextState === "true";
+
+      const { error } = await supabaseClient
+        .from("products")
+        .update({ is_visible: normalizedState })
+        .eq("id", productId);
+
+      if (error) {
+        console.error("Erro ao atualizar visibilidade do produto:", error);
+        showMessage("list-message", `Erro ao atualizar visibilidade: ${error.message}`, "error");
+        return;
+      }
+
+      showMessage(
+        "list-message",
+        normalizedState ? "Produto mostrado no site com sucesso." : "Produto ocultado do site com sucesso.",
+        "success"
+      );
+
+      await loadProducts();
+    }
 
     async function duplicateProduct(productId) {
       clearMessage("list-message");
