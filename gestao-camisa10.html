@@ -874,7 +874,7 @@
     <div class="topbar-inner">
       <div class="brand-block">
         <div class="brand-title">Gestão Camisa 10 Store</div>
-        <div class="brand-subtitle">Versão enxuta e organizada</div>
+
       </div>
       <div class="topbar-actions">
         <button class="btn btn-secondary hidden" id="topLogoutBtn" onclick="logout()">Sair</button>
@@ -886,7 +886,7 @@
     <div id="login-screen" class="login-wrapper" style="display:block;">
       <div class="card">
         <h2 class="login-title">Entrar no painel</h2>
-        <p class="subtitle">Acesse com seu usuário do Supabase Auth</p>
+
         <div class="field">
           <label for="login-email">E-mail</label>
           <input type="email" id="login-email" placeholder="Digite seu e-mail" />
@@ -905,7 +905,7 @@
         <div class="selector-top">
           <div>
             <h2 class="login-title" style="text-align:left;margin-bottom:6px;">Escolha a área</h2>
-            <p class="selector-copy">Separei a parte da loja da parte da gestão para ficar mais simples no celular. Você entra no que precisa e volta para esta tela quando quiser.</p>
+
           </div>
           <button class="btn btn-secondary" onclick="logout()">Sair</button>
         </div>
@@ -913,14 +913,14 @@
           <button class="selector-card" type="button" onclick="enterArea('loja')">
             <div class="selector-icon">🛍️</div>
             <h3>Loja</h3>
-            <p>Cadastro de produtos, lote, categorias, ajustes da loja e slides do banner.</p>
-            <span class="badge">Uso rápido</span>
+
+            
           </button>
           <button class="selector-card" type="button" onclick="enterArea('gestao')">
             <div class="selector-icon">📦</div>
             <h3>Gestão</h3>
-            <p>Entradas, estoque, fornecedores, vendas e visão financeira em área separada.</p>
-            <span class="badge">Foco no controle</span>
+
+            
           </button>
         </div>
       </div>
@@ -960,7 +960,7 @@
           <div class="module-heading">
             <div>
               <h3 class="section-title" style="margin-bottom:8px;">Área da loja</h3>
-              <div class="module-heading-copy">Tudo que mexe no site fica aqui. Cadastro de produtos, lote, categorias, banners e ajustes da vitrine.</div>
+
             </div>
             <div class="module-mini-tabs">
               <span class="module-chip">Loja online</span>
@@ -978,7 +978,7 @@
             <aside class="loja-sidebar">
               <div class="loja-sidebar-head">
                 <strong>Menu da loja</strong>
-                <span>Agora cada área ficou separada: visualizar produtos, cadastrar produto e cadastro em lote em páginas internas próprias.</span>
+
               </div>
               <button class="tab-btn active" data-tab="tab-products-list">Ver produtos<small>Lista, filtros, busca e organização por tipo</small></button>
               <button class="tab-btn" data-tab="tab-product-form">Cadastrar produto<small>Formulário separado, sem poluição visual</small></button>
@@ -993,7 +993,7 @@
             <div class="loja-page-head">
               <div>
                 <h3>Produtos cadastrados</h3>
-                <p>Agora a vitrine interna ficou separada do cadastro. Aqui você gerencia, busca, filtra e enxerga os produtos por tipo, sem misturar com o formulário.</p>
+
               </div>
               <div class="actions-row" style="margin-top:0;">
                 <button class="btn btn-primary" type="button" onclick="startNewProduct()">Novo produto</button>
@@ -1005,7 +1005,7 @@
             <div class="list-header-row">
               <div>
                 <h3 class="section-title" style="margin-bottom:6px;">Produtos cadastrados</h3>
-                <div class="small-muted">Busque, filtre e duplique produtos para cadastrar muito mais rápido.</div>
+
               </div>
               <button class="btn btn-primary" type="button" onclick="startNewProduct()">Novo produto</button>
             </div>
@@ -1144,7 +1144,7 @@
             <div class="loja-page-head">
               <div>
                 <h3>Cadastrar produto</h3>
-                <p>Essa tela agora ficou só para cadastro e edição de produto. Menos informação concorrendo, fluxo mais claro e mais confortável no celular.</p>
+
               </div>
               <div class="actions-row" style="margin-top:0;">
                 <button class="btn btn-secondary" type="button" onclick="activateLojaTab('tab-products-list')">Ver produtos</button>
@@ -1157,8 +1157,8 @@
               <div class="form-header-row" style="width:100%;">
                 <div>
                   <h3 class="section-title" id="form-title" style="margin-bottom:6px;">Cadastrar Produto</h3>
-                  <p class="collapsible-intro">Fluxo em etapas, com visual mais limpo e organizado para cadastrar produto sem embolar.</p>
-                  <div class="form-collapsed-hint">Você pode recolher este bloco e focar só nos produtos cadastrados.</div>
+
+
                 </div>
                 <div class="inline-status">
                   <span class="mini-kpi"><strong id="draft-step-indicator">Etapa 1/4</strong><span>Progresso do cadastro</span></span>
@@ -1174,11 +1174,6 @@
               <button type="button" class="step-chip" data-step-target="4">4. Tamanhos e salvar</button>
             </div>
 
-            <div class="product-flow-strip">
-              <div class="product-flow-pill"><strong>Cadastro rápido</strong><span>Nome, categoria e tipo primeiro</span></div>
-              <div class="product-flow-pill"><strong>Menos erro</strong><span>Preço e imagens separados por etapa</span></div>
-              <div class="product-flow-pill"><strong>Mobile melhor</strong><span>Campos agrupados e mais limpos</span></div>
-            </div>
 
             <div class="product-step active" data-step="1">
               <div class="grid-2-equal">
@@ -1246,9 +1241,6 @@
                 </label>
               </div>
 
-              <div class="helper-box helper-box-visible">
-                Digite o nome da camisa e o sistema já prepara o slug. Isso evita erro na hora de editar ou publicar.
-              </div>
             </div>
 
             <div class="product-step" data-step="2">
@@ -1326,9 +1318,6 @@
                 <div id="images-preview" class="multi-preview-grid"></div>
               </div>
 
-              <div class="helper-box helper-box-visible">
-                O upload é automático quando você salvar o produto. Não precisa subir imagem manualmente antes.
-              </div>
 
               <div id="current-gallery-box" class="preview-box hidden" style="margin-top:16px;">
                 <div class="small-muted" style="margin-bottom:8px;">Galeria atual do produto</div>
@@ -1395,9 +1384,6 @@
                 </div>
               </div>
 
-              <div class="helper-box helper-box-visible">
-                Revise os dados acima. Atalho: <strong>Ctrl + S</strong> para salvar mais rápido.
-              </div>
             </div>
 
             <div class="step-actions">
@@ -1419,7 +1405,7 @@
             <div class="form-header-row">
               <div>
                 <h3 class="section-title">Cadastro em lote — por modelo</h3>
-                <p class="section-copy" style="margin-bottom:0;">Cadastre vários modelos de camisa de uma vez, com categoria, tamanhos e imagens compartilhadas ou próprias em cada produto.</p>
+
               </div>
               <div class="inline-status">
                 <span class="mini-kpi"><strong id="batch-create-count">0</strong><span>Modelos preparados</span></span>
@@ -1475,9 +1461,6 @@
                     </div>
                   </div>
 
-                  <div class="helper-box helper-box-visible">
-                    Essa área define o padrão do lote inteiro. Aqui você cadastra o modelo, o preço de venda e o preço antigo padrão. Quantidade e custo entram depois na Gestão, no pedido de entrada.
-                  </div>
                 </div>
 
                 <div class="mini-card">
@@ -1501,9 +1484,6 @@
                       <div id="batch-shared-extra-preview" class="batch-shared-preview"></div>
                     </div>
                   </div>
-                  <div class="helper-box helper-box-visible">
-                    Se marcar “usar imagens compartilhadas” em um produto, ele aproveita essas imagens. Você ainda pode trocar a principal ou enviar extras próprios em cada card.
-                  </div>
                 </div>
               </div>
 
@@ -1518,9 +1498,6 @@ Camisa Brasil 2026
 Camisa Real Madrid 24/25"></textarea>
                   </div>
 
-                  <div class="helper-box helper-box-visible" style="display:block; margin-top:-4px;">
-                    Exemplo de uso: digite um modelo por linha, marque os tamanhos padrão e salve. O estoque real e o custo por item você lança depois na área <strong>Gestão &gt; Pedidos / Entradas</strong>.
-                  </div>
 
                   <div class="batch-save-bar">
                     <div class="batch-create-kpi">
@@ -1544,12 +1521,6 @@ Camisa Real Madrid 24/25"></textarea>
 
                 <div class="mini-card">
                   <div class="batch-save-bar">
-                    <div class="batch-summary-list">
-                      <strong>Antes de salvar:</strong>
-                      <span>• cada modelo precisa ter imagem principal própria ou compartilhada</span>
-                      <span>• os tamanhos marcados serão aplicados em todos os modelos do lote</span>
-                      <span>• a descrição padrão será repetida em todos os modelos</span>
-                    </div>
                     <div class="actions-row" style="margin-top:0;">
                       <button class="btn btn-primary" type="button" onclick="saveBatchCreateProducts()">Cadastrar modelos do lote</button>
                     </div>
@@ -1697,7 +1668,7 @@ Camisa Real Madrid 24/25"></textarea>
           <div class="module-heading">
             <div>
               <h3 class="section-title" style="margin-bottom:8px;">Gestão de estoque</h3>
-              <div class="module-heading-copy">Área separada da loja para registrar entrada de mercadoria, acompanhar saldo por tamanho e enxergar custo e resultado sem poluir o painel principal.</div>
+
             </div>
             <div class="module-mini-tabs">
               <span class="module-chip">Separado da loja</span>
@@ -1794,7 +1765,7 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="list-header-row">
                   <div>
                     <h3 class="section-title" style="margin-bottom:6px;">Indicadores da gestão</h3>
-                    <div class="small-muted">Uma área separada para enxergar estoque total, lucro real já realizado e potencial da vitrine sem poluir o resumo principal.</div>
+
                     <div class="period-filter-bar" id="gestao-indicators-period-bar">
                       <button class="period-filter-btn active" type="button" data-period-filter="all">Tudo</button>
                       <button class="period-filter-btn" type="button" data-period-filter="today">Hoje</button>
@@ -1823,9 +1794,6 @@ Camisa Real Madrid 24/25"></textarea>
             <div class="stack">
               <div class="card order-entry-card">
                 <h3 class="section-title">Montar pedido / entrada</h3>
-                <div class="helper-box helper-box-visible" style="margin-bottom:16px;display:block;">
-                  Monte o pedido uma vez, adicione os itens e salve tudo no final. O custo extra entra separado no resumo, sem bagunçar o total.
-                </div>
 
                 <div class="order-builder-shell">
                   <div class="order-top-grid">
@@ -1873,7 +1841,7 @@ Camisa Real Madrid 24/25"></textarea>
                   <div class="order-items-box">
                     <div class="order-items-head">
                       <strong>Adicionar item</strong>
-                      <span class="small-muted">Adicione quantos produtos quiser antes de salvar o pedido</span>
+
                     </div>
                     <div class="order-item-row">
                       <div class="field">
@@ -1921,9 +1889,6 @@ Camisa Real Madrid 24/25"></textarea>
                         <strong>Finalizar</strong>
                         <span class="badge">Salva tudo de uma vez</span>
                       </div>
-                      <div class="gestao-empty" style="padding:14px;">
-                        Quando você salvar, todos os itens entram no mesmo pedido, usando o mesmo fornecedor e a mesma data. Os custos extras entram no valor investido.
-                      </div>
                       <div class="actions-row">
                         <button class="btn btn-primary" id="gestao-entry-save-btn" type="button" onclick="saveGestaoEntry()">Salvar pedido completo</button>
                         <button class="btn btn-secondary hidden" id="gestao-entry-cancel-btn" type="button" onclick="cancelGestaoOrderEdit()">Cancelar edição</button>
@@ -1938,7 +1903,7 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="list-header-row">
                   <div>
                     <h3 class="section-title" style="margin-bottom:6px;">Pedidos recentes</h3>
-                    <div class="small-muted">Toque no pedido para abrir os detalhes.</div>
+
                   </div>
                 </div>
                 <div id="gestaoEntriesList" class="gestao-list">
@@ -1953,7 +1918,7 @@ Camisa Real Madrid 24/25"></textarea>
               <div class="list-header-row">
                 <div>
                   <h3 class="section-title" style="margin-bottom:6px;">Saldo de estoque</h3>
-                  <div class="small-muted">Calculado a partir das entradas lançadas aqui na gestão, com custo médio automático.</div>
+
                 </div>
                 <button class="btn btn-secondary" type="button" onclick="renderGestao()">Atualizar</button>
               </div>
@@ -1970,9 +1935,6 @@ Camisa Real Madrid 24/25"></textarea>
             <div class="grid-2-equal">
               <div class="card sale-form-card">
                 <h3 class="section-title">Lançar venda e lucro</h3>
-                <div class="helper-box helper-box-visible" style="margin-bottom:16px;display:block;">
-                  Agora você pode montar uma venda com várias camisas no mesmo pedido. Adicione cada item e finalize tudo de uma vez.
-                </div>
                 <div class="grid-2-equal">
                   <div class="field">
                     <label for="gestao-sale-product-search">Buscar produto</label>
