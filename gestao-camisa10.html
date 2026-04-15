@@ -700,622 +700,170 @@
     @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline{grid-template-columns:1fr}}
     @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.admin-header{padding:16px}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:168px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:8px}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding:8px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}.type-manager-row,.variation-grid,.variation-media-grid{grid-template-columns:1fr}.variation-preview-main{width:100%;max-width:140px;height:auto;aspect-ratio:1/1}}
   
-  /* === Nike-inspired premium visual refresh === */
-  :root{
-    --nike-bg:#050505;
-    --nike-surface:#0b0b0b;
-    --nike-surface-2:#101010;
-    --nike-surface-3:#141414;
-    --nike-line:rgba(255,255,255,.06);
-    --nike-line-strong:rgba(255,255,255,.12);
-    --nike-text:#f5f5f5;
-    --nike-muted:#9d9d9d;
-    --nike-accent:#f2f2f2;
-    --nike-shadow:0 18px 46px rgba(0,0,0,.28);
+  /* === Loja com menu lateral e páginas internas === */
+  .loja-shell{
+    display:grid;
+    grid-template-columns:280px minmax(0,1fr);
+    gap:18px;
+    align-items:start;
   }
-
-  body{
-    background:
-      radial-gradient(circle at top center, rgba(255,255,255,.04), transparent 24%),
-      linear-gradient(180deg,#030303 0%, #070707 48%, #0b0b0b 100%);
-    color:var(--nike-text);
-  }
-
-  .topbar{
-    background:rgba(4,4,4,.88);
-    border-bottom:1px solid var(--nike-line);
+  .loja-sidebar{
+    position:sticky;
+    top:146px;
+    display:grid;
+    gap:10px;
+    padding:14px;
+    border-radius:22px;
+    background:rgba(10,10,10,.94);
+    border:1px solid rgba(255,255,255,.06);
     backdrop-filter:blur(14px);
   }
-  .topbar-inner{min-height:74px}
-  .brand-title{
-    color:#fff;
-    letter-spacing:.01em;
-    text-transform:uppercase;
+  .loja-sidebar-head{
+    display:grid;
+    gap:4px;
+    padding:4px 4px 10px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    margin-bottom:2px;
   }
-  .brand-subtitle{
+  .loja-sidebar-head strong{
+    color:#fff;
+    font-size:1rem;
+    letter-spacing:-.02em;
+  }
+  .loja-sidebar-head span{
     color:var(--nike-muted);
-    letter-spacing:.02em;
+    font-size:.82rem;
+    line-height:1.45;
   }
-
-  .admin-header{
-    background:
-      linear-gradient(180deg, rgba(15,15,15,.96) 0%, rgba(8,8,8,.98) 100%);
-    border:1px solid var(--nike-line);
-    box-shadow:none;
-  }
-  .admin-title{
-    color:#fff;
-    letter-spacing:-.03em;
-  }
-
-  .card,
-  .mini-card,
-  .stat-card,
-  .product-admin-card,
-  .batch-card,
-  .batch-panel,
-  .order-items-box,
-  .order-summary-box,
-  .draft-summary-card,
-  .selector-card,
-  .gestao-card,
-  .focus-shortcut,
-  .metric-card,
-  .dashboard-summary-item,
-  .stock-list-row,
-  .alert-item,
-  .gestao-list-card,
-  .variation-card,
-  .variation-toggle-box,
-  .type-manager{
-    background:linear-gradient(180deg, rgba(15,15,15,.98) 0%, rgba(9,9,9,.98) 100%) !important;
-    border:1px solid var(--nike-line) !important;
-    box-shadow:none !important;
-  }
-
-  .product-form-card,
-  .finance-highlight-card{
-    background:
-      radial-gradient(circle at top right, rgba(255,255,255,.05), transparent 24%),
-      linear-gradient(180deg, rgba(17,17,17,.98) 0%, rgba(8,8,8,.98) 100%) !important;
-    border:1px solid var(--nike-line-strong) !important;
-  }
-
-  .module-switcher,
-  .tabs,
-  .gestao-subtabs,
-  .products-toolbar-advanced,
-  .categories-toolbar,
-  .slides-toolbar,
-  .stock-toolbar{
-    background:rgba(10,10,10,.94) !important;
-    border:1px solid var(--nike-line) !important;
-    box-shadow:none !important;
-  }
-
-  .module-btn,
-  .tab-btn,
-  .gestao-subtab,
-  .period-filter-btn,
-  .step-chip,
-  .type-chip,
-  .module-chip,
-  .badge,
-  .batch-stat,
-  .stock-size-chip{
-    background:#111 !important;
-    border:1px solid var(--nike-line) !important;
-    color:#f2f2f2 !important;
-    box-shadow:none !important;
-  }
-
-  .module-btn.active,
-  .tab-btn.active,
-  .gestao-subtab.active,
-  .period-filter-btn.active,
-  .step-chip.active,
-  .quick-toggle-btn.active{
-    background:#fff !important;
-    color:#090909 !important;
-    border-color:#fff !important;
-  }
-  .module-btn.active small{color:#333 !important}
-
-  .btn{
-    border-radius:12px;
-    font-weight:800;
-    letter-spacing:.01em;
-    box-shadow:none !important;
-  }
-  .btn-primary{
-    background:#fff !important;
-    color:#090909 !important;
-    border:1px solid #fff !important;
-  }
-  .btn-secondary,
-  .btn-ghost,
-  .quick-icon-btn{
-    background:#121212 !important;
-    color:#fff !important;
-    border:1px solid var(--nike-line-strong) !important;
-  }
-  .btn-success{
-    background:#131313 !important;
-    color:#fff !important;
-    border:1px solid rgba(255,255,255,.18) !important;
-  }
-  .btn-danger{
-    background:#1a1a1a !important;
-    color:#fff !important;
-    border:1px solid rgba(255,255,255,.14) !important;
-  }
-  .btn-warning{
-    background:#fff !important;
-    color:#090909 !important;
-    border:1px solid #fff !important;
-  }
-
-  .field label,
-  .section-title,
-  .selector-card h3,
-  .focus-shortcut strong,
-  .gestao-card strong,
-  .product-admin-title,
-  .variation-card-title{
-    color:#fff !important;
-    letter-spacing:-.01em;
-  }
-  .section-title{
-    font-size:1.08rem;
-    text-transform:none;
-  }
-  .small-muted,
-  .module-heading-copy,
-  .selector-copy,
-  .collapsible-intro,
-  .form-collapsed-hint,
-  .section-copy,
-  .size-profile-note,
-  .type-manager-help,
-  .product-admin-sub,
-  .product-admin-desc,
-  .stock-sub,
-  .stock-meta,
-  .alert-copy span,
-  .gestao-list-sub,
-  .stat-card span,
-  .metric-card span,
-  .dashboard-summary-item span,
-  .draft-summary-card span{
-    color:var(--nike-muted) !important;
-  }
-
-  .field input,
-  .field textarea,
-  .field select,
-  .quick-priority-input,
-  .products-toolbar input,
-  .categories-toolbar input,
-  .slides-toolbar input,
-  .stock-toolbar input,
-  .products-toolbar-advanced select,
-  .batch-panel textarea,
-  .batch-panel input,
-  .batch-panel select{
-    background:#0b0b0b !important;
-    border:1px solid var(--nike-line) !important;
-    color:#fff !important;
-    border-radius:12px !important;
-  }
-  .field input:focus,
-  .field textarea:focus,
-  .field select:focus{
-    border-color:rgba(255,255,255,.28) !important;
-    box-shadow:0 0 0 3px rgba(255,255,255,.06) !important;
-  }
-
-  .stat-card::before{
-    width:2px;
-    background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,0));
-  }
-  .stat-card strong,
-  .mini-kpi strong,
-  .price-main,
-  .stock-total,
-  .metric-card strong,
-  .dashboard-summary-item strong{
-    color:#fff !important;
-  }
-
-  .product-admin-card{
-    border-radius:18px;
-    padding:14px;
-  }
-  .product-admin-image-wrap{
+  .loja-sidebar .tab-btn{
+    width:100%;
+    text-align:left;
     border-radius:16px;
-    background:#080808;
-  }
-  .product-admin-thumb{
-    filter:saturate(.98) contrast(1.02);
-  }
-  .product-admin-actions{
-    border-top:1px solid rgba(255,255,255,.06);
-    padding-top:10px;
-  }
-  .product-admin-actions .btn-primary-soft,
-  .product-admin-actions .btn-visibility-show,
-  .product-admin-actions .btn-visibility-hide{
-    background:#121212 !important;
-    color:#fff !important;
-    border:1px solid var(--nike-line-strong) !important;
-  }
-
-  .badge{
-    background:#121212 !important;
-    color:#ededed !important;
-    border-radius:999px;
-  }
-  .badge-featured,
-  .quick-order-badge{
-    background:#fff !important;
-    color:#090909 !important;
-    border:1px solid #fff !important;
-  }
-
-  .collapsible-summary::after{
-    background:#fff !important;
-    color:#090909 !important;
-  }
-  .batch-card-summary::after{
-    color:#fff !important;
-  }
-
-  .helper-box,
-  .helper-box-visible{
-    background:rgba(255,255,255,.04) !important;
-    border:1px solid rgba(255,255,255,.08) !important;
-    color:#d8d8d8 !important;
-  }
-
-  .sizes-box-premium .size-item.active,
-  .variation-size-chip.active{
-    background:#fff !important;
-    color:#090909 !important;
-    border-color:#fff !important;
-    box-shadow:none !important;
-  }
-
-  .selector-card:hover,
-  .product-admin-card:hover,
-  .stat-card:hover{
-    transform:translateY(-2px);
-    border-color:rgba(255,255,255,.14) !important;
-    box-shadow:var(--nike-shadow) !important;
-  }
-
-  .table-wrap,
-  table,
-  thead{
-    background:#0d0d0d !important;
-    border-color:var(--nike-line) !important;
-  }
-  th{
-    color:#d8d8d8 !important;
-  }
-
-  .alert-item.is-danger,
-  .alert-item.is-warning,
-  .stock-status.is-high,
-  .stock-status.is-medium,
-  .stock-status.is-low{
+    padding:14px 14px;
+    display:grid;
+    gap:4px;
     background:#111 !important;
   }
-
-  @media (max-width:700px){
-    .admin-header{padding:14px}
-    .product-admin-card{padding:12px}
-    .module-switcher,
-    .tabs,
-    .gestao-subtabs{backdrop-filter:blur(12px)}
+  .loja-sidebar .tab-btn small{
+    color:var(--nike-muted);
+    font-size:.76rem;
+    font-weight:600;
+    line-height:1.4;
   }
-
-
-  /* === Lapidação visual pesada da área de gestão === */
-  #module-gestao .module-heading{
+  .loja-sidebar .tab-btn.active small{
+    color:#333 !important;
+  }
+  .loja-main{
+    min-width:0;
+    display:grid;
+    gap:16px;
+  }
+  .loja-page-head{
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    align-items:flex-start;
+    flex-wrap:wrap;
     padding:18px 20px;
     border:1px solid rgba(255,255,255,.06);
     border-radius:22px;
     background:
       radial-gradient(circle at top right, rgba(255,255,255,.05), transparent 26%),
       linear-gradient(180deg, rgba(16,16,16,.98) 0%, rgba(8,8,8,.98) 100%);
-    margin-bottom:16px;
   }
-
-  #module-gestao .module-heading-copy{
-    max-width:820px;
-    color:#a8a8a8 !important;
-  }
-
-  #module-gestao .kpi-grid-gestao .stat-card{
-    min-height:120px;
-    padding:18px 18px 16px;
-    border-radius:20px;
-    background:
-      linear-gradient(180deg, rgba(17,17,17,.98) 0%, rgba(10,10,10,.98) 100%) !important;
-  }
-
-  #module-gestao .kpi-grid-gestao .stat-card strong{
-    font-size:1.55rem;
-    letter-spacing:-.03em;
-  }
-
-  #module-gestao .focus-shortcuts{
-    gap:14px;
-    margin-bottom:20px;
-  }
-
-  #module-gestao .focus-shortcut{
-    border-radius:20px;
-    padding:18px 18px 16px;
-    background:
-      linear-gradient(180deg, rgba(18,18,18,.98) 0%, rgba(9,9,9,.98) 100%) !important;
-  }
-
-  #module-gestao .focus-shortcut strong{
-    font-size:1.02rem;
+  .loja-page-head h3{
+    font-size:1.2rem;
+    color:#fff;
     letter-spacing:-.02em;
+    margin-bottom:6px;
   }
-
-  #module-gestao .gestao-subtabs{
-    padding:12px;
-    gap:10px;
-    border-radius:18px;
-    position:sticky;
-    top:146px;
-    z-index:38;
-    background:rgba(8,8,8,.94) !important;
-    backdrop-filter:blur(12px);
+  .loja-page-head p{
+    color:var(--nike-muted);
+    max-width:760px;
+    line-height:1.6;
+    font-size:.9rem;
   }
-
-  #module-gestao .gestao-subtab{
-    padding:12px 16px;
-    border-radius:999px;
-    font-size:.84rem;
-  }
-
-  #module-gestao .gestao-subtab.active{
-    box-shadow:0 10px 24px rgba(255,255,255,.08);
-  }
-
-  #module-gestao .card{
-    border-radius:22px;
-    padding:18px;
-  }
-
-  #module-gestao .section-title{
-    font-size:1.12rem;
-    letter-spacing:-.02em;
-  }
-
-  #module-gestao .list-header-row{
-    padding-bottom:14px;
-    margin-bottom:16px;
-  }
-
-  #module-gestao .order-entry-card,
-  #module-gestao .sale-form-card,
-  #module-gestao .finance-highlight-card{
-    border-radius:24px !important;
-  }
-
-  #module-gestao .order-top-grid{
-    gap:16px;
-    align-items:stretch;
-  }
-
-  #module-gestao .order-items-box{
-    padding:18px;
-    border-radius:18px;
-    background:
-      linear-gradient(180deg, rgba(17,17,17,.98) 0%, rgba(10,10,10,.98) 100%) !important;
-  }
-
-  #module-gestao .order-items-head strong{
-    font-size:1rem;
-    letter-spacing:-.02em;
-  }
-
-  #module-gestao .order-summary-grid{
-    gap:10px;
-  }
-
-  #module-gestao .order-summary-box{
-    min-height:88px;
-    border-radius:18px;
-    padding:15px 16px;
-    background:
-      linear-gradient(180deg, rgba(20,20,20,.98) 0%, rgba(10,10,10,.98) 100%) !important;
-  }
-
-  #module-gestao .order-summary-box span{
-    font-size:.77rem;
-    text-transform:uppercase;
-    letter-spacing:.05em;
-  }
-
-  #module-gestao .order-summary-box strong{
-    font-size:1.05rem;
-    letter-spacing:-.02em;
-  }
-
-  #module-gestao .order-summary-box.highlight{
-    border-color:rgba(255,255,255,.18) !important;
-    background:
-      radial-gradient(circle at top right, rgba(255,255,255,.07), transparent 28%),
-      linear-gradient(180deg, rgba(22,22,22,.98) 0%, rgba(10,10,10,.98) 100%) !important;
-  }
-
-  #module-gestao .order-item-row{
-    padding:14px;
-    gap:12px;
-    border-radius:18px;
-    background:
-      linear-gradient(180deg, rgba(14,14,14,.98) 0%, rgba(9,9,9,.98) 100%) !important;
-  }
-
-  #module-gestao #gestaoPendingItemsList .gestao-empty,
-  #module-gestao #gestaoPendingSaleItemsList .gestao-empty,
-  #module-gestao #gestaoStockList .gestao-empty,
-  #module-gestao #gestaoSalesList .gestao-empty,
-  #module-gestao #gestaoEntriesList .gestao-empty{
-    border-radius:18px;
-    background:
-      linear-gradient(180deg, rgba(14,14,14,.98) 0%, rgba(9,9,9,.98) 100%) !important;
-  }
-
-  #module-gestao .gestao-list{
-    gap:14px;
-  }
-
-  #module-gestao .gestao-list-card,
-  #module-gestao .order-collapsible,
-  #module-gestao .stock-list-row,
-  #module-gestao .alert-item{
-    border-radius:20px !important;
-  }
-
-  #module-gestao .stock-list-row{
-    padding:14px 16px;
-    grid-template-columns:68px minmax(0,1fr) auto;
-    background:
-      linear-gradient(180deg, rgba(18,18,18,.98) 0%, rgba(9,9,9,.98) 100%) !important;
-  }
-
-  #module-gestao .stock-list-row img{
-    width:68px;
-    height:68px;
-    border-radius:16px;
-  }
-
-  #module-gestao .stock-name{
-    font-size:1rem;
-    letter-spacing:-.02em;
-  }
-
-  #module-gestao .stock-size-chip{
-    background:#111 !important;
-    border:1px solid rgba(255,255,255,.08) !important;
-    color:#f0f0f0 !important;
-  }
-
-  #module-gestao .stock-status{
-    border-radius:999px;
-    padding:8px 11px;
-  }
-
-  #module-gestao .metric-card{
-    min-height:108px;
-    border-radius:20px;
-    justify-content:space-between;
-  }
-
-  #module-gestao .metric-card strong{
-    font-size:1.28rem;
-    letter-spacing:-.03em;
-  }
-
-  #module-gestao .alerts-panel{
-    margin-top:16px;
-  }
-
-  #module-gestao .alert-item{
-    padding:15px 16px;
-  }
-
-  #module-gestao .gestao-empty{
-    border-radius:20px;
-    padding:18px;
-  }
-
-  #module-gestao .period-filter-bar{
+  .product-type-bar{
+    display:flex;
     gap:8px;
-    margin-top:12px;
+    flex-wrap:wrap;
+    margin-bottom:12px;
   }
-
-  #module-gestao .period-filter-btn{
+  .type-filter-btn{
+    border:none;
     padding:10px 13px;
-    font-size:.79rem;
+    border-radius:999px;
+    background:#111;
+    color:#f2f2f2;
+    border:1px solid rgba(255,255,255,.08);
+    font-weight:800;
+    font-size:.8rem;
+    cursor:pointer;
   }
-
-  #module-gestao #gestaoResumoRapido{
-    background:
-      linear-gradient(180deg, rgba(18,18,18,.98) 0%, rgba(9,9,9,.98) 100%) !important;
+  .type-filter-btn.active{
+    background:#fff;
+    color:#090909;
+    border-color:#fff;
   }
-
-  #module-gestao .actions-row .btn{
-    min-height:44px;
+  .product-group-shell{
+    display:grid;
+    gap:18px;
   }
-
+  .product-kind-section{
+    display:grid;
+    gap:12px;
+  }
+  .product-kind-head{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+    padding-bottom:10px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .product-kind-head strong{
+    font-size:1rem;
+    color:#fff;
+    letter-spacing:-.02em;
+  }
+  .product-kind-head span{
+    color:var(--nike-muted);
+    font-size:.82rem;
+  }
+  @media (max-width:980px){
+    .loja-shell{grid-template-columns:1fr}
+    .loja-sidebar{
+      position:static;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      align-items:stretch;
+    }
+    .loja-sidebar-head{
+      grid-column:1/-1;
+    }
+  }
   @media (max-width:700px){
-    #module-gestao .module-heading{
+    .loja-sidebar{
+      display:flex;
+      overflow:auto;
+      padding:10px;
+      gap:8px;
+      border-radius:18px;
+    }
+    .loja-sidebar-head{
+      min-width:220px;
+      margin-bottom:0;
+      border-bottom:none;
+      border-right:1px solid rgba(255,255,255,.06);
+      padding:4px 12px 4px 4px;
+    }
+    .loja-sidebar .tab-btn{
+      min-width:180px;
+      padding:12px 13px;
+    }
+    .loja-page-head{
       padding:16px;
       border-radius:20px;
-    }
-
-    #module-gestao .kpi-grid-gestao .stat-card{
-      min-height:auto;
-      padding:16px;
-    }
-
-    #module-gestao .kpi-grid-gestao .stat-card strong{
-      font-size:1.38rem;
-    }
-
-    #module-gestao .gestao-subtabs{
-      top:168px;
-      padding:8px;
-      gap:8px;
-      overflow:auto;
-      flex-wrap:nowrap;
-    }
-
-    #module-gestao .gestao-subtab{
-      white-space:nowrap;
-      padding:11px 14px;
-    }
-
-    #module-gestao .order-items-box,
-    #module-gestao .card{
-      padding:16px;
-    }
-
-    #module-gestao .order-summary-grid,
-    #module-gestao .metrics-grid{
-      grid-template-columns:1fr 1fr !important;
-      gap:10px;
-    }
-
-    #module-gestao .order-summary-box,
-    #module-gestao .metric-card{
-      min-height:86px;
-      padding:14px;
-    }
-
-    #module-gestao .stock-list-row{
-      grid-template-columns:60px minmax(0,1fr);
-      align-items:start;
-    }
-
-    #module-gestao .stock-side{
-      justify-items:start;
-      min-width:0;
-      margin-left:74px;
-    }
-
-    #module-gestao .focus-shortcut,
-    #module-gestao .gestao-list-card,
-    #module-gestao .order-collapsible{
-      border-radius:18px !important;
     }
   }
 
@@ -1426,17 +974,185 @@
             <button class="btn btn-secondary" type="button" onclick="activateLojaTab('tab-batch-create')">Cadastro em lote</button>
           </div>
 
-          <div class="tabs" data-module-tabs="loja">
-            <button class="tab-btn active" data-tab="tab-products">Produtos</button>
-            <button class="tab-btn" data-tab="tab-batch-create">Cadastro em lote</button>
-            <button class="tab-btn" data-tab="tab-categories">Categorias</button>
-            <button class="tab-btn" data-tab="tab-shop">Ajustes da loja</button>
-            <button class="tab-btn" data-tab="tab-slides">Slides do banner</button>
-          </div>
+          <div class="loja-shell">
+            <aside class="loja-sidebar">
+              <div class="loja-sidebar-head">
+                <strong>Menu da loja</strong>
+                <span>Agora cada área ficou separada: visualizar produtos, cadastrar produto e cadastro em lote em páginas internas próprias.</span>
+              </div>
+              <button class="tab-btn active" data-tab="tab-products-list">Ver produtos<small>Lista, filtros, busca e organização por tipo</small></button>
+              <button class="tab-btn" data-tab="tab-product-form">Cadastrar produto<small>Formulário separado, sem poluição visual</small></button>
+              <button class="tab-btn" data-tab="tab-batch-create">Cadastro em lote<small>Área própria para cadastrar vários modelos</small></button>
+              <button class="tab-btn" data-tab="tab-categories">Categorias<small>Controle rápido das categorias da loja</small></button>
+              <button class="tab-btn" data-tab="tab-shop">Ajustes da loja<small>Textos, logo e contatos</small></button>
+              <button class="tab-btn" data-tab="tab-slides">Slides do banner<small>Gestão dos banners da home</small></button>
+            </aside>
+            <div class="loja-main">
 
-          <section id="tab-products" class="tab-panel active">
-        <div class="stack">
-          <details class="card product-form-card collapsible-card" id="product-form-card">
+          <section id="tab-products-list" class="tab-panel active">
+            <div class="loja-page-head">
+              <div>
+                <h3>Produtos cadastrados</h3>
+                <p>Agora a vitrine interna ficou separada do cadastro. Aqui você gerencia, busca, filtra e enxerga os produtos por tipo, sem misturar com o formulário.</p>
+              </div>
+              <div class="actions-row" style="margin-top:0;">
+                <button class="btn btn-primary" type="button" onclick="startNewProduct()">Novo produto</button>
+                <button class="btn btn-secondary" type="button" onclick="activateLojaTab('tab-batch-create')">Cadastro em lote</button>
+              </div>
+            </div>
+            <div class="stack">
+<div class="card product-list-card">
+            <div class="list-header-row">
+              <div>
+                <h3 class="section-title" style="margin-bottom:6px;">Produtos cadastrados</h3>
+                <div class="small-muted">Busque, filtre e duplique produtos para cadastrar muito mais rápido.</div>
+              </div>
+              <button class="btn btn-primary" type="button" onclick="startNewProduct()">Novo produto</button>
+            </div>
+
+            <div class="product-type-bar" id="product-kind-filter-bar">
+              <button class="type-filter-btn active" type="button" data-kind-filter="" onclick="setProductKindFilter('')">Todos</button>
+              <button class="type-filter-btn" type="button" data-kind-filter="Camisa" onclick="setProductKindFilter('Camisa')">Camisas</button>
+              <button class="type-filter-btn" type="button" data-kind-filter="Sandália" onclick="setProductKindFilter('Sandália')">Sandálias</button>
+              <button class="type-filter-btn" type="button" data-kind-filter="Kit Infantil" onclick="setProductKindFilter('Kit Infantil')">Kit infantil</button>
+              <button class="type-filter-btn" type="button" data-kind-filter="Copo" onclick="setProductKindFilter('Copo')">Copos</button>
+              <button class="type-filter-btn" type="button" data-kind-filter="Outros" onclick="setProductKindFilter('Outros')">Outros</button>
+            </div>
+
+            <div class="products-toolbar products-toolbar-advanced">
+              <input type="text" id="search-input" placeholder="Buscar por nome do produto..." oninput="filterProducts()" />
+              <select id="product-filter-kind" onchange="filterProducts()">
+                <option value="">Todos os tipos</option>
+                <option value="Camisa">Camisas</option>
+                <option value="Sandália">Sandálias</option>
+                <option value="Kit Infantil">Kit infantil</option>
+                <option value="Copo">Copos</option>
+                <option value="Outros">Outros</option>
+              </select>
+              <select id="product-filter-category" onchange="filterProducts()">
+                <option value="">Todas as categorias</option>
+              </select>
+              <select id="product-filter-sale-type" onchange="filterProducts()">
+                <option value="">Todos os tipos</option>
+                <option value="pronta_entrega">Pronta entrega</option>
+                <option value="sob_encomenda">Sob encomenda</option>
+              </select>
+              <select id="product-filter-visibility" onchange="filterProducts()">
+                <option value="">Todos</option>
+                <option value="visible">Visíveis no site</option>
+                <option value="hidden">Ocultos do site</option>
+              </select>
+              <button class="btn btn-secondary" onclick="loadProducts()">Atualizar</button>
+            </div>
+
+            <details class="batch-card">
+              <summary class="batch-card-summary">
+                <div class="batch-card-top">
+                  <div>
+                    <h4 class="section-title" style="margin-bottom:6px;">Edição em lote</h4>
+                    <div class="small-muted">Clique para expandir. Selecione produtos específicos ou aplique direto nos produtos filtrados.</div>
+                  </div>
+                  <div class="batch-stats">
+                    <div class="batch-stat">Filtrados: <strong id="batch-filtered-count">0</strong></div>
+                    <div class="batch-stat">Marcados: <strong id="batch-selected-count" class="batch-checkbox-count">0</strong></div>
+                  </div>
+                </div>
+              </summary>
+
+              <div class="batch-card-body">
+              <div class="batch-selection-bar">
+                <label class="batch-checkbox-all">
+                  <input type="checkbox" id="select-all-filtered" onchange="toggleSelectAllFiltered(this.checked)" />
+                  Selecionar todos os produtos filtrados
+                </label>
+
+                <div class="batch-selection-actions">
+                  <button class="btn btn-ghost" type="button" onclick="selectFilteredProducts()">Marcar filtrados</button>
+                  <button class="btn btn-ghost" type="button" onclick="clearSelectedProducts()">Limpar seleção</button>
+                </div>
+              </div>
+
+              <div class="batch-grid">
+                <div class="batch-panel">
+                  <div>
+                    <strong>Preço em lote</strong>
+                    <div class="batch-help">Você pode definir um novo preço, somar/subtrair valor fixo ou aplicar porcentagem.</div>
+                  </div>
+
+                  <div class="batch-mode-row">
+                    <select id="batch-price-target" onchange="updateBatchPreview()">
+                      <option value="selected">Aplicar aos marcados</option>
+                      <option value="filtered">Aplicar a todos os filtrados</option>
+                    </select>
+                    <select id="batch-price-mode" onchange="updateBatchPreview()">
+                      <option value="set">Definir novo preço</option>
+                      <option value="increase_fixed">Somar valor</option>
+                      <option value="decrease_fixed">Subtrair valor</option>
+                      <option value="increase_percent">Aumentar %</option>
+                      <option value="decrease_percent">Diminuir %</option>
+                    </select>
+                  </div>
+
+                  <input type="text" inputmode="decimal" id="batch-price-value" placeholder="Ex.: 10 ou 129,90" oninput="updateBatchPreview()" />
+
+                  <div id="batch-price-preview" class="batch-summary">Nenhuma alteração de preço configurada.</div>
+
+                  <div class="batch-quick-actions">
+                    <button class="btn btn-warning" type="button" onclick="applyBatchPrice()">Aplicar preço em lote</button>
+                  </div>
+                </div>
+
+                <div class="batch-panel">
+                  <div>
+                    <strong>Descrição em lote</strong>
+                    <div class="batch-help">Você pode substituir a descrição inteira ou adicionar texto no início/final.</div>
+                  </div>
+
+                  <div class="batch-action-row">
+                    <select id="batch-description-target" onchange="updateBatchPreview()">
+                      <option value="selected">Aplicar aos marcados</option>
+                      <option value="filtered">Aplicar a todos os filtrados</option>
+                    </select>
+                    <select id="batch-description-mode" onchange="updateBatchPreview()">
+                      <option value="replace">Substituir descrição</option>
+                      <option value="prepend">Adicionar no início</option>
+                      <option value="append">Adicionar no final</option>
+                    </select>
+                  </div>
+
+                  <textarea id="batch-description-value" rows="5" placeholder="Digite o texto que deseja aplicar..." oninput="updateBatchPreview()"></textarea>
+
+                  <div id="batch-description-preview" class="batch-summary">Nenhuma alteração de descrição configurada.</div>
+
+                  <div class="batch-quick-actions">
+                    <button class="btn btn-warning" type="button" onclick="applyBatchDescription()">Aplicar descrição em lote</button>
+                  </div>
+                </div>
+              </div>
+              </div>
+            </details>
+
+            <div id="products-table-body" class="product-group-shell">
+              <div class="empty-state">Carregando produtos...</div>
+            </div>
+            <div id="list-message" class="message"></div>
+          </div>
+            </div>
+          </section>
+
+          <section id="tab-product-form" class="tab-panel">
+            <div class="loja-page-head">
+              <div>
+                <h3>Cadastrar produto</h3>
+                <p>Essa tela agora ficou só para cadastro e edição de produto. Menos informação concorrendo, fluxo mais claro e mais confortável no celular.</p>
+              </div>
+              <div class="actions-row" style="margin-top:0;">
+                <button class="btn btn-secondary" type="button" onclick="activateLojaTab('tab-products-list')">Ver produtos</button>
+                <button class="btn btn-secondary" type="button" onclick="activateLojaTab('tab-batch-create')">Ir para lote</button>
+              </div>
+            </div>
+            <div class="stack">
+<details class="card product-form-card collapsible-card" id="product-form-card">
             <summary class="collapsible-summary">
               <div class="form-header-row" style="width:100%;">
                 <div>
@@ -1694,131 +1410,10 @@
             <div id="form-message" class="message"></div>
             </div>
           </details>
-
-          <div class="card product-list-card">
-            <div class="list-header-row">
-              <div>
-                <h3 class="section-title" style="margin-bottom:6px;">Produtos cadastrados</h3>
-                <div class="small-muted">Busque, filtre e duplique produtos para cadastrar muito mais rápido.</div>
-              </div>
-              <button class="btn btn-primary" type="button" onclick="startNewProduct()">Novo produto</button>
             </div>
+          </section>
 
-            <div class="products-toolbar products-toolbar-advanced">
-              <input type="text" id="search-input" placeholder="Buscar por nome do produto..." oninput="filterProducts()" />
-              <select id="product-filter-category" onchange="filterProducts()">
-                <option value="">Todas as categorias</option>
-              </select>
-              <select id="product-filter-sale-type" onchange="filterProducts()">
-                <option value="">Todos os tipos</option>
-                <option value="pronta_entrega">Pronta entrega</option>
-                <option value="sob_encomenda">Sob encomenda</option>
-              </select>
-              <select id="product-filter-visibility" onchange="filterProducts()">
-                <option value="">Todos</option>
-                <option value="visible">Visíveis no site</option>
-                <option value="hidden">Ocultos do site</option>
-              </select>
-              <button class="btn btn-secondary" onclick="loadProducts()">Atualizar</button>
-            </div>
-
-            <details class="batch-card">
-              <summary class="batch-card-summary">
-                <div class="batch-card-top">
-                  <div>
-                    <h4 class="section-title" style="margin-bottom:6px;">Edição em lote</h4>
-                    <div class="small-muted">Clique para expandir. Selecione produtos específicos ou aplique direto nos produtos filtrados.</div>
-                  </div>
-                  <div class="batch-stats">
-                    <div class="batch-stat">Filtrados: <strong id="batch-filtered-count">0</strong></div>
-                    <div class="batch-stat">Marcados: <strong id="batch-selected-count" class="batch-checkbox-count">0</strong></div>
-                  </div>
-                </div>
-              </summary>
-
-              <div class="batch-card-body">
-              <div class="batch-selection-bar">
-                <label class="batch-checkbox-all">
-                  <input type="checkbox" id="select-all-filtered" onchange="toggleSelectAllFiltered(this.checked)" />
-                  Selecionar todos os produtos filtrados
-                </label>
-
-                <div class="batch-selection-actions">
-                  <button class="btn btn-ghost" type="button" onclick="selectFilteredProducts()">Marcar filtrados</button>
-                  <button class="btn btn-ghost" type="button" onclick="clearSelectedProducts()">Limpar seleção</button>
-                </div>
-              </div>
-
-              <div class="batch-grid">
-                <div class="batch-panel">
-                  <div>
-                    <strong>Preço em lote</strong>
-                    <div class="batch-help">Você pode definir um novo preço, somar/subtrair valor fixo ou aplicar porcentagem.</div>
-                  </div>
-
-                  <div class="batch-mode-row">
-                    <select id="batch-price-target" onchange="updateBatchPreview()">
-                      <option value="selected">Aplicar aos marcados</option>
-                      <option value="filtered">Aplicar a todos os filtrados</option>
-                    </select>
-                    <select id="batch-price-mode" onchange="updateBatchPreview()">
-                      <option value="set">Definir novo preço</option>
-                      <option value="increase_fixed">Somar valor</option>
-                      <option value="decrease_fixed">Subtrair valor</option>
-                      <option value="increase_percent">Aumentar %</option>
-                      <option value="decrease_percent">Diminuir %</option>
-                    </select>
-                  </div>
-
-                  <input type="text" inputmode="decimal" id="batch-price-value" placeholder="Ex.: 10 ou 129,90" oninput="updateBatchPreview()" />
-
-                  <div id="batch-price-preview" class="batch-summary">Nenhuma alteração de preço configurada.</div>
-
-                  <div class="batch-quick-actions">
-                    <button class="btn btn-warning" type="button" onclick="applyBatchPrice()">Aplicar preço em lote</button>
-                  </div>
-                </div>
-
-                <div class="batch-panel">
-                  <div>
-                    <strong>Descrição em lote</strong>
-                    <div class="batch-help">Você pode substituir a descrição inteira ou adicionar texto no início/final.</div>
-                  </div>
-
-                  <div class="batch-action-row">
-                    <select id="batch-description-target" onchange="updateBatchPreview()">
-                      <option value="selected">Aplicar aos marcados</option>
-                      <option value="filtered">Aplicar a todos os filtrados</option>
-                    </select>
-                    <select id="batch-description-mode" onchange="updateBatchPreview()">
-                      <option value="replace">Substituir descrição</option>
-                      <option value="prepend">Adicionar no início</option>
-                      <option value="append">Adicionar no final</option>
-                    </select>
-                  </div>
-
-                  <textarea id="batch-description-value" rows="5" placeholder="Digite o texto que deseja aplicar..." oninput="updateBatchPreview()"></textarea>
-
-                  <div id="batch-description-preview" class="batch-summary">Nenhuma alteração de descrição configurada.</div>
-
-                  <div class="batch-quick-actions">
-                    <button class="btn btn-warning" type="button" onclick="applyBatchDescription()">Aplicar descrição em lote</button>
-                  </div>
-                </div>
-              </div>
-              </div>
-            </details>
-
-            <div id="products-table-body" class="product-admin-list">
-              <div class="empty-state">Carregando produtos...</div>
-            </div>
-            <div id="list-message" class="message"></div>
-          </div>
-        </div>
-      </section>
-
-      
-      <section id="tab-batch-create" class="tab-panel">
+<section id="tab-batch-create" class="tab-panel">
         <div class="stack">
           <div class="card">
             <div class="form-header-row">
@@ -2094,6 +1689,8 @@ Camisa Real Madrid 24/25"></textarea>
           </div>
         </div>
       </section>
+            </div>
+          </div>
         </section>
 
         <section id="module-gestao" class="module-panel">
@@ -2610,6 +2207,7 @@ Camisa Real Madrid 24/25"></textarea>
     let editingHeroSlideId = null;
     let allProducts = [];
     let filteredProducts = [];
+    let currentProductKindFilter = "";
     let selectedProductIds = new Set();
     let allCategories = [];
     let allHeroSlides = [];
@@ -3420,7 +3018,7 @@ Camisa Real Madrid 24/25"></textarea>
       resetForm();
       loadCategories();
       setProductStep(1);
-      document.querySelector('.tab-btn[data-tab="tab-products"]')?.click();
+      activateLojaTab('tab-product-form');
       const productFormCard = document.getElementById("product-form-card");
       if (productFormCard) productFormCard.open = true;
       setProductStep(1);
@@ -4021,11 +3619,34 @@ async function uploadMultipleProductImages(productId) {
       });
     }
 
+
+    function normalizeKindFilterValue(value = "") {
+      const normalized = String(value || "").trim();
+      if (!normalized) return "";
+      return normalized;
+    }
+
+    function setProductKindFilter(kind = "") {
+      currentProductKindFilter = normalizeKindFilterValue(kind);
+      const filterSelect = document.getElementById("product-filter-kind");
+      if (filterSelect) filterSelect.value = currentProductKindFilter;
+      document.querySelectorAll(".type-filter-btn").forEach(button => {
+        button.classList.toggle("active", (button.dataset.kindFilter || "") === currentProductKindFilter);
+      });
+      filterProducts();
+    }
+
+    function getDisplayProductKind(product) {
+      const inferred = inferProductKind(product);
+      return inferred || "Outros";
+    }
+
     function getFilteredProducts() {
       const term = document.getElementById("search-input").value.trim().toLowerCase();
       const categoryFilter = document.getElementById("product-filter-category")?.value || "";
       const saleTypeFilter = document.getElementById("product-filter-sale-type")?.value || "";
       const visibilityFilter = document.getElementById("product-filter-visibility")?.value || "";
+      const kindFilter = normalizeKindFilterValue(document.getElementById("product-filter-kind")?.value || currentProductKindFilter || "");
 
       return allProducts
         .filter(product => {
@@ -4033,10 +3654,15 @@ async function uploadMultipleProductImages(productId) {
           const matchCategory = !categoryFilter || String(product.category_id) === String(categoryFilter);
           const matchSaleType = !saleTypeFilter || (product.sale_type || "pronta_entrega") === saleTypeFilter;
           const isVisible = product.is_visible !== false;
+          const productKind = getDisplayProductKind(product);
+          const normalizedKind = productKind === "Camisa" || productKind === "Sandália" || productKind === "Kit Infantil" || productKind === "Copo"
+            ? productKind
+            : "Outros";
+          const matchKind = !kindFilter || normalizedKind === kindFilter;
           const matchVisibility = !visibilityFilter
             || (visibilityFilter === "visible" && isVisible)
             || (visibilityFilter === "hidden" && !isVisible);
-          return matchName && matchCategory && matchSaleType && matchVisibility;
+          return matchName && matchCategory && matchSaleType && matchKind && matchVisibility;
         })
         .sort((a, b) => {
           const aSaleType = a.sale_type || "pronta_entrega";
@@ -4293,6 +3919,7 @@ async function uploadMultipleProductImages(productId) {
       updateBatchPreview();
     }
 
+
     function renderProducts(products) {
       const tbody = document.getElementById("products-table-body");
 
@@ -4302,13 +3929,23 @@ async function uploadMultipleProductImages(productId) {
         return;
       }
 
-      tbody.innerHTML = products.map(product => {
+      const groupedProducts = {};
+      const kindOrder = ["Camisa", "Sandália", "Kit Infantil", "Copo", "Outros"];
+
+      products.forEach(product => {
+        const baseKind = getDisplayProductKind(product);
+        const normalizedKind = kindOrder.includes(baseKind) ? baseKind : "Outros";
+        if (!groupedProducts[normalizedKind]) groupedProducts[normalizedKind] = [];
+        groupedProducts[normalizedKind].push(product);
+      });
+
+      const renderCard = (product) => {
         const sizes = Array.isArray(product.product_sizes)
           ? product.product_sizes.filter(item => item.is_available).map(item => item.size)
           : [];
 
         const categoryName = product.categories?.name || "Sem categoria";
-        const productKind = inferProductKind(product);
+        const productKind = getDisplayProductKind(product);
         const saleType = product.sale_type === "sob_encomenda" ? "Sob encomenda" : "Pronta entrega";
         const visibleBadge = product.is_visible
           ? '<span class="badge">Visível</span>'
@@ -4413,7 +4050,21 @@ async function uploadMultipleProductImages(productId) {
             </div>
           </article>
         `;
-      }).join("");
+      };
+
+      tbody.innerHTML = kindOrder
+        .filter(kind => Array.isArray(groupedProducts[kind]) && groupedProducts[kind].length)
+        .map(kind => `
+          <section class="product-kind-section">
+            <div class="product-kind-head">
+              <strong>${kind}</strong>
+              <span>${groupedProducts[kind].length} produto(s)</span>
+            </div>
+            <div class="product-admin-list">
+              ${groupedProducts[kind].map(renderCard).join("")}
+            </div>
+          </section>
+        `).join("");
 
       updateBatchCounters();
     }
@@ -4798,6 +4449,7 @@ async function uploadMultipleProductImages(productId) {
       document.getElementById("cancel-edit-btn").classList.remove("hidden");
       const productFormCard = document.getElementById("product-form-card");
       if (productFormCard) productFormCard.open = true;
+      activateLojaTab('tab-product-form');
 
       setProductStep(1);
       updateDraftSummary();
@@ -4808,6 +4460,7 @@ async function uploadMultipleProductImages(productId) {
       resetForm();
       loadCategories();
       setProductStep(1);
+      activateLojaTab('tab-products-list');
     }
 
 
@@ -5458,7 +5111,7 @@ async function uploadHeroSlideImage() {
     }
 
     function setupTabs() {
-      const tabGroups = document.querySelectorAll(".tabs");
+      const tabGroups = document.querySelectorAll(".tabs, .loja-sidebar");
       tabGroups.forEach(group => {
         const buttons = group.querySelectorAll(".tab-btn");
         buttons.forEach((button) => {
@@ -5484,6 +5137,11 @@ async function uploadHeroSlideImage() {
       parentModule?.querySelectorAll('.tab-panel').forEach(item => item.classList.remove('active'));
       parentModule?.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === targetId));
       panel.classList.add('active');
+      if (targetId === 'tab-product-form') {
+        const productFormCard = document.getElementById('product-form-card');
+        if (productFormCard) productFormCard.open = true;
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function activateModule(targetId) {
