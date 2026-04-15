@@ -2059,6 +2059,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
             )
           `)
           .eq("is_featured", true)
+          .order("priority_featured", { ascending: true })
           .order("created_at", { ascending: false })
           .limit(4);
 
@@ -2535,6 +2536,8 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
           sale_type,
           category_id,
           priority_encomenda,
+          priority_pronta_entrega,
+          priority_featured,
           created_at,
           categories (
             id,
