@@ -174,21 +174,28 @@
     .products-toolbar-advanced{display:grid;grid-template-columns:minmax(180px,1.2fr) minmax(160px,.9fr) minmax(160px,.9fr) minmax(170px,.95fr) auto;align-items:center}
     .products-toolbar-advanced select{padding:12px 14px;border-radius:14px;border:1px solid #2d2d2d;background:#101010;color:#fff}
     .product-admin-list{display:grid;grid-template-columns:1fr;gap:12px}
-    .product-admin-card{position:relative;display:grid;grid-template-columns:88px minmax(0,1fr);gap:12px;padding:12px;border-radius:16px;background:#101010;border:1px solid rgba(255,255,255,.05);overflow:visible;align-items:start}
+    .product-admin-card{position:relative;border-radius:18px;background:#101010;border:1px solid rgba(255,255,255,.05);overflow:hidden;transition:.2s ease}
+    .product-admin-card[open]{border-color:rgba(212,175,55,.22);box-shadow:0 0 0 1px rgba(212,175,55,.08),0 14px 28px rgba(0,0,0,.18)}
+    .product-admin-card:hover{transform:translateY(-2px);border-color:rgba(212,175,55,.16)}
+    .product-admin-summary{list-style:none;display:grid;grid-template-columns:88px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;cursor:pointer}
+    .product-admin-summary::-webkit-details-marker{display:none}
     .product-admin-image-wrap{position:relative;width:88px;height:88px;aspect-ratio:auto;background:#0f0f0f;border:none;border-radius:14px;overflow:hidden}
-    .product-admin-select{position:absolute;top:6px;right:6px;z-index:2;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:999px;background:rgba(7,7,7,.82);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12)}
-    .product-admin-select input{width:16px;height:16px;accent-color:var(--gold);cursor:pointer}
     .product-admin-thumb{width:100%;height:100%;object-fit:cover;background:#0f0f0f;transition:none}
-    .product-admin-card:hover .product-admin-thumb{transform:none}
-    .product-admin-content{display:grid;gap:10px;min-width:0;padding:0}
+    .product-admin-summary-main{min-width:0;display:grid;gap:6px}
+    .product-admin-content{display:grid;gap:10px;min-width:0;padding:14px 12px 12px;border-top:1px solid rgba(255,255,255,.06);background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,0))}
     .product-admin-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
     .product-admin-title{font-size:1rem;font-weight:900;color:#fff;line-height:1.35}
     .product-admin-sub{color:var(--muted);font-size:.84rem;word-break:break-word}
-    .product-admin-price{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .product-admin-price{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;text-align:right}
     .price-main{font-size:1.05rem;font-weight:900;color:var(--gold-2)}
     .price-old{text-decoration:line-through;color:#8f8f8f;font-size:.88rem}
+    .product-admin-expand{display:inline-flex;align-items:center;justify-content:center;align-self:center;min-width:34px;height:34px;padding:0 10px;border-radius:999px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.18);color:var(--gold-2);font-size:.8rem;font-weight:900}
+    .product-admin-card[open] .product-admin-expand{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#111;border-color:transparent}
     .product-admin-meta{display:flex;gap:6px;flex-wrap:wrap}
     .product-admin-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+    .product-admin-actions-top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+    .product-admin-select{display:flex;align-items:center;gap:10px;color:#f1f1f1;font-weight:700;font-size:.84rem}
+    .product-admin-select input{width:16px;height:16px;accent-color:var(--gold);cursor:pointer}
     .product-admin-actions .btn{padding:9px 12px;font-size:.84rem}
     .product-admin-actions .btn-primary-soft{
       background:rgba(212,175,55,.10);
@@ -684,9 +691,7 @@
     .tab-btn:not(.active):hover,.gestao-subtab:not(.active):hover,.period-filter-btn:not(.active):hover{background:#1a1a1a;border-color:rgba(212,175,55,.16)}
     .list-header-row{padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,.05)}
     .products-toolbar-advanced,.categories-toolbar,.slides-toolbar,.stock-toolbar{padding:12px;border-radius:16px;background:#0c0c0c;border:1px solid rgba(255,255,255,.05)}
-    .product-admin-card{transition:.2s ease}
-    .product-admin-card:hover{transform:translateY(-2px);border-color:rgba(212,175,55,.16)}
-    .product-admin-title{font-size:1.03rem}
+        .product-admin-title{font-size:1.03rem}
     .product-admin-actions{padding-top:6px;border-top:1px solid rgba(255,255,255,.05)}
     .product-admin-actions .btn{border-radius:12px}
     .quick-order-badge{min-width:76px}
@@ -698,7 +703,7 @@
 
 
     @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline{grid-template-columns:1fr}}
-    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.admin-header{padding:16px}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:168px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:8px}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding:8px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}.type-manager-row,.variation-grid,.variation-media-grid{grid-template-columns:1fr}.variation-preview-main{width:100%;max-width:140px;height:auto;aspect-ratio:1/1}}
+    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.admin-header{padding:16px}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-summary{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:12px 10px 10px}.product-admin-actions .btn{width:100%}.product-admin-price{justify-content:flex-start;text-align:left}.product-admin-expand{margin-top:2px}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:168px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:8px}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding:8px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}.type-manager-row,.variation-grid,.variation-media-grid{grid-template-columns:1fr}.variation-preview-main{width:100%;max-width:140px;height:auto;aspect-ratio:1/1}}
   
   /* === Loja com menu lateral e páginas internas === */
   .loja-shell{
@@ -3931,35 +3936,41 @@ async function uploadMultipleProductImages(productId) {
         const isSelected = selectedProductIds.has(String(product.id));
 
         return `
-          <article class="product-admin-card ${isSelected ? "selected" : ""}">
-            <div class="product-admin-image-wrap">
-              <div class="product-admin-select">
-                <input
-                  type="checkbox"
-                  aria-label="Selecionar produto"
-                  ${isSelected ? "checked" : ""}
-                  onchange="toggleProductSelection('${product.id}', this.checked)"
+          <details class="product-admin-card ${isSelected ? "selected" : ""}">
+            <summary class="product-admin-summary">
+              <div class="product-admin-image-wrap">
+                <img
+                  src="${product.image_url || 'https://via.placeholder.com/600x600?text=Sem+Imagem'}"
+                  alt="${product.name || ''}"
+                  class="product-admin-thumb"
+                  onerror="this.src='https://via.placeholder.com/600x600?text=Imagem';"
                 />
               </div>
 
-              <img
-                src="${product.image_url || 'https://via.placeholder.com/600x600?text=Sem+Imagem'}"
-                alt="${product.name || ''}"
-                class="product-admin-thumb"
-                onerror="this.src='https://via.placeholder.com/600x600?text=Imagem';"
-              />
-            </div>
+              <div class="product-admin-summary-main">
+                <div class="product-admin-title">${product.name || "-"} ${featuredBadge}</div>
+                <div class="product-admin-sub">Toque para abrir detalhes</div>
+              </div>
+
+              <div class="product-admin-price">
+                <span class="price-main">${formatPrice(product.price)}</span>
+                ${oldPrice}
+                <span class="product-admin-expand">Ver</span>
+              </div>
+            </summary>
 
             <div class="product-admin-content">
-              <div class="product-admin-top">
-                <div>
-                  <div class="product-admin-title">${product.name || "-"} ${featuredBadge}</div>
-                  <div class="product-admin-sub">Slug: ${product.slug || "-"}</div>
-                </div>
-                <div class="product-admin-price">
-                  <span class="price-main">${formatPrice(product.price)}</span>
-                  ${oldPrice}
-                </div>
+              <div class="product-admin-actions-top">
+                <label class="product-admin-select">
+                  <input
+                    type="checkbox"
+                    aria-label="Selecionar produto"
+                    ${isSelected ? "checked" : ""}
+                    onchange="toggleProductSelection('${product.id}', this.checked)"
+                  />
+                  <span>Selecionar produto</span>
+                </label>
+                <div class="product-admin-sub">Slug: ${product.slug || "-"}</div>
               </div>
 
               ${description}
@@ -4010,7 +4021,7 @@ async function uploadMultipleProductImages(productId) {
                 <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">Excluir</button>
               </div>
             </div>
-          </article>
+          </details>
         `;
       };
 
