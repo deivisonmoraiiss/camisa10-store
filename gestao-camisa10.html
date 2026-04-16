@@ -2500,6 +2500,7 @@ Camisa Real Madrid 24/25"></textarea>
     const GESTAO_ORDER_ITEMS_TABLE = "inventory_order_items";
     const GESTAO_SALES_TABLE = "sales";
     const GESTAO_SALE_ITEMS_TABLE = "sale_items";
+    const GESTAO_BUSINESS_COSTS_TABLE = "business_expenses";
     let gestaoSuppliers = [];
     let gestaoEntries = [];
     let gestaoSales = [];
@@ -6278,8 +6279,14 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       gestaoBusinessCosts = gestaoBusinessCosts.filter(entry => String(entry.id) !== String(costId));
       if (String(editingGestaoBusinessCostId || '') === String(costId)) resetGestaoBusinessCostForm();
       localStorage.setItem(GESTAO_BUSINESS_COSTS_KEY, JSON.stringify(gestaoBusinessCosts));
-      renderGestao();
-      showMessage('gestao-business-cost-message', 'Custo excluído com sucesso.', 'success');
+      try {
+        await persistGestaoState();
+        renderGestao();
+        showMessage('gestao-business-cost-message', 'Custo excluído com sucesso.', 'success');
+      } catch (error) {
+        console.error('Erro ao excluir custo do negócio:', error);
+        showMessage('gestao-business-cost-message', `Erro ao excluir custo: ${error?.message || 'sem detalhe'}.`, 'error');
+      }
     }
 
     async function saveGestaoBusinessCost() {
@@ -6309,9 +6316,15 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         gestaoBusinessCosts.unshift(payload);
       }
       localStorage.setItem(GESTAO_BUSINESS_COSTS_KEY, JSON.stringify(gestaoBusinessCosts));
-      resetGestaoBusinessCostForm();
-      renderGestao();
-      showMessage('gestao-business-cost-message', `${payload.type === 'investimento' ? 'Investimento' : 'Despesa'} salva com sucesso.`, 'success');
+      try {
+        await persistGestaoState();
+        resetGestaoBusinessCostForm();
+        renderGestao();
+        showMessage('gestao-business-cost-message', `${payload.type === 'investimento' ? 'Investimento' : 'Despesa'} salva com sucesso.`, 'success');
+      } catch (error) {
+        console.error('Erro ao salvar custo do negócio:', error);
+        showMessage('gestao-business-cost-message', `Erro ao salvar custo: ${error?.message || 'sem detalhe'}.`, 'error');
+      }
     }
 
     function renderGestaoBusinessCosts() {
@@ -6473,6 +6486,14 @@ function updateGestaoSyncUi() {
 
       if (salesError) throw salesError;
 
+      const { data: businessCostsRows, error: businessCostsError } = await supabaseClient
+        .from(GESTAO_BUSINESS_COSTS_TABLE)
+        .select('id, name, expense_type, category, amount, expense_date, months_to_dilute, notes, created_at')
+        .order('expense_date', { ascending: false })
+        .order('created_at', { ascending: false });
+
+      if (businessCostsError) throw businessCostsError;
+
       gestaoSuppliers = (suppliers || []).map(item => ({
         id: item.id,
         name: item.name,
@@ -6521,6 +6542,17 @@ function updateGestaoSyncUi() {
         clientPhone: gestaoSalesMeta?.[item.sale_id]?.clientPhone || ''
       }));
 
+      gestaoBusinessCosts = (businessCostsRows || []).map(item => normalizeGestaoBusinessCostItem({
+        id: item.id,
+        name: item.name,
+        type: item.expense_type,
+        amount: item.amount,
+        date: item.expense_date || item.created_at,
+        category: item.category || '',
+        notes: item.notes || '',
+        monthsToDilute: item.months_to_dilute || 1
+      }));
+
       normalizeGestaoEntriesExtraCosts();
       localStorage.setItem(GESTAO_SUPPLIERS_KEY, JSON.stringify(gestaoSuppliers));
       localStorage.setItem(GESTAO_ENTRIES_KEY, JSON.stringify(gestaoEntries));
@@ -6534,7 +6566,6 @@ function updateGestaoSyncUi() {
     async function loadGestaoState() {
       try {
         await loadGestaoStateFromSupabase();
-        loadGestaoBusinessCostsFromStorage();
         return;
       } catch (error) {
         console.warn('Gestão em modo local:', error?.message || error);
@@ -6605,8 +6636,40 @@ function updateGestaoSyncUi() {
       await Promise.all([
         syncGestaoSuppliersToSupabase(),
         syncGestaoEntriesToSupabase(),
-        syncGestaoSalesToSupabase()
+        syncGestaoSalesToSupabase(),
+        syncGestaoBusinessCostsToSupabase()
       ]);
+    }
+
+    async function syncGestaoBusinessCostsToSupabase() {
+      const payload = gestaoBusinessCosts.map(item => {
+        const normalized = normalizeGestaoBusinessCostItem(item);
+        return {
+          id: normalized.id,
+          name: normalized.name,
+          expense_type: normalized.type,
+          category: normalized.category || '',
+          amount: Number(normalized.amount || 0),
+          expense_date: normalized.date || new Date().toISOString().slice(0,10),
+          months_to_dilute: Math.max(1, Number(normalized.monthsToDilute || 1)),
+          notes: normalized.notes || ''
+        };
+      });
+
+      const { error: deleteError } = await supabaseClient
+        .from(GESTAO_BUSINESS_COSTS_TABLE)
+        .delete()
+        .not('id', 'is', null);
+
+      if (deleteError) throw deleteError;
+
+      if (!payload.length) return;
+
+      const { error } = await supabaseClient
+        .from(GESTAO_BUSINESS_COSTS_TABLE)
+        .insert(payload);
+
+      if (error) throw error;
     }
 
     async function syncGestaoSuppliersToSupabase() {
