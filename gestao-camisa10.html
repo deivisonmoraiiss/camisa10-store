@@ -3014,6 +3014,12 @@ Camisa Real Madrid 24/25"></textarea>
       return null;
     }
 
+    function inferEncomendaPriority(product = {}) {
+      const explicit = product.priority_encomenda;
+      if (explicit !== null && explicit !== undefined && explicit !== "") return Number(explicit);
+      return null;
+    }
+
     function getProntaEntregaProductsSorted() {
       return allProducts
         .filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega")
@@ -3030,6 +3036,26 @@ Camisa Real Madrid 24/25"></textarea>
 
     function getProntaEntregaPosition(productId) {
       const sorted = getProntaEntregaProductsSorted();
+      const index = sorted.findIndex(product => String(product.id) === String(productId));
+      return index >= 0 ? index + 1 : null;
+    }
+
+    function getSobEncomendaProductsSorted() {
+      return allProducts
+        .filter(product => product.sale_type === "sob_encomenda")
+        .sort((a, b) => {
+          const aPriority = inferEncomendaPriority(a) ?? 999999;
+          const bPriority = inferEncomendaPriority(b) ?? 999999;
+          if (aPriority !== bPriority) return aPriority - bPriority;
+
+          const aDate = new Date(a.created_at || 0).getTime();
+          const bDate = new Date(b.created_at || 0).getTime();
+          return bDate - aDate;
+        });
+    }
+
+    function getSobEncomendaPosition(productId) {
+      const sorted = getSobEncomendaProductsSorted();
       const index = sorted.findIndex(product => String(product.id) === String(productId));
       return index >= 0 ? index + 1 : null;
     }
@@ -4296,8 +4322,12 @@ async function uploadMultipleProductImages(productId) {
         const kindDiff = kindOrder.indexOf(getOrderedKind(a)) - kindOrder.indexOf(getOrderedKind(b));
         if (kindDiff !== 0) return kindDiff;
 
-        const aPriority = inferProntaPriority(a) ?? 999999;
-        const bPriority = inferProntaPriority(b) ?? 999999;
+        const aPriority = (a.sale_type || "pronta_entrega") === "sob_encomenda"
+          ? (inferEncomendaPriority(a) ?? 999999)
+          : (inferProntaPriority(a) ?? 999999);
+        const bPriority = (b.sale_type || "pronta_entrega") === "sob_encomenda"
+          ? (inferEncomendaPriority(b) ?? 999999)
+          : (inferProntaPriority(b) ?? 999999);
         if (aPriority !== bPriority) return aPriority - bPriority;
 
         return String(a.name || "").localeCompare(String(b.name || ""), "pt-BR");
@@ -4325,6 +4355,7 @@ async function uploadMultipleProductImages(productId) {
           ? `<span class="badge">Home sob encomenda: ${product.priority_encomenda}</span>`
           : '';
         const prontaPriority = inferProntaPriority(product);
+        const encomendaPriority = inferEncomendaPriority(product);
         const prontaOrderBadge = (product.sale_type || "pronta_entrega") === "pronta_entrega" && prontaPriority
           ? `<span class="badge">Pronta entrega: ${prontaPriority}</span>`
           : '';
@@ -4409,7 +4440,19 @@ async function uploadMultipleProductImages(productId) {
                           <button class="btn btn-secondary" onclick="saveQuickProntaPriority('${product.id}')">Salvar</button>
                         </div>
                       </div>
-                    ` : `<div class="small-muted" style="display:flex;align-items:center;">Esse controle aparece só para pronta entrega.</div>`}
+                    ` : `
+                      <div class="quick-order-box">
+                        <span class="quick-order-badge">Posição #${getSobEncomendaPosition(product.id) || "—"}</span>
+                        <div class="quick-order-actions">
+                          <button class="quick-icon-btn" type="button" onclick="moveSobEncomendaPriority('${product.id}', 'up')" ${getSobEncomendaPosition(product.id) === 1 ? "disabled" : ""}>↑</button>
+                          <button class="quick-icon-btn" type="button" onclick="moveSobEncomendaPriority('${product.id}', 'down')">↓</button>
+                        </div>
+                        <div class="quick-priority-box">
+                          <input class="quick-priority-input" type="number" min="1" step="1" id="quick-encomenda-priority-${product.id}" value="${encomendaPriority ?? ""}" placeholder="Ordem sob encomenda" />
+                          <button class="btn btn-secondary" onclick="saveQuickEncomendaPriority('${product.id}')">Salvar</button>
+                        </div>
+                      </div>
+                    `}
                   </div>
 
                   <div class="product-admin-actions">
@@ -4548,6 +4591,33 @@ async function uploadMultipleProductImages(productId) {
       await loadProducts();
     }
 
+    async function saveQuickEncomendaPriority(productId) {
+      clearMessage("list-message");
+      const input = document.getElementById(`quick-encomenda-priority-${productId}`);
+      if (!input) return;
+      const raw = String(input.value || "").trim();
+      const numericValue = raw ? Number(raw) : null;
+
+      if (raw && (!Number.isFinite(numericValue) || numericValue < 1)) {
+        showMessage("list-message", "Digite um número válido para a ordem de sob encomenda.", "error");
+        return;
+      }
+
+      const { error } = await supabaseClient
+        .from("products")
+        .update({ priority_encomenda: numericValue })
+        .eq("id", productId);
+
+      if (error) {
+        console.error("Erro ao atualizar prioridade de sob encomenda:", error);
+        showMessage("list-message", `Erro ao salvar ordem de sob encomenda: ${error.message}`, "error");
+        return;
+      }
+
+      showMessage("list-message", "Ordem de sob encomenda atualizada com sucesso.", "success");
+      await loadProducts();
+    }
+
     async function moveProntaEntregaPriority(productId, direction) {
       clearMessage("list-message");
       const sorted = getProntaEntregaProductsSorted();
@@ -4595,6 +4665,42 @@ async function uploadMultipleProductImages(productId) {
       persistStoredProntaPriority(currentProduct.id, targetPriority);
       persistStoredProntaPriority(targetProduct.id, currentPriority);
       showMessage("list-message", "Ordem visual da pronta entrega atualizada com sucesso.", "success");
+      await loadProducts();
+    }
+
+    async function moveSobEncomendaPriority(productId, direction) {
+      clearMessage("list-message");
+      const sorted = getSobEncomendaProductsSorted();
+      const currentIndex = sorted.findIndex(product => String(product.id) === String(productId));
+
+      if (currentIndex === -1) return;
+
+      const targetIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+      if (targetIndex < 0 || targetIndex >= sorted.length) return;
+
+      const currentProduct = sorted[currentIndex];
+      const targetProduct = sorted[targetIndex];
+
+      const currentPriority = inferEncomendaPriority(currentProduct) ?? (currentIndex + 1);
+      const targetPriority = inferEncomendaPriority(targetProduct) ?? (targetIndex + 1);
+
+      const currentResponse = await supabaseClient
+        .from("products")
+        .update({ priority_encomenda: targetPriority })
+        .eq("id", currentProduct.id);
+
+      const targetResponse = await supabaseClient
+        .from("products")
+        .update({ priority_encomenda: currentPriority })
+        .eq("id", targetProduct.id);
+
+      if (currentResponse.error || targetResponse.error) {
+        const errorMessage = currentResponse.error?.message || targetResponse.error?.message || "Erro ao reordenar";
+        showMessage("list-message", `Erro ao reordenar sob encomenda: ${errorMessage}`, "error");
+        return;
+      }
+
+      showMessage("list-message", "Ordem visual de sob encomenda atualizada com sucesso.", "success");
       await loadProducts();
     }
 
