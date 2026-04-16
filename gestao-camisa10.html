@@ -174,28 +174,21 @@
     .products-toolbar-advanced{display:grid;grid-template-columns:minmax(180px,1.2fr) minmax(160px,.9fr) minmax(160px,.9fr) minmax(170px,.95fr) auto;align-items:center}
     .products-toolbar-advanced select{padding:12px 14px;border-radius:14px;border:1px solid #2d2d2d;background:#101010;color:#fff}
     .product-admin-list{display:grid;grid-template-columns:1fr;gap:12px}
-    .product-admin-card{position:relative;border-radius:18px;background:#101010;border:1px solid rgba(255,255,255,.05);overflow:hidden;transition:.2s ease}
-    .product-admin-card[open]{border-color:rgba(212,175,55,.22);box-shadow:0 0 0 1px rgba(212,175,55,.08),0 14px 28px rgba(0,0,0,.18)}
-    .product-admin-card:hover{transform:translateY(-2px);border-color:rgba(212,175,55,.16)}
-    .product-admin-summary{list-style:none;display:grid;grid-template-columns:88px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;cursor:pointer}
-    .product-admin-summary::-webkit-details-marker{display:none}
+    .product-admin-card{position:relative;display:grid;grid-template-columns:88px minmax(0,1fr);gap:12px;padding:12px;border-radius:16px;background:#101010;border:1px solid rgba(255,255,255,.05);overflow:visible;align-items:start}
     .product-admin-image-wrap{position:relative;width:88px;height:88px;aspect-ratio:auto;background:#0f0f0f;border:none;border-radius:14px;overflow:hidden}
+    .product-admin-select{position:absolute;top:6px;right:6px;z-index:2;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:999px;background:rgba(7,7,7,.82);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12)}
+    .product-admin-select input{width:16px;height:16px;accent-color:var(--gold);cursor:pointer}
     .product-admin-thumb{width:100%;height:100%;object-fit:cover;background:#0f0f0f;transition:none}
-    .product-admin-summary-main{min-width:0;display:grid;gap:6px}
-    .product-admin-content{display:grid;gap:10px;min-width:0;padding:14px 12px 12px;border-top:1px solid rgba(255,255,255,.06);background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,0))}
+    .product-admin-card:hover .product-admin-thumb{transform:none}
+    .product-admin-content{display:grid;gap:10px;min-width:0;padding:0}
     .product-admin-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
     .product-admin-title{font-size:1rem;font-weight:900;color:#fff;line-height:1.35}
     .product-admin-sub{color:var(--muted);font-size:.84rem;word-break:break-word}
-    .product-admin-price{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;text-align:right}
+    .product-admin-price{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
     .price-main{font-size:1.05rem;font-weight:900;color:var(--gold-2)}
     .price-old{text-decoration:line-through;color:#8f8f8f;font-size:.88rem}
-    .product-admin-expand{display:inline-flex;align-items:center;justify-content:center;align-self:center;min-width:34px;height:34px;padding:0 10px;border-radius:999px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.18);color:var(--gold-2);font-size:.8rem;font-weight:900}
-    .product-admin-card[open] .product-admin-expand{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#111;border-color:transparent}
     .product-admin-meta{display:flex;gap:6px;flex-wrap:wrap}
     .product-admin-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
-    .product-admin-actions-top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
-    .product-admin-select{display:flex;align-items:center;gap:10px;color:#f1f1f1;font-weight:700;font-size:.84rem}
-    .product-admin-select input{width:16px;height:16px;accent-color:var(--gold);cursor:pointer}
     .product-admin-actions .btn{padding:9px 12px;font-size:.84rem}
     .product-admin-actions .btn-primary-soft{
       background:rgba(212,175,55,.10);
@@ -691,7 +684,9 @@
     .tab-btn:not(.active):hover,.gestao-subtab:not(.active):hover,.period-filter-btn:not(.active):hover{background:#1a1a1a;border-color:rgba(212,175,55,.16)}
     .list-header-row{padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,.05)}
     .products-toolbar-advanced,.categories-toolbar,.slides-toolbar,.stock-toolbar{padding:12px;border-radius:16px;background:#0c0c0c;border:1px solid rgba(255,255,255,.05)}
-        .product-admin-title{font-size:1.03rem}
+    .product-admin-card{transition:.2s ease}
+    .product-admin-card:hover{transform:translateY(-2px);border-color:rgba(212,175,55,.16)}
+    .product-admin-title{font-size:1.03rem}
     .product-admin-actions{padding-top:6px;border-top:1px solid rgba(255,255,255,.05)}
     .product-admin-actions .btn{border-radius:12px}
     .quick-order-badge{min-width:76px}
@@ -703,7 +698,7 @@
 
 
     @media (max-width:1180px){.grid-2,.grid-2-equal,.shop-grid,.quick-stats,.draft-summary,.stepper-nav,.products-toolbar-advanced,.batch-grid,.batch-mode-row,.batch-action-row,.batch-create-layout,.batch-item-grid,.batch-item-image-grid,.batch-create-kpi,.gestao-grid,.selector-grid,.kpi-grid-gestao,.order-top-grid,.order-summary-grid,.metrics-grid,.product-flow-strip,.gestao-summary-inline{grid-template-columns:1fr}}
-    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.admin-header{padding:16px}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-summary{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:12px 10px 10px}.product-admin-actions .btn{width:100%}.product-admin-price{justify-content:flex-start;text-align:left}.product-admin-expand{margin-top:2px}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:168px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:8px}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding:8px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}.type-manager-row,.variation-grid,.variation-media-grid{grid-template-columns:1fr}.variation-preview-main{width:100%;max-width:140px;height:auto;aspect-ratio:1/1}}
+    @media (max-width:700px){.container{width:min(94%,94%)} .order-item-row{grid-template-columns:1fr 1fr}.order-item-row .field:last-child{grid-column:1/-1}.admin-title{font-size:1.5rem}.admin-header{padding:16px}.sizes-box{grid-template-columns:repeat(2,1fr)}.stock-group-card{grid-template-columns:60px minmax(0,1fr);gap:12px}.stock-group-card img{width:60px;height:60px}.table-actions .btn,.actions-row .btn,.topbar-actions .btn{width:100%}.product-admin-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}.product-admin-header-row{grid-template-columns:1fr}.product-admin-image-wrap{width:72px;height:72px}.product-admin-content{padding:0}.product-admin-actions .btn{width:100%}.batch-selection-bar{align-items:flex-start}.batch-selection-actions,.batch-quick-actions{width:100%}.batch-selection-actions .btn,.batch-quick-actions .btn{width:100%}.batch-save-bar{align-items:flex-start}.batch-save-bar .actions-row,.batch-save-bar .actions-row .btn{width:100%}.tabs{top:168px;padding:8px;border-radius:16px;overflow:auto;flex-wrap:nowrap}.tab-btn{white-space:nowrap}.module-switcher{display:flex;gap:8px;overflow:auto;padding:8px}.module-btn{min-width:120px;padding:10px 12px}.module-btn small{font-size:.72rem}.module-heading{gap:10px}.module-mini-tabs{gap:8px}.module-chip{font-size:.78rem;padding:8px 10px}.mobile-shortcut-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mobile-shortcut-row .btn{width:100%}.focus-shortcuts{grid-template-columns:1fr}.selector-top{gap:10px}.selector-card{padding:18px}.gestao-subtabs{overflow:auto;flex-wrap:nowrap;padding:8px}.gestao-subtab{white-space:nowrap}.back-home-row .btn{width:100%}.type-manager-row,.variation-grid,.variation-media-grid{grid-template-columns:1fr}.variation-preview-main{width:100%;max-width:140px;height:auto;aspect-ratio:1/1}}
   
   /* === Loja com menu lateral e páginas internas === */
   .loja-shell{
@@ -879,7 +874,7 @@
     <div class="topbar-inner">
       <div class="brand-block">
         <div class="brand-title">Gestão Camisa 10 Store</div>
-
+        <div class="brand-subtitle">Versão enxuta e organizada</div>
       </div>
       <div class="topbar-actions">
         <button class="btn btn-secondary hidden" id="topLogoutBtn" onclick="logout()">Sair</button>
@@ -891,7 +886,7 @@
     <div id="login-screen" class="login-wrapper" style="display:block;">
       <div class="card">
         <h2 class="login-title">Entrar no painel</h2>
-
+        <p class="subtitle">Acesse com seu usuário do Supabase Auth</p>
         <div class="field">
           <label for="login-email">E-mail</label>
           <input type="email" id="login-email" placeholder="Digite seu e-mail" />
@@ -910,7 +905,7 @@
         <div class="selector-top">
           <div>
             <h2 class="login-title" style="text-align:left;margin-bottom:6px;">Escolha a área</h2>
-
+            <p class="selector-copy">Separei a parte da loja da parte da gestão para ficar mais simples no celular. Você entra no que precisa e volta para esta tela quando quiser.</p>
           </div>
           <button class="btn btn-secondary" onclick="logout()">Sair</button>
         </div>
@@ -918,14 +913,14 @@
           <button class="selector-card" type="button" onclick="enterArea('loja')">
             <div class="selector-icon">🛍️</div>
             <h3>Loja</h3>
-
-            
+            <p>Cadastro de produtos, lote, categorias, ajustes da loja e slides do banner.</p>
+            <span class="badge">Uso rápido</span>
           </button>
           <button class="selector-card" type="button" onclick="enterArea('gestao')">
             <div class="selector-icon">📦</div>
             <h3>Gestão</h3>
-
-            
+            <p>Entradas, estoque, fornecedores, vendas e visão financeira em área separada.</p>
+            <span class="badge">Foco no controle</span>
           </button>
         </div>
       </div>
@@ -965,7 +960,7 @@
           <div class="module-heading">
             <div>
               <h3 class="section-title" style="margin-bottom:8px;">Área da loja</h3>
-
+              <div class="module-heading-copy">Tudo que mexe no site fica aqui. Cadastro de produtos, lote, categorias, banners e ajustes da vitrine.</div>
             </div>
             <div class="module-mini-tabs">
               <span class="module-chip">Loja online</span>
@@ -983,7 +978,7 @@
             <aside class="loja-sidebar">
               <div class="loja-sidebar-head">
                 <strong>Menu da loja</strong>
-
+                <span>Agora cada área ficou separada: visualizar produtos, cadastrar produto e cadastro em lote em páginas internas próprias.</span>
               </div>
               <button class="tab-btn active" data-tab="tab-products-list">Ver produtos<small>Lista, filtros, busca e organização por tipo</small></button>
               <button class="tab-btn" data-tab="tab-product-form">Cadastrar produto<small>Formulário separado, sem poluição visual</small></button>
@@ -998,7 +993,7 @@
             <div class="loja-page-head">
               <div>
                 <h3>Produtos cadastrados</h3>
-
+                <p>Agora a vitrine interna ficou separada do cadastro. Aqui você gerencia, busca, filtra e enxerga os produtos por tipo, sem misturar com o formulário.</p>
               </div>
               <div class="actions-row" style="margin-top:0;">
                 <button class="btn btn-primary" type="button" onclick="startNewProduct()">Novo produto</button>
@@ -1010,7 +1005,7 @@
             <div class="list-header-row">
               <div>
                 <h3 class="section-title" style="margin-bottom:6px;">Produtos cadastrados</h3>
-
+                <div class="small-muted">Busque, filtre e duplique produtos para cadastrar muito mais rápido.</div>
               </div>
               <button class="btn btn-primary" type="button" onclick="startNewProduct()">Novo produto</button>
             </div>
@@ -1133,6 +1128,31 @@
                     <button class="btn btn-warning" type="button" onclick="applyBatchDescription()">Aplicar descrição em lote</button>
                   </div>
                 </div>
+
+                <div class="batch-panel">
+                  <div>
+                    <strong>Tipo de venda em lote</strong>
+                    <div class="batch-help">Altere vários produtos de uma vez para pronta entrega ou sob encomenda.</div>
+                  </div>
+
+                  <div class="batch-action-row">
+                    <select id="batch-sale-type-target" onchange="updateBatchPreview()">
+                      <option value="selected">Aplicar aos marcados</option>
+                      <option value="filtered">Aplicar a todos os filtrados</option>
+                    </select>
+                    <select id="batch-sale-type-value" onchange="updateBatchPreview()">
+                      <option value="">Não alterar</option>
+                      <option value="pronta_entrega">Pronta entrega</option>
+                      <option value="sob_encomenda">Sob encomenda</option>
+                    </select>
+                  </div>
+
+                  <div id="batch-sale-type-preview" class="batch-summary">Nenhuma alteração de tipo de venda configurada.</div>
+
+                  <div class="batch-quick-actions">
+                    <button class="btn btn-warning" type="button" onclick="applyBatchSaleType()">Aplicar tipo de venda</button>
+                  </div>
+                </div>
               </div>
               </div>
             </details>
@@ -1149,7 +1169,7 @@
             <div class="loja-page-head">
               <div>
                 <h3>Cadastrar produto</h3>
-
+                <p>Essa tela agora ficou só para cadastro e edição de produto. Menos informação concorrendo, fluxo mais claro e mais confortável no celular.</p>
               </div>
               <div class="actions-row" style="margin-top:0;">
                 <button class="btn btn-secondary" type="button" onclick="activateLojaTab('tab-products-list')">Ver produtos</button>
@@ -1162,8 +1182,8 @@
               <div class="form-header-row" style="width:100%;">
                 <div>
                   <h3 class="section-title" id="form-title" style="margin-bottom:6px;">Cadastrar Produto</h3>
-
-
+                  <p class="collapsible-intro">Fluxo em etapas, com visual mais limpo e organizado para cadastrar produto sem embolar.</p>
+                  <div class="form-collapsed-hint">Você pode recolher este bloco e focar só nos produtos cadastrados.</div>
                 </div>
                 <div class="inline-status">
                   <span class="mini-kpi"><strong id="draft-step-indicator">Etapa 1/4</strong><span>Progresso do cadastro</span></span>
@@ -1179,6 +1199,11 @@
               <button type="button" class="step-chip" data-step-target="4">4. Tamanhos e salvar</button>
             </div>
 
+            <div class="product-flow-strip">
+              <div class="product-flow-pill"><strong>Cadastro rápido</strong><span>Nome, categoria e tipo primeiro</span></div>
+              <div class="product-flow-pill"><strong>Menos erro</strong><span>Preço e imagens separados por etapa</span></div>
+              <div class="product-flow-pill"><strong>Mobile melhor</strong><span>Campos agrupados e mais limpos</span></div>
+            </div>
 
             <div class="product-step active" data-step="1">
               <div class="grid-2-equal">
@@ -1246,6 +1271,9 @@
                 </label>
               </div>
 
+              <div class="helper-box helper-box-visible">
+                Digite o nome da camisa e o sistema já prepara o slug. Isso evita erro na hora de editar ou publicar.
+              </div>
             </div>
 
             <div class="product-step" data-step="2">
@@ -1323,6 +1351,9 @@
                 <div id="images-preview" class="multi-preview-grid"></div>
               </div>
 
+              <div class="helper-box helper-box-visible">
+                O upload é automático quando você salvar o produto. Não precisa subir imagem manualmente antes.
+              </div>
 
               <div id="current-gallery-box" class="preview-box hidden" style="margin-top:16px;">
                 <div class="small-muted" style="margin-bottom:8px;">Galeria atual do produto</div>
@@ -1389,6 +1420,9 @@
                 </div>
               </div>
 
+              <div class="helper-box helper-box-visible">
+                Revise os dados acima. Atalho: <strong>Ctrl + S</strong> para salvar mais rápido.
+              </div>
             </div>
 
             <div class="step-actions">
@@ -1410,7 +1444,7 @@
             <div class="form-header-row">
               <div>
                 <h3 class="section-title">Cadastro em lote — por modelo</h3>
-
+                <p class="section-copy" style="margin-bottom:0;">Cadastre vários modelos de camisa de uma vez, com categoria, tamanhos e imagens compartilhadas ou próprias em cada produto.</p>
               </div>
               <div class="inline-status">
                 <span class="mini-kpi"><strong id="batch-create-count">0</strong><span>Modelos preparados</span></span>
@@ -1428,9 +1462,23 @@
                     </select>
                   </div>
 
-                  <div class="field">
-                    <label>Tipo de venda</label>
-                    <input type="text" value="Sob encomenda" readonly />
+                  <div class="grid-2-equal">
+                    <div class="field">
+                      <label for="batch-create-sale-type">Tipo de venda</label>
+                      <select id="batch-create-sale-type" onchange="renderBatchCreateProducts()">
+                        <option value="pronta_entrega">Pronta entrega</option>
+                        <option value="sob_encomenda">Sob encomenda</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label for="batch-create-size-profile">Grade padrão</label>
+                      <select id="batch-create-size-profile" onchange="handleBatchCreateSizeProfileChange(this.value)">
+                        <option value="adulto">Adulto (P, M, G, EG)</option>
+                        <option value="infantil">Infantil (2, 4, 6, 8, 10)</option>
+                        <option value="sandalia">Sandália (25 a 43)</option>
+                        <option value="unico">Tamanho único / sem grade</option>
+                      </select>
+                    </div>
                   </div>
 
                   <div class="field">
@@ -1458,14 +1506,13 @@
 
                   <div class="field">
                     <label>Tamanhos padrão</label>
-                    <div class="sizes-box sizes-box-premium" id="batch-create-sizes">
-                      <label class="size-item"><input type="checkbox" value="P" class="batch-size-check"> <span>P</span></label>
-                      <label class="size-item"><input type="checkbox" value="M" class="batch-size-check"> <span>M</span></label>
-                      <label class="size-item"><input type="checkbox" value="G" class="batch-size-check"> <span>G</span></label>
-                      <label class="size-item"><input type="checkbox" value="EG" class="batch-size-check"> <span>EG</span></label>
-                    </div>
+                    <div class="sizes-box sizes-box-premium" id="batch-create-sizes"></div>
+                    <div class="size-profile-note" id="batch-create-size-note">Escolha a grade para cadastrar camisas adultas, infantis, sandálias ou item único.</div>
                   </div>
 
+                  <div class="helper-box helper-box-visible">
+                    Essa área define o padrão do lote inteiro. Aqui você cadastra o modelo, o preço de venda e o preço antigo padrão. Quantidade e custo entram depois na Gestão, no pedido de entrada.
+                  </div>
                 </div>
 
                 <div class="mini-card">
@@ -1489,6 +1536,9 @@
                       <div id="batch-shared-extra-preview" class="batch-shared-preview"></div>
                     </div>
                   </div>
+                  <div class="helper-box helper-box-visible">
+                    Se marcar “usar imagens compartilhadas” em um produto, ele aproveita essas imagens. Você ainda pode trocar a principal ou enviar extras próprios em cada card.
+                  </div>
                 </div>
               </div>
 
@@ -1503,6 +1553,9 @@ Camisa Brasil 2026
 Camisa Real Madrid 24/25"></textarea>
                   </div>
 
+                  <div class="helper-box helper-box-visible" style="display:block; margin-top:-4px;">
+                    Exemplo de uso: digite um modelo por linha, marque os tamanhos padrão e salve. O estoque real e o custo por item você lança depois na área <strong>Gestão &gt; Pedidos / Entradas</strong>.
+                  </div>
 
                   <div class="batch-save-bar">
                     <div class="batch-create-kpi">
@@ -1526,6 +1579,12 @@ Camisa Real Madrid 24/25"></textarea>
 
                 <div class="mini-card">
                   <div class="batch-save-bar">
+                    <div class="batch-summary-list">
+                      <strong>Antes de salvar:</strong>
+                      <span>• cada modelo precisa ter imagem principal própria ou compartilhada</span>
+                      <span>• os tamanhos marcados serão aplicados em todos os modelos do lote</span>
+                      <span>• a descrição padrão será repetida em todos os modelos</span>
+                    </div>
                     <div class="actions-row" style="margin-top:0;">
                       <button class="btn btn-primary" type="button" onclick="saveBatchCreateProducts()">Cadastrar modelos do lote</button>
                     </div>
@@ -1673,7 +1732,7 @@ Camisa Real Madrid 24/25"></textarea>
           <div class="module-heading">
             <div>
               <h3 class="section-title" style="margin-bottom:8px;">Gestão de estoque</h3>
-
+              <div class="module-heading-copy">Área separada da loja para registrar entrada de mercadoria, acompanhar saldo por tamanho e enxergar custo e resultado sem poluir o painel principal.</div>
             </div>
             <div class="module-mini-tabs">
               <span class="module-chip">Separado da loja</span>
@@ -1770,7 +1829,7 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="list-header-row">
                   <div>
                     <h3 class="section-title" style="margin-bottom:6px;">Indicadores da gestão</h3>
-
+                    <div class="small-muted">Uma área separada para enxergar estoque total, lucro real já realizado e potencial da vitrine sem poluir o resumo principal.</div>
                     <div class="period-filter-bar" id="gestao-indicators-period-bar">
                       <button class="period-filter-btn active" type="button" data-period-filter="all">Tudo</button>
                       <button class="period-filter-btn" type="button" data-period-filter="today">Hoje</button>
@@ -1799,6 +1858,9 @@ Camisa Real Madrid 24/25"></textarea>
             <div class="stack">
               <div class="card order-entry-card">
                 <h3 class="section-title">Montar pedido / entrada</h3>
+                <div class="helper-box helper-box-visible" style="margin-bottom:16px;display:block;">
+                  Monte o pedido uma vez, adicione os itens e salve tudo no final. O custo extra entra separado no resumo, sem bagunçar o total.
+                </div>
 
                 <div class="order-builder-shell">
                   <div class="order-top-grid">
@@ -1846,7 +1908,7 @@ Camisa Real Madrid 24/25"></textarea>
                   <div class="order-items-box">
                     <div class="order-items-head">
                       <strong>Adicionar item</strong>
-
+                      <span class="small-muted">Adicione quantos produtos quiser antes de salvar o pedido</span>
                     </div>
                     <div class="order-item-row">
                       <div class="field">
@@ -1894,6 +1956,9 @@ Camisa Real Madrid 24/25"></textarea>
                         <strong>Finalizar</strong>
                         <span class="badge">Salva tudo de uma vez</span>
                       </div>
+                      <div class="gestao-empty" style="padding:14px;">
+                        Quando você salvar, todos os itens entram no mesmo pedido, usando o mesmo fornecedor e a mesma data. Os custos extras entram no valor investido.
+                      </div>
                       <div class="actions-row">
                         <button class="btn btn-primary" id="gestao-entry-save-btn" type="button" onclick="saveGestaoEntry()">Salvar pedido completo</button>
                         <button class="btn btn-secondary hidden" id="gestao-entry-cancel-btn" type="button" onclick="cancelGestaoOrderEdit()">Cancelar edição</button>
@@ -1908,7 +1973,7 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="list-header-row">
                   <div>
                     <h3 class="section-title" style="margin-bottom:6px;">Pedidos recentes</h3>
-
+                    <div class="small-muted">Toque no pedido para abrir os detalhes.</div>
                   </div>
                 </div>
                 <div id="gestaoEntriesList" class="gestao-list">
@@ -1923,7 +1988,7 @@ Camisa Real Madrid 24/25"></textarea>
               <div class="list-header-row">
                 <div>
                   <h3 class="section-title" style="margin-bottom:6px;">Saldo de estoque</h3>
-
+                  <div class="small-muted">Calculado a partir das entradas lançadas aqui na gestão, com custo médio automático.</div>
                 </div>
                 <button class="btn btn-secondary" type="button" onclick="renderGestao()">Atualizar</button>
               </div>
@@ -1940,6 +2005,9 @@ Camisa Real Madrid 24/25"></textarea>
             <div class="grid-2-equal">
               <div class="card sale-form-card">
                 <h3 class="section-title">Lançar venda e lucro</h3>
+                <div class="helper-box helper-box-visible" style="margin-bottom:16px;display:block;">
+                  Agora você pode montar uma venda com várias camisas no mesmo pedido. Adicione cada item e finalize tudo de uma vez.
+                </div>
                 <div class="grid-2-equal">
                   <div class="field">
                     <label for="gestao-sale-product-search">Buscar produto</label>
@@ -3622,10 +3690,13 @@ async function uploadMultipleProductImages(productId) {
           const matchSaleType = !saleTypeFilter || (product.sale_type || "pronta_entrega") === saleTypeFilter;
           const isVisible = product.is_visible !== false;
           const productKind = getDisplayProductKind(product);
-          const normalizedKind = productKind === "Camisa" || productKind === "Sandália" || productKind === "Kit Infantil" || productKind === "Copo"
-            ? productKind
-            : "Outros";
-          const matchKind = !kindFilter || normalizedKind === kindFilter;
+          const normalizedKind = productKind === "Camisa" || productKind === "Kit Infantil"
+            ? "Camisa"
+            : (productKind === "Sandália" || productKind === "Copo" ? productKind : "Outros");
+          const matchKind = !kindFilter
+            || (kindFilter === "Camisa" && normalizedKind === "Camisa")
+            || (kindFilter === "Kit Infantil" && productKind === "Kit Infantil")
+            || (kindFilter !== "Camisa" && kindFilter !== "Kit Infantil" && normalizedKind === kindFilter);
           const matchVisibility = !visibilityFilter
             || (visibilityFilter === "visible" && isVisible)
             || (visibilityFilter === "hidden" && !isVisible);
@@ -3740,6 +3811,13 @@ async function uploadMultipleProductImages(productId) {
       return `${products.length} produto(s) serão atualizados. Prévia em ${example.name || "Produto"}: ${shortened || "sem descrição"}`;
     }
 
+    function buildBatchSaleTypePreview(products, saleTypeValue) {
+      if (!products.length) return "Nenhum produto encontrado para esta ação.";
+      if (!saleTypeValue) return "Selecione o tipo de venda que deseja aplicar.";
+      const label = saleTypeValue === "pronta_entrega" ? "Pronta entrega" : "Sob encomenda";
+      return `${products.length} produto(s) serão alterados para ${label}.`;
+    }
+
     function updateBatchPreview() {
       const priceTarget = document.getElementById("batch-price-target")?.value || "selected";
       const priceMode = document.getElementById("batch-price-mode")?.value || "set";
@@ -3747,9 +3825,12 @@ async function uploadMultipleProductImages(productId) {
       const descriptionTarget = document.getElementById("batch-description-target")?.value || "selected";
       const descriptionMode = document.getElementById("batch-description-mode")?.value || "replace";
       const descriptionValue = document.getElementById("batch-description-value")?.value || "";
+      const saleTypeTarget = document.getElementById("batch-sale-type-target")?.value || "selected";
+      const saleTypeValue = document.getElementById("batch-sale-type-value")?.value || "";
 
       const pricePreview = document.getElementById("batch-price-preview");
       const descriptionPreview = document.getElementById("batch-description-preview");
+      const saleTypePreview = document.getElementById("batch-sale-type-preview");
 
       if (pricePreview) {
         pricePreview.textContent = buildBatchPricePreview(getTargetProducts(priceTarget), priceMode, priceValue);
@@ -3757,6 +3838,10 @@ async function uploadMultipleProductImages(productId) {
 
       if (descriptionPreview) {
         descriptionPreview.textContent = buildBatchDescriptionPreview(getTargetProducts(descriptionTarget), descriptionMode, descriptionValue);
+      }
+
+      if (saleTypePreview) {
+        saleTypePreview.textContent = buildBatchSaleTypePreview(getTargetProducts(saleTypeTarget), saleTypeValue);
       }
 
       updateBatchCounters();
@@ -3859,6 +3944,50 @@ async function uploadMultipleProductImages(productId) {
       await loadProducts();
     }
 
+
+    async function applyBatchSaleType() {
+      clearMessage("list-message");
+      const target = document.getElementById("batch-sale-type-target")?.value || "selected";
+      const saleType = document.getElementById("batch-sale-type-value")?.value || "";
+      const targetProducts = getTargetProducts(target);
+
+      if (!targetProducts.length) {
+        showMessage("list-message", "Selecione produtos ou use a opção de aplicar aos filtrados.", "error");
+        return;
+      }
+
+      if (!saleType) {
+        showMessage("list-message", "Selecione o tipo de venda que deseja aplicar.", "error");
+        return;
+      }
+
+      const label = saleType === "pronta_entrega" ? "Pronta entrega" : "Sob encomenda";
+      const confirmAction = confirm(`Deseja alterar ${targetProducts.length} produto(s) para ${label}?`);
+      if (!confirmAction) return;
+
+      for (const product of targetProducts) {
+        const updatePayload = {
+          sale_type: saleType,
+          priority_encomenda: saleType === "sob_encomenda" ? product.priority_encomenda : null
+        };
+
+        const { error } = await supabaseClient
+          .from("products")
+          .update(updatePayload)
+          .eq("id", product.id);
+
+        if (error) {
+          console.error("Erro ao atualizar tipo de venda em lote:", error);
+          showMessage("list-message", `Erro ao atualizar ${product.name}: ${error.message}`, "error");
+          return;
+        }
+      }
+
+      document.getElementById("batch-sale-type-value").value = "";
+      showMessage("list-message", `${targetProducts.length} produto(s) tiveram o tipo de venda atualizado com sucesso.`, "success");
+      await loadProducts();
+    }
+
     async function loadProducts() {
       const tbody = document.getElementById("products-table-body");
       tbody.innerHTML = `<div class="empty-state">Carregando produtos...</div>`;
@@ -3897,11 +4026,13 @@ async function uploadMultipleProductImages(productId) {
       }
 
       const groupedProducts = {};
-      const kindOrder = ["Camisa", "Sandália", "Kit Infantil", "Copo", "Outros"];
+      const kindOrder = ["Camisa", "Sandália", "Copo", "Outros"];
 
       products.forEach(product => {
         const baseKind = getDisplayProductKind(product);
-        const normalizedKind = kindOrder.includes(baseKind) ? baseKind : "Outros";
+        const normalizedKind = baseKind === "Camisa" || baseKind === "Kit Infantil"
+          ? "Camisa"
+          : (kindOrder.includes(baseKind) ? baseKind : "Outros");
         if (!groupedProducts[normalizedKind]) groupedProducts[normalizedKind] = [];
         groupedProducts[normalizedKind].push(product);
       });
@@ -3936,41 +4067,35 @@ async function uploadMultipleProductImages(productId) {
         const isSelected = selectedProductIds.has(String(product.id));
 
         return `
-          <details class="product-admin-card ${isSelected ? "selected" : ""}">
-            <summary class="product-admin-summary">
-              <div class="product-admin-image-wrap">
-                <img
-                  src="${product.image_url || 'https://via.placeholder.com/600x600?text=Sem+Imagem'}"
-                  alt="${product.name || ''}"
-                  class="product-admin-thumb"
-                  onerror="this.src='https://via.placeholder.com/600x600?text=Imagem';"
+          <article class="product-admin-card ${isSelected ? "selected" : ""}">
+            <div class="product-admin-image-wrap">
+              <div class="product-admin-select">
+                <input
+                  type="checkbox"
+                  aria-label="Selecionar produto"
+                  ${isSelected ? "checked" : ""}
+                  onchange="toggleProductSelection('${product.id}', this.checked)"
                 />
               </div>
 
-              <div class="product-admin-summary-main">
-                <div class="product-admin-title">${product.name || "-"} ${featuredBadge}</div>
-                <div class="product-admin-sub">Toque para abrir detalhes</div>
-              </div>
-
-              <div class="product-admin-price">
-                <span class="price-main">${formatPrice(product.price)}</span>
-                ${oldPrice}
-                <span class="product-admin-expand">Ver</span>
-              </div>
-            </summary>
+              <img
+                src="${product.image_url || 'https://via.placeholder.com/600x600?text=Sem+Imagem'}"
+                alt="${product.name || ''}"
+                class="product-admin-thumb"
+                onerror="this.src='https://via.placeholder.com/600x600?text=Imagem';"
+              />
+            </div>
 
             <div class="product-admin-content">
-              <div class="product-admin-actions-top">
-                <label class="product-admin-select">
-                  <input
-                    type="checkbox"
-                    aria-label="Selecionar produto"
-                    ${isSelected ? "checked" : ""}
-                    onchange="toggleProductSelection('${product.id}', this.checked)"
-                  />
-                  <span>Selecionar produto</span>
-                </label>
-                <div class="product-admin-sub">Slug: ${product.slug || "-"}</div>
+              <div class="product-admin-top">
+                <div>
+                  <div class="product-admin-title">${product.name || "-"} ${featuredBadge}</div>
+                  <div class="product-admin-sub">Slug: ${product.slug || "-"}</div>
+                </div>
+                <div class="product-admin-price">
+                  <span class="price-main">${formatPrice(product.price)}</span>
+                  ${oldPrice}
+                </div>
               </div>
 
               ${description}
@@ -4021,7 +4146,7 @@ async function uploadMultipleProductImages(productId) {
                 <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">Excluir</button>
               </div>
             </div>
-          </details>
+          </article>
         `;
       };
 
@@ -5184,6 +5309,40 @@ async function uploadHeroSlideImage() {
       return [...document.querySelectorAll(".batch-size-check:checked")].map(item => item.value);
     }
 
+    function renderBatchCreateSizes(profile = "adulto", selectedSizes = []) {
+      const container = document.getElementById("batch-create-sizes");
+      const note = document.getElementById("batch-create-size-note");
+      if (!container) return;
+
+      const options = getSizeOptionsByProfile(profile);
+      const selected = Array.isArray(selectedSizes) ? selectedSizes : [];
+
+      container.innerHTML = options.map(size => `
+        <label class="size-item ${selected.includes(size) ? "active" : ""}">
+          <input type="checkbox" value="${size}" class="batch-size-check" ${selected.includes(size) ? "checked" : ""}>
+          <span>${size}</span>
+        </label>
+      `).join("");
+
+      container.querySelectorAll(".batch-size-check").forEach(check => {
+        check.addEventListener("change", () => {
+          refreshBatchSizeChipStates();
+          renderBatchCreateProducts();
+        });
+      });
+
+      if (note) {
+        note.textContent = `Grade atual do lote: ${getSizeProfileLabel(profile)}.`;
+      }
+
+      refreshBatchSizeChipStates();
+    }
+
+    function handleBatchCreateSizeProfileChange(profile) {
+      renderBatchCreateSizes(profile, []);
+      renderBatchCreateProducts();
+    }
+
     function refreshBatchSizeChipStates() {
       document.querySelectorAll("#batch-create-sizes .size-item").forEach(item => {
         const input = item.querySelector(".batch-size-check");
@@ -5399,6 +5558,14 @@ async function uploadHeroSlideImage() {
                     const oldPrice = document.getElementById("batch-create-old-price")?.value?.trim() || "";
                     return oldPrice ? formatPrice(oldPrice) : "não definido";
                   })()}</span>
+                  <span class="batch-chip">Venda: ${(() => {
+                    const saleType = document.getElementById("batch-create-sale-type")?.value || "pronta_entrega";
+                    return saleType === "pronta_entrega" ? "Pronta entrega" : "Sob encomenda";
+                  })()}</span>
+                  <span class="batch-chip">Grade: ${(() => {
+                    const profile = document.getElementById("batch-create-size-profile")?.value || "adulto";
+                    return getSizeProfileLabel(profile);
+                  })()}</span>
                 </div>
                 <div id="batch-item-gallery-preview-${index}" class="batch-item-gallery-preview" style="margin-top:12px;"></div>
               </div>
@@ -5509,6 +5676,8 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       const description = document.getElementById("batch-create-description")?.value?.trim() || "";
       const batchPriceRaw = document.getElementById("batch-create-price")?.value?.trim() || "";
       const batchOldPriceRaw = document.getElementById("batch-create-old-price")?.value?.trim() || "";
+      const batchSaleType = document.getElementById("batch-create-sale-type")?.value || "pronta_entrega";
+      const batchSizeProfile = document.getElementById("batch-create-size-profile")?.value || "adulto";
       const sizes = getBatchCreateSelectedSizes();
       const isVisible = !!document.getElementById("batch-create-visible")?.checked;
 
@@ -5557,7 +5726,9 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
             is_featured: false,
             is_visible: isVisible,
             badge_type: null,
-            sale_type: "sob_encomenda",
+            sale_type: batchSaleType,
+            size_profile: batchSizeProfile,
+            product_kind: batchSizeProfile === "infantil" ? "Kit Infantil" : "Camisa",
             category_id: categoryId
           };
 
@@ -5594,11 +5765,12 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         document.getElementById("batch-create-description").value = "";
         document.getElementById("batch-create-price").value = "";
         document.getElementById("batch-create-old-price").value = "";
+        document.getElementById("batch-create-sale-type").value = "pronta_entrega";
+        document.getElementById("batch-create-size-profile").value = "adulto";
         document.getElementById("batch-shared-main-file").value = "";
         document.getElementById("batch-shared-main-url").value = "";
         document.getElementById("batch-shared-extra-files").value = "";
-        document.querySelectorAll(".batch-size-check").forEach(check => check.checked = false);
-        refreshBatchSizeChipStates();
+        renderBatchCreateSizes("adulto", []);
         await renderBatchSharedPreviews();
         await renderBatchCreateProducts();
         await loadProducts();
@@ -7264,8 +7436,8 @@ async function saveGestaoSale() {
         syncProductTypeFromKind(true);
         updateDraftSummary();
       });
-      document.querySelectorAll(".batch-size-check").forEach(check => {
-        check.addEventListener("change", refreshBatchSizeChipStates);
+      document.getElementById("batch-create-size-profile")?.addEventListener("change", (event) => {
+        handleBatchCreateSizeProfileChange(event.target.value);
       });
       document.getElementById("batch-create-names")?.addEventListener("input", updateBatchCreateKpis);
       document.getElementById("new-product-kind")?.addEventListener("keydown", (event) => {
@@ -7293,7 +7465,7 @@ async function saveGestaoSale() {
       productVariationsDraft = [];
       syncProductTypeFromKind(true);
       toggleProductVariations(false);
-      refreshBatchSizeChipStates();
+      renderBatchCreateSizes("adulto", []);
       updateDraftSummary();
       updateBatchCreateKpis();
       const entryDateField = document.getElementById('gestao-entry-date');
