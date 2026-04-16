@@ -1935,7 +1935,24 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
     function isShirtCategoryProduct(product) {
       const categoryName = normalizeCategoryName(product);
-      const normalized = normalizeCategorySlug(categoryName);
+      const normalizedCategory = normalizeCategorySlug(categoryName);
+      const productName = normalizeCategorySlug(product.name || product.title || "");
+      const combinedText = `${normalizedCategory} ${productName}`;
+
+      const blockedKeywords = [
+        "sandalia",
+        "sandália",
+        "chinelo",
+        "copo",
+        "caneca",
+        "garrafa",
+        "bone",
+        "boné"
+      ];
+
+      if (blockedKeywords.some(keyword => combinedText.includes(normalizeCategorySlug(keyword)))) {
+        return false;
+      }
 
       const shirtKeywords = [
         "brasileirao",
@@ -1951,10 +1968,14 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         "feminina",
         "camisa",
         "camisas",
-        "times"
+        "times",
+        "infantil",
+        "kit infantil",
+        "conjunto infantil",
+        "juvenil"
       ];
 
-      return shirtKeywords.some(keyword => normalized.includes(normalizeCategorySlug(keyword)));
+      return shirtKeywords.some(keyword => combinedText.includes(normalizeCategorySlug(keyword)));
     }
 
     function getProductBadge(product, isFeatured = false) {
