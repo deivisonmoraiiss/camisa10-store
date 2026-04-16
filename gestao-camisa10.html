@@ -984,6 +984,27 @@
     padding-bottom:14px;
   }
 
+
+    .business-cost-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .business-cost-type-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .business-cost-type-btn{padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:#121212;color:#f3f3f3;font-weight:800;cursor:pointer;text-align:left}
+    .business-cost-type-btn small{display:block;color:var(--muted);font-size:.76rem;font-weight:600;margin-top:4px}
+    .business-cost-type-btn.active{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#111;border-color:transparent}
+    .business-cost-type-btn.active small{color:#2f2510}
+    .business-cost-months-wrap.hidden{display:none!important}
+    .business-cost-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .business-cost-card{padding:14px;border-radius:16px;background:#101010;border:1px solid rgba(255,255,255,.05);display:grid;gap:8px}
+    .business-cost-card span{color:var(--muted);font-size:.82rem;line-height:1.45}
+    .business-cost-card strong{color:#fff;font-size:1rem}
+    .business-cost-list{display:grid;gap:12px}
+    .business-cost-item{padding:14px;border-radius:18px;background:#101010;border:1px solid rgba(255,255,255,.06);display:grid;gap:10px}
+    .business-cost-item-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+    .business-cost-item-title{font-weight:900;color:#fff}
+    .business-cost-item-sub{color:var(--muted);font-size:.84rem;line-height:1.5}
+    .business-cost-pill-row{display:flex;gap:8px;flex-wrap:wrap}
+    .business-cost-period-note{color:var(--muted);font-size:.82rem;line-height:1.55}
+    @media (max-width:700px){.business-cost-form-grid,.business-cost-summary-grid,.business-cost-type-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -1892,10 +1913,104 @@ Camisa Real Madrid 24/25"></textarea>
             <button class="gestao-subtab" type="button" data-gestao-tab="gestao-indicadores">Indicadores</button>
             <button class="gestao-subtab" type="button" data-gestao-tab="gestao-vendas">Vendas</button>
             <button class="gestao-subtab" type="button" data-gestao-tab="gestao-fornecedores">Fornecedores</button>
+            <button class="gestao-subtab" type="button" data-gestao-tab="gestao-custos">Custos do negócio</button>
             <button class="gestao-subtab" type="button" data-gestao-tab="gestao-dashboard">Resumo</button>
           </div>
 
-          <section id="gestao-dashboard" class="gestao-subpanel">
+          
+          <section id="gestao-custos" class="gestao-subpanel">
+            <div class="stack">
+              <div class="grid-2-equal">
+                <div class="card finance-highlight-card">
+                  <div class="list-header-row">
+                    <div>
+                      <h3 class="section-title" style="margin-bottom:6px;">Custos do negócio</h3>
+                      <div class="small-muted">Registre tudo que não é estoque: despesas operacionais e investimentos em bens materiais.</div>
+                    </div>
+                    <span class="badge" id="gestao-business-cost-form-badge">Nova despesa</span>
+                  </div>
+
+                  <input type="hidden" id="gestao-business-cost-type" value="despesa" />
+                  <div class="business-cost-type-grid" style="margin-bottom:14px;">
+                    <button class="business-cost-type-btn active" type="button" id="business-cost-type-despesa-btn" onclick="setGestaoBusinessCostType('despesa')">
+                      Despesa
+                      <small>Entra direto no lucro do período</small>
+                    </button>
+                    <button class="business-cost-type-btn" type="button" id="business-cost-type-investimento-btn" onclick="setGestaoBusinessCostType('investimento')">
+                      Investimento
+                      <small>Diluído em meses, sem pesar tudo de uma vez</small>
+                    </button>
+                  </div>
+
+                  <div class="business-cost-form-grid">
+                    <div class="field">
+                      <label for="gestao-business-cost-name">Nome do gasto</label>
+                      <input type="text" id="gestao-business-cost-name" placeholder="Ex: arara, iluminação, sacolas" />
+                    </div>
+                    <div class="field">
+                      <label for="gestao-business-cost-category">Categoria</label>
+                      <input type="text" id="gestao-business-cost-category" placeholder="Ex: estrutura, operacional, embalagem" />
+                    </div>
+                    <div class="field">
+                      <label for="gestao-business-cost-amount">Valor total</label>
+                      <input type="text" inputmode="decimal" id="gestao-business-cost-amount" placeholder="0,00" />
+                    </div>
+                    <div class="field">
+                      <label for="gestao-business-cost-date">Data</label>
+                      <input type="date" id="gestao-business-cost-date" />
+                    </div>
+                  </div>
+
+                  <div class="field business-cost-months-wrap hidden" id="gestao-business-cost-months-wrap">
+                    <label for="gestao-business-cost-months">Diluir em quantos meses?</label>
+                    <input type="number" id="gestao-business-cost-months" min="1" step="1" value="12" />
+                  </div>
+
+                  <div class="field">
+                    <label for="gestao-business-cost-notes">Observação</label>
+                    <textarea id="gestao-business-cost-notes" placeholder="Ex: comprado para melhorar a apresentação da loja"></textarea>
+                  </div>
+
+                  <div class="actions-row">
+                    <button class="btn btn-primary" type="button" id="gestao-business-cost-save-btn" onclick="saveGestaoBusinessCost()">Salvar custo</button>
+                    <button class="btn btn-secondary hidden" type="button" id="gestao-business-cost-cancel-btn" onclick="cancelGestaoBusinessCostEdit()">Cancelar edição</button>
+                  </div>
+                  <div id="gestao-business-cost-message" class="message"></div>
+                </div>
+
+                <div class="card">
+                  <div class="list-header-row">
+                    <div>
+                      <h3 class="section-title" style="margin-bottom:6px;">Resumo dos custos</h3>
+                      <div class="small-muted">Esses valores entram no lucro líquido do período selecionado nos indicadores.</div>
+                    </div>
+                    <button class="btn btn-secondary" type="button" onclick="renderGestao()">Atualizar</button>
+                  </div>
+                  <div id="gestaoBusinessCostSummary" class="business-cost-summary-grid">
+                    <div class="business-cost-card"><span>Despesas do período</span><strong>R$ 0,00</strong></div>
+                    <div class="business-cost-card"><span>Investimentos reconhecidos</span><strong>R$ 0,00</strong></div>
+                    <div class="business-cost-card"><span>Carga mensal atual</span><strong>R$ 0,00</strong></div>
+                    <div class="business-cost-card"><span>Itens cadastrados</span><strong>0</strong></div>
+                  </div>
+                  <div class="business-cost-period-note" id="gestaoBusinessCostPeriodNote" style="margin-top:12px;">Os investimentos entram diluídos para não distorcer teu caixa real.</div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="list-header-row">
+                  <div>
+                    <h3 class="section-title" style="margin-bottom:6px;">Lançamentos de custos</h3>
+                    <div class="small-muted">Aqui ficam os gastos com estrutura, operação, materiais de venda e melhorias do negócio.</div>
+                  </div>
+                </div>
+                <div id="gestaoBusinessCostsList" class="business-cost-list">
+                  <div class="gestao-empty">Nenhum custo do negócio cadastrado ainda.</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+<section id="gestao-dashboard" class="gestao-subpanel">
             <div class="gestao-grid" style="margin-bottom:18px;">
               <div class="gestao-card">
                 <div class="gestao-icon">1</div>
@@ -1921,6 +2036,12 @@ Camisa Real Madrid 24/25"></textarea>
                 <p>Registre a venda, baixe o estoque automaticamente e acompanhe faturamento e lucro estimado.</p>
                 <span class="badge">Já ativo</span>
               </div>
+              <div class="gestao-card">
+                <div class="gestao-icon">5</div>
+                <strong>Custos do negócio</strong>
+                <p>Lance despesas operacionais e investimentos em estrutura para enxergar o lucro líquido de verdade.</p>
+                <span class="badge">Novo</span>
+              </div>
             </div>
 
             <div class="grid-2-equal">
@@ -1934,6 +2055,7 @@ Camisa Real Madrid 24/25"></textarea>
                   <button class="btn btn-primary" type="button" onclick="activateGestaoTab('gestao-entradas')">Lançar pedido</button>
                   <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-vendas')">Lançar venda e lucro</button>
                   <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-estoque')">Ver estoque</button>
+                  <button class="btn btn-secondary" type="button" onclick="activateGestaoTab('gestao-custos')">Custos do negócio</button>
                 </div>
               </div>
             </div>
@@ -2371,6 +2493,7 @@ Camisa Real Madrid 24/25"></textarea>
     const GESTAO_ENTRIES_KEY = "camisa10_gestao_entries_v2";
     const GESTAO_SALES_KEY = "camisa10_gestao_sales_v3";
     const GESTAO_SALES_META_KEY = "camisa10_gestao_sales_meta_v1";
+    const GESTAO_BUSINESS_COSTS_KEY = "camisa10_gestao_business_costs_v1";
     const GESTAO_SUPPLIERS_TABLE = "inventory_suppliers";
     const GESTAO_ENTRIES_TABLE = "inventory_entries";
     const GESTAO_ORDERS_TABLE = "inventory_orders";
@@ -2380,6 +2503,7 @@ Camisa Real Madrid 24/25"></textarea>
     let gestaoSuppliers = [];
     let gestaoEntries = [];
     let gestaoSales = [];
+    let gestaoBusinessCosts = [];
     let gestaoSyncMode = "local";
     let gestaoPendingOrderItems = [];
     let gestaoPendingSaleItems = [];
@@ -2387,6 +2511,7 @@ Camisa Real Madrid 24/25"></textarea>
     let editingGestaoSupplierId = null;
     let editingGestaoOrderId = null;
     let editingGestaoSaleId = null;
+    let editingGestaoBusinessCostId = null;
     let gestaoPeriodFilter = "all";
     const PRODUCT_META_STORAGE_KEY = "camisa10_product_meta_v1";
     const PRODUCT_VARIATIONS_STORAGE_KEY = "camisa10_product_variations_v1";
@@ -5982,7 +6107,268 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
 
 
 
-    function updateGestaoSyncUi() {
+    
+    function normalizeGestaoBusinessCostType(value) {
+      return String(value || '').toLowerCase() === 'investimento' ? 'investimento' : 'despesa';
+    }
+
+    function normalizeGestaoBusinessCostItem(item = {}) {
+      const type = normalizeGestaoBusinessCostType(item.type);
+      const amount = roundMoney(item.amount || item.value || 0);
+      const monthsToDilute = Math.max(1, Number(item.monthsToDilute || item.months_to_dilute || (type === 'investimento' ? 12 : 1) || 1));
+      const rawDate = item.date || item.costDate || item.created_at || new Date().toISOString().slice(0,10);
+      return {
+        id: item.id || generateClientUuid(),
+        name: String(item.name || item.title || '').trim(),
+        type,
+        amount,
+        date: String(rawDate).slice(0,10),
+        category: String(item.category || '').trim(),
+        notes: String(item.notes || item.note || '').trim(),
+        monthsToDilute
+      };
+    }
+
+    function loadGestaoBusinessCostsFromStorage() {
+      try {
+        gestaoBusinessCosts = JSON.parse(localStorage.getItem(GESTAO_BUSINESS_COSTS_KEY) || '[]')
+          .map(normalizeGestaoBusinessCostItem)
+          .filter(item => item.name && Number(item.amount || 0) > 0);
+      } catch (error) {
+        gestaoBusinessCosts = [];
+      }
+    }
+
+    function getInvestmentMonthlyAmount(item) {
+      const normalized = normalizeGestaoBusinessCostItem(item);
+      return roundMoney(Number(normalized.amount || 0) / Math.max(1, Number(normalized.monthsToDilute || 1)));
+    }
+
+    function getMonthStart(date) {
+      const base = date ? new Date(date) : new Date();
+      return new Date(base.getFullYear(), base.getMonth(), 1, 12, 0, 0, 0);
+    }
+
+    function getMonthDiff(startDate, endDate) {
+      return ((endDate.getFullYear() - startDate.getFullYear()) * 12) + (endDate.getMonth() - startDate.getMonth());
+    }
+
+    function getRecognizedInvestmentAmount(item, period = gestaoPeriodFilter) {
+      const normalized = normalizeGestaoBusinessCostItem(item);
+      if (normalized.type !== 'investimento') return 0;
+      const start = getMonthStart(parseGestaoDate(normalized.date) || new Date());
+      const months = Math.max(1, Number(normalized.monthsToDilute || 1));
+      const monthly = Number(getInvestmentMonthlyAmount(normalized) || 0);
+      if (!monthly) return 0;
+
+      if (period === 'all') {
+        const now = getMonthStart(new Date());
+        const elapsed = Math.min(months, Math.max(0, getMonthDiff(start, now) + 1));
+        return roundMoney(elapsed * monthly);
+      }
+
+      const range = getPeriodDateRange(period);
+      const periodStart = getMonthStart(range.start || new Date());
+      const periodEnd = getMonthStart(range.end || new Date());
+      const firstIndex = Math.max(0, getMonthDiff(start, periodStart));
+      const lastIndex = Math.min(months - 1, getMonthDiff(start, periodEnd));
+      if (lastIndex < firstIndex) return 0;
+      return roundMoney((lastIndex - firstIndex + 1) * monthly);
+    }
+
+    function getCurrentBusinessInvestmentMonthlyLoad() {
+      const currentMonth = getMonthStart(new Date());
+      return roundMoney(gestaoBusinessCosts.reduce((sum, item) => {
+        const normalized = normalizeGestaoBusinessCostItem(item);
+        if (normalized.type !== 'investimento') return sum;
+        const start = getMonthStart(parseGestaoDate(normalized.date) || new Date());
+        const index = getMonthDiff(start, currentMonth);
+        if (index < 0 || index >= Math.max(1, Number(normalized.monthsToDilute || 1))) return sum;
+        return sum + Number(getInvestmentMonthlyAmount(normalized) || 0);
+      }, 0));
+    }
+
+    function getFilteredGestaoBusinessCosts(period = gestaoPeriodFilter) {
+      const normalizedCosts = gestaoBusinessCosts.map(normalizeGestaoBusinessCostItem);
+      if (period === 'all') return normalizedCosts.sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+      const range = getPeriodDateRange(period);
+      return normalizedCosts.filter(item => {
+        const date = parseGestaoDate(item.date);
+        return date && date >= range.start && date <= range.end;
+      }).sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+    }
+
+    function getGestaoBusinessCostMetrics(period = gestaoPeriodFilter) {
+      const filtered = getFilteredGestaoBusinessCosts(period);
+      const totalExpenses = roundMoney(filtered
+        .filter(item => normalizeGestaoBusinessCostType(item.type) === 'despesa')
+        .reduce((sum, item) => sum + Number(item.amount || 0), 0));
+      const totalInvestmentsPurchased = roundMoney(filtered
+        .filter(item => normalizeGestaoBusinessCostType(item.type) === 'investimento')
+        .reduce((sum, item) => sum + Number(item.amount || 0), 0));
+      const recognizedInvestments = roundMoney(gestaoBusinessCosts
+        .map(normalizeGestaoBusinessCostItem)
+        .filter(item => item.type === 'investimento')
+        .reduce((sum, item) => sum + getRecognizedInvestmentAmount(item, period), 0));
+      const currentMonthlyLoad = getCurrentBusinessInvestmentMonthlyLoad();
+      return {
+        totalExpenses,
+        totalInvestmentsPurchased,
+        recognizedInvestments,
+        currentMonthlyLoad,
+        totalCount: gestaoBusinessCosts.length,
+        filteredCount: filtered.length,
+        periodLabel: getPeriodDateRange(period).label
+      };
+    }
+
+    function setGestaoBusinessCostType(type = 'despesa') {
+      const normalized = normalizeGestaoBusinessCostType(type);
+      const input = document.getElementById('gestao-business-cost-type');
+      if (input) input.value = normalized;
+      document.getElementById('business-cost-type-despesa-btn')?.classList.toggle('active', normalized === 'despesa');
+      document.getElementById('business-cost-type-investimento-btn')?.classList.toggle('active', normalized === 'investimento');
+      document.getElementById('gestao-business-cost-months-wrap')?.classList.toggle('hidden', normalized !== 'investimento');
+      const badge = document.getElementById('gestao-business-cost-form-badge');
+      if (badge) badge.textContent = normalized === 'investimento' ? 'Novo investimento' : 'Nova despesa';
+    }
+
+    function resetGestaoBusinessCostForm() {
+      editingGestaoBusinessCostId = null;
+      document.getElementById('gestao-business-cost-name').value = '';
+      document.getElementById('gestao-business-cost-category').value = '';
+      document.getElementById('gestao-business-cost-amount').value = '';
+      document.getElementById('gestao-business-cost-date').value = new Date().toISOString().slice(0,10);
+      document.getElementById('gestao-business-cost-months').value = 12;
+      document.getElementById('gestao-business-cost-notes').value = '';
+      const typeInput = document.getElementById('gestao-business-cost-type');
+      if (typeInput) typeInput.value = 'despesa';
+      document.getElementById('gestao-business-cost-save-btn').textContent = 'Salvar custo';
+      document.getElementById('gestao-business-cost-cancel-btn').classList.add('hidden');
+      clearMessage('gestao-business-cost-message');
+      setGestaoBusinessCostType('despesa');
+    }
+
+    function cancelGestaoBusinessCostEdit() {
+      resetGestaoBusinessCostForm();
+    }
+
+    function editGestaoBusinessCost(costId) {
+      const item = gestaoBusinessCosts.find(entry => String(entry.id) === String(costId));
+      if (!item) {
+        showMessage('gestao-business-cost-message', 'Não foi possível localizar esse custo.', 'error');
+        return;
+      }
+      editingGestaoBusinessCostId = item.id;
+      document.getElementById('gestao-business-cost-name').value = item.name || '';
+      document.getElementById('gestao-business-cost-category').value = item.category || '';
+      document.getElementById('gestao-business-cost-amount').value = formatMoneyInputValue(item.amount);
+      document.getElementById('gestao-business-cost-date').value = item.date || new Date().toISOString().slice(0,10);
+      document.getElementById('gestao-business-cost-months').value = Math.max(1, Number(item.monthsToDilute || 12));
+      document.getElementById('gestao-business-cost-notes').value = item.notes || '';
+      document.getElementById('gestao-business-cost-save-btn').textContent = 'Atualizar custo';
+      document.getElementById('gestao-business-cost-cancel-btn').classList.remove('hidden');
+      setGestaoBusinessCostType(item.type || 'despesa');
+      activateGestaoTab('gestao-custos');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function deleteGestaoBusinessCost(costId) {
+      if (!confirm('Deseja excluir este custo do negócio?')) return;
+      gestaoBusinessCosts = gestaoBusinessCosts.filter(entry => String(entry.id) !== String(costId));
+      if (String(editingGestaoBusinessCostId || '') === String(costId)) resetGestaoBusinessCostForm();
+      localStorage.setItem(GESTAO_BUSINESS_COSTS_KEY, JSON.stringify(gestaoBusinessCosts));
+      renderGestao();
+      showMessage('gestao-business-cost-message', 'Custo excluído com sucesso.', 'success');
+    }
+
+    async function saveGestaoBusinessCost() {
+      clearMessage('gestao-business-cost-message');
+      const name = document.getElementById('gestao-business-cost-name').value.trim();
+      const type = normalizeGestaoBusinessCostType(document.getElementById('gestao-business-cost-type')?.value || 'despesa');
+      const category = document.getElementById('gestao-business-cost-category').value.trim();
+      const amount = normalizeMoneyInput(document.getElementById('gestao-business-cost-amount').value || '') || 0;
+      const date = document.getElementById('gestao-business-cost-date').value || new Date().toISOString().slice(0,10);
+      const monthsToDilute = Math.max(1, Number(document.getElementById('gestao-business-cost-months').value || 1));
+      const notes = document.getElementById('gestao-business-cost-notes').value.trim();
+      if (!name) {
+        showMessage('gestao-business-cost-message', 'Digite o nome do gasto.', 'error');
+        return;
+      }
+      if (!(amount > 0)) {
+        showMessage('gestao-business-cost-message', 'Digite um valor maior que zero.', 'error');
+        return;
+      }
+      const payload = normalizeGestaoBusinessCostItem({
+        id: editingGestaoBusinessCostId || generateClientUuid(),
+        name, type, category, amount, date, notes, monthsToDilute
+      });
+      if (editingGestaoBusinessCostId) {
+        gestaoBusinessCosts = gestaoBusinessCosts.map(entry => String(entry.id) === String(editingGestaoBusinessCostId) ? payload : entry);
+      } else {
+        gestaoBusinessCosts.unshift(payload);
+      }
+      localStorage.setItem(GESTAO_BUSINESS_COSTS_KEY, JSON.stringify(gestaoBusinessCosts));
+      resetGestaoBusinessCostForm();
+      renderGestao();
+      showMessage('gestao-business-cost-message', `${payload.type === 'investimento' ? 'Investimento' : 'Despesa'} salva com sucesso.`, 'success');
+    }
+
+    function renderGestaoBusinessCosts() {
+      const list = document.getElementById('gestaoBusinessCostsList');
+      const summary = document.getElementById('gestaoBusinessCostSummary');
+      const note = document.getElementById('gestaoBusinessCostPeriodNote');
+      const metrics = getGestaoBusinessCostMetrics();
+      const filtered = getFilteredGestaoBusinessCosts();
+      if (summary) {
+        summary.innerHTML = `
+          <div class="business-cost-card"><span>Despesas (${metrics.periodLabel})</span><strong>${formatPrice(metrics.totalExpenses)}</strong></div>
+          <div class="business-cost-card"><span>Investimentos reconhecidos</span><strong>${formatPrice(metrics.recognizedInvestments)}</strong></div>
+          <div class="business-cost-card"><span>Carga mensal atual</span><strong>${formatPrice(metrics.currentMonthlyLoad)}</strong></div>
+          <div class="business-cost-card"><span>Itens cadastrados</span><strong>${metrics.totalCount}</strong></div>
+        `;
+      }
+      if (note) {
+        note.textContent = gestaoPeriodFilter === 'all'
+          ? 'Na visão geral, os investimentos entram reconhecidos até o mês atual, sem jogar o valor inteiro de uma vez no lucro.'
+          : `Período atual: ${metrics.periodLabel}. As despesas entram pela data e os investimentos entram de forma diluída.`;
+      }
+      if (!list) return;
+      if (!gestaoBusinessCosts.length) {
+        list.innerHTML = '<div class="gestao-empty">Nenhum custo do negócio cadastrado ainda.</div>';
+        return;
+      }
+      if (!filtered.length) {
+        list.innerHTML = '<div class="gestao-empty">Nenhum custo do negócio encontrado nesse período.</div>';
+        return;
+      }
+      list.innerHTML = filtered.map(item => {
+        const normalized = normalizeGestaoBusinessCostItem(item);
+        const recognized = normalized.type === 'investimento' ? getRecognizedInvestmentAmount(normalized) : Number(normalized.amount || 0);
+        const monthly = normalized.type === 'investimento' ? getInvestmentMonthlyAmount(normalized) : Number(normalized.amount || 0);
+        return `
+          <article class="business-cost-item">
+            <div class="business-cost-item-head">
+              <div>
+                <div class="business-cost-item-title">${escapeHtml(normalized.name)}</div>
+                <div class="business-cost-item-sub">${escapeHtml(normalized.date)}${normalized.category ? ` • ${escapeHtml(normalized.category)}` : ''}${normalized.notes ? ` • ${escapeHtml(normalized.notes)}` : ''}</div>
+              </div>
+              <div class="table-actions">
+                <button class="btn btn-success" type="button" onclick="editGestaoBusinessCost('${normalized.id}')">Editar</button>
+                <button class="btn btn-danger" type="button" onclick="deleteGestaoBusinessCost('${normalized.id}')">Excluir</button>
+              </div>
+            </div>
+            <div class="business-cost-pill-row">
+              <span class="badge">${normalized.type === 'investimento' ? 'Investimento' : 'Despesa'}</span>
+              <span class="badge">Valor total: ${formatPrice(normalized.amount)}</span>
+              ${normalized.type === 'investimento' ? `<span class="badge">Mensal: ${formatPrice(monthly)}</span><span class="badge">${Math.max(1, Number(normalized.monthsToDilute || 1))} mês(es)</span><span class="badge">Reconhecido: ${formatPrice(recognized)}</span>` : `<span class="badge">Impacto no período: ${formatPrice(recognized)}</span>`}
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+function updateGestaoSyncUi() {
       const statusEl = document.getElementById('gestaoSyncStatus');
       const hintEl = document.getElementById('gestaoSyncHint');
       if (!statusEl || !hintEl) return;
@@ -6046,7 +6432,15 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     function getGestaoExtraInvestedTotal() {
       const ordersExtra = gestaoEntries.reduce((sum, item) => sum + Number(item.extraCost || 0), 0);
       const salesExtra = gestaoSales.reduce((sum, item) => sum + Number(item.extraCostsTotal || 0), 0);
-      return roundMoney(ordersExtra + salesExtra);
+      const businessExpensesTotal = gestaoBusinessCosts
+        .map(normalizeGestaoBusinessCostItem)
+        .filter(item => item.type === 'despesa')
+        .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      const businessInvestmentsTotal = gestaoBusinessCosts
+        .map(normalizeGestaoBusinessCostItem)
+        .filter(item => item.type === 'investimento')
+        .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      return roundMoney(ordersExtra + salesExtra + businessExpensesTotal + businessInvestmentsTotal);
     }
 
     async function loadGestaoStateFromSupabase() {
@@ -6132,6 +6526,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       localStorage.setItem(GESTAO_ENTRIES_KEY, JSON.stringify(gestaoEntries));
       localStorage.setItem(GESTAO_SALES_KEY, JSON.stringify(gestaoSales));
       localStorage.setItem(GESTAO_SALES_META_KEY, JSON.stringify(gestaoSalesMeta));
+      localStorage.setItem(GESTAO_BUSINESS_COSTS_KEY, JSON.stringify(gestaoBusinessCosts));
       gestaoSyncMode = 'online';
       updateGestaoSyncUi();
     }
@@ -6139,6 +6534,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     async function loadGestaoState() {
       try {
         await loadGestaoStateFromSupabase();
+        loadGestaoBusinessCostsFromStorage();
         return;
       } catch (error) {
         console.warn('Gestão em modo local:', error?.message || error);
@@ -6187,8 +6583,10 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         gestaoSuppliers = [];
         gestaoEntries = [];
         gestaoSales = [];
+        gestaoBusinessCosts = [];
         gestaoSalesMeta = {};
       }
+      loadGestaoBusinessCostsFromStorage();
       normalizeGestaoEntriesExtraCosts();
       gestaoSyncMode = 'local';
       updateGestaoSyncUi();
@@ -6200,6 +6598,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       localStorage.setItem(GESTAO_ENTRIES_KEY, JSON.stringify(gestaoEntries));
       localStorage.setItem(GESTAO_SALES_KEY, JSON.stringify(gestaoSales));
       localStorage.setItem(GESTAO_SALES_META_KEY, JSON.stringify(gestaoSalesMeta));
+      localStorage.setItem(GESTAO_BUSINESS_COSTS_KEY, JSON.stringify(gestaoBusinessCosts));
 
       if (gestaoSyncMode !== 'online') return;
 
@@ -6562,9 +6961,11 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
     function getGestaoMetrics(period = gestaoPeriodFilter) {
       const stock = calculateGestaoStock();
       const filteredSales = getFilteredGestaoSales(period);
+      const businessCosts = getGestaoBusinessCostMetrics(period);
       const totalStockPieces = stock.reduce((sum, item) => sum + Math.max(0, Number(item.currentQty || 0)), 0);
       const totalRevenue = roundMoney(filteredSales.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0));
       const realProfit = roundMoney(filteredSales.reduce((sum, item) => sum + Number(item.profit || 0), 0));
+      const netProfitAfterBusinessCosts = roundMoney(realProfit - businessCosts.totalExpenses - businessCosts.recognizedInvestments);
       const shirtsSold = filteredSales.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
       const saleGroups = getFilteredGestaoSaleGroups(period);
       const salesCount = saleGroups.length;
@@ -6590,6 +6991,10 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         totalStockPieces,
         totalRevenue,
         realProfit,
+        netProfitAfterBusinessCosts,
+        businessExpenses: businessCosts.totalExpenses,
+        businessInvestmentsRecognized: businessCosts.recognizedInvestments,
+        businessCurrentMonthlyLoad: businessCosts.currentMonthlyLoad,
         shirtsSold,
         salesCount,
         ticketAverage,
@@ -6768,6 +7173,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       syncGestaoPeriodButtons();
       renderGestaoSummary();
       renderGestaoMetrics();
+      renderGestaoBusinessCosts();
     }
 
     function renderGestaoSummary() {
@@ -6790,7 +7196,10 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
           <div class="dashboard-summary-item"><span>Investimento total</span><strong>${formatPrice(investments.historicalInvestedTotal)}</strong></div>
           <div class="dashboard-summary-item"><span>Estoque atual</span><strong>${formatPrice(investments.currentStockInvestment)}</strong></div>
           <div class="dashboard-summary-item"><span>Receita real (${metrics.periodLabel})</span><strong>${formatPrice(metrics.totalRevenue)}</strong></div>
-          <div class="dashboard-summary-item"><span>Lucro real</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
+          <div class="dashboard-summary-item"><span>Lucro operacional</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
+          <div class="dashboard-summary-item"><span>Despesas do negócio</span><strong>${formatPrice(metrics.businessExpenses)}</strong></div>
+          <div class="dashboard-summary-item"><span>Investimentos reconhecidos</span><strong>${formatPrice(metrics.businessInvestmentsRecognized)}</strong></div>
+          <div class="dashboard-summary-item"><span>Lucro líquido</span><strong>${formatPrice(metrics.netProfitAfterBusinessCosts)}</strong></div>
           <div class="dashboard-summary-item"><span>Receita potencial</span><strong>${formatPrice(metrics.potentialRevenue)}</strong></div>
           <div class="dashboard-summary-item"><span>Lucro potencial</span><strong>${formatPrice(metrics.potentialProfit)}</strong></div>
           <div class="dashboard-summary-item"><span>Peças em estoque</span><strong>${metrics.totalStockPieces}</strong></div>
@@ -6940,11 +7349,15 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
         <div class="metric-card"><span>Investimento total</span><strong>${formatPrice(investments.historicalInvestedTotal)}</strong></div>
         <div class="metric-card"><span>Estoque atual</span><strong>${formatPrice(investments.currentStockInvestment)}</strong></div>
         <div class="metric-card"><span>Receita real (${metrics.periodLabel})</span><strong>${formatPrice(metrics.totalRevenue)}</strong></div>
-        <div class="metric-card"><span>Lucro real</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
+        <div class="metric-card"><span>Lucro operacional</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
+        <div class="metric-card"><span>Despesas do negócio</span><strong>${formatPrice(metrics.businessExpenses)}</strong></div>
+        <div class="metric-card"><span>Investimentos reconhecidos</span><strong>${formatPrice(metrics.businessInvestmentsRecognized)}</strong></div>
+        <div class="metric-card"><span>Lucro líquido</span><strong>${formatPrice(metrics.netProfitAfterBusinessCosts)}</strong></div>
         <div class="metric-card"><span>Receita potencial</span><strong>${formatPrice(metrics.potentialRevenue)}</strong></div>
         <div class="metric-card"><span>Lucro potencial</span><strong>${formatPrice(metrics.potentialProfit)}</strong></div>
         <div class="metric-card"><span>Camisas em estoque</span><strong>${metrics.totalStockPieces}</strong></div>
         <div class="metric-card"><span>Total combinado</span><strong>${formatPrice(metrics.totalCombinedRevenue)}</strong></div>
+        <div class="metric-card"><span>Carga mensal atual</span><strong>${formatPrice(metrics.businessCurrentMonthlyLoad)}</strong></div>
         <div class="metric-card"><span>Produto mais vendido</span><strong>${escapeHtml(metrics.topProductName)}</strong></div>
         <div class="metric-card"><span>Maior lucro acumulado</span><strong>${escapeHtml(metrics.topProfitProductName)}</strong></div>
       `;
@@ -7398,11 +7811,13 @@ function renderGestaoSuppliers() {
       syncGestaoPeriodButtons();
       renderGestaoSummary();
       renderGestaoMetrics();
+      renderGestaoBusinessCosts();
       renderGestaoAlerts();
       renderGestaoEntries();
       renderGestaoStock();
       renderGestaoSales();
       renderGestaoSuppliers();
+      renderGestaoBusinessCosts();
       renderGestaoPendingOrder();
       renderGestaoPendingSale();
       renderGestaoSizeOptions('entry');
@@ -7673,6 +8088,9 @@ async function saveGestaoSale() {
       updateBatchCreateKpis();
       const entryDateField = document.getElementById('gestao-entry-date');
       if (entryDateField) entryDateField.value = new Date().toISOString().slice(0,10);
+      const businessCostDateField = document.getElementById('gestao-business-cost-date');
+      if (businessCostDateField) businessCostDateField.value = new Date().toISOString().slice(0,10);
+      setGestaoBusinessCostType('despesa');
       document.getElementById('gestao-entry-extra')?.addEventListener('input', renderGestaoPendingOrder);
       document.getElementById('gestao-entry-product-search')?.addEventListener('focus', () => syncGestaoProductSearchFromSelect('entry'));
       document.getElementById('gestao-sale-product-search')?.addEventListener('focus', () => syncGestaoProductSearchFromSelect('sale'));
