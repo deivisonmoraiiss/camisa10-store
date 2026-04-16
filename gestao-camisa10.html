@@ -196,6 +196,66 @@
       border:1px solid rgba(212,175,55,.24)
     }
     .product-admin-actions .btn-primary-soft:hover{background:rgba(212,175,55,.16)}
+    .product-admin-details{display:grid;gap:10px;min-width:0}
+    .product-admin-summary{
+      list-style:none;
+      cursor:pointer;
+      display:grid;
+      gap:8px;
+    }
+    .product-admin-summary::-webkit-details-marker{display:none}
+    .product-admin-summary::marker{display:none}
+    .product-admin-summary-toggle{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:max-content;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(212,175,55,.12);
+      border:1px solid rgba(212,175,55,.22);
+      color:#f6df95;
+      font-size:.78rem;
+      font-weight:900;
+    }
+    .product-admin-details[open] .product-admin-summary-toggle{
+      background:linear-gradient(135deg,var(--gold),var(--gold-2));
+      color:#111;
+      border-color:transparent;
+    }
+    .product-admin-expanded{
+      display:grid;
+      gap:10px;
+      padding-top:10px;
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+    .product-admin-compact-head{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+    .product-admin-title-wrap{min-width:0}
+    .product-admin-title-wrap .product-admin-title{margin-bottom:0}
+    .product-admin-compact-price{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .product-admin-summary .product-admin-sub{
+      color:var(--muted);
+      font-size:.82rem;
+    }
+    .product-admin-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:2px;
+    }
+    .product-admin-actions .btn{padding:9px 12px;font-size:.84rem}
     .product-admin-actions .btn-visibility-show{
       background:rgba(46,139,87,.14);
       color:#b9f0cf;
@@ -1308,7 +1368,7 @@
                   <label for="product-size-profile">Grade / variação</label>
                   <select id="product-size-profile">
                     <option value="adulto">Adulto (P, M, G, EG)</option>
-                    <option value="infantil">Infantil (2, 4, 6, 8, 10)</option>
+                    <option value="infantil">Infantil (2, 4, 6, 8)</option>
                     <option value="sandalia">Sandália (25 a 43)</option>
                     <option value="unico">Tamanho único / sem grade</option>
                     <option value="custom">Personalizado</option>
@@ -1527,7 +1587,7 @@
                       <label for="batch-create-size-profile">Grade padrão</label>
                       <select id="batch-create-size-profile" onchange="handleBatchCreateSizeProfileChange(this.value)">
                         <option value="adulto">Adulto (P, M, G, EG)</option>
-                        <option value="infantil">Infantil (2, 4, 6, 8, 10)</option>
+                        <option value="infantil">Infantil (2, 4, 6, 8)</option>
                         <option value="sandalia">Sandália (25 a 43)</option>
                         <option value="unico">Tamanho único / sem grade</option>
                       </select>
@@ -2839,7 +2899,7 @@ Camisa Real Madrid 24/25"></textarea>
 
     function getSizeOptionsByProfile(profile) {
       const normalized = String(profile || "adulto").toLowerCase();
-      if (normalized === "infantil") return ["2", "4", "6", "8", "10"];
+      if (normalized === "infantil") return ["2", "4", "6", "8"];
       if (normalized === "sandalia") return ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43"];
       if (normalized === "unico") return ["Único"];
       return ["P", "M", "G", "EG"];
@@ -2881,12 +2941,17 @@ Camisa Real Madrid 24/25"></textarea>
       const kindInput = document.getElementById("product-kind");
       const profileSelect = document.getElementById("product-size-profile");
       const note = document.getElementById("product-size-profile-note");
+      const categorySelect = document.getElementById("product-category");
       if (!kindInput || !profileSelect) return;
 
       const value = kindInput.value.trim().toLowerCase();
+      const categoryValue = String(categorySelect?.selectedOptions?.[0]?.textContent || categorySelect?.value || "").trim().toLowerCase();
       let suggestedProfile = profileSelect.value || "adulto";
 
-      if (value.includes("infantil") || value.includes("kids") || value.includes("kit")) {
+      if (
+        value.includes("infantil") || value.includes("kids") || value.includes("kit")
+        || categoryValue.includes("infantil")
+      ) {
         suggestedProfile = "infantil";
       } else if (value.includes("sand") || value.includes("chinelo") || value.includes("slide")) {
         suggestedProfile = "sandalia";
@@ -4140,64 +4205,72 @@ async function uploadMultipleProductImages(productId) {
             </div>
 
             <div class="product-admin-content">
-              <div class="product-admin-top">
-                <div>
-                  <div class="product-admin-title">${product.name || "-"} ${featuredBadge}</div>
-                  <div class="product-admin-sub">Slug: ${product.slug || "-"}</div>
-                </div>
-                <div class="product-admin-price">
-                  <span class="price-main">${formatPrice(product.price)}</span>
-                  ${oldPrice}
-                </div>
-              </div>
-
-              ${description}
-
-              <div class="product-admin-meta">
-                <span class="badge">${productKind}</span>
-                <span class="badge">${categoryName}</span>
-                <span class="badge">${saleType}</span>
-                ${visibleBadge}
-                ${badgeType}
-                ${variationsBadge}
-                ${encomendaOrderBadge}
-                ${prontaOrderBadge}
-              </div>
-
-              <div class="product-admin-meta">
-                ${sizesHtml}
-              </div>
-
-              <div class="product-admin-quick-grid">
-                <button class="btn btn-secondary quick-toggle-btn ${product.is_featured ? "active" : ""}" onclick="toggleFeaturedQuick('${product.id}', ${product.is_featured ? "false" : "true"})">
-                  ${product.is_featured ? "Remover de Mais procuradas" : "Colocar em Mais procuradas"}
-                </button>
-                ${(product.sale_type || "pronta_entrega") === "pronta_entrega" ? `
-                  <div class="quick-order-box">
-                    <span class="quick-order-badge">Posição #${getProntaEntregaPosition(product.id) || "—"}</span>
-                    <div class="quick-order-actions">
-                      <button class="quick-icon-btn" type="button" onclick="moveProntaEntregaPriority('${product.id}', 'up')" ${getProntaEntregaPosition(product.id) === 1 ? "disabled" : ""}>↑</button>
-                      <button class="quick-icon-btn" type="button" onclick="moveProntaEntregaPriority('${product.id}', 'down')">↓</button>
+              <details class="product-admin-details">
+                <summary class="product-admin-summary">
+                  <div class="product-admin-compact-head">
+                    <div class="product-admin-title-wrap">
+                      <div class="product-admin-title">${product.name || "-"} ${featuredBadge}</div>
                     </div>
-                    <div class="quick-priority-box">
-                      <input class="quick-priority-input" type="number" min="1" step="1" id="quick-priority-${product.id}" value="${prontaPriority ?? ""}" placeholder="Ordem pronta entrega" />
-                      <button class="btn btn-secondary" onclick="saveQuickProntaPriority('${product.id}')">Salvar</button>
+                    <div class="product-admin-compact-price">
+                      <span class="price-main">${formatPrice(product.price)}</span>
+                      ${oldPrice}
                     </div>
                   </div>
-                ` : `<div class="small-muted" style="display:flex;align-items:center;">Esse controle aparece só para pronta entrega.</div>`}
-              </div>
+                  <span class="product-admin-summary-toggle">Ver detalhes</span>
+                </summary>
 
-              <div class="product-admin-actions">
-                <button class="btn btn-success" onclick="editProduct('${product.id}')">Editar</button>
-                <button
-                  class="btn ${product.is_visible !== false ? "btn-visibility-hide" : "btn-visibility-show"}"
-                  onclick="toggleProductVisibility('${product.id}', ${product.is_visible !== false ? "false" : "true"})"
-                >
-                  ${product.is_visible !== false ? "Ocultar do site" : "Mostrar no site"}
-                </button>
-                <button class="btn btn-primary-soft" onclick="duplicateProduct('${product.id}')">Duplicar</button>
-                <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">Excluir</button>
-              </div>
+                <div class="product-admin-expanded">
+                  <div class="product-admin-sub">Slug: ${product.slug || "-"}</div>
+
+                  ${description}
+
+                  <div class="product-admin-meta">
+                    <span class="badge">${productKind}</span>
+                    <span class="badge">${categoryName}</span>
+                    <span class="badge">${saleType}</span>
+                    ${visibleBadge}
+                    ${badgeType}
+                    ${variationsBadge}
+                    ${encomendaOrderBadge}
+                    ${prontaOrderBadge}
+                  </div>
+
+                  <div class="product-admin-meta">
+                    ${sizesHtml}
+                  </div>
+
+                  <div class="product-admin-quick-grid">
+                    <button class="btn btn-secondary quick-toggle-btn ${product.is_featured ? "active" : ""}" onclick="toggleFeaturedQuick('${product.id}', ${product.is_featured ? "false" : "true"})">
+                      ${product.is_featured ? "Remover de Mais procuradas" : "Colocar em Mais procuradas"}
+                    </button>
+                    ${(product.sale_type || "pronta_entrega") === "pronta_entrega" ? `
+                      <div class="quick-order-box">
+                        <span class="quick-order-badge">Posição #${getProntaEntregaPosition(product.id) || "—"}</span>
+                        <div class="quick-order-actions">
+                          <button class="quick-icon-btn" type="button" onclick="moveProntaEntregaPriority('${product.id}', 'up')" ${getProntaEntregaPosition(product.id) === 1 ? "disabled" : ""}>↑</button>
+                          <button class="quick-icon-btn" type="button" onclick="moveProntaEntregaPriority('${product.id}', 'down')">↓</button>
+                        </div>
+                        <div class="quick-priority-box">
+                          <input class="quick-priority-input" type="number" min="1" step="1" id="quick-priority-${product.id}" value="${prontaPriority ?? ""}" placeholder="Ordem pronta entrega" />
+                          <button class="btn btn-secondary" onclick="saveQuickProntaPriority('${product.id}')">Salvar</button>
+                        </div>
+                      </div>
+                    ` : `<div class="small-muted" style="display:flex;align-items:center;">Esse controle aparece só para pronta entrega.</div>`}
+                  </div>
+
+                  <div class="product-admin-actions">
+                    <button class="btn btn-success" onclick="editProduct('${product.id}')">Editar</button>
+                    <button
+                      class="btn ${product.is_visible !== false ? "btn-visibility-hide" : "btn-visibility-show"}"
+                      onclick="toggleProductVisibility('${product.id}', ${product.is_visible !== false ? "false" : "true"})"
+                    >
+                      ${product.is_visible !== false ? "Ocultar do site" : "Mostrar no site"}
+                    </button>
+                    <button class="btn btn-primary-soft" onclick="duplicateProduct('${product.id}')">Duplicar</button>
+                    <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">Excluir</button>
+                  </div>
+                </div>
+              </details>
             </div>
           </article>
         `;
@@ -7480,7 +7553,10 @@ async function saveGestaoSale() {
       loadProductTypeOptions();
       document.getElementById("product-name")?.addEventListener("input", syncSlugPreview);
       document.getElementById("product-price")?.addEventListener("input", updateDraftSummary);
-      document.getElementById("product-category")?.addEventListener("change", updateDraftSummary);
+      document.getElementById("product-category")?.addEventListener("change", () => {
+        syncProductTypeFromKind();
+        updateDraftSummary();
+      });
       document.getElementById("product-kind")?.addEventListener("input", () => {
         syncProductTypeFromKind();
         updateDraftSummary();
