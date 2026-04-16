@@ -197,19 +197,6 @@
     .product-admin-select{display:flex;align-items:center;gap:10px;color:#f1f1f1;font-weight:700;font-size:.84rem}
     .product-admin-select input{width:16px;height:16px;accent-color:var(--gold);cursor:pointer}
     .product-admin-actions .btn{padding:9px 12px;font-size:.84rem}
-    .product-admin-card.drag-mode{cursor:grab}
-    .product-admin-card.drag-mode .product-admin-summary{cursor:grab}
-    .product-admin-card.dragging{opacity:.55;transform:scale(.995);border-color:rgba(212,175,55,.48)}
-    .product-admin-card.drag-over{border-color:rgba(212,175,55,.58);box-shadow:0 0 0 2px rgba(212,175,55,.15),0 14px 28px rgba(0,0,0,.18)}
-    .drag-handle{display:none;align-items:center;justify-content:center;width:38px;height:38px;border-radius:12px;border:1px dashed rgba(212,175,55,.28);background:rgba(212,175,55,.08);color:#f6df95;font-weight:900;font-size:1rem;flex-shrink:0}
-    .product-admin-card.drag-mode .drag-handle{display:inline-flex}
-    .price-inline-box{display:grid;grid-template-columns:minmax(110px,150px) auto;gap:8px;align-items:center}
-    .price-inline-input{width:100%;padding:9px 12px;border-radius:12px;border:1px solid #2d2d2d;background:#101010;color:#fff;font-size:.88rem}
-    .quick-section-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0 10px}
-    .sort-mode-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-    .sort-mode-chip{border:none;padding:10px 14px;border-radius:999px;background:#111;color:#f2f2f2;border:1px solid rgba(255,255,255,.08);font-weight:800;font-size:.8rem;cursor:pointer}
-    .sort-mode-chip.active{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#111;border-color:transparent}
-    .sort-mode-hint{color:var(--muted);font-size:.82rem;margin-top:6px}
     .product-admin-actions .btn-primary-soft{
       background:rgba(212,175,55,.10);
       color:#f6df95;
@@ -1061,18 +1048,6 @@
                 <option value="hidden">Ocultos do site</option>
               </select>
               <button class="btn btn-secondary" onclick="loadProducts()">Atualizar</button>
-            </div>
-
-            <div class="quick-section-head">
-              <div>
-                <strong style="color:#fff;display:block;">Organização rápida</strong>
-                <div class="sort-mode-hint" id="sort-mode-hint">Preço pode ser alterado direto no card. Para arrastar, escolha uma vitrine abaixo.</div>
-              </div>
-              <div class="sort-mode-bar">
-                <button class="sort-mode-chip active" type="button" data-sort-mode="none" onclick="setProductSortMode('none')">Normal</button>
-                <button class="sort-mode-chip" type="button" data-sort-mode="pronta_entrega" onclick="setProductSortMode('pronta_entrega')">Arrastar pronta entrega</button>
-                <button class="sort-mode-chip" type="button" data-sort-mode="featured" onclick="setProductSortMode('featured')">Arrastar mais procuradas</button>
-              </div>
             </div>
 
             <details class="batch-card">
@@ -2233,15 +2208,11 @@ Camisa Real Madrid 24/25"></textarea>
     const PRODUCT_VARIATIONS_STORAGE_KEY = "camisa10_product_variations_v1";
     const PRODUCT_TYPE_OPTIONS_KEY = "camisa10_product_type_options_v1";
     const PRODUCT_PRIORITIES_STORAGE_KEY = "camisa10_product_priorities_v1";
-    const PRODUCT_FEATURED_ORDER_STORAGE_KEY = "camisa10_product_featured_order_v1";
     let productMetaCache = {};
     let productVariationsCache = {};
     let productVariationsDraft = [];
     let productTypeOptions = [];
     let productPriorityCache = {};
-    let productFeaturedOrderCache = {};
-    let currentProductSortMode = "none";
-    let draggedProductId = null;
 
 
 
@@ -2364,34 +2335,6 @@ Camisa Real Madrid 24/25"></textarea>
 
     function persistProductPriorityCache() {
       localStorage.setItem(PRODUCT_PRIORITIES_STORAGE_KEY, JSON.stringify(productPriorityCache));
-    }
-
-    function loadProductFeaturedOrderCache() {
-      try {
-        productFeaturedOrderCache = JSON.parse(localStorage.getItem(PRODUCT_FEATURED_ORDER_STORAGE_KEY) || "{}") || {};
-      } catch (error) {
-        productFeaturedOrderCache = {};
-      }
-    }
-
-    function persistProductFeaturedOrderCache() {
-      localStorage.setItem(PRODUCT_FEATURED_ORDER_STORAGE_KEY, JSON.stringify(productFeaturedOrderCache));
-    }
-
-    function getStoredFeaturedPriority(productId) {
-      if (!productId) return "";
-      return productFeaturedOrderCache[String(productId)]?.priority_featured ?? "";
-    }
-
-    function persistStoredFeaturedPriority(productId, value) {
-      if (!productId) return;
-      const key = String(productId);
-      if (value === "" || value === null || value === undefined) {
-        delete productFeaturedOrderCache[key];
-      } else {
-        productFeaturedOrderCache[key] = { priority_featured: Number(value) };
-      }
-      persistProductFeaturedOrderCache();
     }
 
     function getStoredProntaPriority(productId) {
@@ -2753,12 +2696,6 @@ Camisa Real Madrid 24/25"></textarea>
       return null;
     }
 
-    function inferFeaturedPriority(product = {}) {
-      const cached = getStoredFeaturedPriority(product.id);
-      if (cached !== "" && cached !== null && cached !== undefined) return Number(cached);
-      return null;
-    }
-
     function getProntaEntregaProductsSorted() {
       return allProducts
         .filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega")
@@ -2775,25 +2712,6 @@ Camisa Real Madrid 24/25"></textarea>
 
     function getProntaEntregaPosition(productId) {
       const sorted = getProntaEntregaProductsSorted();
-      const index = sorted.findIndex(product => String(product.id) === String(productId));
-      return index >= 0 ? index + 1 : null;
-    }
-
-    function getFeaturedProductsSorted() {
-      return allProducts
-        .filter(product => !!product.is_featured)
-        .sort((a, b) => {
-          const aPriority = inferFeaturedPriority(a) ?? 999999;
-          const bPriority = inferFeaturedPriority(b) ?? 999999;
-          if (aPriority !== bPriority) return aPriority - bPriority;
-          const aDate = new Date(a.created_at || 0).getTime();
-          const bDate = new Date(b.created_at || 0).getTime();
-          return bDate - aDate;
-        });
-    }
-
-    function getFeaturedPosition(productId) {
-      const sorted = getFeaturedProductsSorted();
       const index = sorted.findIndex(product => String(product.id) === String(productId));
       return index >= 0 ? index + 1 : null;
     }
@@ -3711,20 +3629,9 @@ async function uploadMultipleProductImages(productId) {
           const matchVisibility = !visibilityFilter
             || (visibilityFilter === "visible" && isVisible)
             || (visibilityFilter === "hidden" && !isVisible);
-          const matchSortMode = currentProductSortMode === "pronta_entrega"
-            ? (product.sale_type || "pronta_entrega") === "pronta_entrega"
-            : currentProductSortMode === "featured"
-              ? !!product.is_featured
-              : true;
-          return matchName && matchCategory && matchSaleType && matchKind && matchVisibility && matchSortMode;
+          return matchName && matchCategory && matchSaleType && matchKind && matchVisibility;
         })
         .sort((a, b) => {
-          if (currentProductSortMode === "featured") {
-            const aFeatured = inferFeaturedPriority(a) ?? 999999;
-            const bFeatured = inferFeaturedPriority(b) ?? 999999;
-            if (aFeatured !== bFeatured) return aFeatured - bFeatured;
-          }
-
           const aSaleType = a.sale_type || "pronta_entrega";
           const bSaleType = b.sale_type || "pronta_entrega";
 
@@ -3852,7 +3759,6 @@ async function uploadMultipleProductImages(productId) {
         descriptionPreview.textContent = buildBatchDescriptionPreview(getTargetProducts(descriptionTarget), descriptionMode, descriptionValue);
       }
 
-      products.forEach(product => bindMoneyInput(`inline-price-${product.id}`));
       updateBatchCounters();
     }
 
@@ -3981,120 +3887,6 @@ async function uploadMultipleProductImages(productId) {
     }
 
 
-    function setProductSortMode(mode = "none") {
-      currentProductSortMode = mode;
-      document.querySelectorAll('.sort-mode-chip').forEach(button => {
-        button.classList.toggle('active', button.dataset.sortMode === mode);
-      });
-      const hint = document.getElementById('sort-mode-hint');
-      if (hint) {
-        if (mode === 'pronta_entrega') hint.textContent = 'Agora você pode arrastar só os produtos de pronta entrega. A ordem salva reflete nessa vitrine.';
-        else if (mode === 'featured') hint.textContent = 'Agora você pode arrastar só os produtos marcados em Mais procuradas. Esta ordem fica salva no painel para usar como vitrine.';
-        else hint.textContent = 'Preço pode ser alterado direto no card. Para arrastar, escolha uma vitrine abaixo.';
-      }
-      filterProducts();
-    }
-
-    async function saveInlineProductPrice(productId) {
-      clearMessage('list-message');
-      const input = document.getElementById(`inline-price-${productId}`);
-      if (!input) return;
-      const numericValue = normalizeMoneyInput(input.value);
-      if (Number.isNaN(numericValue) || numericValue < 0) {
-        showMessage('list-message', 'Digite um preço válido.', 'error');
-        return;
-      }
-      const { error } = await supabaseClient
-        .from('products')
-        .update({ price: numericValue })
-        .eq('id', productId);
-      if (error) {
-        console.error('Erro ao atualizar preço rápido:', error);
-        showMessage('list-message', `Erro ao atualizar preço: ${error.message}`, 'error');
-        return;
-      }
-      showMessage('list-message', 'Preço atualizado com sucesso.', 'success');
-      await loadProducts();
-    }
-
-    function handleProductDragStart(event, productId) {
-      if (currentProductSortMode === 'none') return;
-      draggedProductId = String(productId);
-      event.dataTransfer.effectAllowed = 'move';
-      try { event.dataTransfer.setData('text/plain', draggedProductId); } catch (error) {}
-      event.currentTarget.classList.add('dragging');
-    }
-
-    function handleProductDragOver(event) {
-      if (currentProductSortMode === 'none') return;
-      event.preventDefault();
-      event.dataTransfer.dropEffect = 'move';
-      event.currentTarget.classList.add('drag-over');
-    }
-
-    function handleProductDragLeave(event) {
-      event.currentTarget.classList.remove('drag-over');
-    }
-
-    async function handleProductDrop(event, targetProductId) {
-      if (currentProductSortMode === 'none') return;
-      event.preventDefault();
-      event.currentTarget.classList.remove('drag-over');
-      const sourceId = draggedProductId || (() => { try { return event.dataTransfer.getData('text/plain'); } catch (error) { return null; } })();
-      if (!sourceId || String(sourceId) === String(targetProductId)) return;
-      await reorderProductsByMode(String(sourceId), String(targetProductId));
-    }
-
-    function handleProductDragEnd(event) {
-      draggedProductId = null;
-      document.querySelectorAll('.product-admin-card').forEach(card => card.classList.remove('dragging', 'drag-over'));
-    }
-
-    async function reorderProductsByMode(sourceId, targetId) {
-      clearMessage('list-message');
-      if (currentProductSortMode === 'pronta_entrega') {
-        const sorted = getProntaEntregaProductsSorted();
-        const reordered = reorderIdList(sorted.map(product => String(product.id)), sourceId, targetId);
-        if (!reordered) return;
-        for (let index = 0; index < reordered.length; index++) {
-          const productId = reordered[index];
-          const priority = index + 1;
-          let response = await supabaseClient.from('products').update({ priority_pronta_entrega: priority }).eq('id', productId);
-          if (response.error && shouldRetryWithoutMetaColumns(response.error)) {
-            persistStoredProntaPriority(productId, priority);
-            continue;
-          }
-          if (response.error) {
-            showMessage('list-message', `Erro ao salvar ordem da pronta entrega: ${response.error.message}`, 'error');
-            return;
-          }
-          persistStoredProntaPriority(productId, priority);
-        }
-        showMessage('list-message', 'Nova ordem da pronta entrega salva com sucesso.', 'success');
-        await loadProducts();
-        return;
-      }
-
-      if (currentProductSortMode === 'featured') {
-        const sorted = getFeaturedProductsSorted();
-        const reordered = reorderIdList(sorted.map(product => String(product.id)), sourceId, targetId);
-        if (!reordered) return;
-        reordered.forEach((productId, index) => persistStoredFeaturedPriority(productId, index + 1));
-        showMessage('list-message', 'Nova ordem de Mais procuradas salva neste painel.', 'success');
-        filterProducts();
-      }
-    }
-
-    function reorderIdList(list, sourceId, targetId) {
-      const next = [...list];
-      const sourceIndex = next.findIndex(id => String(id) === String(sourceId));
-      const targetIndex = next.findIndex(id => String(id) === String(targetId));
-      if (sourceIndex === -1 || targetIndex === -1) return null;
-      const [moved] = next.splice(sourceIndex, 1);
-      next.splice(targetIndex, 0, moved);
-      return next;
-    }
-
     function renderProducts(products) {
       const tbody = document.getElementById("products-table-body");
 
@@ -4126,7 +3918,6 @@ async function uploadMultipleProductImages(productId) {
           ? '<span class="badge">Visível</span>'
           : '<span class="badge" style="background:rgba(217,83,79,.16);color:#ffd2d0;border-color:rgba(217,83,79,.28);">Oculto</span>';
         const featuredBadge = product.is_featured ? '<span class="badge-featured">Mais procuradas</span>' : '';
-        const featuredOrderBadge = product.is_featured && getFeaturedPosition(product.id) ? `<span class="badge">Mais procuradas: ${getFeaturedPosition(product.id)}</span>` : '';
         const encomendaOrderBadge = product.sale_type === "sob_encomenda" && product.priority_encomenda
           ? `<span class="badge">Home sob encomenda: ${product.priority_encomenda}</span>`
           : '';
@@ -4145,7 +3936,7 @@ async function uploadMultipleProductImages(productId) {
         const isSelected = selectedProductIds.has(String(product.id));
 
         return `
-          <details class="product-admin-card ${isSelected ? "selected" : ""} ${currentProductSortMode !== "none" ? "drag-mode" : ""}" ${currentProductSortMode !== "none" ? `draggable="true" ondragstart="handleProductDragStart(event, '${product.id}')" ondragover="handleProductDragOver(event)" ondragleave="handleProductDragLeave(event)" ondrop="handleProductDrop(event, '${product.id}')" ondragend="handleProductDragEnd(event)"` : ''}>
+          <details class="product-admin-card ${isSelected ? "selected" : ""}">
             <summary class="product-admin-summary">
               <div class="product-admin-image-wrap">
                 <img
@@ -4162,7 +3953,6 @@ async function uploadMultipleProductImages(productId) {
               </div>
 
               <div class="product-admin-price">
-                <span class="drag-handle" title="Arrastar">⋮⋮</span>
                 <span class="price-main">${formatPrice(product.price)}</span>
                 ${oldPrice}
                 <span class="product-admin-expand">Ver</span>
@@ -4194,7 +3984,6 @@ async function uploadMultipleProductImages(productId) {
                 ${variationsBadge}
                 ${encomendaOrderBadge}
                 ${prontaOrderBadge}
-                ${featuredOrderBadge}
               </div>
 
               <div class="product-admin-meta">
@@ -4202,10 +3991,6 @@ async function uploadMultipleProductImages(productId) {
               </div>
 
               <div class="product-admin-quick-grid">
-                <div class="price-inline-box">
-                  <input class="price-inline-input" type="text" inputmode="decimal" id="inline-price-${product.id}" value="${Number(product.price || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}" />
-                  <button class="btn btn-secondary" onclick="saveInlineProductPrice('${product.id}')">Salvar preço</button>
-                </div>
                 <button class="btn btn-secondary quick-toggle-btn ${product.is_featured ? "active" : ""}" onclick="toggleFeaturedQuick('${product.id}', ${product.is_featured ? "false" : "true"})">
                   ${product.is_featured ? "Remover de Mais procuradas" : "Colocar em Mais procuradas"}
                 </button>
@@ -4271,12 +4056,6 @@ async function uploadMultipleProductImages(productId) {
         return;
       }
 
-      if (normalizedState) {
-        const nextPosition = getFeaturedProductsSorted().length + 1;
-        persistStoredFeaturedPriority(productId, nextPosition);
-      } else {
-        persistStoredFeaturedPriority(productId, "");
-      }
       showMessage("list-message", normalizedState ? "Produto marcado em Mais procuradas." : "Produto removido de Mais procuradas.", "success");
       await loadProducts();
     }
@@ -7472,7 +7251,6 @@ async function saveGestaoSale() {
 
       loadProductMetaCache();
       loadProductPriorityCache();
-      loadProductFeaturedOrderCache();
       loadProductVariationsCache();
       loadProductTypeOptions();
       document.getElementById("product-name")?.addEventListener("input", syncSlugPreview);
