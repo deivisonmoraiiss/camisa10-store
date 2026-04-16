@@ -867,6 +867,60 @@
     }
   }
 
+
+  /* limpeza visual */
+  .subtitle,
+  .selector-copy,
+  .module-heading-copy,
+  .loja-sidebar-head span,
+  .loja-page-head p,
+  .collapsible-intro,
+  .form-collapsed-hint,
+  .product-flow-strip,
+  .helper-box,
+  .type-manager-help,
+  .size-profile-note,
+  .batch-help,
+  .variation-card-sub,
+  .focus-shortcut span,
+  .gestao-card p,
+  .selector-card p,
+  .list-header-row .small-muted,
+  .batch-card-top .small-muted,
+  .preview-box .small-muted,
+  .variation-topbar .small-muted,
+  .module-btn small,
+  .tab-btn small,
+  .module-mini-tabs,
+  .small-muted[id="base-size-note"] {
+    display:none !important;
+  }
+
+  .selector-top,
+  .module-heading,
+  .loja-page-head,
+  .form-header-row,
+  .list-header-row,
+  .batch-card-top,
+  .variation-topbar,
+  .order-items-head {
+    gap:10px;
+  }
+
+  .card,
+  .mini-card,
+  .product-step,
+  .batch-panel,
+  .order-items-box,
+  .order-summary-box,
+  .draft-summary-card,
+  .selector-card,
+  .focus-shortcut,
+  .gestao-card {
+    padding-top:14px;
+    padding-bottom:14px;
+  }
+
 </style>
 </head>
 <body>
@@ -874,7 +928,7 @@
     <div class="topbar-inner">
       <div class="brand-block">
         <div class="brand-title">Gestão Camisa 10 Store</div>
-        <div class="brand-subtitle">Versão enxuta e organizada</div>
+        <div class="brand-subtitle">Painel limpo</div>
       </div>
       <div class="topbar-actions">
         <button class="btn btn-secondary hidden" id="topLogoutBtn" onclick="logout()">Sair</button>
@@ -885,7 +939,7 @@
   <div class="container">
     <div id="login-screen" class="login-wrapper" style="display:block;">
       <div class="card">
-        <h2 class="login-title">Entrar no painel</h2>
+        <h2 class="login-title">Entrar</h2>
         <p class="subtitle">Acesse com seu usuário do Supabase Auth</p>
         <div class="field">
           <label for="login-email">E-mail</label>
@@ -904,7 +958,7 @@
       <div class="selector-wrapper">
         <div class="selector-top">
           <div>
-            <h2 class="login-title" style="text-align:left;margin-bottom:6px;">Escolha a área</h2>
+            <h2 class="login-title" style="text-align:left;margin-bottom:6px;">Escolha a seção</h2>
             <p class="selector-copy">Separei a parte da loja da parte da gestão para ficar mais simples no celular. Você entra no que precisa e volta para esta tela quando quiser.</p>
           </div>
           <button class="btn btn-secondary" onclick="logout()">Sair</button>
@@ -933,7 +987,6 @@
       <div class="admin-header">
         <div>
           <div class="admin-title">Painel administrativo</div>
-          <div class="small-muted">Só o que você precisa para cadastrar, ajustar e vender.</div>
         </div>
         <button class="btn btn-secondary" onclick="logout()">Sair</button>
       </div>
