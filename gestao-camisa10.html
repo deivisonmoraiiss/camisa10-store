@@ -174,7 +174,8 @@
     .products-toolbar-advanced{display:grid;grid-template-columns:minmax(180px,1.2fr) minmax(160px,.9fr) minmax(160px,.9fr) minmax(170px,.95fr) auto;align-items:center}
     .products-toolbar-advanced select{padding:12px 14px;border-radius:14px;border:1px solid #2d2d2d;background:#101010;color:#fff}
     .product-admin-list{display:grid;grid-template-columns:1fr;gap:12px}
-    .product-admin-card{position:relative;display:grid;grid-template-columns:88px minmax(0,1fr);gap:12px;padding:12px;border-radius:16px;background:#101010;border:1px solid rgba(255,255,255,.05);overflow:visible;align-items:start}
+    .product-admin-card{position:relative;display:grid;grid-template-columns:88px minmax(0,1fr);gap:12px;padding:12px;border-radius:16px;background:#101010;border:1px solid rgba(255,255,255,.05);overflow:visible;align-items:start;cursor:pointer}
+    .product-admin-card.is-open{border-color:rgba(212,175,55,.34);box-shadow:0 0 0 1px rgba(212,175,55,.14)}
     .product-admin-image-wrap{position:relative;width:88px;height:88px;aspect-ratio:auto;background:#0f0f0f;border:none;border-radius:14px;overflow:hidden}
     .product-admin-select{position:absolute;top:6px;right:6px;z-index:2;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:999px;background:rgba(7,7,7,.82);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12)}
     .product-admin-select input{width:16px;height:16px;accent-color:var(--gold);cursor:pointer}
@@ -218,11 +219,13 @@
       font-size:.78rem;
       font-weight:900;
     }
+    .product-admin-summary-toggle::before{content:"Abrir"}
     .product-admin-details[open] .product-admin-summary-toggle{
       background:linear-gradient(135deg,var(--gold),var(--gold-2));
       color:#111;
       border-color:transparent;
     }
+    .product-admin-details[open] .product-admin-summary-toggle::before{content:"Recolher"}
     .product-admin-expanded{
       display:grid;
       gap:10px;
@@ -2863,7 +2866,15 @@ Camisa Real Madrid 24/25"></textarea>
       const cached = String(productMetaCache?.[String(product.id || "")]?.sizeProfile || "").trim().toLowerCase();
       if (cached) return cached;
       const kind = inferProductKind(product).toLowerCase();
-      if (kind.includes("infantil")) return "infantil";
+      const name = String(product.name || "").trim().toLowerCase();
+      const categoryName = String(product.categories?.name || product.category_name || product.category || "").trim().toLowerCase();
+      if (
+        kind.includes("infantil")
+        || name.includes("infantil")
+        || name.includes("kids")
+        || name.includes("kit")
+        || categoryName.includes("infantil")
+      ) return "infantil";
       if (kind.includes("sand")) return "sandalia";
       if (kind.includes("copo")) return "unico";
       return "adulto";
@@ -4144,13 +4155,30 @@ async function uploadMultipleProductImages(productId) {
       }
 
       const groupedProducts = {};
-      const kindOrder = ["Camisa", "Sandália", "Copo", "Outros"];
+      const kindOrder = ["Camisa", "Kit Infantil", "Sandália", "Copo", "Outros"];
 
-      products.forEach(product => {
+      const getOrderedKind = (product) => {
         const baseKind = getDisplayProductKind(product);
-        const normalizedKind = baseKind === "Camisa" || baseKind === "Kit Infantil"
-          ? "Camisa"
-          : (kindOrder.includes(baseKind) ? baseKind : "Outros");
+        if (baseKind === "Kit Infantil") return "Kit Infantil";
+        if (baseKind === "Camisa") return "Camisa";
+        if (baseKind === "Sandália") return "Sandália";
+        if (baseKind === "Copo") return "Copo";
+        return "Outros";
+      };
+
+      const sortedProducts = [...products].sort((a, b) => {
+        const kindDiff = kindOrder.indexOf(getOrderedKind(a)) - kindOrder.indexOf(getOrderedKind(b));
+        if (kindDiff !== 0) return kindDiff;
+
+        const aPriority = inferProntaPriority(a) ?? 999999;
+        const bPriority = inferProntaPriority(b) ?? 999999;
+        if (aPriority !== bPriority) return aPriority - bPriority;
+
+        return String(a.name || "").localeCompare(String(b.name || ""), "pt-BR");
+      });
+
+      sortedProducts.forEach(product => {
+        const normalizedKind = getOrderedKind(product);
         if (!groupedProducts[normalizedKind]) groupedProducts[normalizedKind] = [];
         groupedProducts[normalizedKind].push(product);
       });
@@ -4185,7 +4213,7 @@ async function uploadMultipleProductImages(productId) {
         const isSelected = selectedProductIds.has(String(product.id));
 
         return `
-          <article class="product-admin-card ${isSelected ? "selected" : ""}">
+          <article class="product-admin-card ${isSelected ? "selected" : ""}" data-product-card>
             <div class="product-admin-image-wrap">
               <div class="product-admin-select">
                 <input
@@ -4216,7 +4244,7 @@ async function uploadMultipleProductImages(productId) {
                       ${oldPrice}
                     </div>
                   </div>
-                  <span class="product-admin-summary-toggle">Ver detalhes</span>
+                  <span class="product-admin-summary-toggle" aria-hidden="true"></span>
                 </summary>
 
                 <div class="product-admin-expanded">
@@ -4290,7 +4318,53 @@ async function uploadMultipleProductImages(productId) {
           </section>
         `).join("");
 
+      setupProductCardAccordions();
       updateBatchCounters();
+    }
+
+    function setupProductCardAccordions() {
+      const cards = document.querySelectorAll("[data-product-card]");
+      if (!cards.length) return;
+
+      cards.forEach(card => {
+        const details = card.querySelector(".product-admin-details");
+        const summary = card.querySelector(".product-admin-summary");
+        if (!details || !summary) return;
+
+        const syncOpenState = () => {
+          card.classList.toggle("is-open", details.open);
+        };
+
+        summary.addEventListener("click", () => {
+          requestAnimationFrame(() => {
+            if (details.open) {
+              document.querySelectorAll(".product-admin-details[open]").forEach(otherDetails => {
+                if (otherDetails !== details) {
+                  otherDetails.open = false;
+                  otherDetails.closest("[data-product-card]")?.classList.remove("is-open");
+                }
+              });
+            }
+            syncOpenState();
+          });
+        });
+
+        card.addEventListener("click", event => {
+          if (event.target.closest("button, a, input, select, textarea, label, summary")) return;
+          const shouldOpen = !details.open;
+          document.querySelectorAll(".product-admin-details[open]").forEach(otherDetails => {
+            if (otherDetails !== details) {
+              otherDetails.open = false;
+              otherDetails.closest("[data-product-card]")?.classList.remove("is-open");
+            }
+          });
+          details.open = shouldOpen;
+          syncOpenState();
+        });
+
+        details.addEventListener("toggle", syncOpenState);
+        syncOpenState();
+      });
     }
 
     async function toggleFeaturedQuick(productId, nextState) {
