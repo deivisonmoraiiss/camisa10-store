@@ -1003,6 +1003,107 @@
     .business-cost-item-sub{color:var(--muted);font-size:.84rem;line-height:1.5}
     .business-cost-pill-row{display:flex;gap:8px;flex-wrap:wrap}
     .business-cost-period-note{color:var(--muted);font-size:.82rem;line-height:1.55}
+    .topbar{
+      background:rgba(5,5,5,.86);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      box-shadow:0 18px 44px rgba(0,0,0,.24);
+    }
+    .brand-block{display:grid;grid-template-columns:44px minmax(0,1fr);align-items:center;gap:2px 14px}
+    .brand-mark{grid-row:1 / span 2}
+    .brand-mark{
+      width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#111;
+      font-weight:950;letter-spacing:.02em;box-shadow:0 16px 32px rgba(212,175,55,.14)
+    }
+    .brand-kicker{color:var(--muted);font-size:.76rem;font-weight:900;text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px}
+    .brand-title{font-size:1.08rem;color:#fff;letter-spacing:0}
+    .brand-subtitle{font-size:.82rem}
+    .ops-pill{
+      display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+      color:#e8e8e8;font-size:.82rem;font-weight:800
+    }
+    .ops-pill::before{
+      content:"";width:8px;height:8px;border-radius:999px;background:#59d89a;
+      box-shadow:0 0 0 4px rgba(89,216,154,.10)
+    }
+    .enterprise-hero{
+      position:relative;overflow:hidden;border-radius:24px;padding:24px;
+      background:
+        linear-gradient(135deg,rgba(212,175,55,.13),rgba(255,255,255,.035) 42%,rgba(255,255,255,.015)),
+        #0f0f0f;
+      border:1px solid rgba(212,175,55,.16);
+      box-shadow:0 24px 60px rgba(0,0,0,.26);
+      margin-bottom:18px
+    }
+    .enterprise-hero::after{
+      content:"";position:absolute;inset:auto -80px -120px auto;width:260px;height:260px;
+      background:radial-gradient(circle,rgba(240,207,99,.12),transparent 66%);
+      pointer-events:none
+    }
+    .enterprise-hero-inner{position:relative;z-index:1;display:flex;justify-content:space-between;gap:18px;align-items:flex-start;flex-wrap:wrap}
+    .enterprise-eyebrow{color:var(--gold-2);font-size:.78rem;font-weight:950;text-transform:uppercase;letter-spacing:.13em;margin-bottom:10px}
+    .enterprise-title{font-size:clamp(1.8rem,3vw,2.7rem);font-weight:950;line-height:1.04;color:#fff;margin-bottom:10px}
+    .enterprise-copy{color:#d2d2d2;max-width:720px;line-height:1.65;font-size:.96rem}
+    .enterprise-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .enterprise-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 0}
+    .enterprise-kpi{
+      min-height:112px;padding:16px;border-radius:18px;
+      background:rgba(8,8,8,.72);border:1px solid rgba(255,255,255,.08);
+      display:grid;gap:8px;align-content:start
+    }
+    .enterprise-kpi-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .enterprise-kpi-icon{
+      width:34px;height:34px;border-radius:12px;display:grid;place-items:center;
+      background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.22);color:var(--gold-2);font-weight:950
+    }
+    .enterprise-kpi strong{font-size:1.7rem;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
+    .enterprise-kpi span{color:var(--muted);font-size:.84rem;line-height:1.45}
+    .admin-header{display:none}
+    .grid-3.enterprise-hidden-stats{display:none}
+    .module-shell{
+      grid-template-columns:260px minmax(0,1fr);
+      align-items:start;
+      gap:20px
+    }
+    .module-switcher{
+      position:sticky;top:96px;display:grid;gap:10px;margin-bottom:0;
+      padding:12px;border-radius:22px;background:#0e0e0e;border:1px solid rgba(255,255,255,.07)
+    }
+    .module-btn{
+      min-width:0;border-radius:16px;padding:14px 15px;background:#151515;
+      border-color:rgba(255,255,255,.07)
+    }
+    .module-btn.active{box-shadow:0 16px 34px rgba(212,175,55,.12)}
+    .module-panel{
+      min-width:0;padding:18px;border-radius:24px;background:#0d0d0d;
+      border:1px solid rgba(255,255,255,.06)
+    }
+    .module-panel.active{display:block}
+    .loja-sidebar{
+      background:#111;border:1px solid rgba(255,255,255,.07);border-radius:22px;padding:12px
+    }
+    .loja-sidebar .tab-btn{
+      width:100%;border-radius:14px;text-align:left;background:transparent;
+      border-color:transparent;padding:13px 14px
+    }
+    .loja-sidebar .tab-btn.active{
+      background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#111
+    }
+    .loja-sidebar .tab-btn small{display:block;margin-top:5px;color:var(--muted);font-size:.76rem;line-height:1.35}
+    .loja-sidebar .tab-btn.active small{color:#2f2510}
+    .product-list-card,.product-form-card,.order-entry-card,.sale-form-card,.finance-highlight-card{
+      border-radius:22px;box-shadow:0 18px 42px rgba(0,0,0,.18)
+    }
+    @media (max-width:980px){
+      .module-shell{grid-template-columns:1fr}
+      .module-switcher{position:static;display:flex;overflow-x:auto}
+      .module-btn{min-width:190px}
+      .enterprise-kpis{grid-template-columns:1fr}
+      .enterprise-actions{justify-content:flex-start}
+      .brand-block{gap:10px}
+      .ops-pill{display:none}
+    }
     @media (max-width:700px){.business-cost-form-grid,.business-cost-summary-grid,.business-cost-type-grid{grid-template-columns:1fr}}
 
 </style>
@@ -1011,10 +1112,12 @@
   <div class="topbar">
     <div class="topbar-inner">
       <div class="brand-block">
-        <div class="brand-title">Gestão Camisa 10 Store</div>
-        <div class="brand-subtitle">Painel limpo</div>
+        <div class="brand-mark">10</div>
+        <div class="brand-title">Camisa 10 Store</div>
+        <div class="brand-subtitle">Backoffice da loja</div>
       </div>
       <div class="topbar-actions">
+        <span class="ops-pill">Painel online</span>
         <button class="btn btn-secondary hidden" id="topLogoutBtn" onclick="logout()">Sair</button>
       </div>
     </div>
@@ -1068,6 +1171,43 @@
       <div class="back-home-row">
         <button class="btn btn-secondary" type="button" onclick="goToHomeSelector()">← Voltar para escolha</button>
       </div>
+      <div class="enterprise-hero">
+        <div class="enterprise-hero-inner">
+          <div>
+            <div class="enterprise-eyebrow">Central de operação</div>
+            <div class="enterprise-title">Gestão Camisa 10 Store</div>
+            <p class="enterprise-copy">Controle produtos, vitrine, banners, estoque, compras, vendas e financeiro em um painel com leitura rápida para rotina de loja.</p>
+          </div>
+          <div class="enterprise-actions">
+            <button class="btn btn-primary" type="button" onclick="startNewProduct()">Novo produto</button>
+            <button class="btn btn-secondary" type="button" onclick="activateLojaTab('tab-products-list')">Ver produtos</button>
+            <button class="btn btn-secondary" type="button" onclick="logout()">Sair</button>
+          </div>
+        </div>
+        <div class="enterprise-kpis">
+          <div class="enterprise-kpi">
+            <div class="enterprise-kpi-top">
+              <span class="enterprise-kpi-icon">P</span>
+              <strong id="statProducts">--</strong>
+            </div>
+            <span>Produtos cadastrados na loja</span>
+          </div>
+          <div class="enterprise-kpi">
+            <div class="enterprise-kpi-top">
+              <span class="enterprise-kpi-icon">C</span>
+              <strong id="statCategories">--</strong>
+            </div>
+            <span>Categorias ativas para organizar a vitrine</span>
+          </div>
+          <div class="enterprise-kpi">
+            <div class="enterprise-kpi-top">
+              <span class="enterprise-kpi-icon">B</span>
+              <strong id="statSlides">--</strong>
+            </div>
+            <span>Slides publicados no banner da Home</span>
+          </div>
+        </div>
+      </div>
       <div class="admin-header">
         <div>
           <div class="admin-title">Painel administrativo</div>
@@ -1075,10 +1215,10 @@
         <button class="btn btn-secondary" onclick="logout()">Sair</button>
       </div>
 
-      <div class="grid-3" style="margin-bottom:16px;">
-        <div class="stat-card"><strong id="statProducts">--</strong><span>Produtos cadastrados</span></div>
-        <div class="stat-card"><strong id="statCategories">--</strong><span>Categorias ativas</span></div>
-        <div class="stat-card"><strong id="statSlides">--</strong><span>Slides do banner</span></div>
+      <div class="grid-3 enterprise-hidden-stats" style="margin-bottom:16px;">
+        <div class="stat-card"><strong>--</strong><span>Produtos cadastrados</span></div>
+        <div class="stat-card"><strong>--</strong><span>Categorias ativas</span></div>
+        <div class="stat-card"><strong>--</strong><span>Slides do banner</span></div>
       </div>
 
       <div class="module-shell">
