@@ -1062,26 +1062,46 @@
     .admin-header{display:none}
     .grid-3.enterprise-hidden-stats{display:none}
     .module-shell{
-      grid-template-columns:260px minmax(0,1fr);
+      display:grid;
+      grid-template-columns:1fr;
       align-items:start;
-      gap:20px
+      gap:16px
     }
     .module-switcher{
-      position:sticky;top:96px;display:grid;gap:10px;margin-bottom:0;
-      padding:12px;border-radius:22px;background:#0e0e0e;border:1px solid rgba(255,255,255,.07)
+      position:static;
+      display:flex;
+      gap:10px;
+      margin-bottom:0;
+      padding:10px;
+      border-radius:20px;
+      background:#0e0e0e;
+      border:1px solid rgba(255,255,255,.07);
+      width:fit-content;
+      max-width:100%
     }
     .module-btn{
-      min-width:0;border-radius:16px;padding:14px 15px;background:#151515;
+      min-width:190px;
+      border-radius:14px;
+      padding:12px 14px;
+      background:#151515;
       border-color:rgba(255,255,255,.07)
     }
-    .module-btn.active{box-shadow:0 16px 34px rgba(212,175,55,.12)}
+    .module-btn.active{box-shadow:0 14px 28px rgba(212,175,55,.10)}
     .module-panel{
-      min-width:0;padding:18px;border-radius:24px;background:#0d0d0d;
-      border:1px solid rgba(255,255,255,.06)
+      min-width:0;
+      padding:0;
+      border-radius:0;
+      background:transparent;
+      border:none
     }
     .module-panel.active{display:block}
     .loja-sidebar{
-      background:#111;border:1px solid rgba(255,255,255,.07);border-radius:22px;padding:12px
+      background:#0f0f0f;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:22px;
+      padding:14px;
+      position:sticky;
+      top:96px
     }
     .loja-sidebar .tab-btn{
       width:100%;border-radius:14px;text-align:left;background:transparent;
@@ -1099,6 +1119,7 @@
       .module-shell{grid-template-columns:1fr}
       .module-switcher{position:static;display:flex;overflow-x:auto}
       .module-btn{min-width:190px}
+      .loja-sidebar{position:static}
       .enterprise-kpis{grid-template-columns:1fr}
       .enterprise-actions{justify-content:flex-start}
       .brand-block{gap:10px}
