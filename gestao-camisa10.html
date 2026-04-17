@@ -2042,7 +2042,7 @@ Camisa Real Madrid 24/25"></textarea>
           <div class="kpi-grid-gestao">
             <div class="stat-card"><strong id="gestaoKpiEntradas">0</strong><span>Entradas lançadas</span></div>
             <div class="stat-card"><strong id="gestaoKpiPecas">0</strong><span>Peças registradas</span></div>
-            <div class="stat-card"><strong id="gestaoKpiInvestido">R$ 0,00</strong><span>Valor investido</span></div>
+            <div class="stat-card"><strong id="gestaoKpiInvestido">R$ 0,00</strong><span>Investimento em estoque</span></div>
             <div class="stat-card"><strong id="gestaoKpiFornecedores">0</strong><span>Fornecedores</span></div>
           </div>
           <div class="module-mini-tabs" style="margin-top:-4px;">
@@ -2356,7 +2356,7 @@ Camisa Real Madrid 24/25"></textarea>
                         <span class="badge">Salva tudo de uma vez</span>
                       </div>
                       <div class="gestao-empty" style="padding:14px;">
-                        Quando você salvar, todos os itens entram no mesmo pedido, usando o mesmo fornecedor e a mesma data. Os custos extras entram no valor investido.
+                        Quando você salvar, todos os itens entram no mesmo pedido, usando o mesmo fornecedor e a mesma data. Os custos extras entram no investimento em estoque.
                       </div>
                       <div class="actions-row">
                         <button class="btn btn-primary" id="gestao-entry-save-btn" type="button" onclick="saveGestaoEntry()">Salvar pedido completo</button>
@@ -7195,15 +7195,31 @@ function updateGestaoSyncUi() {
       const productsPurchasedTotal = roundMoney(gestaoEntries.reduce((sum, item) => {
         return sum + (Number(item.quantity || 0) * Number(item.cost || 0));
       }, 0));
-      const extraInvestedTotal = roundMoney(getGestaoExtraInvestedTotal());
-      const historicalInvestedTotal = roundMoney(productsPurchasedTotal + extraInvestedTotal);
+      const stockExtraCostsTotal = roundMoney(gestaoEntries.reduce((sum, item) => sum + Number(item.extraCost || 0), 0));
+      const stockInvestedTotal = roundMoney(productsPurchasedTotal + stockExtraCostsTotal);
+      const salesExtraCostsTotal = roundMoney(gestaoSales.reduce((sum, item) => sum + Number(item.extraCostsTotal || 0), 0));
+      const businessExpensesTotal = roundMoney(gestaoBusinessCosts
+        .map(normalizeGestaoBusinessCostItem)
+        .filter(item => item.type === 'despesa')
+        .reduce((sum, item) => sum + Number(item.amount || 0), 0));
+      const businessInvestmentsTotal = roundMoney(gestaoBusinessCosts
+        .map(normalizeGestaoBusinessCostItem)
+        .filter(item => item.type === 'investimento')
+        .reduce((sum, item) => sum + Number(item.amount || 0), 0));
+      const businessOutlayTotal = roundMoney(salesExtraCostsTotal + businessExpensesTotal + businessInvestmentsTotal);
+      const historicalInvestedTotal = stockInvestedTotal;
       const currentStockInvestment = roundMoney(calculateGestaoStock().reduce((sum, item) => {
         return sum + Number(item.currentInvestment || 0);
       }, 0));
 
       return {
         productsPurchasedTotal,
-        extraInvestedTotal,
+        stockExtraCostsTotal,
+        stockInvestedTotal,
+        salesExtraCostsTotal,
+        businessExpensesTotal,
+        businessInvestmentsTotal,
+        businessOutlayTotal,
         historicalInvestedTotal,
         currentStockInvestment
       };
@@ -7481,7 +7497,7 @@ function updateGestaoSyncUi() {
       const investments = getGestaoInvestmentTotals();
       document.getElementById('gestaoKpiEntradas').textContent = String(totalOrders);
       document.getElementById('gestaoKpiPecas').textContent = String(totalPieces);
-      document.getElementById('gestaoKpiInvestido').textContent = formatPrice(investments.historicalInvestedTotal);
+      document.getElementById('gestaoKpiInvestido').textContent = formatPrice(investments.stockInvestedTotal);
       document.getElementById('gestaoKpiFornecedores').textContent = String(gestaoSuppliers.length);
     }
 
@@ -7518,17 +7534,21 @@ function updateGestaoSyncUi() {
       const potentialProfitEl = document.getElementById('gestaoDashPotentialProfit');
       if (revenueEl) revenueEl.textContent = formatPrice(metrics.totalRevenue);
       if (profitEl) profitEl.textContent = formatPrice(metrics.realProfit);
-      if (investedEl) investedEl.textContent = formatPrice(investments.historicalInvestedTotal);
+      if (investedEl) investedEl.textContent = formatPrice(investments.stockInvestedTotal);
       if (potentialProfitEl) potentialProfitEl.textContent = formatPrice(metrics.potentialProfit);
 
       box.innerHTML = `
         <div class="dashboard-summary-grid">
-          <div class="dashboard-summary-item"><span>Investimento total</span><strong>${formatPrice(investments.historicalInvestedTotal)}</strong></div>
+          <div class="dashboard-summary-item"><span>Investimento em estoque</span><strong>${formatPrice(investments.stockInvestedTotal)}</strong></div>
+          <div class="dashboard-summary-item"><span>Produtos comprados</span><strong>${formatPrice(investments.productsPurchasedTotal)}</strong></div>
+          <div class="dashboard-summary-item"><span>Custos extras de estoque</span><strong>${formatPrice(investments.stockExtraCostsTotal)}</strong></div>
           <div class="dashboard-summary-item"><span>Estoque atual</span><strong>${formatPrice(investments.currentStockInvestment)}</strong></div>
           <div class="dashboard-summary-item"><span>Receita real (${metrics.periodLabel})</span><strong>${formatPrice(metrics.totalRevenue)}</strong></div>
           <div class="dashboard-summary-item"><span>Lucro operacional</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
           <div class="dashboard-summary-item"><span>Despesas do negócio</span><strong>${formatPrice(metrics.businessExpenses)}</strong></div>
           <div class="dashboard-summary-item"><span>Investimentos reconhecidos</span><strong>${formatPrice(metrics.businessInvestmentsRecognized)}</strong></div>
+          <div class="dashboard-summary-item"><span>Gastos de venda</span><strong>${formatPrice(investments.salesExtraCostsTotal)}</strong></div>
+          <div class="dashboard-summary-item"><span>Total despesas/estrutura</span><strong>${formatPrice(investments.businessOutlayTotal)}</strong></div>
           <div class="dashboard-summary-item"><span>Lucro líquido</span><strong>${formatPrice(metrics.netProfitAfterBusinessCosts)}</strong></div>
           <div class="dashboard-summary-item"><span>Receita potencial</span><strong>${formatPrice(metrics.potentialRevenue)}</strong></div>
           <div class="dashboard-summary-item"><span>Lucro potencial</span><strong>${formatPrice(metrics.potentialProfit)}</strong></div>
@@ -7537,7 +7557,7 @@ function updateGestaoSyncUi() {
           <div class="dashboard-summary-item"><span>Camisas vendidas</span><strong>${metrics.shirtsSold}</strong></div>
           <div class="dashboard-summary-item"><span>Ticket médio</span><strong>${formatPrice(metrics.ticketAverage)}</strong></div>
           <div class="dashboard-summary-item"><span>Pedidos lançados (${metrics.periodLabel})</span><strong>${metrics.ordersCount}</strong></div>
-          <div class="dashboard-summary-item"><span>Total combinado</span><strong>${formatPrice(metrics.totalCombinedRevenue)}</strong></div>
+          <div class="dashboard-summary-item"><span>Receita real + potencial</span><strong>${formatPrice(metrics.totalCombinedRevenue)}</strong></div>
         </div>
       `;
     }
@@ -7676,17 +7696,21 @@ function updateGestaoSyncUi() {
       const metrics = getGestaoMetrics();
       const investments = getGestaoInvestmentTotals();
       box.innerHTML = `
-        <div class="metric-card"><span>Investimento total</span><strong>${formatPrice(investments.historicalInvestedTotal)}</strong></div>
+        <div class="metric-card"><span>Investimento em estoque</span><strong>${formatPrice(investments.stockInvestedTotal)}</strong></div>
+        <div class="metric-card"><span>Produtos comprados</span><strong>${formatPrice(investments.productsPurchasedTotal)}</strong></div>
+        <div class="metric-card"><span>Custos extras de estoque</span><strong>${formatPrice(investments.stockExtraCostsTotal)}</strong></div>
         <div class="metric-card"><span>Estoque atual</span><strong>${formatPrice(investments.currentStockInvestment)}</strong></div>
         <div class="metric-card"><span>Receita real (${metrics.periodLabel})</span><strong>${formatPrice(metrics.totalRevenue)}</strong></div>
         <div class="metric-card"><span>Lucro operacional</span><strong>${formatPrice(metrics.realProfit)}</strong></div>
         <div class="metric-card"><span>Despesas do negócio</span><strong>${formatPrice(metrics.businessExpenses)}</strong></div>
         <div class="metric-card"><span>Investimentos reconhecidos</span><strong>${formatPrice(metrics.businessInvestmentsRecognized)}</strong></div>
+        <div class="metric-card"><span>Gastos de venda</span><strong>${formatPrice(investments.salesExtraCostsTotal)}</strong></div>
+        <div class="metric-card"><span>Total despesas/estrutura</span><strong>${formatPrice(investments.businessOutlayTotal)}</strong></div>
         <div class="metric-card"><span>Lucro líquido</span><strong>${formatPrice(metrics.netProfitAfterBusinessCosts)}</strong></div>
         <div class="metric-card"><span>Receita potencial</span><strong>${formatPrice(metrics.potentialRevenue)}</strong></div>
         <div class="metric-card"><span>Lucro potencial</span><strong>${formatPrice(metrics.potentialProfit)}</strong></div>
         <div class="metric-card"><span>Camisas em estoque</span><strong>${metrics.totalStockPieces}</strong></div>
-        <div class="metric-card"><span>Total combinado</span><strong>${formatPrice(metrics.totalCombinedRevenue)}</strong></div>
+        <div class="metric-card"><span>Receita real + potencial</span><strong>${formatPrice(metrics.totalCombinedRevenue)}</strong></div>
         <div class="metric-card"><span>Carga mensal atual</span><strong>${formatPrice(metrics.businessCurrentMonthlyLoad)}</strong></div>
         <div class="metric-card"><span>Produto mais vendido</span><strong>${escapeHtml(metrics.topProductName)}</strong></div>
         <div class="metric-card"><span>Maior lucro acumulado</span><strong>${escapeHtml(metrics.topProfitProductName)}</strong></div>
