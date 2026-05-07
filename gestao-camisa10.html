@@ -575,14 +575,6 @@
       padding:6px 10px;border-radius:999px;background:#171717;border:1px solid rgba(255,255,255,.06);
       color:#efefef;font-size:.78rem;font-weight:800
     }
-    .stock-sell-chip{cursor:pointer}
-    .stock-sell-chip:hover{border-color:rgba(212,175,55,.4);color:#fff;background:rgba(212,175,55,.12)}
-    .quick-sale-options{margin:14px 0;border:1px solid rgba(255,255,255,.06);border-radius:16px;background:#101010;overflow:hidden}
-    .quick-sale-options summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;justify-content:space-between;gap:12px;align-items:center;font-weight:900;color:#fff}
-    .quick-sale-options summary::-webkit-details-marker{display:none}
-    .quick-sale-options summary::after{content:"Abrir";font-size:.78rem;color:#111;background:linear-gradient(135deg,var(--gold),var(--gold-2));padding:7px 11px;border-radius:999px;flex-shrink:0}
-    .quick-sale-options[open] summary::after{content:"Recolher"}
-    .quick-sale-options-body{padding:0 16px 16px}
     .stock-side{display:grid;justify-items:end;gap:8px;min-width:124px}
     .stock-total{font-size:1rem;font-weight:900;color:#fff}
     .stock-meta{color:var(--muted);font-size:.78rem;text-align:right;line-height:1.45}
@@ -1480,9 +1472,6 @@
               <div class="actions-row" style="margin-top:0;">
                 <button class="btn btn-secondary" type="button" onclick="activateLojaTab('tab-products-list')">Ver produtos</button>
                 <button class="btn btn-secondary" type="button" onclick="activateLojaTab('tab-batch-create')">Ir para lote</button>
-                <button class="btn btn-primary" type="button" onclick="startProductTemplate('camisa-adulto')">Nova camisa adulto</button>
-                <button class="btn btn-secondary" type="button" onclick="startProductTemplate('kit-infantil')">Novo kit infantil</button>
-                <button class="btn btn-secondary" type="button" onclick="startProductTemplate('sandalia')">Nova sandalia</button>
               </div>
             </div>
             <div class="stack">
@@ -2325,11 +2314,11 @@ Camisa Real Madrid 24/25"></textarea>
                         <label for="gestao-entry-product-search">Buscar produto</label>
                         <input type="text" id="gestao-entry-product-search" placeholder="Digite por exemplo: brasil" oninput="handleGestaoProductSearch('entry')" />
                         <label for="gestao-entry-product" style="margin-top:6px;">Produto</label>
-                        <select id="gestao-entry-product" onchange="handleGestaoEntryProductChange()"></select>
+                        <select id="gestao-entry-product" onchange="syncGestaoProductSearchFromSelect('entry')"></select>
                       </div>
                       <div class="field">
                         <label for="gestao-entry-size">Tam.</label>
-                        <select id="gestao-entry-size" onchange="fillGestaoEntryCostFromHistory()">
+                        <select id="gestao-entry-size">
                           <option value="P">P</option>
                           <option value="M">M</option>
                           <option value="G">G</option>
@@ -2423,7 +2412,7 @@ Camisa Real Madrid 24/25"></textarea>
                     <label for="gestao-sale-product-search">Buscar produto</label>
                     <input type="text" id="gestao-sale-product-search" placeholder="Digite por exemplo: brasil" oninput="handleGestaoProductSearch('sale')" />
                     <label for="gestao-sale-product" style="margin-top:6px;">Produto</label>
-                    <select id="gestao-sale-product" onchange="handleGestaoSaleProductChange()"></select>
+                    <select id="gestao-sale-product" onchange="syncGestaoProductSearchFromSelect('sale'); updateGestaoSalePreview()"></select>
                   </div>
                   <div class="field">
                     <label for="gestao-sale-size">Tamanho</label>
@@ -2468,12 +2457,6 @@ Camisa Real Madrid 24/25"></textarea>
                   <label for="gestao-sale-client-phone">Número do cliente</label>
                   <input type="text" id="gestao-sale-client-phone" placeholder="Ex: 5597..." oninput="renderGestaoPendingSale()" />
                 </div>
-                <details class="quick-sale-options">
-                  <summary>
-                    <span>Custos extras da venda</span>
-                    <span class="small-muted">Embalagem, frete, taxas e outros</span>
-                  </summary>
-                  <div class="quick-sale-options-body">
                 <div class="grid-2-equal">
                   <div class="field">
                     <label for="gestao-sale-packaging">Embalagem</label>
@@ -2494,8 +2477,6 @@ Camisa Real Madrid 24/25"></textarea>
                     <input type="text" inputmode="decimal" id="gestao-sale-other" placeholder="Ex: brinde, ajuste, etc." oninput="renderGestaoPendingSale()" />
                   </div>
                 </div>
-                  </div>
-                </details>
 
                 <div class="order-items-box" style="margin-top:4px;">
                   <div class="order-items-head">
@@ -2914,7 +2895,9 @@ Camisa Real Madrid 24/25"></textarea>
         oldPrice: overrides.oldPrice || "",
         image_url: overrides.image_url || "",
         gallery_urls: Array.isArray(overrides.gallery_urls) ? [...overrides.gallery_urls] : [],
-        sizes: Array.isArray(overrides.sizes) ? [...overrides.sizes] : [],
+        sizes: Array.isArray(overrides.sizes) && overrides.sizes.length
+          ? [...overrides.sizes]
+          : getSizeOptionsByProfile(document.getElementById("product-size-profile")?.value || "adulto"),
         mainFile: null,
         extraFiles: []
       };
@@ -3245,7 +3228,7 @@ Camisa Real Madrid 24/25"></textarea>
       if (normalized === "infantil") return ["2", "4", "6", "8"];
       if (normalized === "sandalia") return ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43"];
       if (normalized === "unico") return ["Único"];
-      return ["P", "M", "G", "EG"];
+      return ["P", "M", "G", "GG", "EG"];
     }
 
     function getSizeProfileLabel(profile) {
@@ -3260,8 +3243,10 @@ Camisa Real Madrid 24/25"></textarea>
     function renderProductSizes(profile = "adulto", selectedSizes = []) {
       const container = document.getElementById("product-sizes-container");
       if (!container) return;
-      const currentSelected = Array.isArray(selectedSizes) ? selectedSizes : getSelectedSizes();
       const options = getSizeOptionsByProfile(profile);
+      const currentSelected = Array.isArray(selectedSizes) && selectedSizes.length
+        ? selectedSizes
+        : options;
       container.innerHTML = options.map(size => `
         <label class="size-item ${currentSelected.includes(size) ? "active" : ""}">
           <input type="checkbox" value="${size}" class="size-check" ${currentSelected.includes(size) ? "checked" : ""}>
@@ -3520,29 +3505,6 @@ Camisa Real Madrid 24/25"></textarea>
       setProductStep(1);
       updateDraftSummary();
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function startProductTemplate(templateKey) {
-      const templates = {
-        "camisa-adulto": { kind: "Camisa", profile: "adulto", saleType: "pronta_entrega", badge: "", name: "Camisa " },
-        "kit-infantil": { kind: "Kit Infantil", profile: "infantil", saleType: "pronta_entrega", badge: "novo", name: "Kit Infantil " },
-        "sandalia": { kind: "Sandália", profile: "sandalia", saleType: "pronta_entrega", badge: "", name: "Sandália " },
-        "copo": { kind: "Copo", profile: "unico", saleType: "pronta_entrega", badge: "", name: "Copo " }
-      };
-      const template = templates[templateKey] || templates["camisa-adulto"];
-      startNewProduct();
-      document.getElementById("product-name").value = template.name;
-      document.getElementById("product-kind").value = template.kind;
-      document.getElementById("product-size-profile").value = template.profile;
-      document.getElementById("product-sale-type").value = template.saleType;
-      document.getElementById("product-badge-type").value = template.badge;
-      document.getElementById("product-visible").checked = true;
-      syncProductTypeFromKind(true);
-      renderProductSizes(template.profile, []);
-      syncSlugPreview();
-      setTimeout(() => {
-        try { document.getElementById("product-name").focus(); } catch (error) {}
-      }, 0);
     }
 
     async function uploadFileToBucket(bucketName, filePath, file) {
@@ -4160,24 +4122,8 @@ async function uploadMultipleProductImages(productId) {
       return inferred || "Outros";
     }
 
-    function normalizeSearchText(value = "") {
-      return String(value || "")
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]+/g, " ")
-        .trim();
-    }
-
-    function matchesSearchTokens(text = "", term = "") {
-      const normalizedTerm = normalizeSearchText(term);
-      if (!normalizedTerm) return true;
-      const normalizedText = normalizeSearchText(text);
-      return normalizedTerm.split(/\s+/).filter(Boolean).every(token => normalizedText.includes(token));
-    }
-
     function getFilteredProducts() {
-      const term = document.getElementById("search-input").value.trim();
+      const term = document.getElementById("search-input").value.trim().toLowerCase();
       const categoryFilter = document.getElementById("product-filter-category")?.value || "";
       const saleTypeFilter = document.getElementById("product-filter-sale-type")?.value || "";
       const visibilityFilter = document.getElementById("product-filter-visibility")?.value || "";
@@ -4185,7 +4131,7 @@ async function uploadMultipleProductImages(productId) {
 
       return allProducts
         .filter(product => {
-          const matchName = matchesSearchTokens(`${product.name || ""} ${product.short_description || ""}`, term);
+          const matchName = !term || (product.name || "").toLowerCase().includes(term);
           const matchCategory = !categoryFilter || String(product.category_id) === String(categoryFilter);
           const matchSaleType = !saleTypeFilter || (product.sale_type || "pronta_entrega") === saleTypeFilter;
           const isVisible = product.is_visible !== false;
@@ -4675,7 +4621,6 @@ async function uploadMultipleProductImages(productId) {
                   </div>
 
                   <div class="product-admin-actions">
-                    <button class="btn btn-primary" onclick="startGestaoSaleFromProduct('${product.id}')">Vender</button>
                     <button class="btn btn-success" onclick="editProduct('${product.id}')">Editar</button>
                     <button
                       class="btn ${product.is_visible !== false ? "btn-visibility-hide" : "btn-visibility-show"}"
@@ -5967,7 +5912,9 @@ async function uploadHeroSlideImage() {
       if (!container) return;
 
       const options = getSizeOptionsByProfile(profile);
-      const selected = Array.isArray(selectedSizes) ? selectedSizes : [];
+      const selected = Array.isArray(selectedSizes) && selectedSizes.length
+        ? selectedSizes
+        : options;
 
       container.innerHTML = options.map(size => `
         <label class="size-item ${selected.includes(size) ? "active" : ""}">
@@ -7125,10 +7072,10 @@ function updateGestaoSyncUi() {
     }
 
     function getGestaoProductMatches(term = '') {
-      const normalized = String(term || '').trim();
+      const normalized = String(term || '').trim().toLowerCase();
       const products = [...allProducts].sort((a, b) => (a.name || '').localeCompare(b.name || ''));
       if (!normalized) return products;
-      return products.filter(product => matchesSearchTokens(`${product.name || ''} ${product.short_description || ''}`, normalized));
+      return products.filter(product => (product.name || '').toLowerCase().includes(normalized));
     }
 
     function populateGestaoProductOptions() {
@@ -7172,17 +7119,8 @@ function updateGestaoSyncUi() {
       populateGestaoProductOptions();
       syncGestaoProductSearchFromSelect(context, true);
       if (context === 'sale') {
-        fillGestaoSalePriceFromProduct();
         updateGestaoSalePreview();
-      } else {
-        fillGestaoEntryCostFromHistory();
       }
-    }
-
-    function handleGestaoSaleProductChange() {
-      syncGestaoProductSearchFromSelect('sale');
-      fillGestaoSalePriceFromProduct(true);
-      updateGestaoSalePreview();
     }
 
     function syncGestaoProductSearchFromSelect(context, keepTypedValue = false) {
@@ -7203,29 +7141,6 @@ function updateGestaoSyncUi() {
       const totalQty = relevant.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
       const totalCost = relevant.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.cost || 0)), 0);
       return totalQty ? (totalCost / totalQty) : 0;
-    }
-
-    function getLastCostForProductSize(productId, size) {
-      const latest = [...gestaoEntries]
-        .filter(item => String(item.productId) === String(productId) && String(item.size) === String(size) && Number(item.cost || 0) > 0)
-        .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))[0];
-      return latest ? Number(latest.cost || 0) : 0;
-    }
-
-    function fillGestaoEntryCostFromHistory(force = false) {
-      const productId = document.getElementById('gestao-entry-product')?.value || '';
-      const size = document.getElementById('gestao-entry-size')?.value || '';
-      const costField = document.getElementById('gestao-entry-cost');
-      if (!productId || !size || !costField) return;
-      const lastCost = getLastCostForProductSize(productId, size);
-      if (lastCost > 0 && (force || !costField.value.trim())) {
-        costField.value = formatMoneyInputValue(lastCost);
-      }
-    }
-
-    function handleGestaoEntryProductChange() {
-      syncGestaoProductSearchFromSelect('entry');
-      fillGestaoEntryCostFromHistory();
     }
 
     function getSizeOptionsForProduct(productId, context = 'entry') {
@@ -7333,16 +7248,6 @@ function updateGestaoSyncUi() {
 
     function getProductPriceById(productId) {
       return Number(allProducts.find(item => String(item.id) === String(productId))?.price || 0);
-    }
-
-    function fillGestaoSalePriceFromProduct(force = false) {
-      const productId = document.getElementById('gestao-sale-product')?.value || '';
-      const priceField = document.getElementById('gestao-sale-price');
-      if (!productId || !priceField) return;
-      const productPrice = getProductPriceById(productId);
-      if (productPrice > 0 && (force || !priceField.value.trim())) {
-        priceField.value = formatMoneyInputValue(String(productPrice).replace('.', ','));
-      }
     }
 
     function getSupplierNameById(supplierId) {
@@ -7501,11 +7406,11 @@ function updateGestaoSyncUi() {
       return normalizeMoneyInput(document.getElementById('gestao-entry-extra')?.value || '') || 0;
     }
 
-    function resetGestaoEntryItemFields(options = {}) {
+    function resetGestaoEntryItemFields() {
       const qty = document.getElementById('gestao-entry-qty');
       const cost = document.getElementById('gestao-entry-cost');
       if (qty) qty.value = '';
-      if (cost && !options.keepCost) cost.value = '';
+      if (cost) cost.value = '';
       renderGestaoSizeOptions('entry');
     }
 
@@ -7539,9 +7444,8 @@ function updateGestaoSyncUi() {
         tempId: `pending-${Date.now()}-${Math.random().toString(16).slice(2,6)}`,
         productId, size, quantity, cost
       });
-      resetGestaoEntryItemFields({ keepCost: true });
+      resetGestaoEntryItemFields();
       renderGestaoPendingOrder();
-      document.getElementById('gestao-entry-product-search')?.focus();
       showMessage('gestao-entry-message', 'Item adicionado ao pedido.', 'success');
     }
 
@@ -7910,7 +7814,7 @@ function renderGestaoStock() {
       });
 
       if (search) {
-        grouped = grouped.filter(item => matchesSearchTokens(item.name || '', search));
+        grouped = grouped.filter(item => (item.name || '').toLowerCase().includes(search));
       }
 
       grouped.sort((a, b) => a.totalQty - b.totalQty || (a.name || '').localeCompare(b.name || ''));
@@ -7924,7 +7828,7 @@ function renderGestaoStock() {
       container.innerHTML = `<div class="stock-list-shell">${grouped.map(item => {
         const sizeSummary = sizeOrder
           .filter(size => Number(item.sizes[size] || 0) > 0)
-          .map(size => `<button class="stock-size-chip stock-sell-chip" type="button" onclick="startGestaoSaleFromStock('${item.productId}','${escapeHtml(size)}')">${size}: ${item.sizes[size]} - vender</button>`)
+          .map(size => `<span class="stock-size-chip">${size}: ${item.sizes[size]}</span>`)
           .join('');
         const level = getStockLevelMeta(item.totalQty);
 
@@ -7954,56 +7858,10 @@ function getGestaoSaleExtraCosts() {
       return roundMoney((normalizeMoneyInput(document.getElementById('gestao-sale-packaging')?.value || '') || 0) + (normalizeMoneyInput(document.getElementById('gestao-sale-shipping')?.value || '') || 0) + (normalizeMoneyInput(document.getElementById('gestao-sale-fee')?.value || '') || 0) + (normalizeMoneyInput(document.getElementById('gestao-sale-other')?.value || '') || 0));
     }
 
-    function getFirstAvailableStockSize(productId) {
-      const sizeOrder = ['P', 'M', 'G', 'GG', 'EG', '2', '4', '6', '8'];
-      const rows = calculateGestaoStock()
-        .filter(item => String(item.productId) === String(productId) && Number(item.currentQty || 0) > 0);
-      if (!rows.length) return getSizeOptionsForProduct(productId, 'sale')[0] || 'M';
-      rows.sort((a, b) => {
-        const aIndex = sizeOrder.indexOf(String(a.size));
-        const bIndex = sizeOrder.indexOf(String(b.size));
-        return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
-      });
-      return rows[0].size || 'M';
-    }
-
-    function startGestaoSaleFromProduct(productId) {
-      const size = getFirstAvailableStockSize(productId);
-      startGestaoSaleFromStock(productId, size);
-      const stockRow = calculateGestaoStock().find(item => String(item.productId) === String(productId) && String(item.size) === String(size));
-      if (!stockRow || Number(stockRow.currentQty || 0) <= 0) {
-        showMessage('gestao-sale-message', 'Produto aberto na venda. Confira o estoque antes de adicionar o item.', 'error');
-      }
-    }
-
-    function startGestaoSaleFromStock(productId, size) {
-      if (!productId) return;
-      activateModule('module-gestao');
-      activateGestaoTab('gestao-vendas');
-
-      const productSearch = document.getElementById('gestao-sale-product-search');
-      const productSelect = document.getElementById('gestao-sale-product');
-      const sizeSelect = document.getElementById('gestao-sale-size');
-      const qtyField = document.getElementById('gestao-sale-qty');
-
-      if (productSearch) productSearch.value = getProductNameById(productId);
-      populateGestaoProductOptions();
-      if (productSelect) productSelect.value = String(productId);
-      renderGestaoSizeOptions('sale', size);
-      if (sizeSelect && size) sizeSelect.value = String(size);
-      if (qtyField) qtyField.value = '1';
-      fillGestaoSalePriceFromProduct(true);
-      updateGestaoSalePreview();
-      document.getElementById('gestao-sale-client-name')?.focus();
-    }
-
     function resetGestaoSaleItemFields() {
-      const search = document.getElementById('gestao-sale-product-search');
-      if (search) search.value = '';
       document.getElementById('gestao-sale-product').value = '';
       document.getElementById('gestao-sale-qty').value = '1';
       document.getElementById('gestao-sale-price').value = '';
-      populateGestaoProductOptions();
       renderGestaoSizeOptions('sale');
       updateGestaoSalePreview();
     }
@@ -8343,26 +8201,6 @@ function renderGestaoSuppliers() {
       syncGestaoPeriodButtons();
     }
 
-    function setupGestaoQuickKeys() {
-      const bindEnter = (inputId, action) => {
-        const input = document.getElementById(inputId);
-        if (!input || input.dataset.quickKeyBound === 'true') return;
-        input.dataset.quickKeyBound = 'true';
-        input.addEventListener('keydown', event => {
-          if (event.key !== 'Enter') return;
-          event.preventDefault();
-          action();
-        });
-      };
-
-      ['gestao-entry-product-search', 'gestao-entry-size', 'gestao-entry-qty', 'gestao-entry-cost'].forEach(id => {
-        bindEnter(id, addGestaoEntryItem);
-      });
-      ['gestao-sale-product-search', 'gestao-sale-size', 'gestao-sale-qty', 'gestao-sale-price'].forEach(id => {
-        bindEnter(id, addGestaoSaleItem);
-      });
-    }
-
     async function saveGestaoSupplier() {
       clearMessage('gestao-supplier-message');
       const name = document.getElementById('gestao-supplier-name').value.trim();
@@ -8556,7 +8394,6 @@ async function saveGestaoSale() {
       setupTabs();
       setupModules();
       setupGestaoTabs();
-      setupGestaoQuickKeys();
       setupMoneyInputs();
 
       loadProductMetaCache();
