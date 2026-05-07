@@ -567,6 +567,16 @@
       color: #6e6e6e;
     }
 
+    .size-btn.order-only {
+      border-color: rgba(212,175,55,0.32);
+      background: linear-gradient(180deg, rgba(212,175,55,0.10) 0%, rgba(15,15,15,0.98) 100%);
+      color: #f1dda0;
+    }
+
+    .size-btn.order-only .size-status {
+      color: #d4af37;
+    }
+
     .size-message {
       min-height: 20px;
       font-size: 13px;
@@ -1318,6 +1328,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
     let currentProduct = null;
     let selectedSize = null;
+    let selectedSizeIsAvailable = true;
     let whatsappNumber = "5597981098445";
     let siteSettings = null;
     let galleryImagesList = [];
@@ -1389,14 +1400,23 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     function updatePurchaseSummary() {
       document.getElementById("purchase-product-name").textContent = currentProduct?.name || "-";
       document.getElementById("purchase-product-price").textContent = currentProduct ? formatPrice(currentProduct.price) : "-";
-      document.getElementById("selected-size-text").textContent = selectedSize || "Selecione um tamanho";
+      document.getElementById("selected-size-text").textContent = selectedSize
+        ? `${selectedSize}${selectedSizeIsAvailable ? "" : " (sob encomenda)"}`
+        : "Selecione um tamanho";
 
       const selectedBanner = document.getElementById("size-selected-banner");
       const selectedBannerValue = document.getElementById("size-selected-banner-value");
+      const buyBtn = document.getElementById("buy-whatsapp-btn");
+
+      if (buyBtn) {
+        buyBtn.textContent = selectedSize && !selectedSizeIsAvailable
+          ? "Pedir por encomenda no WhatsApp"
+          : (getProductSaleType(currentProduct) === "sob_encomenda" ? "Encomendar no WhatsApp" : "Pedir no WhatsApp");
+      }
 
       if (selectedSize) {
         selectedBanner.classList.add("show");
-        selectedBannerValue.textContent = selectedSize;
+        selectedBannerValue.textContent = selectedSizeIsAvailable ? selectedSize : `${selectedSize} - sob encomenda`;
       } else {
         selectedBanner.classList.remove("show");
         selectedBannerValue.textContent = "-";
@@ -1522,10 +1542,11 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       document.getElementById("size-message").textContent = text;
     }
 
-    function selectSize(size, button) {
+    function selectSize(size, button, isAvailable = true) {
       if (button.classList.contains("disabled")) return;
 
       selectedSize = size;
+      selectedSizeIsAvailable = isAvailable;
 
       document.querySelectorAll(".size-btn").forEach(btn => {
         btn.classList.remove("active");
@@ -1534,7 +1555,11 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
       button.classList.add("active");
       button.setAttribute("aria-pressed", "true");
-      clearSizeMessage();
+      if (selectedSizeIsAvailable) {
+        clearSizeMessage();
+      } else {
+        setSizeMessage("Esse tamanho sera pedido por encomenda no WhatsApp.");
+      }
       updatePurchaseSummary();
     }
 
@@ -1574,6 +1599,41 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       });
     }
 
+    function getSizeOptionsByProfile(profile) {
+      const normalized = String(profile || "adulto").toLowerCase();
+      if (normalized === "infantil") return ["2", "4", "6", "8"];
+      if (normalized === "sandalia") return ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43"];
+      if (normalized === "unico") return ["Unico"];
+      return ["P", "M", "G", "GG", "EG"];
+    }
+
+    function inferSizeProfileFromProduct(product) {
+      const text = `${product?.name || ""} ${product?.categories?.name || ""}`.toLowerCase();
+      if (text.includes("infantil") || text.includes("kids") || text.includes("kit")) return "infantil";
+      if (text.includes("sand") || text.includes("chinelo") || text.includes("slide")) return "sandalia";
+      if (text.includes("copo") || text.includes("caneca") || text.includes("garrafa")) return "unico";
+      return "adulto";
+    }
+
+    function getFallbackSizeRows(product) {
+      return getSizeOptionsByProfile(product?.size_profile || inferSizeProfileFromProduct(product)).map(size => ({
+        size,
+        is_available: false
+      }));
+    }
+
+    function getRenderableSizeRows(sizeRows, product) {
+      const bySize = new Map();
+      getFallbackSizeRows(product).forEach(item => {
+        bySize.set(String(item.size || "").trim().toUpperCase(), item);
+      });
+      (sizeRows || []).forEach(item => {
+        const sizeKey = String(item?.size || "").trim().toUpperCase();
+        if (sizeKey) bySize.set(sizeKey, item);
+      });
+      return [...bySize.values()];
+    }
+
     function renderSizes(sizeRows) {
       const box = document.getElementById("sizes-box");
       const blockTitleEl = document.querySelector(".block-title");
@@ -1582,7 +1642,8 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         const text = el.textContent.trim();
         return text === "Tamanho" || text === "Numeração";
       });
-      const dynamicLabel = getDynamicSizeLabel(sizeRows);
+      const rowsToRender = getRenderableSizeRows(sizeRows, currentProduct);
+      const dynamicLabel = getDynamicSizeLabel(rowsToRender);
 
       if (blockTitleEl) {
         blockTitleEl.textContent = dynamicLabel;
@@ -1601,31 +1662,34 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         }
       });
 
-      const displaySizes = getDisplaySizes(sizeRows);
-      const hasAnyAvailable = Object.values(availableMap).some(Boolean);
+      const displaySizes = getDisplaySizes(rowsToRender);
+      const isProductOrderOnly = getProductSaleType(currentProduct) === "sob_encomenda";
+      const hasAnyAvailable = !isProductOrderOnly && Object.values(availableMap).some(Boolean);
 
-      if (!sizeRows || !sizeRows.length || !displaySizes.length) {
-        box.innerHTML = `<div style="color:#b8b8b8; font-size:14px;">Consulte os tamanhos disponíveis pelo WhatsApp.</div>`;
+      if (!rowsToRender.length || !displaySizes.length) {
+        box.innerHTML = `<div style="color:#b8b8b8; font-size:14px;">Consulte as opcoes de encomenda pelo WhatsApp.</div>`;
         return;
       }
 
       box.innerHTML = displaySizes.map(size => {
-        const isAvailable = availableMap[size] === true;
+        const isAvailable = !isProductOrderOnly && availableMap[size] === true;
+        const escapedSize = size.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
         return `
           <button
-            class="size-btn ${isAvailable ? "" : "disabled"}"
-            ${isAvailable ? `onclick="selectSize('${size}', this)"` : "type='button' disabled"}
+            type="button"
+            class="size-btn ${isAvailable ? "" : "order-only"}"
+            onclick="selectSize('${escapedSize}', this, ${isAvailable ? "true" : "false"})"
           >
             <span class="size-code">${size}</span>
-            <span class="size-status">${isAvailable ? "Disponível" : "Indisponível"}</span>
+            <span class="size-status">${isAvailable ? "Disponível" : "Sob encomenda"}</span>
           </button>
         `;
       }).join("");
 
       if (!hasAnyAvailable) {
         setSizeMessage(dynamicLabel.includes("numeração")
-          ? "Nenhuma numeração disponível no momento."
-          : "Nenhum tamanho disponível no momento.");
+          ? "Nenhuma numeração pronta entrega agora. Você pode pedir por encomenda."
+          : "Nenhum tamanho pronta entrega agora. Você pode pedir por encomenda.");
       } else {
         clearSizeMessage();
       }
@@ -1640,6 +1704,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 Produto: ${currentProduct.name}
 Preço: ${formatPrice(currentProduct.price)}
 Tamanho: ${selectedSize}
+Tipo de pedido: ${selectedSizeIsAvailable && getProductSaleType(currentProduct) !== "sob_encomenda" ? "Pronta entrega" : "Sob encomenda"}
 
 Link do produto:
 ${window.location.href}`;
@@ -1968,6 +2033,7 @@ ${window.location.href}`;
 
       currentProduct = product;
       selectedSize = null;
+      selectedSizeIsAvailable = true;
 
       document.title = `${product.name} | Camisa 10 Store`;
       document.getElementById("product-category").textContent = product.categories?.name || "Camisa 10 Store";
