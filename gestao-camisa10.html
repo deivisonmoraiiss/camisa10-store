@@ -1936,6 +1936,8 @@ Camisa Real Madrid 24/25"></textarea>
                 <h4>Contato e redes</h4>
                 <div class="field"><label for="setting-instagram-url">Link do Instagram</label><input type="text" id="setting-instagram-url" placeholder="https://instagram.com/..." /></div>
                 <div class="field"><label for="setting-whatsapp-number">Número do WhatsApp</label><input type="text" id="setting-whatsapp-number" placeholder="5597981098445" /></div>
+                <div class="field"><label for="setting-coupon-code">Cupom de desconto</label><input type="text" id="setting-coupon-code" placeholder="Ex: CAMISA10" /></div>
+                <div class="field"><label for="setting-coupon-discount">Valor do desconto</label><input type="number" id="setting-coupon-discount" min="0" step="0.01" placeholder="Ex: 10.00" /></div>
                 <div class="field"><label for="logo-file">Arquivo da logo</label><input type="file" id="logo-file" accept="image/*" onchange="previewBannerImage(event, 'logo-preview')" /></div>
                 <div class="field"><label for="setting-logo-url">URL da logo</label><input type="text" id="setting-logo-url" placeholder="A URL será preenchida após o upload" /></div>
                 <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadLogoImage()">Fazer upload da logo</button></div>
@@ -5709,7 +5711,7 @@ async function uploadHeroSlideImage() {
     async function loadSiteSettings() {
       clearMessage("settings-message");
 
-      const { data, error } = await supabaseClient
+      let response = await supabaseClient
         .from(SITE_SETTINGS_TABLE)
         .select(`
           id,
@@ -5724,16 +5726,42 @@ async function uploadHeroSlideImage() {
           footer_text,
           logo_url,
           instagram_url,
-          whatsapp_number
+          whatsapp_number,
+          coupon_code,
+          coupon_discount_value
         `)
         .eq("id", SITE_SETTINGS_ID)
         .single();
 
-      if (error) {
-        console.error("Erro ao carregar configurações do site:", error);
+      if (response.error && (String(response.error.message || "").includes("coupon_code") || String(response.error.message || "").includes("coupon_discount_value") || response.error.code === "42703")) {
+        response = await supabaseClient
+          .from(SITE_SETTINGS_TABLE)
+          .select(`
+            id,
+            hero_title,
+            hero_subtitle,
+            hero_image_url,
+            hero_left_image_url,
+            delivery_text,
+            catalog_title,
+            catalog_subtitle,
+            contact_text,
+            footer_text,
+            logo_url,
+            instagram_url,
+            whatsapp_number
+          `)
+          .eq("id", SITE_SETTINGS_ID)
+          .single();
+      }
+
+      if (response.error) {
+        console.error("Erro ao carregar configurações do site:", response.error);
         showMessage("settings-message", "Não foi possível carregar as configurações do site.", "error");
         return;
       }
+
+      const data = response.data;
 
       document.getElementById("setting-hero-title").value = data.hero_title || "";
       document.getElementById("setting-hero-subtitle").value = data.hero_subtitle || "";
@@ -5747,6 +5775,8 @@ async function uploadHeroSlideImage() {
       document.getElementById("setting-logo-url").value = data.logo_url || "";
       document.getElementById("setting-instagram-url").value = data.instagram_url || "";
       document.getElementById("setting-whatsapp-number").value = data.whatsapp_number || "";
+      document.getElementById("setting-coupon-code").value = data.coupon_code || "";
+      document.getElementById("setting-coupon-discount").value = data.coupon_discount_value || "";
 
       if (data.hero_image_url) {
         document.getElementById("hero-banner-preview").src = data.hero_image_url;
@@ -5776,13 +5806,31 @@ async function uploadHeroSlideImage() {
         footer_text: document.getElementById("setting-footer-text").value.trim(),
         logo_url: document.getElementById("setting-logo-url").value.trim(),
         instagram_url: document.getElementById("setting-instagram-url").value.trim(),
-        whatsapp_number: document.getElementById("setting-whatsapp-number").value.trim()
+        whatsapp_number: document.getElementById("setting-whatsapp-number").value.trim(),
+        coupon_code: document.getElementById("setting-coupon-code").value.trim().toUpperCase(),
+        coupon_discount_value: Number(document.getElementById("setting-coupon-discount").value || 0) || 0
       };
 
-      const { error } = await supabaseClient
+      let { error } = await supabaseClient
         .from(SITE_SETTINGS_TABLE)
         .update(payload)
         .eq("id", SITE_SETTINGS_ID);
+
+      if (error && (String(error.message || "").includes("coupon_code") || String(error.message || "").includes("coupon_discount_value") || error.code === "42703")) {
+        const fallbackPayload = { ...payload };
+        delete fallbackPayload.coupon_code;
+        delete fallbackPayload.coupon_discount_value;
+        const fallbackResponse = await supabaseClient
+          .from(SITE_SETTINGS_TABLE)
+          .update(fallbackPayload)
+          .eq("id", SITE_SETTINGS_ID);
+        error = fallbackResponse.error;
+
+        if (!error) {
+          showMessage("settings-message", "Configuracoes salvas. Para o cupom aparecer no site, adicione as colunas coupon_code e coupon_discount_value no Supabase.", "error");
+          return;
+        }
+      }
 
       if (error) {
         console.error("Erro ao salvar configurações do site:", error);
