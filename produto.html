@@ -414,6 +414,50 @@
       padding-bottom: 6px;
     }
 
+    .coupon-card {
+      display: none;
+      gap: 10px;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(46,204,113,0.28);
+      background: rgba(46,204,113,0.08);
+    }
+
+    .coupon-card.show {
+      display: grid;
+    }
+
+    .coupon-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .coupon-label {
+      color: #e7ffe9;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .coupon-code {
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: #111;
+      border: 1px dashed rgba(46,204,113,0.5);
+      color: #9dffb6;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+
+    .coupon-text {
+      color: #d7f9dd;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
     .share-btn {
       width: 52px;
       height: 52px;
@@ -1222,6 +1266,14 @@
               </button>
             </div>
 
+            <div id="coupon-card" class="coupon-card" aria-live="polite">
+              <div class="coupon-top">
+                <span class="coupon-label">Cupom disponivel</span>
+                <span id="coupon-code" class="coupon-code">CAMISA10</span>
+              </div>
+              <div id="coupon-text" class="coupon-text"></div>
+            </div>
+
             <div id="product-description" class="product-description">
               Sem descrição disponível.
             </div>
@@ -1373,6 +1425,44 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       });
     }
 
+    function getCouponCode() {
+      return String(siteSettings?.coupon_code || "").trim().toUpperCase();
+    }
+
+    function getCouponDiscountValue() {
+      const value = Number(siteSettings?.coupon_discount_value || 0);
+      return Number.isFinite(value) && value > 0 ? value : 0;
+    }
+
+    function getDiscountedProductPrice(product = currentProduct) {
+      const price = Number(product?.price || 0);
+      const discount = getCouponDiscountValue();
+      return Math.max(0, price - discount);
+    }
+
+    function hasActiveCoupon() {
+      return !!getCouponCode() && getCouponDiscountValue() > 0;
+    }
+
+    function renderCouponBox() {
+      const card = document.getElementById("coupon-card");
+      const codeEl = document.getElementById("coupon-code");
+      const textEl = document.getElementById("coupon-text");
+      if (!card || !codeEl || !textEl) return;
+
+      if (!currentProduct || !hasActiveCoupon()) {
+        card.classList.remove("show");
+        textEl.textContent = "";
+        return;
+      }
+
+      const discount = Math.min(Number(currentProduct.price || 0), getCouponDiscountValue());
+      const finalPrice = getDiscountedProductPrice(currentProduct);
+      codeEl.textContent = getCouponCode();
+      textEl.textContent = `Use o cupom ${getCouponCode()} e ganhe ${formatPrice(discount)} de desconto. Valor com cupom: ${formatPrice(finalPrice)}.`;
+      card.classList.add("show");
+    }
+
     function sanitizePhone(phone) {
       return String(phone || "").replace(/\D/g, "");
     }
@@ -1399,7 +1489,9 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
     function updatePurchaseSummary() {
       document.getElementById("purchase-product-name").textContent = currentProduct?.name || "-";
-      document.getElementById("purchase-product-price").textContent = currentProduct ? formatPrice(currentProduct.price) : "-";
+      document.getElementById("purchase-product-price").textContent = currentProduct
+        ? (hasActiveCoupon() ? `${formatPrice(getDiscountedProductPrice())} com cupom` : formatPrice(currentProduct.price))
+        : "-";
       document.getElementById("selected-size-text").textContent = selectedSize
         ? `${selectedSize}${selectedSizeIsAvailable ? "" : " (sob encomenda)"}`
         : "Selecione um tamanho";
@@ -1703,6 +1795,8 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
 Produto: ${currentProduct.name}
 Preço: ${formatPrice(currentProduct.price)}
+${hasActiveCoupon() ? `Cupom: ${getCouponCode()} (${formatPrice(getCouponDiscountValue())} de desconto)
+Valor com cupom: ${formatPrice(getDiscountedProductPrice())}` : ""}
 Tamanho: ${selectedSize}
 Tipo de pedido: ${selectedSizeIsAvailable && getProductSaleType(currentProduct) !== "sob_encomenda" ? "Pronta entrega" : "Sob encomenda"}
 
@@ -1824,6 +1918,14 @@ ${window.location.href}`;
       applyLogoSource("logo.jpg");
     }
 
+    function shouldRetryWithoutCouponColumns(error) {
+      const message = String(error?.message || "").toLowerCase();
+      return error?.code === "42703"
+        || message.includes("coupon_code")
+        || message.includes("coupon_discount_value")
+        || message.includes("schema cache");
+    }
+
     async function loadSiteSettings() {
       const cacheKey = getCacheKey("site_settings", SITE_SETTINGS_ID);
       const cached = getCachedData(cacheKey);
@@ -1834,7 +1936,7 @@ ${window.location.href}`;
         return;
       }
 
-      const { data, error } = await supabaseClient
+      let response = await supabaseClient
         .from("site_settings")
         .select(`
           id,
@@ -1844,19 +1946,38 @@ ${window.location.href}`;
           logo_url,
           instagram_url,
           whatsapp_number,
-          logo_text
+          logo_text,
+          coupon_code,
+          coupon_discount_value
         `)
         .eq("id", SITE_SETTINGS_ID)
         .single();
 
-      if (error) {
-        console.error("Erro ao carregar site_settings:", error);
+      if (response.error && shouldRetryWithoutCouponColumns(response.error)) {
+        response = await supabaseClient
+          .from("site_settings")
+          .select(`
+            id,
+            hero_title,
+            delivery_text,
+            footer_text,
+            logo_url,
+            instagram_url,
+            whatsapp_number,
+            logo_text
+          `)
+          .eq("id", SITE_SETTINGS_ID)
+          .single();
+      }
+
+      if (response.error) {
+        console.error("Erro ao carregar site_settings:", response.error);
         return;
       }
 
-      if (data) {
-        siteSettings = data;
-        setCachedData(cacheKey, data);
+      if (response.data) {
+        siteSettings = response.data;
+        setCachedData(cacheKey, response.data);
         applySiteSettings();
       }
     }
@@ -2039,6 +2160,7 @@ ${window.location.href}`;
       document.getElementById("product-category").textContent = product.categories?.name || "Camisa 10 Store";
       document.getElementById("product-name").textContent = product.name || "Produto";
       document.getElementById("product-price").textContent = formatPrice(product.price);
+      renderCouponBox();
       const oldPriceEl = document.getElementById("product-old-price");
       const hasOldPrice = Number(product.old_price || 0) > Number(product.price || 0);
       if (oldPriceEl) {
