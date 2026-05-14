@@ -443,6 +443,7 @@
     }
 
     .coupon-code {
+      display: none;
       padding: 8px 12px;
       border-radius: 10px;
       background: #111;
@@ -450,6 +451,10 @@
       color: #9dffb6;
       font-weight: 900;
       letter-spacing: 0.04em;
+    }
+
+    .coupon-code.show {
+      display: inline-flex;
     }
 
     .coupon-form {
@@ -1511,17 +1516,21 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         card.classList.remove("show");
         appliedCouponCode = "";
         discountEl.textContent = "";
+        discountEl.classList.remove("show");
         textEl.textContent = "";
         textEl.className = "coupon-text";
         return;
       }
 
-      const discount = Math.min(Number(currentProduct.price || 0), getCouponDiscountValue());
-      discountEl.textContent = `-${formatPrice(discount)}`;
       if (isCouponApplied()) {
+        const discount = Math.min(Number(currentProduct.price || 0), getCouponDiscountValue());
+        discountEl.textContent = `-${formatPrice(discount)}`;
+        discountEl.classList.add("show");
         textEl.textContent = `Cupom aplicado. Valor com desconto: ${formatPrice(getDiscountedProductPrice(currentProduct))}.`;
         textEl.className = "coupon-text success";
       } else {
+        discountEl.textContent = "";
+        discountEl.classList.remove("show");
         textEl.textContent = "Digite seu cupom para liberar o desconto neste produto.";
         textEl.className = "coupon-text";
       }
@@ -1544,6 +1553,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         appliedCouponCode = "";
         textEl.textContent = "Cupom invalido. Confira o codigo e tente novamente.";
         textEl.className = "coupon-text error";
+        document.getElementById("coupon-discount-preview")?.classList.remove("show");
         updatePurchaseSummary();
         return;
       }
