@@ -414,103 +414,6 @@
       padding-bottom: 6px;
     }
 
-    .coupon-card {
-      display: none;
-      gap: 10px;
-      padding: 16px;
-      border-radius: 18px;
-      border: 1px solid rgba(46,204,113,0.28);
-      background: rgba(46,204,113,0.08);
-    }
-
-    .coupon-card.show {
-      display: grid;
-    }
-
-    .coupon-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .coupon-label {
-      color: #e7ffe9;
-      font-size: 13px;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-
-    .coupon-code {
-      display: none;
-      padding: 8px 12px;
-      border-radius: 10px;
-      background: #111;
-      border: 1px dashed rgba(46,204,113,0.5);
-      color: #9dffb6;
-      font-weight: 900;
-      letter-spacing: 0.04em;
-    }
-
-    .coupon-code.show {
-      display: inline-flex;
-    }
-
-    .coupon-form {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
-    }
-
-    .coupon-input {
-      width: 100%;
-      min-height: 46px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(0,0,0,0.24);
-      color: #fff;
-      padding: 0 13px;
-      font-weight: 800;
-      text-transform: uppercase;
-      outline: none;
-    }
-
-    .coupon-input:focus {
-      border-color: rgba(46,204,113,0.6);
-      box-shadow: 0 0 0 3px rgba(46,204,113,0.12);
-    }
-
-    .coupon-apply-btn {
-      min-height: 46px;
-      border: 0;
-      border-radius: 12px;
-      background: #2ecc71;
-      color: #07130b;
-      cursor: pointer;
-      font-weight: 900;
-      padding: 0 16px;
-    }
-
-    .coupon-apply-btn:hover {
-      filter: brightness(1.06);
-    }
-
-    .coupon-text {
-      color: #d7f9dd;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .coupon-text.error {
-      color: #ffd2d0;
-    }
-
-    .coupon-text.success {
-      color: #9dffb6;
-      font-weight: 800;
-    }
-
     .share-btn {
       width: 52px;
       height: 52px;
@@ -1319,18 +1222,6 @@
               </button>
             </div>
 
-            <div id="coupon-card" class="coupon-card" aria-live="polite">
-              <div class="coupon-top">
-                <span class="coupon-label">Tem cupom de desconto?</span>
-                <span id="coupon-discount-preview" class="coupon-code"></span>
-              </div>
-              <div class="coupon-form">
-                <input id="coupon-input" class="coupon-input" type="text" placeholder="Digite seu cupom" autocomplete="off" />
-                <button class="coupon-apply-btn" type="button" onclick="applyCouponCode()">Aplicar</button>
-              </div>
-              <div id="coupon-text" class="coupon-text"></div>
-            </div>
-
             <div id="product-description" class="product-description">
               Sem descrição disponível.
             </div>
@@ -1442,9 +1333,8 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     let siteSettings = null;
     let galleryImagesList = [];
     let currentGalleryIndex = 0;
-    let appliedCouponCode = "";
 
-    const CACHE_TTL_MS = 10 * 60 * 1000;
+    const CACHE_TTL_MS = 0;
 
     function getCacheKey(prefix, value) {
       return `camisa10_${prefix}_${String(value || "").trim()}`;
@@ -1452,6 +1342,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
     function getCachedData(key) {
       try {
+        if (CACHE_TTL_MS <= 0) return null;
         const raw = localStorage.getItem(key);
         if (!raw) return null;
         const parsed = JSON.parse(raw);
@@ -1468,6 +1359,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
     function setCachedData(key, data) {
       try {
+        if (CACHE_TTL_MS <= 0) return;
         localStorage.setItem(key, JSON.stringify({
           timestamp: Date.now(),
           data
@@ -1481,86 +1373,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         style: "currency",
         currency: "BRL"
       });
-    }
-
-    function getCouponCode() {
-      return String(siteSettings?.coupon_code || "").trim().toUpperCase();
-    }
-
-    function getCouponDiscountValue() {
-      const value = Number(siteSettings?.coupon_discount_value || 0);
-      return Number.isFinite(value) && value > 0 ? value : 0;
-    }
-
-    function getDiscountedProductPrice(product = currentProduct) {
-      const price = Number(product?.price || 0);
-      const discount = getCouponDiscountValue();
-      return Math.max(0, price - discount);
-    }
-
-    function hasActiveCoupon() {
-      return !!getCouponCode() && getCouponDiscountValue() > 0;
-    }
-
-    function isCouponApplied() {
-      return hasActiveCoupon() && appliedCouponCode === getCouponCode();
-    }
-
-    function renderCouponBox() {
-      const card = document.getElementById("coupon-card");
-      const discountEl = document.getElementById("coupon-discount-preview");
-      const textEl = document.getElementById("coupon-text");
-      if (!card || !discountEl || !textEl) return;
-
-      if (!currentProduct || !hasActiveCoupon()) {
-        card.classList.remove("show");
-        appliedCouponCode = "";
-        discountEl.textContent = "";
-        discountEl.classList.remove("show");
-        textEl.textContent = "";
-        textEl.className = "coupon-text";
-        return;
-      }
-
-      if (isCouponApplied()) {
-        const discount = Math.min(Number(currentProduct.price || 0), getCouponDiscountValue());
-        discountEl.textContent = `-${formatPrice(discount)}`;
-        discountEl.classList.add("show");
-        textEl.textContent = `Cupom aplicado. Valor com desconto: ${formatPrice(getDiscountedProductPrice(currentProduct))}.`;
-        textEl.className = "coupon-text success";
-      } else {
-        discountEl.textContent = "";
-        discountEl.classList.remove("show");
-        textEl.textContent = "Digite seu cupom para liberar o desconto neste produto.";
-        textEl.className = "coupon-text";
-      }
-      card.classList.add("show");
-    }
-
-    function applyCouponCode() {
-      const input = document.getElementById("coupon-input");
-      const textEl = document.getElementById("coupon-text");
-      if (!input || !textEl) return;
-
-      const typedCode = String(input.value || "").trim().toUpperCase();
-      if (!hasActiveCoupon()) {
-        textEl.textContent = "Nenhum cupom ativo no momento.";
-        textEl.className = "coupon-text error";
-        return;
-      }
-
-      if (typedCode !== getCouponCode()) {
-        appliedCouponCode = "";
-        textEl.textContent = "Cupom invalido. Confira o codigo e tente novamente.";
-        textEl.className = "coupon-text error";
-        document.getElementById("coupon-discount-preview")?.classList.remove("show");
-        updatePurchaseSummary();
-        return;
-      }
-
-      appliedCouponCode = typedCode;
-      renderCouponBox();
-      updatePurchaseSummary();
     }
 
     function sanitizePhone(phone) {
@@ -1589,9 +1401,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
     function updatePurchaseSummary() {
       document.getElementById("purchase-product-name").textContent = currentProduct?.name || "-";
-      document.getElementById("purchase-product-price").textContent = currentProduct
-        ? (isCouponApplied() ? `${formatPrice(getDiscountedProductPrice())} com cupom` : formatPrice(currentProduct.price))
-        : "-";
+      document.getElementById("purchase-product-price").textContent = currentProduct ? formatPrice(currentProduct.price) : "-";
       document.getElementById("selected-size-text").textContent = selectedSize
         ? `${selectedSize}${selectedSizeIsAvailable ? "" : " (sob encomenda)"}`
         : "Selecione um tamanho";
@@ -1895,8 +1705,6 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
 Produto: ${currentProduct.name}
 Preço: ${formatPrice(currentProduct.price)}
-${isCouponApplied() ? `Cupom: ${getCouponCode()} (${formatPrice(getCouponDiscountValue())} de desconto)
-Valor com cupom: ${formatPrice(getDiscountedProductPrice())}` : ""}
 Tamanho: ${selectedSize}
 Tipo de pedido: ${selectedSizeIsAvailable && getProductSaleType(currentProduct) !== "sob_encomenda" ? "Pronta entrega" : "Sob encomenda"}
 
@@ -2018,18 +1826,17 @@ ${window.location.href}`;
       applyLogoSource("logo.jpg");
     }
 
-    function shouldRetryWithoutCouponColumns(error) {
-      const message = String(error?.message || "").toLowerCase();
-      return error?.code === "42703"
-        || message.includes("coupon_code")
-        || message.includes("coupon_discount_value")
-        || message.includes("schema cache");
-    }
-
     async function loadSiteSettings() {
       const cacheKey = getCacheKey("site_settings", SITE_SETTINGS_ID);
+      const cached = getCachedData(cacheKey);
 
-      let response = await supabaseClient
+      if (cached) {
+        siteSettings = cached;
+        applySiteSettings();
+        return;
+      }
+
+      const { data, error } = await supabaseClient
         .from("site_settings")
         .select(`
           id,
@@ -2039,43 +1846,26 @@ ${window.location.href}`;
           logo_url,
           instagram_url,
           whatsapp_number,
-          logo_text,
-          coupon_code,
-          coupon_discount_value
+          logo_text
         `)
         .eq("id", SITE_SETTINGS_ID)
         .single();
 
-      if (response.error && shouldRetryWithoutCouponColumns(response.error)) {
-        response = await supabaseClient
-          .from("site_settings")
-          .select(`
-            id,
-            hero_title,
-            delivery_text,
-            footer_text,
-            logo_url,
-            instagram_url,
-            whatsapp_number,
-            logo_text
-          `)
-          .eq("id", SITE_SETTINGS_ID)
-          .single();
-      }
-
-      if (response.error) {
-        console.error("Erro ao carregar site_settings:", response.error);
+      if (error) {
+        console.error("Erro ao carregar site_settings:", error);
         return;
       }
 
-      if (response.data) {
-        siteSettings = response.data;
-        setCachedData(cacheKey, response.data);
+      if (data) {
+        siteSettings = data;
+        setCachedData(cacheKey, data);
         applySiteSettings();
       }
     }
 
     function getAvailableFlag(item) {
+      const stockQuantity = Number(item?.stock_quantity ?? item?.quantity ?? item?.qty);
+      if (Number.isFinite(stockQuantity)) return stockQuantity > 0;
       if (typeof item?.is_available === "boolean") return item.is_available;
       if (typeof item?.available === "boolean") return item.available;
       return true;
@@ -2248,13 +2038,11 @@ ${window.location.href}`;
       currentProduct = product;
       selectedSize = null;
       selectedSizeIsAvailable = true;
-      appliedCouponCode = "";
 
       document.title = `${product.name} | Camisa 10 Store`;
       document.getElementById("product-category").textContent = product.categories?.name || "Camisa 10 Store";
       document.getElementById("product-name").textContent = product.name || "Produto";
       document.getElementById("product-price").textContent = formatPrice(product.price);
-      renderCouponBox();
       const oldPriceEl = document.getElementById("product-old-price");
       const hasOldPrice = Number(product.old_price || 0) > Number(product.price || 0);
       if (oldPriceEl) {
@@ -2288,15 +2076,9 @@ ${window.location.href}`;
       showState("product");
     }
 
-      document.addEventListener("DOMContentLoaded", async () => {
+    document.addEventListener("DOMContentLoaded", async () => {
       applyDefaultBranding();
       setupGallerySwipe();
-      document.getElementById("coupon-input")?.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-          event.preventDefault();
-          applyCouponCode();
-        }
-      });
       await loadSiteSettings();
       await loadProduct();
     });
