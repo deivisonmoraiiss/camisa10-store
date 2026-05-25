@@ -1665,8 +1665,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       });
 
       const displaySizes = getDisplaySizes(rowsToRender);
-      const isProductOrderOnly = getProductSaleType(currentProduct) === "sob_encomenda";
-      const hasAnyAvailable = !isProductOrderOnly && Object.values(availableMap).some(Boolean);
+      const hasAnyAvailable = Object.values(availableMap).some(Boolean);
 
       if (!rowsToRender.length || !displaySizes.length) {
         box.innerHTML = `<div style="color:#b8b8b8; font-size:14px;">Consulte as opcoes de encomenda pelo WhatsApp.</div>`;
@@ -1674,7 +1673,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       }
 
       box.innerHTML = displaySizes.map(size => {
-        const isAvailable = !isProductOrderOnly && availableMap[size] === true;
+        const isAvailable = availableMap[size] === true;
         const escapedSize = size.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
         return `
           <button
@@ -1993,7 +1992,8 @@ ${window.location.href}`;
             product_sizes (
               id,
               size,
-              is_available
+              is_available,
+              stock_quantity
             )
           `);
 
