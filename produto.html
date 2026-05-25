@@ -1606,6 +1606,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       if (normalized === "infantil") return ["2", "4", "6", "8"];
       if (normalized === "sandalia") return ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43"];
       if (normalized === "unico") return ["Unico"];
+      if (normalized === "custom") return [];
       return ["P", "M", "G", "GG", "EG"];
     }
 
@@ -1984,6 +1985,7 @@ ${window.location.href}`;
             image_url,
             short_description,
             sale_type,
+            size_profile,
             category_id,
             categories (
               id,
