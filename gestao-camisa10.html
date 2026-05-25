@@ -288,6 +288,14 @@
     }
     .quick-icon-btn:hover{transform:translateY(-1px)}
     .quick-icon-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .quick-stock-editor{display:grid;gap:10px;padding:12px;border-radius:14px;background:#0d0d0d;border:1px solid rgba(255,255,255,.06)}
+    .quick-stock-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;color:#f2f2f2;font-weight:900;font-size:.86rem}
+    .quick-stock-note{color:var(--muted);font-size:.78rem;font-weight:600}
+    .quick-stock-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(72px,1fr));gap:8px}
+    .quick-stock-field{display:grid;gap:5px}
+    .quick-stock-field label{color:#dcdcdc;font-size:.75rem;font-weight:900}
+    .quick-stock-field input{width:100%;padding:9px 10px;border-radius:12px;border:1px solid #2d2d2d;background:#101010;color:#fff;font-size:.86rem;font-weight:800}
+    .quick-stock-field input:focus{border-color:rgba(212,175,55,.55);box-shadow:0 0 0 3px rgba(212,175,55,.10);outline:none}
     .collapsible-card{overflow:hidden}
     .collapsible-summary{
       list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:12px
@@ -1936,8 +1944,6 @@ Camisa Real Madrid 24/25"></textarea>
                 <h4>Contato e redes</h4>
                 <div class="field"><label for="setting-instagram-url">Link do Instagram</label><input type="text" id="setting-instagram-url" placeholder="https://instagram.com/..." /></div>
                 <div class="field"><label for="setting-whatsapp-number">Número do WhatsApp</label><input type="text" id="setting-whatsapp-number" placeholder="5597981098445" /></div>
-                <div class="field"><label for="setting-coupon-code">Cupom de desconto</label><input type="text" id="setting-coupon-code" placeholder="Ex: CAMISA10" /></div>
-                <div class="field"><label for="setting-coupon-discount">Valor do desconto</label><input type="number" id="setting-coupon-discount" min="0" step="0.01" placeholder="Ex: 10.00" /></div>
                 <div class="field"><label for="logo-file">Arquivo da logo</label><input type="file" id="logo-file" accept="image/*" onchange="previewBannerImage(event, 'logo-preview')" /></div>
                 <div class="field"><label for="setting-logo-url">URL da logo</label><input type="text" id="setting-logo-url" placeholder="A URL será preenchida após o upload" /></div>
                 <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadLogoImage()">Fazer upload da logo</button></div>
@@ -3358,7 +3364,8 @@ Camisa Real Madrid 24/25"></textarea>
           product_sizes (
             id,
             size,
-            is_available
+            is_available,
+            stock_quantity
           )
         `;
       let response = await supabaseClient
@@ -3411,7 +3418,8 @@ Camisa Real Madrid 24/25"></textarea>
           product_sizes (
             id,
             size,
-            is_available
+            is_available,
+            stock_quantity
           )
         `)
         .eq("id", productId)
@@ -3984,6 +3992,43 @@ async function uploadMultipleProductImages(productId) {
     }
 
 
+    function getSizeStockQuantity(item) {
+      const rawValue = item?.stock_quantity ?? item?.quantity ?? item?.qty ?? item?.stock;
+      const numeric = Number(rawValue);
+      if (Number.isFinite(numeric)) return Math.max(0, Math.floor(numeric));
+      return item?.is_available === false ? 0 : 1;
+    }
+
+    function normalizeStockQuantity(value) {
+      const numeric = Number(value);
+      if (!Number.isFinite(numeric) || numeric < 0) return null;
+      return Math.floor(numeric);
+    }
+
+    function normalizeProductSizeRows(sizes) {
+      return (sizes || [])
+        .map(item => {
+          const size = typeof item === "string" ? item : item?.size;
+          const cleanSize = String(size || "").trim();
+          if (!cleanSize) return null;
+          const stockQuantity = typeof item === "string" ? 1 : getSizeStockQuantity(item);
+          return {
+            size: cleanSize,
+            is_available: stockQuantity > 0,
+            stock_quantity: stockQuantity
+          };
+        })
+        .filter(Boolean);
+    }
+
+    function shouldRetryWithoutStockQuantity(error) {
+      const message = String(error?.message || "").toLowerCase();
+      return error?.code === "42703"
+        || message.includes("stock_quantity")
+        || message.includes("schema cache")
+        || message.includes("column");
+    }
+
     async function saveProductSizes(productId, sizes) {
       const { error: deleteError } = await supabaseClient
         .from("product_sizes")
@@ -3998,19 +4043,33 @@ async function uploadMultipleProductImages(productId) {
         };
       }
 
-      if (!sizes.length) {
+      const normalizedRows = normalizeProductSizeRows(sizes);
+
+      if (!normalizedRows.length) {
         return { success: true };
       }
 
-      const rows = sizes.map(size => ({
+      const rows = normalizedRows.map(item => ({
         product_id: productId,
-        size,
-        is_available: true
+        size: item.size,
+        is_available: item.is_available,
+        stock_quantity: item.stock_quantity
       }));
 
-      const { error: insertError } = await supabaseClient
+      let { error: insertError } = await supabaseClient
         .from("product_sizes")
         .insert(rows);
+
+      let stockQuantitySaved = true;
+
+      if (insertError && shouldRetryWithoutStockQuantity(insertError)) {
+        const fallbackRows = rows.map(({ stock_quantity, ...row }) => row);
+        const fallbackResponse = await supabaseClient
+          .from("product_sizes")
+          .insert(fallbackRows);
+        insertError = fallbackResponse.error;
+        stockQuantitySaved = false;
+      }
 
       if (insertError) {
         console.error("Erro ao salvar tamanhos:", insertError);
@@ -4020,7 +4079,7 @@ async function uploadMultipleProductImages(productId) {
         };
       }
 
-      return { success: true };
+      return { success: true, stockQuantitySaved };
     }
 
 
@@ -4463,6 +4522,108 @@ async function uploadMultipleProductImages(productId) {
       updateBatchPreview();
     }
 
+    function getProductStockRows(product) {
+      const profile = product?.size_profile || inferSizeProfile(product || {});
+      const rowsBySize = new Map();
+
+      getSizeOptionsByProfile(profile).forEach(size => {
+        rowsBySize.set(String(size).toUpperCase(), {
+          size,
+          is_available: false,
+          stock_quantity: 0
+        });
+      });
+
+      (product?.product_sizes || []).forEach(item => {
+        const size = String(item?.size || "").trim();
+        if (!size) return;
+        rowsBySize.set(size.toUpperCase(), {
+          ...item,
+          size,
+          stock_quantity: getSizeStockQuantity(item),
+          is_available: getSizeStockQuantity(item) > 0
+        });
+      });
+
+      return [...rowsBySize.values()];
+    }
+
+    function buildQuickStockEditor(product) {
+      const rows = getProductStockRows(product);
+      const availableCount = rows.filter(item => getSizeStockQuantity(item) > 0).length;
+      const productId = String(product.id);
+
+      return `
+        <div class="quick-stock-editor" style="grid-column:1/-1">
+          <div class="quick-stock-head">
+            <span>Estoque manual por tamanho</span>
+            <span class="quick-stock-note">${availableCount} tamanho(s) disponivel(is)</span>
+          </div>
+          <div class="quick-stock-grid">
+            ${rows.map(item => {
+              const qty = getSizeStockQuantity(item);
+              return `
+                <div class="quick-stock-field">
+                  <label>${escapeHtml(item.size)}</label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="1"
+                    value="${qty}"
+                    data-stock-product-id="${escapeHtml(productId)}"
+                    data-stock-size="${escapeHtml(item.size)}"
+                    aria-label="Estoque tamanho ${escapeHtml(item.size)}"
+                  />
+                </div>
+              `;
+            }).join("")}
+          </div>
+          <button class="btn btn-primary" type="button" onclick="saveQuickStock('${product.id}')">Salvar estoque</button>
+        </div>
+      `;
+    }
+
+    async function saveQuickStock(productId) {
+      clearMessage("list-message");
+      const product = allProducts.find(item => String(item.id) === String(productId));
+      if (!product) {
+        showMessage("list-message", "Produto nao encontrado para atualizar estoque.", "error");
+        return;
+      }
+
+      const inputs = [...document.querySelectorAll("[data-stock-product-id]")]
+        .filter(input => String(input.dataset.stockProductId) === String(productId));
+      const rows = inputs.map(input => {
+        const quantity = normalizeStockQuantity(input.value);
+        return {
+          size: input.dataset.stockSize || "",
+          stock_quantity: quantity,
+          is_available: Number(quantity || 0) > 0
+        };
+      });
+
+      if (!rows.length || rows.some(item => !item.size || item.stock_quantity === null)) {
+        showMessage("list-message", "Digite apenas quantidades inteiras a partir de zero.", "error");
+        return;
+      }
+
+      const result = await saveProductSizes(productId, rows);
+      if (!result.success) {
+        showMessage("list-message", `Erro ao salvar estoque: ${result.message}`, "error");
+        return;
+      }
+
+      showMessage(
+        "list-message",
+        result.stockQuantitySaved === false
+          ? "Estoque salvo como disponivel/sob encomenda. Para guardar a quantidade exata, adicione a coluna stock_quantity no Supabase."
+          : "Estoque atualizado com sucesso. O site ja vai refletir os tamanhos disponiveis.",
+        "success"
+      );
+
+      await loadProducts();
+    }
+
 
     function renderProducts(products) {
       const tbody = document.getElementById("products-table-body");
@@ -4507,9 +4668,10 @@ async function uploadMultipleProductImages(productId) {
       });
 
       const renderCard = (product) => {
-        const sizes = Array.isArray(product.product_sizes)
-          ? product.product_sizes.filter(item => item.is_available).map(item => item.size)
-          : [];
+        const stockRows = getProductStockRows(product);
+        const sizes = stockRows
+          .filter(item => getSizeStockQuantity(item) > 0)
+          .map(item => ({ size: item.size, quantity: getSizeStockQuantity(item) }));
 
         const categoryName = product.categories?.name || "Sem categoria";
         const productKind = getDisplayProductKind(product);
@@ -4530,8 +4692,9 @@ async function uploadMultipleProductImages(productId) {
         const variationsCount = getStoredProductVariations(product.id).length;
         const variationsBadge = variationsCount ? `<span class="badge">${variationsCount} variação(ões)</span>` : '';
         const sizesHtml = sizes.length
-          ? sizes.map(size => `<span class="badge">${size}</span>`).join("")
+          ? sizes.map(item => `<span class="badge">${escapeHtml(item.size)}: ${item.quantity}</span>`).join("")
           : '<span class="small-muted">Sem tamanhos</span>';
+        const quickStockEditor = buildQuickStockEditor(product);
         const oldPrice = product.old_price ? `<span class="price-old">${formatPrice(product.old_price)}</span>` : '';
         const description = product.short_description ? `<div class="product-admin-desc">${product.short_description}</div>` : '';
         const isSelected = selectedProductIds.has(String(product.id));
@@ -4592,6 +4755,7 @@ async function uploadMultipleProductImages(productId) {
                   </div>
 
                   <div class="product-admin-quick-grid">
+                    ${quickStockEditor}
                     <button class="btn btn-secondary quick-toggle-btn ${product.is_featured ? "active" : ""}" onclick="toggleFeaturedQuick('${product.id}', ${product.is_featured ? "false" : "true"})">
                       ${product.is_featured ? "Remover de Mais procuradas" : "Colocar em Mais procuradas"}
                     </button>
@@ -5711,7 +5875,7 @@ async function uploadHeroSlideImage() {
     async function loadSiteSettings() {
       clearMessage("settings-message");
 
-      let response = await supabaseClient
+      const { data, error } = await supabaseClient
         .from(SITE_SETTINGS_TABLE)
         .select(`
           id,
@@ -5726,42 +5890,16 @@ async function uploadHeroSlideImage() {
           footer_text,
           logo_url,
           instagram_url,
-          whatsapp_number,
-          coupon_code,
-          coupon_discount_value
+          whatsapp_number
         `)
         .eq("id", SITE_SETTINGS_ID)
         .single();
 
-      if (response.error && (String(response.error.message || "").includes("coupon_code") || String(response.error.message || "").includes("coupon_discount_value") || response.error.code === "42703")) {
-        response = await supabaseClient
-          .from(SITE_SETTINGS_TABLE)
-          .select(`
-            id,
-            hero_title,
-            hero_subtitle,
-            hero_image_url,
-            hero_left_image_url,
-            delivery_text,
-            catalog_title,
-            catalog_subtitle,
-            contact_text,
-            footer_text,
-            logo_url,
-            instagram_url,
-            whatsapp_number
-          `)
-          .eq("id", SITE_SETTINGS_ID)
-          .single();
-      }
-
-      if (response.error) {
-        console.error("Erro ao carregar configurações do site:", response.error);
+      if (error) {
+        console.error("Erro ao carregar configurações do site:", error);
         showMessage("settings-message", "Não foi possível carregar as configurações do site.", "error");
         return;
       }
-
-      const data = response.data;
 
       document.getElementById("setting-hero-title").value = data.hero_title || "";
       document.getElementById("setting-hero-subtitle").value = data.hero_subtitle || "";
@@ -5775,8 +5913,6 @@ async function uploadHeroSlideImage() {
       document.getElementById("setting-logo-url").value = data.logo_url || "";
       document.getElementById("setting-instagram-url").value = data.instagram_url || "";
       document.getElementById("setting-whatsapp-number").value = data.whatsapp_number || "";
-      document.getElementById("setting-coupon-code").value = data.coupon_code || "";
-      document.getElementById("setting-coupon-discount").value = data.coupon_discount_value || "";
 
       if (data.hero_image_url) {
         document.getElementById("hero-banner-preview").src = data.hero_image_url;
@@ -5806,31 +5942,13 @@ async function uploadHeroSlideImage() {
         footer_text: document.getElementById("setting-footer-text").value.trim(),
         logo_url: document.getElementById("setting-logo-url").value.trim(),
         instagram_url: document.getElementById("setting-instagram-url").value.trim(),
-        whatsapp_number: document.getElementById("setting-whatsapp-number").value.trim(),
-        coupon_code: document.getElementById("setting-coupon-code").value.trim().toUpperCase(),
-        coupon_discount_value: Number(document.getElementById("setting-coupon-discount").value || 0) || 0
+        whatsapp_number: document.getElementById("setting-whatsapp-number").value.trim()
       };
 
-      let { error } = await supabaseClient
+      const { error } = await supabaseClient
         .from(SITE_SETTINGS_TABLE)
         .update(payload)
         .eq("id", SITE_SETTINGS_ID);
-
-      if (error && (String(error.message || "").includes("coupon_code") || String(error.message || "").includes("coupon_discount_value") || error.code === "42703")) {
-        const fallbackPayload = { ...payload };
-        delete fallbackPayload.coupon_code;
-        delete fallbackPayload.coupon_discount_value;
-        const fallbackResponse = await supabaseClient
-          .from(SITE_SETTINGS_TABLE)
-          .update(fallbackPayload)
-          .eq("id", SITE_SETTINGS_ID);
-        error = fallbackResponse.error;
-
-        if (!error) {
-          showMessage("settings-message", "Configuracoes salvas. Para o cupom aparecer no site, adicione as colunas coupon_code e coupon_discount_value no Supabase.", "error");
-          return;
-        }
-      }
 
       if (error) {
         console.error("Erro ao salvar configurações do site:", error);
