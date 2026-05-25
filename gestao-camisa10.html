@@ -1911,6 +1911,22 @@ Camisa Real Madrid 24/25"></textarea>
               <label for="category-name">Nome da categoria</label>
               <input type="text" id="category-name" placeholder="Ex: Brasileirão" />
             </div>
+            <div class="field">
+              <label for="category-size-profile">Grade padrao da categoria</label>
+              <select id="category-size-profile" onchange="syncCategorySizePreset()">
+                <option value="">Sem grade padrao</option>
+                <option value="adulto">Adulto (P, M, G, GG, EG)</option>
+                <option value="infantil">Infantil (2, 4, 6, 8)</option>
+                <option value="sandalia">Sandalia (25 a 43)</option>
+                <option value="unico">Tamanho unico</option>
+                <option value="custom">Personalizado</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="category-size-options">Tamanhos dessa categoria</label>
+              <input type="text" id="category-size-options" placeholder="Ex: P, M, G, GG, EG, 3GG" />
+              <div class="small-muted">Separe por virgula. Ex.: camisa com 3GG ou infantil com 10.</div>
+            </div>
             <div class="actions-row">
               <button class="btn btn-primary" id="save-category-btn" onclick="saveCategory()">Salvar categoria</button>
               <button class="btn btn-secondary hidden" id="cancel-category-edit-btn" onclick="cancelCategoryEdit()">Cancelar edição</button>
@@ -2687,11 +2703,13 @@ Camisa Real Madrid 24/25"></textarea>
     const PRODUCT_VARIATIONS_STORAGE_KEY = "camisa10_product_variations_v1";
     const PRODUCT_TYPE_OPTIONS_KEY = "camisa10_product_type_options_v1";
     const PRODUCT_PRIORITIES_STORAGE_KEY = "camisa10_product_priorities_v1";
+    const CATEGORY_SIZE_OPTIONS_KEY = "camisa10_category_size_options_v1";
     let productMetaCache = {};
     let productVariationsCache = {};
     let productVariationsDraft = [];
     let productTypeOptions = [];
     let productPriorityCache = {};
+    let categorySizeOptionsCache = {};
 
 
 
@@ -2756,6 +2774,18 @@ Camisa Real Madrid 24/25"></textarea>
       return [...document.querySelectorAll(".size-check:checked")].map(item => item.value);
     }
 
+    function parseSizeOptions(value) {
+      return String(value || "")
+        .split(/[,;\n]/)
+        .map(item => item.trim())
+        .filter(Boolean)
+        .filter((item, index, arr) => arr.findIndex(other => other.toUpperCase() === item.toUpperCase()) === index);
+    }
+
+    function formatSizeOptions(sizes = []) {
+      return (Array.isArray(sizes) ? sizes : parseSizeOptions(sizes)).join(", ");
+    }
+
     function refreshSizeChipStates() {
       document.querySelectorAll(".size-item").forEach(item => {
         const input = item.querySelector(".size-check");
@@ -2814,6 +2844,50 @@ Camisa Real Madrid 24/25"></textarea>
 
     function persistProductPriorityCache() {
       localStorage.setItem(PRODUCT_PRIORITIES_STORAGE_KEY, JSON.stringify(productPriorityCache));
+    }
+
+    function loadCategorySizeOptionsCache() {
+      try {
+        categorySizeOptionsCache = JSON.parse(localStorage.getItem(CATEGORY_SIZE_OPTIONS_KEY) || "{}") || {};
+      } catch (error) {
+        categorySizeOptionsCache = {};
+      }
+    }
+
+    function persistCategorySizeOptionsCache() {
+      localStorage.setItem(CATEGORY_SIZE_OPTIONS_KEY, JSON.stringify(categorySizeOptionsCache));
+    }
+
+    function getCategorySizeConfig(category) {
+      if (!category) return null;
+      const cached = categorySizeOptionsCache[String(category.id)] || {};
+      const profile = String(category.size_profile || category.sizeProfile || cached.profile || "").toLowerCase();
+      const sizes = parseSizeOptions(category.size_options || category.sizeOptions || cached.sizes || "");
+      if (!profile && !sizes.length) return null;
+      return {
+        profile: profile || "custom",
+        sizes
+      };
+    }
+
+    function getCategorySizeConfigById(categoryId) {
+      const category = allCategories.find(item => String(item.id) === String(categoryId));
+      return getCategorySizeConfig(category);
+    }
+
+    function persistCategorySizeConfig(categoryId, profile, sizes) {
+      if (!categoryId) return;
+      const parsedSizes = parseSizeOptions(sizes);
+      if (!profile && !parsedSizes.length) {
+        delete categorySizeOptionsCache[String(categoryId)];
+        persistCategorySizeOptionsCache();
+        return;
+      }
+      categorySizeOptionsCache[String(categoryId)] = {
+        profile: String(profile || "custom").toLowerCase(),
+        sizes: parsedSizes
+      };
+      persistCategorySizeOptionsCache();
     }
 
     function getStoredProntaPriority(productId) {
@@ -3236,6 +3310,7 @@ Camisa Real Madrid 24/25"></textarea>
       if (normalized === "infantil") return ["2", "4", "6", "8"];
       if (normalized === "sandalia") return ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43"];
       if (normalized === "unico") return ["Único"];
+      if (normalized === "custom") return [];
       return ["P", "M", "G", "GG", "EG"];
     }
 
@@ -3248,10 +3323,12 @@ Camisa Real Madrid 24/25"></textarea>
       return "Adulto";
     }
 
-    function renderProductSizes(profile = "adulto", selectedSizes = []) {
+    function renderProductSizes(profile = "adulto", selectedSizes = [], customOptions = []) {
       const container = document.getElementById("product-sizes-container");
       if (!container) return;
-      const options = getSizeOptionsByProfile(profile);
+      const parsedCustomOptions = parseSizeOptions(customOptions);
+      const selectedOptions = parseSizeOptions(Array.isArray(selectedSizes) ? selectedSizes.join(",") : selectedSizes);
+      const options = [...new Set([...(parsedCustomOptions.length ? parsedCustomOptions : getSizeOptionsByProfile(profile)), ...selectedOptions])];
       const currentSelected = Array.isArray(selectedSizes) && selectedSizes.length
         ? selectedSizes
         : options;
@@ -3282,18 +3359,25 @@ Camisa Real Madrid 24/25"></textarea>
 
       const value = kindInput.value.trim().toLowerCase();
       const categoryValue = String(categorySelect?.selectedOptions?.[0]?.textContent || categorySelect?.value || "").trim().toLowerCase();
+      const categoryConfig = getCategorySizeConfigById(categorySelect?.value || "");
       let suggestedProfile = profileSelect.value || "adulto";
+      let customSizeOptions = [];
 
-      if (
+      if (!force && categoryConfig) {
+        suggestedProfile = categoryConfig.profile || "custom";
+        customSizeOptions = categoryConfig.sizes || [];
+      }
+
+      if (!categoryConfig && (
         value.includes("infantil") || value.includes("kids") || value.includes("kit")
         || categoryValue.includes("infantil")
-      ) {
+      )) {
         suggestedProfile = "infantil";
-      } else if (value.includes("sand") || value.includes("chinelo") || value.includes("slide")) {
+      } else if (!categoryConfig && (value.includes("sand") || value.includes("chinelo") || value.includes("slide"))) {
         suggestedProfile = "sandalia";
-      } else if (value.includes("copo") || value.includes("caneca") || value.includes("garrafa")) {
+      } else if (!categoryConfig && (value.includes("copo") || value.includes("caneca") || value.includes("garrafa"))) {
         suggestedProfile = "unico";
-      } else if (value.includes("camisa")) {
+      } else if (!categoryConfig && value.includes("camisa")) {
         suggestedProfile = "adulto";
       }
 
@@ -3307,7 +3391,7 @@ Camisa Real Madrid 24/25"></textarea>
           : `Grade automática atual: ${getSizeProfileLabel(suggestedProfile)}.`;
       }
 
-      renderProductSizes(profileSelect.value || suggestedProfile);
+      renderProductSizes(profileSelect.value || suggestedProfile, [], customSizeOptions);
       renderProductVariations();
     }
 
@@ -3639,11 +3723,20 @@ Camisa Real Madrid 24/25"></textarea>
 
     function resetCategoryForm() {
       document.getElementById("category-name").value = "";
+      document.getElementById("category-size-profile").value = "";
+      document.getElementById("category-size-options").value = "";
       editingCategoryId = null;
       document.getElementById("category-form-title").textContent = "Cadastrar Categoria";
       document.getElementById("save-category-btn").textContent = "Salvar categoria";
       document.getElementById("cancel-category-edit-btn").classList.add("hidden");
       clearMessage("category-message");
+    }
+
+    function syncCategorySizePreset() {
+      const profile = document.getElementById("category-size-profile")?.value || "";
+      const input = document.getElementById("category-size-options");
+      if (!input || !profile || profile === "custom") return;
+      input.value = formatSizeOptions(getSizeOptionsByProfile(profile));
     }
 
     async function logout() {
@@ -3694,15 +3787,39 @@ Camisa Real Madrid 24/25"></textarea>
       showMessage("login-message", "Login realizado com sucesso.", "success");
     }
 
+    async function fetchCategoriesWithSizeConfig() {
+      let response = await supabaseClient
+        .from("categories")
+        .select("id, name, size_profile, size_options")
+        .order("name", { ascending: true });
+
+      if (response.error && shouldRetryWithoutMetaColumns(response.error)) {
+        response = await supabaseClient
+          .from("categories")
+          .select("id, name")
+          .order("name", { ascending: true });
+      }
+
+      if (!response.error) {
+        response.data = (response.data || []).map(category => {
+          const cached = categorySizeOptionsCache[String(category.id)] || {};
+          return {
+            ...category,
+            size_profile: category.size_profile || cached.profile || "",
+            size_options: category.size_options || formatSizeOptions(cached.sizes || [])
+          };
+        });
+      }
+
+      return response;
+    }
+
     async function loadCategories(selectedCategoryId = null) {
       const select = document.getElementById("product-category");
       const filterSelect = document.getElementById("product-filter-category");
       select.innerHTML = '<option value="">Carregando categorias...</option>';
 
-      const { data, error } = await supabaseClient
-        .from("categories")
-        .select("id, name")
-        .order("name", { ascending: true });
+      const { data, error } = await fetchCategoriesWithSizeConfig();
 
       if (error) {
         console.error("Erro ao carregar categorias:", error);
@@ -3719,6 +3836,7 @@ Camisa Real Madrid 24/25"></textarea>
         return;
       }
 
+      allCategories = data || [];
       select.innerHTML = '<option value="">Selecione uma categoria</option>';
 
       if (filterSelect) {
@@ -3739,6 +3857,11 @@ Camisa Real Madrid 24/25"></textarea>
         const option = document.createElement("option");
         option.value = category.id;
         option.textContent = category.name;
+        const config = getCategorySizeConfig(category);
+        if (config) {
+          option.dataset.sizeProfile = config.profile;
+          option.dataset.sizeOptions = formatSizeOptions(config.sizes);
+        }
 
         if (selectedCategoryId && String(selectedCategoryId) === String(category.id)) {
           option.selected = true;
@@ -3755,10 +3878,7 @@ Camisa Real Madrid 24/25"></textarea>
       tbody.innerHTML = `<tr><td colspan="2" class="empty-state">Carregando categorias...</td></tr>`;
       clearMessage("category-list-message");
 
-      const { data, error } = await supabaseClient
-        .from("categories")
-        .select("id, name")
-        .order("name", { ascending: true });
+      const { data, error } = await fetchCategoriesWithSizeConfig();
 
       if (error) {
         console.error("Erro ao carregar lista de categorias:", error);
@@ -3779,17 +3899,23 @@ Camisa Real Madrid 24/25"></textarea>
         return;
       }
 
-      tbody.innerHTML = categories.map(category => `
+      tbody.innerHTML = categories.map(category => {
+        const config = getCategorySizeConfig(category);
+        const sizeSummary = config?.sizes?.length ? formatSizeOptions(config.sizes) : "Sem grade padrao";
+        return `
         <tr>
-          <td>${category.name}</td>
+          <td>
+            <strong>${escapeHtml(category.name)}</strong>
+            <div class="small-muted">${escapeHtml(sizeSummary)}</div>
+          </td>
           <td>
             <div class="table-actions">
-              <button class="btn btn-success" onclick="editCategory('${category.id}', ${JSON.stringify(category.name).replace(/"/g, '&quot;')})">Editar</button>
+              <button class="btn btn-success" onclick="editCategory('${category.id}')">Editar</button>
               <button class="btn btn-danger" onclick="deleteCategory('${category.id}')">Excluir</button>
             </div>
           </td>
         </tr>
-      `).join("");
+      `}).join("");
     }
 
     function filterCategories() {
@@ -3811,13 +3937,24 @@ Camisa Real Madrid 24/25"></textarea>
       clearMessage("category-message");
 
       const name = document.getElementById("category-name").value.trim();
+      const sizeProfile = document.getElementById("category-size-profile")?.value || "";
+      const sizeOptions = parseSizeOptions(document.getElementById("category-size-options")?.value || "");
 
       if (!name) {
         showMessage("category-message", "Digite o nome da categoria.", "error");
         return;
       }
 
-      const payload = { name };
+      if (sizeProfile && !sizeOptions.length) {
+        showMessage("category-message", "Informe pelo menos um tamanho para essa grade.", "error");
+        return;
+      }
+
+      const payload = {
+        name,
+        size_profile: sizeProfile || null,
+        size_options: sizeOptions.length ? formatSizeOptions(sizeOptions) : null
+      };
       let response;
 
       if (editingCategoryId) {
@@ -3833,11 +3970,28 @@ Camisa Real Madrid 24/25"></textarea>
           .select();
       }
 
+      if (response.error && shouldRetryWithoutMetaColumns(response.error)) {
+        const fallbackPayload = { name };
+        response = editingCategoryId
+          ? await supabaseClient
+            .from("categories")
+            .update(fallbackPayload)
+            .eq("id", editingCategoryId)
+            .select()
+          : await supabaseClient
+            .from("categories")
+            .insert([fallbackPayload])
+            .select();
+      }
+
       if (response.error) {
         console.error("Erro ao salvar categoria:", response.error);
         showMessage("category-message", `Erro ao salvar categoria: ${response.error.message}`, "error");
         return;
       }
+
+      const savedCategoryId = editingCategoryId || response.data?.[0]?.id;
+      persistCategorySizeConfig(savedCategoryId, sizeProfile, sizeOptions);
 
       showMessage(
         "category-message",
@@ -3851,9 +4005,13 @@ Camisa Real Madrid 24/25"></textarea>
       await loadProducts();
     }
 
-    function editCategory(categoryId, categoryName) {
+    function editCategory(categoryId) {
+      const category = allCategories.find(item => String(item.id) === String(categoryId));
+      const config = getCategorySizeConfig(category);
       editingCategoryId = categoryId;
-      document.getElementById("category-name").value = categoryName || "";
+      document.getElementById("category-name").value = category?.name || "";
+      document.getElementById("category-size-profile").value = config?.profile || "";
+      document.getElementById("category-size-options").value = config?.sizes?.length ? formatSizeOptions(config.sizes) : "";
       document.getElementById("category-form-title").textContent = "Editar Categoria";
       document.getElementById("save-category-btn").textContent = "Atualizar categoria";
       document.getElementById("cancel-category-edit-btn").classList.remove("hidden");
@@ -3898,6 +4056,9 @@ Camisa Real Madrid 24/25"></textarea>
       }
 
       showMessage("category-list-message", "Categoria excluída com sucesso.", "success");
+
+      delete categorySizeOptionsCache[String(categoryId)];
+      persistCategorySizeOptionsCache();
 
       if (editingCategoryId && String(editingCategoryId) === String(categoryId)) {
         resetCategoryForm();
@@ -8564,6 +8725,7 @@ async function saveGestaoSale() {
 
       loadProductMetaCache();
       loadProductPriorityCache();
+      loadCategorySizeOptionsCache();
       loadProductVariationsCache();
       loadProductTypeOptions();
       document.getElementById("product-name")?.addEventListener("input", syncSlugPreview);
@@ -8588,6 +8750,12 @@ async function saveGestaoSale() {
         if (event.key === "Enter") {
           event.preventDefault();
           addCustomProductKind();
+        }
+      });
+      document.getElementById("category-size-options")?.addEventListener("input", () => {
+        const profile = document.getElementById("category-size-profile");
+        if (profile && parseSizeOptions(document.getElementById("category-size-options").value).length && !profile.value) {
+          profile.value = "custom";
         }
       });
       document.querySelectorAll(".step-chip").forEach(button => {
