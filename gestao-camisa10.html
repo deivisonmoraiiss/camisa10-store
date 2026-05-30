@@ -1561,7 +1561,7 @@
                   <label for="product-size-profile">Grade / variação</label>
                   <select id="product-size-profile">
                     <option value="adulto">Adulto (P, M, G, EG)</option>
-                    <option value="infantil">Infantil (2, 4, 6, 8, 10, 12)</option>
+                    <option value="infantil">Infantil (2, 4, 6, 8, 10, 12, 14)</option>
                     <option value="sandalia">Sandália (25 a 43)</option>
                     <option value="unico">Tamanho único / sem grade</option>
                     <option value="custom">Personalizado</option>
@@ -1780,7 +1780,7 @@
                       <label for="batch-create-size-profile">Grade padrão</label>
                       <select id="batch-create-size-profile" onchange="handleBatchCreateSizeProfileChange(this.value)">
                         <option value="adulto">Adulto (P, M, G, EG)</option>
-                        <option value="infantil">Infantil (2, 4, 6, 8, 10, 12)</option>
+                        <option value="infantil">Infantil (2, 4, 6, 8, 10, 12, 14)</option>
                         <option value="sandalia">Sandália (25 a 43)</option>
                         <option value="unico">Tamanho único / sem grade</option>
                       </select>
@@ -1916,7 +1916,7 @@ Camisa Real Madrid 24/25"></textarea>
               <select id="category-size-profile" onchange="syncCategorySizePreset()">
                 <option value="">Sem grade padrao</option>
                 <option value="adulto">Adulto (P, M, G, GG, EG)</option>
-                <option value="infantil">Infantil (2, 4, 6, 8, 10, 12)</option>
+                <option value="infantil">Infantil (2, 4, 6, 8, 10, 12, 14)</option>
                 <option value="sandalia">Sandalia (25 a 43)</option>
                 <option value="unico">Tamanho unico</option>
                 <option value="custom">Personalizado</option>
@@ -3336,7 +3336,7 @@ Camisa Real Madrid 24/25"></textarea>
 
     function getSizeOptionsByProfile(profile) {
       const normalized = String(profile || "adulto").toLowerCase();
-      if (normalized === "infantil") return ["2", "4", "6", "8", "10", "12"];
+      if (normalized === "infantil") return ["2", "4", "6", "8", "10", "12", "14"];
       if (normalized === "sandalia") return ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43"];
       if (normalized === "unico") return ["Único"];
       if (normalized === "custom") return [];
