@@ -1561,7 +1561,7 @@
                   <label for="product-size-profile">Grade / variação</label>
                   <select id="product-size-profile">
                     <option value="adulto">Adulto (P, M, G, EG)</option>
-                    <option value="infantil">Infantil (2, 4, 6, 8)</option>
+                    <option value="infantil">Infantil (2, 4, 6, 8, 10, 12)</option>
                     <option value="sandalia">Sandália (25 a 43)</option>
                     <option value="unico">Tamanho único / sem grade</option>
                     <option value="custom">Personalizado</option>
@@ -1780,7 +1780,7 @@
                       <label for="batch-create-size-profile">Grade padrão</label>
                       <select id="batch-create-size-profile" onchange="handleBatchCreateSizeProfileChange(this.value)">
                         <option value="adulto">Adulto (P, M, G, EG)</option>
-                        <option value="infantil">Infantil (2, 4, 6, 8)</option>
+                        <option value="infantil">Infantil (2, 4, 6, 8, 10, 12)</option>
                         <option value="sandalia">Sandália (25 a 43)</option>
                         <option value="unico">Tamanho único / sem grade</option>
                       </select>
@@ -1916,7 +1916,7 @@ Camisa Real Madrid 24/25"></textarea>
               <select id="category-size-profile" onchange="syncCategorySizePreset()">
                 <option value="">Sem grade padrao</option>
                 <option value="adulto">Adulto (P, M, G, GG, EG)</option>
-                <option value="infantil">Infantil (2, 4, 6, 8)</option>
+                <option value="infantil">Infantil (2, 4, 6, 8, 10, 12)</option>
                 <option value="sandalia">Sandalia (25 a 43)</option>
                 <option value="unico">Tamanho unico</option>
                 <option value="custom">Personalizado</option>
@@ -2748,6 +2748,35 @@ Camisa Real Madrid 24/25"></textarea>
       el.className = "message";
     }
 
+    function getCurrentScrollTop() {
+      return window.scrollY || document.documentElement.scrollTop || 0;
+    }
+
+    function restoreScrollPosition(scrollTop, options = {}) {
+      requestAnimationFrame(() => {
+        const productId = options.productId ? String(options.productId) : "";
+        if (productId) {
+          const card = document.querySelector(`[data-product-card="${CSS.escape(productId)}"]`);
+          const details = card?.querySelector(".product-admin-details");
+          if (details) details.open = true;
+          card?.classList.add("is-open");
+        }
+        window.scrollTo({ top: scrollTop, behavior: "auto" });
+      });
+    }
+
+    async function loadProductsKeepingScroll(productId = null) {
+      const scrollTop = getCurrentScrollTop();
+      await loadProducts();
+      restoreScrollPosition(scrollTop, { productId });
+    }
+
+    function renderGestaoKeepingScroll() {
+      const scrollTop = getCurrentScrollTop();
+      renderGestao();
+      restoreScrollPosition(scrollTop);
+    }
+
     function formatPrice(value) {
       const number = Number(value || 0);
       return number.toLocaleString("pt-BR", {
@@ -3307,7 +3336,7 @@ Camisa Real Madrid 24/25"></textarea>
 
     function getSizeOptionsByProfile(profile) {
       const normalized = String(profile || "adulto").toLowerCase();
-      if (normalized === "infantil") return ["2", "4", "6", "8"];
+      if (normalized === "infantil") return ["2", "4", "6", "8", "10", "12"];
       if (normalized === "sandalia") return ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43"];
       if (normalized === "unico") return ["Único"];
       if (normalized === "custom") return [];
@@ -4002,7 +4031,7 @@ Camisa Real Madrid 24/25"></textarea>
       resetCategoryForm();
       await loadCategories();
       await loadCategoriesList();
-      await loadProducts();
+      await loadProductsKeepingScroll();
     }
 
     function editCategory(categoryId) {
@@ -4066,7 +4095,7 @@ Camisa Real Madrid 24/25"></textarea>
 
       await loadCategories();
       await loadCategoriesList();
-      await loadProducts();
+      await loadProductsKeepingScroll();
     }
 
     
@@ -4562,7 +4591,7 @@ async function uploadMultipleProductImages(productId) {
 
       document.getElementById("batch-price-value").value = "";
       showMessage("list-message", `${targetProducts.length} produto(s) tiveram o preço atualizado com sucesso.`, "success");
-      await loadProducts();
+      await loadProductsKeepingScroll();
     }
 
     async function applyBatchDescription() {
@@ -4609,7 +4638,7 @@ async function uploadMultipleProductImages(productId) {
 
       document.getElementById("batch-description-value").value = "";
       showMessage("list-message", `${targetProducts.length} produto(s) tiveram a descrição atualizada com sucesso.`, "success");
-      await loadProducts();
+      await loadProductsKeepingScroll();
     }
 
 
@@ -4653,7 +4682,7 @@ async function uploadMultipleProductImages(productId) {
 
       document.getElementById("batch-sale-type-value").value = "";
       showMessage("list-message", `${targetProducts.length} produto(s) tiveram o tipo de venda atualizado com sucesso.`, "success");
-      await loadProducts();
+      await loadProductsKeepingScroll();
     }
 
     async function loadProducts() {
@@ -4739,7 +4768,7 @@ async function uploadMultipleProductImages(productId) {
               `;
             }).join("")}
           </div>
-          <button class="btn btn-primary" type="button" onclick="saveQuickStock('${product.id}')">Salvar estoque</button>
+          <button class="btn btn-primary" type="button" data-stock-save-product-id="${escapeHtml(productId)}" onclick="saveQuickStock('${product.id}')">Salvar estoque</button>
         </div>
       `;
     }
@@ -4750,6 +4779,12 @@ async function uploadMultipleProductImages(productId) {
       if (!product) {
         showMessage("list-message", "Produto nao encontrado para atualizar estoque.", "error");
         return;
+      }
+      const escapedProductId = CSS.escape(String(productId));
+      const saveButton = document.querySelector(`[data-stock-save-product-id="${escapedProductId}"]`);
+      if (saveButton) {
+        saveButton.disabled = true;
+        saveButton.textContent = "Salvando...";
       }
 
       const inputs = [...document.querySelectorAll("[data-stock-product-id]")]
@@ -4764,12 +4799,20 @@ async function uploadMultipleProductImages(productId) {
       });
 
       if (!rows.length || rows.some(item => !item.size || item.stock_quantity === null)) {
+        if (saveButton) {
+          saveButton.disabled = false;
+          saveButton.textContent = "Salvar estoque";
+        }
         showMessage("list-message", "Digite apenas quantidades inteiras a partir de zero.", "error");
         return;
       }
 
       const result = await saveProductSizes(productId, rows);
       if (!result.success) {
+        if (saveButton) {
+          saveButton.disabled = false;
+          saveButton.textContent = "Salvar estoque";
+        }
         showMessage("list-message", `Erro ao salvar estoque: ${result.message}`, "error");
         return;
       }
@@ -4782,7 +4825,7 @@ async function uploadMultipleProductImages(productId) {
         "success"
       );
 
-      await loadProducts();
+      await loadProductsKeepingScroll(productId);
     }
 
 
@@ -4861,7 +4904,7 @@ async function uploadMultipleProductImages(productId) {
         const isSelected = selectedProductIds.has(String(product.id));
 
         return `
-          <article class="product-admin-card ${isSelected ? "selected" : ""}" data-product-card>
+          <article class="product-admin-card ${isSelected ? "selected" : ""}" data-product-card="${escapeHtml(product.id)}">
             <div class="product-admin-image-wrap">
               <div class="product-admin-select">
                 <input
@@ -5043,7 +5086,7 @@ async function uploadMultipleProductImages(productId) {
       }
 
       showMessage("list-message", normalizedState ? "Produto marcado em Mais procuradas." : "Produto removido de Mais procuradas.", "success");
-      await loadProducts();
+      await loadProductsKeepingScroll(productId);
     }
 
     async function saveQuickProntaPriority(productId) {
@@ -5068,7 +5111,7 @@ async function uploadMultipleProductImages(productId) {
       if (response.error && shouldRetryWithoutMetaColumns(response.error)) {
         persistStoredProntaPriority(productId, numericValue ?? "");
         showMessage("list-message", "Ordem da pronta entrega salva neste painel. Se quiser refletir no site, falta a coluna online no banco.", "success");
-        await loadProducts();
+        await loadProductsKeepingScroll(productId);
         return;
       }
 
@@ -5080,7 +5123,7 @@ async function uploadMultipleProductImages(productId) {
 
       persistStoredProntaPriority(productId, numericValue ?? "");
       showMessage("list-message", "Ordem da pronta entrega atualizada com sucesso.", "success");
-      await loadProducts();
+      await loadProductsKeepingScroll(productId);
     }
 
     async function saveQuickEncomendaPriority(productId) {
@@ -5107,7 +5150,7 @@ async function uploadMultipleProductImages(productId) {
       }
 
       showMessage("list-message", "Ordem de sob encomenda atualizada com sucesso.", "success");
-      await loadProducts();
+      await loadProductsKeepingScroll(productId);
     }
 
     async function moveProntaEntregaPriority(productId, direction) {
@@ -5144,7 +5187,7 @@ async function uploadMultipleProductImages(productId) {
         persistStoredProntaPriority(currentProduct.id, targetPriority);
         persistStoredProntaPriority(targetProduct.id, currentPriority);
         showMessage("list-message", "Ordem visual da pronta entrega atualizada neste painel.", "success");
-        await loadProducts();
+        await loadProductsKeepingScroll(productId);
         return;
       }
 
@@ -5157,7 +5200,7 @@ async function uploadMultipleProductImages(productId) {
       persistStoredProntaPriority(currentProduct.id, targetPriority);
       persistStoredProntaPriority(targetProduct.id, currentPriority);
       showMessage("list-message", "Ordem visual da pronta entrega atualizada com sucesso.", "success");
-      await loadProducts();
+      await loadProductsKeepingScroll(productId);
     }
 
     async function moveSobEncomendaPriority(productId, direction) {
@@ -5193,7 +5236,7 @@ async function uploadMultipleProductImages(productId) {
       }
 
       showMessage("list-message", "Ordem visual de sob encomenda atualizada com sucesso.", "success");
-      await loadProducts();
+      await loadProductsKeepingScroll(productId);
     }
 
     function filterProducts() {
@@ -5508,7 +5551,7 @@ async function uploadMultipleProductImages(productId) {
         "success"
       );
 
-      await loadProducts();
+      await loadProductsKeepingScroll(productId);
     }
 
     async function duplicateProduct(productId) {
@@ -5607,7 +5650,7 @@ async function uploadMultipleProductImages(productId) {
         persistProductVariationsCache();
       }
       showMessage("list-message", "Produto duplicado com sucesso.", "success");
-      await loadProducts();
+      await loadProductsKeepingScroll(inserted.id);
     }
 
 
@@ -5649,7 +5692,7 @@ async function uploadMultipleProductImages(productId) {
       delete productPriorityCache[String(productId)];
       persistProductPriorityCache();
       showMessage("list-message", "Produto excluído com sucesso.", "success");
-      await loadProducts();
+      await loadProductsKeepingScroll();
 
       if (editingProductId && String(editingProductId) === String(productId)) {
         resetForm();
@@ -6881,7 +6924,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       localStorage.setItem(GESTAO_BUSINESS_COSTS_KEY, JSON.stringify(gestaoBusinessCosts));
       try {
         await persistGestaoState();
-        renderGestao();
+        renderGestaoKeepingScroll();
         showMessage('gestao-business-cost-message', 'Custo excluído com sucesso.', 'success');
       } catch (error) {
         console.error('Erro ao excluir custo do negócio:', error);
@@ -6919,7 +6962,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
       try {
         await persistGestaoState();
         resetGestaoBusinessCostForm();
-        renderGestao();
+        renderGestaoKeepingScroll();
         showMessage('gestao-business-cost-message', `${payload.type === 'investimento' ? 'Investimento' : 'Despesa'} salva com sucesso.`, 'success');
       } catch (error) {
         console.error('Erro ao salvar custo do negócio:', error);
@@ -8323,7 +8366,7 @@ function getGestaoSaleExtraCosts() {
       delete gestaoSalesMeta[saleId];
       try { await persistGestaoState(); } catch (error) { console.error('Erro ao excluir venda:', error); gestaoSyncMode = 'local'; updateGestaoSyncUi(); }
       if (String(editingGestaoSaleId||'') === String(saleId)) clearGestaoPendingSale();
-      renderGestao();
+      renderGestaoKeepingScroll();
       showMessage('gestao-sale-message', 'Venda excluída com sucesso.', 'success');
     }
 
@@ -8465,7 +8508,7 @@ function updateGestaoSalePreview() {
         gestaoSyncMode = 'local';
         updateGestaoSyncUi();
       }
-      renderGestao();
+      renderGestaoKeepingScroll();
       showMessage('gestao-entry-message', 'Pedido excluído com sucesso.', 'success');
     }
 function renderGestaoSuppliers() {
@@ -8553,7 +8596,7 @@ function renderGestaoSuppliers() {
       }
 
       cancelGestaoSupplierEdit();
-      renderGestao();
+      renderGestaoKeepingScroll();
       showMessage('gestao-supplier-message', wasEditing ? 'Fornecedor atualizado com sucesso.' : 'Fornecedor salvo com sucesso.', 'success');
     }
 
@@ -8569,7 +8612,7 @@ async function deleteGestaoSupplier(id) {
         gestaoSyncMode = 'local';
         updateGestaoSyncUi();
       }
-      renderGestao();
+      renderGestaoKeepingScroll();
     }
 
     async function saveGestaoEntry() {
@@ -8616,7 +8659,7 @@ async function deleteGestaoSupplier(id) {
         updateGestaoSyncUi();
       }
 
-      renderGestao();
+      renderGestaoKeepingScroll();
       const wasEditing = !!editingGestaoOrderId;
       cancelGestaoOrderEdit();
       showMessage('gestao-entry-message', wasEditing ? 'Pedido atualizado com sucesso.' : 'Pedido salvo com sucesso.', 'success');
@@ -8678,7 +8721,7 @@ async function saveGestaoSale() {
         updateGestaoSyncUi();
       }
 
-      renderGestao();
+      renderGestaoKeepingScroll();
       clearGestaoPendingSale();
       showMessage('gestao-sale-message', editingGestaoSaleId ? 'Venda atualizada com sucesso.' : 'Venda registrada com sucesso.', 'success');
     }
