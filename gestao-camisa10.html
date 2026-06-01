@@ -1348,6 +1348,7 @@
                 <option value="visible">Visíveis no site</option>
                 <option value="hidden">Ocultos do site</option>
               </select>
+              <button class="btn btn-success" type="button" onclick="exportProductsCsv()">Exportar planilha</button>
               <button class="btn btn-secondary" onclick="loadProducts()">Atualizar</button>
             </div>
 
@@ -3484,7 +3485,8 @@ Camisa Real Madrid 24/25"></textarea>
       let response = await supabaseClient
         .from("products")
         .select(baseSelect)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .range(0, 9999);
 
       if (response.error && shouldRetryWithoutMetaColumns(response.error)) {
         response = await supabaseClient
@@ -3514,7 +3516,8 @@ Camisa Real Madrid 24/25"></textarea>
             is_available
           )
         `)
-          .order("created_at", { ascending: false });
+          .order("created_at", { ascending: false })
+          .range(0, 9999);
       }
 
       return response;
@@ -4710,6 +4713,186 @@ async function uploadMultipleProductImages(productId) {
       filteredProducts = getFilteredProducts();
       renderProducts(filteredProducts);
       updateBatchPreview();
+    }
+
+    function sanitizeCsvCell(value) {
+      const text = value === null || value === undefined ? "" : String(value);
+      const safeText = /^[=+\-@]/.test(text) ? `'${text}` : text;
+      return `"${safeText.replace(/"/g, '""')}"`;
+    }
+
+    function buildCsv(rows, delimiter = ";") {
+      return rows.map(row => row.map(cell => sanitizeCsvCell(cell)).join(delimiter)).join("\r\n");
+    }
+
+    function downloadTextFile(filename, content, mimeType = "text/csv;charset=utf-8") {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    async function getProductImagesForExport(products = []) {
+      const map = new Map();
+      products.forEach(product => {
+        map.set(String(product.id), [product.image_url].filter(Boolean));
+      });
+
+      const ids = products.map(product => product.id).filter(Boolean);
+      if (!ids.length) return map;
+
+      const { data, error } = await supabaseClient
+        .from("product_images")
+        .select("product_id, image_url, sort_order")
+        .in("product_id", ids)
+        .order("sort_order", { ascending: true });
+
+      if (error) {
+        console.warn("NÃ£o foi possÃ­vel carregar imagens adicionais para exportaÃ§Ã£o:", error);
+        return map;
+      }
+
+      (data || []).forEach(item => {
+        const key = String(item.product_id);
+        if (!map.has(key)) map.set(key, []);
+        if (item.image_url && !map.get(key).includes(item.image_url)) {
+          map.get(key).push(item.image_url);
+        }
+      });
+
+      return map;
+    }
+
+    function buildProductExportRows(products, imagesByProduct) {
+      const headers = [
+        "ID",
+        "Nome",
+        "Slug",
+        "Categoria",
+        "Tipo",
+        "Tipo de venda",
+        "VariaÃ§Ã£o",
+        "Tamanho",
+        "Estoque",
+        "DisponÃ­vel",
+        "PreÃ§o",
+        "PreÃ§o antigo",
+        "VisÃ­vel no site",
+        "Destaque",
+        "Selo",
+        "DescriÃ§Ã£o",
+        "Imagem principal",
+        "Imagens adicionais",
+        "SKU sugerido"
+      ];
+
+      const rows = [headers];
+
+      products.forEach(product => {
+        const category = product.categories?.name || "";
+        const kind = getDisplayProductKind(product);
+        const saleType = product.sale_type === "sob_encomenda" ? "Sob encomenda" : "Pronta entrega";
+        const productImages = imagesByProduct.get(String(product.id)) || [product.image_url].filter(Boolean);
+        const mainImage = productImages[0] || "";
+        const extraImages = productImages.slice(1).join(" | ");
+        const variations = getStoredProductVariations(product.id);
+
+        const pushRow = ({ variation = "", size = "", stock = 0, available = false, price = product.price, oldPrice = product.old_price, image = mainImage, extra = extraImages }) => {
+          const skuParts = [product.slug || generateSlug(product.name || ""), variation, size].filter(Boolean);
+          rows.push([
+            product.id || "",
+            product.name || "",
+            product.slug || "",
+            category,
+            kind,
+            saleType,
+            variation,
+            size,
+            Number(stock || 0),
+            available ? "Sim" : "NÃ£o",
+            price ?? "",
+            oldPrice ?? "",
+            product.is_visible !== false ? "Sim" : "NÃ£o",
+            product.is_featured ? "Sim" : "NÃ£o",
+            product.badge_type || "",
+            product.short_description || "",
+            image || "",
+            extra || "",
+            skuParts.join("-").toUpperCase()
+          ]);
+        };
+
+        if (variations.length) {
+          variations.forEach(variation => {
+            const variationImages = [
+              variation.image_url || mainImage,
+              ...(Array.isArray(variation.gallery_urls) ? variation.gallery_urls : []),
+              ...productImages.slice(1)
+            ].filter(Boolean);
+            const sizes = Array.isArray(variation.sizes) && variation.sizes.length ? variation.sizes : [""];
+            sizes.forEach(size => {
+              pushRow({
+                variation: variation.name || "",
+                size,
+                stock: "",
+                available: true,
+                price: variation.price !== "" && variation.price !== null && variation.price !== undefined ? variation.price : product.price,
+                oldPrice: variation.oldPrice !== "" && variation.oldPrice !== null && variation.oldPrice !== undefined ? variation.oldPrice : product.old_price,
+                image: variationImages[0] || "",
+                extra: variationImages.slice(1).join(" | ")
+              });
+            });
+          });
+          return;
+        }
+
+        const stockRows = getProductStockRows(product);
+        if (!stockRows.length) {
+          pushRow({ size: "", stock: "", available: product.is_visible !== false });
+          return;
+        }
+
+        stockRows.forEach(stockRow => {
+          const quantity = getSizeStockQuantity(stockRow);
+          pushRow({
+            size: stockRow.size || "",
+            stock: quantity,
+            available: quantity > 0 || stockRow.is_available === true
+          });
+        });
+      });
+
+      return rows;
+    }
+
+    async function exportProductsCsv() {
+      clearMessage("list-message");
+
+      if (!allProducts.length) {
+        await loadProducts();
+      }
+
+      if (!allProducts.length) {
+        showMessage("list-message", "Nenhum produto encontrado para exportar.", "error");
+        return;
+      }
+
+      try {
+        const imagesByProduct = await getProductImagesForExport(allProducts);
+        const rows = buildProductExportRows(allProducts, imagesByProduct);
+        const csv = "\uFEFF" + buildCsv(rows);
+        const dateStamp = new Date().toISOString().slice(0, 10);
+        downloadTextFile(`produtos-camisa10-nuvemshop-${dateStamp}.csv`, csv);
+        showMessage("list-message", `${allProducts.length} produto(s) exportado(s) para CSV. Revise a planilha antes de importar na Nuvemshop.`, "success");
+      } catch (error) {
+        console.error("Erro ao exportar produtos:", error);
+        showMessage("list-message", `Erro ao exportar produtos: ${error?.message || "sem detalhe"}`, "error");
+      }
     }
 
     function getProductStockRows(product) {
