@@ -939,6 +939,35 @@
   }
 
 
+
+  .product-template-bar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0 16px}
+  .template-btn{padding:13px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:#111;color:#f5f5f5;text-align:left;font-weight:900;cursor:pointer;transition:.18s ease}
+  .template-btn span{display:block;color:var(--muted);font-size:.76rem;font-weight:700;margin-top:4px;line-height:1.35}
+  .template-btn:hover{border-color:rgba(212,175,55,.38);transform:translateY(-1px)}
+  .product-live-panel{display:grid;grid-template-columns:minmax(210px,.8fr) minmax(0,1.2fr);gap:14px;margin:0 0 16px;align-items:stretch}
+  .product-live-card{border-radius:18px;border:1px solid rgba(255,255,255,.08);background:#101010;overflow:hidden;display:grid;grid-template-rows:180px auto;min-height:330px}
+  .product-live-media{background:#070707;display:grid;place-items:center;position:relative;overflow:hidden}
+  .product-live-media img{width:100%;height:100%;object-fit:cover;display:block}
+  .product-live-badge{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#111;font-size:.72rem;font-weight:950;padding:7px 9px;border-radius:999px}
+  .product-live-info{padding:14px;display:grid;gap:8px;align-content:start}
+  .product-live-kind{color:var(--gold-2);font-size:.76rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+  .product-live-name{color:#fff;font-size:1rem;font-weight:950;line-height:1.25;min-height:40px}
+  .product-live-price{color:#fff;font-size:1.16rem;font-weight:950}
+  .product-live-meta{display:flex;gap:8px;flex-wrap:wrap}
+  .product-live-meta span{border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:6px 8px;color:#d8d8d8;font-size:.74rem;font-weight:800;background:#151515}
+  .product-smart-panel{border:1px solid rgba(255,255,255,.08);background:#101010;border-radius:18px;padding:14px;display:grid;gap:12px;align-content:start}
+  .product-smart-title{display:flex;justify-content:space-between;gap:12px;align-items:center;color:#fff;font-weight:950}
+  .product-smart-score{color:#111;background:linear-gradient(135deg,var(--gold),var(--gold-2));border-radius:999px;padding:7px 10px;font-size:.76rem;font-weight:950}
+  .smart-alert-list{display:grid;gap:8px}
+  .smart-alert{border:1px solid rgba(255,255,255,.08);background:#151515;border-radius:12px;padding:10px 11px;color:#e8e8e8;font-size:.84rem;line-height:1.4}
+  .smart-alert.ok{border-color:rgba(89,216,154,.28);color:#c7f5dc;background:rgba(89,216,154,.08)}
+  .storefront-controls{border:1px solid rgba(255,255,255,.08);background:#101010;border-radius:16px;padding:14px;display:grid;gap:12px;margin-bottom:14px}
+  .storefront-controls-title{display:flex;justify-content:space-between;gap:12px;align-items:center;color:#fff;font-weight:950}
+  .storefront-checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .storefront-check{border:1px solid rgba(255,255,255,.08);background:#151515;border-radius:13px;padding:12px;display:flex;gap:10px;align-items:flex-start;color:#f1f1f1;font-weight:850;cursor:pointer}
+  .storefront-check input{margin-top:3px;accent-color:#d4af37}
+  .storefront-check small{display:block;color:var(--muted);font-size:.76rem;font-weight:650;margin-top:3px;line-height:1.35}
+  @media (max-width:900px){.product-template-bar,.product-live-panel,.storefront-checks{grid-template-columns:1fr}.product-live-card{grid-template-rows:220px auto}}
   /* limpeza visual */
   .subtitle,
   .selector-copy,
@@ -947,7 +976,6 @@
   .loja-page-head p,
   .collapsible-intro,
   .form-collapsed-hint,
-  .product-flow-strip,
   .helper-box,
   .type-manager-help,
   .size-profile-note,
@@ -1319,20 +1347,20 @@
             <div class="product-type-bar" id="product-kind-filter-bar">
               <button class="type-filter-btn active" type="button" data-kind-filter="" onclick="setProductKindFilter('')">Todos</button>
               <button class="type-filter-btn" type="button" data-kind-filter="Camisa" onclick="setProductKindFilter('Camisa')">Camisas</button>
-              <button class="type-filter-btn" type="button" data-kind-filter="Sandália" onclick="setProductKindFilter('Sandália')">Sandálias</button>
-              <button class="type-filter-btn" type="button" data-kind-filter="Kit Infantil" onclick="setProductKindFilter('Kit Infantil')">Kit infantil</button>
-              <button class="type-filter-btn" type="button" data-kind-filter="Copo" onclick="setProductKindFilter('Copo')">Copos</button>
+              <button class="type-filter-btn" type="button" data-kind-filter="Streetwear" onclick="setProductKindFilter('Streetwear')">Streetwear</button>
+              <button class="type-filter-btn" type="button" data-kind-filter="Academia" onclick="setProductKindFilter('Academia')">Academia</button>
+              <button class="type-filter-btn" type="button" data-kind-filter="Acessorios" onclick="setProductKindFilter('Acessorios')">Acessorios</button>
               <button class="type-filter-btn" type="button" data-kind-filter="Outros" onclick="setProductKindFilter('Outros')">Outros</button>
             </div>
 
             <div class="products-toolbar products-toolbar-advanced">
               <input type="text" id="search-input" placeholder="Buscar por nome do produto..." oninput="filterProducts()" />
               <select id="product-filter-kind" onchange="filterProducts()">
-                <option value="">Todos os tipos</option>
-                <option value="Camisa">Camisas</option>
-                <option value="Sandália">Sandálias</option>
-                <option value="Kit Infantil">Kit infantil</option>
-                <option value="Copo">Copos</option>
+                <option value="">Todos os segmentos</option>
+                <option value="Camisa">Camisas de time</option>
+                <option value="Streetwear">Streetwear</option>
+                <option value="Academia">Academia</option>
+                <option value="Acessorios">Acessorios</option>
                 <option value="Outros">Outros</option>
               </select>
               <select id="product-filter-category" onchange="filterProducts()">
@@ -1500,18 +1528,24 @@
             <div class="collapsible-body">
 
             <div class="stepper-nav" id="product-stepper-nav">
-              <button type="button" class="step-chip active" data-step-target="1">1. Básico</button>
-              <button type="button" class="step-chip" data-step-target="2">2. Preço e venda</button>
-              <button type="button" class="step-chip" data-step-target="3">3. Imagens</button>
-              <button type="button" class="step-chip" data-step-target="4">4. Tamanhos e salvar</button>
+              <button type="button" class="step-chip active" data-step-target="1">1. Produto</button>
+              <button type="button" class="step-chip" data-step-target="2">2. Preco e vitrine</button>
+              <button type="button" class="step-chip" data-step-target="3">3. Fotos</button>
+              <button type="button" class="step-chip" data-step-target="4">4. Estoque e salvar</button>
             </div>
 
             <div class="product-flow-strip">
-              <div class="product-flow-pill"><strong>Cadastro rápido</strong><span>Nome, categoria e tipo primeiro</span></div>
-              <div class="product-flow-pill"><strong>Menos erro</strong><span>Preço e imagens separados por etapa</span></div>
-              <div class="product-flow-pill"><strong>Mobile melhor</strong><span>Campos agrupados e mais limpos</span></div>
+              <div class="product-flow-pill"><strong>Produto</strong><span>Nome, segmento e modelo pronto</span></div>
+              <div class="product-flow-pill"><strong>Vitrine</strong><span>Preco, destaque e onde aparece</span></div>
+              <div class="product-flow-pill"><strong>Conferencia</strong><span>Preview e avisos antes de salvar</span></div>
             </div>
 
+            <div class="product-template-bar" aria-label="Modelos prontos de cadastro">
+              <button class="template-btn" type="button" onclick="applyProductTemplate('camisa')">Camisa de Time<span>Grade adulto, vitrine principal</span></button>
+              <button class="template-btn" type="button" onclick="applyProductTemplate('streetwear')">Streetwear<span>Oversized, moletom, cargo</span></button>
+              <button class="template-btn" type="button" onclick="applyProductTemplate('academia')">Academia<span>Dry fit, regata, legging</span></button>
+              <button class="template-btn" type="button" onclick="applyProductTemplate('acessorio')">Acessorio<span>Bone, copo, item unico</span></button>
+            </div>
             <div class="product-step active" data-step="1">
               <div class="grid-2-equal">
                 <div class="field">
@@ -1531,7 +1565,7 @@
                     <option value="">Carregando categorias...</option>
                   </select>
                 </div>
-                <div class="field">
+                <div class="field hidden">
                   <label for="product-sale-type">Tipo de venda</label>
                   <select id="product-sale-type">
                     <option value="pronta_entrega">Pronta entrega</option>
@@ -1542,55 +1576,48 @@
 
               <div class="product-meta-grid">
                 <div class="field">
-                  <label for="product-kind">Tipo do item</label>
-                  <input type="text" id="product-kind" placeholder="Ex: Camisa, Kit Infantil, Sandália, Copo" />
+                  <label for="product-kind">Segmento / tipo do item</label>
+                  <input type="text" id="product-kind" placeholder="Ex: Camisa de Time, Streetwear, Academia, Oversized, Dry Fit" />
                   <div class="type-suggestions" id="product-type-suggestions">
-                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Camisa')">👕 Camisa</button>
-                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Kit Infantil')">🧒 Kit Infantil</button>
-                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Sandália')">🩴 Sandália</button>
-                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Copo')">🥤 Copo</button>
+                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Camisa de Time')">Camisa de Time</button>
+                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Streetwear')">Streetwear</button>
+                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Academia')">Academia</button>
+                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Oversized')">Oversized</button>
+                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Dry Fit')">Dry Fit</button>
                   </div>
                   <div class="type-manager">
                     <div class="type-manager-row">
-                      <input type="text" id="new-product-kind" placeholder="Adicionar novo tipo rápido. Ex: Boné" />
+                      <input type="text" id="new-product-kind" placeholder="Adicionar novo tipo rapido. Ex: Regata, Moletom, Cargo" />
                       <button class="btn btn-secondary" type="button" onclick="addCustomProductKind()">Adicionar tipo</button>
                     </div>
-                    <div class="type-manager-help">Você não fica preso a uma lista fixa. Pode criar novos tipos rápidos sempre que surgir um produto novo.</div>
+                    <div class="type-manager-help">Use o segmento principal para organizar a loja e o tipo do item para subcategorias como Oversized, Regata, Moletom, Cargo, Top ou Legging.</div>
                   </div>
                 </div>
                 <div class="field">
                   <label for="product-size-profile">Grade / variação</label>
                   <select id="product-size-profile">
-                    <option value="adulto">Adulto (P, M, G, EG)</option>
+                    <option value="adulto">Camisas / adulto (P, M, G, GG, EG)</option>
+                    <option value="streetwear">Streetwear (PP, P, M, G, GG, XG, XGG)</option>
+                    <option value="fitness">Academia / fitness (PP, P, M, G, GG, XG)</option>
                     <option value="infantil">Infantil (2, 4, 6, 8, 10, 12, 14)</option>
-                    <option value="sandalia">Sandália (25 a 43)</option>
-                    <option value="unico">Tamanho único / sem grade</option>
+                    <option value="sandalia">Calcados / sandalia (25 a 43)</option>
+                    <option value="unico">Tamanho unico / sem grade</option>
                     <option value="custom">Personalizado</option>
                   </select>
-                  <div class="size-profile-note" id="product-size-profile-note">A grade muda automaticamente conforme o tipo do item.</div>
+                  <div class="size-profile-note" id="product-size-profile-note">A grade muda automaticamente conforme o segmento: Camisas, Streetwear, Academia ou Acessorios.</div>
                 </div>
               </div>
-
-              <div class="field" style="margin-top:14px;">
-                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
-                  <input type="checkbox" id="product-visible" style="width:auto; accent-color:#d4af37;" checked />
-                  <span>Produto visível no site</span>
-                </label>
-              </div>
-
-              <div class="helper-box helper-box-visible">
-                Digite o nome da camisa e o sistema já prepara o slug. Isso evita erro na hora de editar ou publicar.
-              </div>
+              <div class="helper-box helper-box-visible">Cadastre o produto pensando como uma loja grande: nome claro, segmento correto, subcategoria no tipo do item e visibilidade marcada quando ele puder aparecer no site.</div>
             </div>
 
             <div class="product-step" data-step="2">
               <div class="grid-2-equal">
                 <div class="field">
-                  <label for="product-price">Preço atual</label>
+                  <label for="product-price">Preco atual</label>
                   <input type="number" id="product-price" step="0.01" placeholder="Ex: 129.90" />
                 </div>
                 <div class="field">
-                  <label for="product-old-price">Preço antigo (opcional)</label>
+                  <label for="product-old-price">Preco antigo (opcional)</label>
                   <input type="number" id="product-old-price" step="0.01" placeholder="Ex: 179.90" />
                 </div>
               </div>
@@ -1600,34 +1627,51 @@
                   <label for="product-badge-type">Selo do produto</label>
                   <select id="product-badge-type">
                     <option value="">Sem selo</option>
-                    <option value="destaque">⭐ Destaque</option>
-                    <option value="mais-vendida">🔥 Mais vendida</option>
-                    <option value="novo">🚀 Novo</option>
+                    <option value="destaque">Destaque</option>
+                    <option value="mais-vendida">Mais vendida</option>
+                    <option value="novo">Novo</option>
                   </select>
                 </div>
                 <div class="field">
-                  <label style="display:flex; align-items:center; gap:10px; cursor:pointer; min-height:52px; margin-top:28px;">
-                    <input type="checkbox" id="product-featured" style="width:auto; accent-color:#d4af37;" />
-                    <span>Mostrar na seção Mais procuradas</span>
+                  <label for="product-sale-type-visual">Status comercial</label>
+                  <select id="product-sale-type-visual" onchange="syncSaleTypeVisual(this.value)">
+                    <option value="pronta_entrega">Pronta entrega</option>
+                    <option value="sob_encomenda">Pedido especial</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="storefront-controls">
+                <div class="storefront-controls-title">
+                  <span>Organizacao da vitrine</span>
+                  <small class="small-muted">Marque onde esse produto deve aparecer</small>
+                </div>
+                <div class="storefront-checks">
+                  <label class="storefront-check">
+                    <input type="checkbox" id="product-visible" checked onchange="updateDraftSummary()" />
+                    <span>Produto ativo no site<small>Desmarque para deixar como rascunho oculto.</small></span>
+                  </label>
+                  <label class="storefront-check">
+                    <input type="checkbox" id="product-featured" onchange="updateDraftSummary()" />
+                    <span>Mais procuradas<small>Aparece no bloco de destaque da home.</small></span>
                   </label>
                 </div>
               </div>
 
-              <div class="field">
-                <label for="priority_encomenda">Ordem no “Sob encomenda”</label>
-                <input type="number" id="priority_encomenda" min="1" step="1" placeholder="Ex: 1, 2, 3..." />
-                <div class="small-muted">Use só para escolher quais camisas sob encomenda aparecem primeiro naquela parte final da Home. Número menor aparece antes.</div>
+              <div class="grid-2-equal">
+                <div class="field">
+                  <label for="priority_pronta_entrega">Ordem na vitrine da loja</label>
+                  <input type="number" id="priority_pronta_entrega" min="1" step="1" placeholder="Ex: 1, 2, 3..." />
+                </div>
+                <div class="field">
+                  <label for="priority_encomenda">Ordem em pedido especial</label>
+                  <input type="number" id="priority_encomenda" min="1" step="1" placeholder="Ex: 1, 2, 3..." />
+                </div>
               </div>
 
               <div class="field">
-                <label for="priority_pronta_entrega">Ordem na “Pronta entrega”</label>
-                <input type="number" id="priority_pronta_entrega" min="1" step="1" placeholder="Ex: 1, 2, 3..." />
-                <div class="small-muted">Número menor aparece antes na vitrine de pronta entrega. Deixe vazio para seguir a ordem normal.</div>
-              </div>
-
-              <div class="field">
-                <label for="product-description">Descrição</label>
-                <textarea id="product-description" placeholder="Descrição do produto"></textarea>
+                <label for="product-description">Descricao</label>
+                <textarea id="product-description" placeholder="Descricao do produto"></textarea>
               </div>
             </div>
 
@@ -1644,7 +1688,7 @@
               </div>
 
               <div class="preview-box">
-                <div class="small-muted" style="margin-bottom:8px;">Pré-visualização da imagem principal</div>
+                <div class="small-muted" style="margin-bottom:8px;">Preview da imagem principal</div>
                 <img id="main-image-preview" class="main-preview" src="https://via.placeholder.com/400x400?text=Sem+Imagem" alt="Preview principal">
               </div>
 
@@ -1654,12 +1698,8 @@
               </div>
 
               <div class="preview-box">
-                <div class="small-muted" style="margin-bottom:8px;">Pré-visualização das fotos adicionais</div>
+                <div class="small-muted" style="margin-bottom:8px;">Preview das fotos adicionais</div>
                 <div id="images-preview" class="multi-preview-grid"></div>
-              </div>
-
-              <div class="helper-box helper-box-visible">
-                O upload é automático quando você salvar o produto. Não precisa subir imagem manualmente antes.
               </div>
 
               <div id="current-gallery-box" class="preview-box hidden" style="margin-top:16px;">
@@ -1732,6 +1772,30 @@
               </div>
             </div>
 
+            <div class="product-live-panel">
+              <div class="product-live-card" aria-label="Preview do produto no site">
+                <div class="product-live-media">
+                  <img id="live-preview-image" src="https://via.placeholder.com/600x600?text=Produto" alt="Preview do produto">
+                  <span class="product-live-badge" id="live-preview-badge">Preview</span>
+                </div>
+                <div class="product-live-info">
+                  <div class="product-live-kind" id="live-preview-kind">Camisa de Time</div>
+                  <div class="product-live-name" id="live-preview-name">Nome do produto</div>
+                  <div class="product-live-price" id="live-preview-price">R$ 0,00</div>
+                  <div class="product-live-meta">
+                    <span id="live-preview-status">Ativo no site</span>
+                    <span id="live-preview-featured">Vitrine normal</span>
+                  </div>
+                </div>
+              </div>
+              <div class="product-smart-panel">
+                <div class="product-smart-title">
+                  <span>Avisos inteligentes</span>
+                  <span class="product-smart-score" id="product-smart-score">0/4 pronto</span>
+                </div>
+                <div class="smart-alert-list" id="product-smart-alerts"></div>
+              </div>
+            </div>
             <div class="step-actions">
               <button class="btn btn-secondary hidden" id="prev-step-btn" type="button" onclick="goToPreviousProductStep()">Voltar etapa</button>
               <button class="btn btn-secondary" id="next-step-btn" type="button" onclick="goToNextProductStep()">Próxima etapa</button>
@@ -2969,12 +3033,23 @@ Camisa Real Madrid 24/25"></textarea>
       const container = document.getElementById("product-type-suggestions");
       if (!container) return;
 
-      const defaultTypes = ["Camisa", "Kit Infantil", "Sandália", "Copo"];
+      const defaultTypes = ["Camisa de Time", "Streetwear", "Academia", "Oversized", "Dry Fit", "Moletom", "Regata", "Legging", "Bermuda", "Acessorios"];
       const mergedTypes = [...new Set([...defaultTypes, ...productTypeOptions.map(item => String(item || "").trim()).filter(Boolean)])];
-      const icons = { Camisa: "👕", "Kit Infantil": "🧒", "Sandália": "🩴", Copo: "🥤", "Boné": "🧢" };
+      const icons = {
+        "Camisa de Time": "Camisa",
+        Streetwear: "Street",
+        Academia: "Treino",
+        Oversized: "Over",
+        "Dry Fit": "Dry",
+        Moletom: "Moletom",
+        Regata: "Regata",
+        Legging: "Legging",
+        Bermuda: "Bermuda",
+        Acessorios: "Acess."
+      };
 
       container.innerHTML = mergedTypes.map(type => `
-        <button class="type-chip" type="button" onclick="applySuggestedProductKind('${escapeHtml(type)}')">${icons[type] || "✨"} ${escapeHtml(type)}</button>
+        <button class="type-chip" type="button" onclick="applySuggestedProductKind('${escapeHtml(type)}')">${icons[type] || "Novo"} ${escapeHtml(type)}</button>
       `).join("");
     }
 
@@ -3339,7 +3414,9 @@ Camisa Real Madrid 24/25"></textarea>
       const normalized = String(profile || "adulto").toLowerCase();
       if (normalized === "infantil") return ["2", "4", "6", "8", "10", "12", "14"];
       if (normalized === "sandalia") return ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43"];
-      if (normalized === "unico") return ["Único"];
+      if (normalized === "streetwear") return ["PP", "P", "M", "G", "GG", "XG", "XGG"];
+      if (normalized === "fitness") return ["PP", "P", "M", "G", "GG", "XG"];
+      if (normalized === "unico") return ["Unico"];
       if (normalized === "custom") return [];
       return ["P", "M", "G", "GG", "EG"];
     }
@@ -3347,10 +3424,12 @@ Camisa Real Madrid 24/25"></textarea>
     function getSizeProfileLabel(profile) {
       const normalized = String(profile || "adulto").toLowerCase();
       if (normalized === "infantil") return "Infantil";
-      if (normalized === "sandalia") return "Sandália";
-      if (normalized === "unico") return "Único / sem grade";
+      if (normalized === "sandalia") return "Calcados / sandalia";
+      if (normalized === "streetwear") return "Streetwear";
+      if (normalized === "fitness") return "Academia / fitness";
+      if (normalized === "unico") return "Unico / sem grade";
       if (normalized === "custom") return "Personalizado";
-      return "Adulto";
+      return "Camisas / adulto";
     }
 
     function renderProductSizes(profile = "adulto", selectedSizes = [], customOptions = []) {
@@ -3392,22 +3471,34 @@ Camisa Real Madrid 24/25"></textarea>
       const categoryConfig = getCategorySizeConfigById(categorySelect?.value || "");
       let suggestedProfile = profileSelect.value || "adulto";
       let customSizeOptions = [];
+      const hasCategorySizeConfig = !force && categoryConfig;
 
-      if (!force && categoryConfig) {
+      if (hasCategorySizeConfig) {
         suggestedProfile = categoryConfig.profile || "custom";
         customSizeOptions = categoryConfig.sizes || [];
       }
-
-      if (!categoryConfig && (
-        value.includes("infantil") || value.includes("kids") || value.includes("kit")
-        || categoryValue.includes("infantil")
+      const textToClassify = `${value} ${categoryValue}`;
+      if (!hasCategorySizeConfig && (
+        textToClassify.includes("infantil") || textToClassify.includes("kids") || textToClassify.includes("kit")
       )) {
         suggestedProfile = "infantil";
-      } else if (!categoryConfig && (value.includes("sand") || value.includes("chinelo") || value.includes("slide"))) {
+      } else if (!hasCategorySizeConfig && (
+        textToClassify.includes("street") || textToClassify.includes("oversized") || textToClassify.includes("over")
+        || textToClassify.includes("moletom") || textToClassify.includes("cargo") || textToClassify.includes("casual")
+        || textToClassify.includes("bermuda") || textToClassify.includes("bone") || textToClassify.includes("boné")
+      )) {
+        suggestedProfile = "streetwear";
+      } else if (!hasCategorySizeConfig && (
+        textToClassify.includes("academia") || textToClassify.includes("fitness") || textToClassify.includes("dry")
+        || textToClassify.includes("treino") || textToClassify.includes("regata") || textToClassify.includes("legging")
+        || textToClassify.includes("top") || textToClassify.includes("compress")
+      )) {
+        suggestedProfile = "fitness";
+      } else if (!hasCategorySizeConfig && (textToClassify.includes("sand") || textToClassify.includes("chinelo") || textToClassify.includes("slide"))) {
         suggestedProfile = "sandalia";
-      } else if (!categoryConfig && (value.includes("copo") || value.includes("caneca") || value.includes("garrafa"))) {
+      } else if (!hasCategorySizeConfig && (textToClassify.includes("copo") || textToClassify.includes("caneca") || textToClassify.includes("garrafa") || textToClassify.includes("acessor"))) {
         suggestedProfile = "unico";
-      } else if (!categoryConfig && value.includes("camisa")) {
+      } else if (!hasCategorySizeConfig && (textToClassify.includes("camisa") || textToClassify.includes("manto") || textToClassify.includes("time") || textToClassify.includes("torcedor"))) {
         suggestedProfile = "adulto";
       }
 
@@ -3561,6 +3652,94 @@ Camisa Real Madrid 24/25"></textarea>
     }
 
 
+    function setFieldValue(id, value) {
+      const field = document.getElementById(id);
+      if (field) field.value = value;
+    }
+
+    function applyProductTemplate(template) {
+      const presets = {
+        camisa: { kind: "Camisa de Time", profile: "adulto", saleType: "pronta_entrega", featured: true, badge: "destaque" },
+        streetwear: { kind: "Streetwear", profile: "streetwear", saleType: "pronta_entrega", featured: true, badge: "novo" },
+        academia: { kind: "Academia", profile: "fitness", saleType: "pronta_entrega", featured: true, badge: "novo" },
+        acessorio: { kind: "Acessorios", profile: "unico", saleType: "pronta_entrega", featured: false, badge: "" }
+      };
+      const preset = presets[template] || presets.camisa;
+      setFieldValue("product-kind", preset.kind);
+      setFieldValue("product-size-profile", preset.profile);
+      setFieldValue("product-sale-type", preset.saleType);
+      setFieldValue("product-sale-type-visual", preset.saleType);
+      setFieldValue("product-badge-type", preset.badge);
+      const visible = document.getElementById("product-visible");
+      if (visible) visible.checked = true;
+      const featured = document.getElementById("product-featured");
+      if (featured) featured.checked = !!preset.featured;
+      renderProductSizes(preset.profile, []);
+      syncProductTypeFromKind(true);
+      updateDraftSummary();
+    }
+
+    function syncSaleTypeVisual(value) {
+      const saleType = document.getElementById("product-sale-type");
+      if (saleType) saleType.value = value || "pronta_entrega";
+      updateDraftSummary();
+    }
+
+    function getMainPreviewSource() {
+      const preview = document.getElementById("main-image-preview")?.src || "";
+      const url = document.getElementById("product-image")?.value?.trim() || "";
+      if (preview && !preview.includes("Sem+Imagem")) return preview;
+      return url || "https://via.placeholder.com/600x600?text=Produto";
+    }
+
+    function updateProductLivePreview() {
+      const name = document.getElementById("product-name")?.value?.trim() || "Nome do produto";
+      const price = document.getElementById("product-price")?.value || "";
+      const kind = normalizeProductKind(document.getElementById("product-kind")?.value || "") || "Camisa de Time";
+      const badgeSelect = document.getElementById("product-badge-type");
+      const badge = badgeSelect?.selectedOptions?.[0]?.textContent?.trim() || "Preview";
+      const visible = document.getElementById("product-visible")?.checked !== false;
+      const featured = !!document.getElementById("product-featured")?.checked;
+
+      const image = document.getElementById("live-preview-image");
+      if (image) image.src = getMainPreviewSource();
+      const liveName = document.getElementById("live-preview-name");
+      if (liveName) liveName.textContent = name;
+      const liveKind = document.getElementById("live-preview-kind");
+      if (liveKind) liveKind.textContent = kind;
+      const livePrice = document.getElementById("live-preview-price");
+      if (livePrice) livePrice.textContent = price ? formatPrice(price) : "R$ 0,00";
+      const liveBadge = document.getElementById("live-preview-badge");
+      if (liveBadge) liveBadge.textContent = badge && badge !== "Sem selo" ? badge : "Preview";
+      const liveStatus = document.getElementById("live-preview-status");
+      if (liveStatus) liveStatus.textContent = visible ? "Ativo no site" : "Oculto";
+      const liveFeatured = document.getElementById("live-preview-featured");
+      if (liveFeatured) liveFeatured.textContent = featured ? "Mais procuradas" : "Vitrine normal";
+    }
+
+    function updateProductSmartAlerts() {
+      const alerts = [];
+      const name = document.getElementById("product-name")?.value?.trim();
+      const price = document.getElementById("product-price")?.value?.trim();
+      const imageUrl = document.getElementById("product-image")?.value?.trim();
+      const file = document.getElementById("product-file")?.files?.[0];
+      const sizes = getSelectedSizes();
+      const visible = document.getElementById("product-visible")?.checked !== false;
+      let score = 0;
+
+      if (name) { score++; alerts.push({ ok: true, text: "Nome preenchido." }); } else alerts.push({ ok: false, text: "Falta preencher o nome do produto." });
+      if (price) { score++; alerts.push({ ok: true, text: "Preco informado." }); } else alerts.push({ ok: false, text: "Falta informar o preco atual." });
+      if (file || imageUrl) { score++; alerts.push({ ok: true, text: "Imagem principal pronta." }); } else alerts.push({ ok: false, text: "Falta imagem principal ou URL da imagem." });
+      if (sizes.length) { score++; alerts.push({ ok: true, text: "Grade de tamanhos selecionada." }); } else alerts.push({ ok: false, text: "Nenhum tamanho marcado para estoque." });
+      if (!visible) alerts.push({ ok: false, text: "Produto esta oculto no site." });
+
+      const scoreEl = document.getElementById("product-smart-score");
+      if (scoreEl) scoreEl.textContent = `${score}/4 pronto`;
+      const list = document.getElementById("product-smart-alerts");
+      if (list) {
+        list.innerHTML = alerts.map(item => `<div class="smart-alert ${item.ok ? "ok" : ""}">${item.text}</div>`).join("");
+      }
+    }
     function syncSlugPreview() {
       const name = document.getElementById("product-name")?.value?.trim() || "";
       const slugField = document.getElementById("product-slug-preview");
@@ -3579,13 +3758,15 @@ Camisa Real Madrid 24/25"></textarea>
       document.getElementById("summary-name").textContent = document.getElementById("product-name").value.trim() || "—";
       document.getElementById("summary-category").textContent = categorySelect?.selectedOptions?.[0]?.textContent && categorySelect.value ? categorySelect.selectedOptions[0].textContent : "—";
       const summaryKind = document.getElementById("summary-kind");
-      if (summaryKind) summaryKind.textContent = normalizeProductKind(kindInput?.value || "") || "Camisa";
+      if (summaryKind) summaryKind.textContent = normalizeProductKind(kindInput?.value || "") || "Camisa de Time";
       document.getElementById("summary-price").textContent = document.getElementById("product-price").value ? formatPrice(document.getElementById("product-price").value) : "—";
       const summarySizeProfile = document.getElementById("summary-size-profile");
       if (summarySizeProfile) summarySizeProfile.textContent = getSizeProfileLabel(sizeProfile?.value || "adulto");
       const summaryVariations = document.getElementById("summary-variations");
       if (summaryVariations) summaryVariations.textContent = hasProductVariationsEnabled() ? `${productVariationsDraft.filter(item => (item.name || '').trim()).length} variação(ões)` : 'Sem variações';
       document.getElementById("summary-sizes").textContent = selectedSizes.length ? selectedSizes.join(", ") : "—";
+      updateProductLivePreview();
+      updateProductSmartAlerts();
     }
 
     function setProductStep(step) {
@@ -3659,6 +3840,7 @@ Camisa Real Madrid 24/25"></textarea>
 
     function resetMainPreview() {
       document.getElementById("main-image-preview").src = "https://via.placeholder.com/400x400?text=Sem+Imagem";
+      updateDraftSummary();
     }
 
     function resetMultiPreview() {
@@ -3680,6 +3862,7 @@ Camisa Real Madrid 24/25"></textarea>
       const reader = new FileReader();
       reader.onload = function(e) {
         document.getElementById("main-image-preview").src = e.target.result;
+        updateDraftSummary();
       };
       reader.readAsDataURL(file);
     }
@@ -3731,8 +3914,9 @@ Camisa Real Madrid 24/25"></textarea>
       if (visibleCheck) visibleCheck.checked = true;
       document.getElementById("product-badge-type").value = "";
       document.getElementById("product-sale-type").value = "pronta_entrega";
+      setFieldValue("product-sale-type-visual", "pronta_entrega");
       const productKindField = document.getElementById("product-kind");
-      if (productKindField) productKindField.value = "Camisa";
+      if (productKindField) productKindField.value = "Camisa de Time";
       const productSizeProfileField = document.getElementById("product-size-profile");
       if (productSizeProfileField) productSizeProfileField.value = "adulto";
       const variationToggle = document.getElementById("product-has-variations");
@@ -4376,6 +4560,21 @@ async function uploadMultipleProductImages(productId) {
       return inferred || "Outros";
     }
 
+    function classifyProductSegment(product = {}) {
+      const kind = String(getDisplayProductKind(product) || "").toLowerCase();
+      const category = categories.find(item => String(item.id) === String(product.category_id));
+      const categoryText = String(category?.name || product.category_name || "").toLowerCase();
+      const name = String(product.name || "").toLowerCase();
+      const profile = String(product.size_profile || productMetaCache[String(product.id)]?.sizeProfile || "").toLowerCase();
+      const text = `${kind} ${categoryText} ${name} ${profile}`;
+
+      if (profile === "streetwear" || text.includes("street") || text.includes("oversized") || text.includes("moletom") || text.includes("cargo") || text.includes("casual")) return "Streetwear";
+      if (profile === "fitness" || text.includes("academia") || text.includes("fitness") || text.includes("dry") || text.includes("treino") || text.includes("regata") || text.includes("legging") || text.includes("compress")) return "Academia";
+      if (text.includes("camisa") || text.includes("manto") || text.includes("time") || text.includes("torcedor") || text.includes("infantil") || text.includes("kit")) return "Camisa";
+      if (text.includes("sand") || text.includes("chinelo") || text.includes("slide") || text.includes("copo") || text.includes("caneca") || text.includes("garrafa") || text.includes("acessor")) return "Acessorios";
+      return "Outros";
+    }
+
     function getFilteredProducts() {
       const term = document.getElementById("search-input").value.trim().toLowerCase();
       const categoryFilter = document.getElementById("product-filter-category")?.value || "";
@@ -4390,13 +4589,8 @@ async function uploadMultipleProductImages(productId) {
           const matchSaleType = !saleTypeFilter || (product.sale_type || "pronta_entrega") === saleTypeFilter;
           const isVisible = product.is_visible !== false;
           const productKind = getDisplayProductKind(product);
-          const normalizedKind = productKind === "Camisa" || productKind === "Kit Infantil"
-            ? "Camisa"
-            : (productKind === "Sandália" || productKind === "Copo" ? productKind : "Outros");
-          const matchKind = !kindFilter
-            || (kindFilter === "Camisa" && normalizedKind === "Camisa")
-            || (kindFilter === "Kit Infantil" && productKind === "Kit Infantil")
-            || (kindFilter !== "Camisa" && kindFilter !== "Kit Infantil" && normalizedKind === kindFilter);
+          const normalizedKind = classifyProductSegment(product);
+          const matchKind = !kindFilter || normalizedKind === kindFilter;
           const matchVisibility = !visibilityFilter
             || (visibilityFilter === "visible" && isVisible)
             || (visibilityFilter === "hidden" && !isVisible);
@@ -5497,7 +5691,7 @@ async function uploadMultipleProductImages(productId) {
       const is_visible = document.getElementById("product-visible") ? document.getElementById("product-visible").checked : true;
       const badge_type = document.getElementById("product-badge-type").value;
       const sale_type = document.getElementById("product-sale-type").value || "pronta_entrega";
-      const product_kind = normalizeProductKind(document.getElementById("product-kind")?.value || "") || "Camisa";
+      const product_kind = normalizeProductKind(document.getElementById("product-kind")?.value || "") || "Camisa de Time";
       const size_profile = String(document.getElementById("product-size-profile")?.value || "adulto").toLowerCase();
       const sizes = getSelectedSizes();
 
@@ -5660,6 +5854,7 @@ async function uploadMultipleProductImages(productId) {
       if (document.getElementById("product-visible")) document.getElementById("product-visible").checked = data.is_visible !== false;
       document.getElementById("product-badge-type").value = data.badge_type || "";
       document.getElementById("product-sale-type").value = data.sale_type || "pronta_entrega";
+      setFieldValue("product-sale-type-visual", data.sale_type || "pronta_entrega");
       const resolvedKind = inferProductKind(data);
       const resolvedSizeProfile = inferSizeProfile(data);
       document.getElementById("product-kind").value = resolvedKind;
@@ -8956,6 +9151,12 @@ async function saveGestaoSale() {
       loadProductTypeOptions();
       document.getElementById("product-name")?.addEventListener("input", syncSlugPreview);
       document.getElementById("product-price")?.addEventListener("input", updateDraftSummary);
+      document.getElementById("product-old-price")?.addEventListener("input", updateDraftSummary);
+      document.getElementById("product-image")?.addEventListener("input", updateDraftSummary);
+      document.getElementById("product-badge-type")?.addEventListener("change", updateDraftSummary);
+      document.getElementById("product-visible")?.addEventListener("change", updateDraftSummary);
+      document.getElementById("product-featured")?.addEventListener("change", updateDraftSummary);
+      document.getElementById("product-sale-type")?.addEventListener("change", () => { setFieldValue("product-sale-type-visual", document.getElementById("product-sale-type")?.value || "pronta_entrega"); updateDraftSummary(); });
       document.getElementById("product-category")?.addEventListener("change", () => {
         syncProductTypeFromKind();
         updateDraftSummary();
@@ -8997,7 +9198,7 @@ async function saveGestaoSale() {
       });
       setProductStep(1);
       renderProductSizes("adulto", []);
-      document.getElementById("product-kind").value = "Camisa";
+      document.getElementById("product-kind").value = "Camisa de Time";
       document.getElementById("product-size-profile").value = "adulto";
       document.getElementById("product-has-variations").checked = false;
       productVariationsDraft = [];
