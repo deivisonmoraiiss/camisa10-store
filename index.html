@@ -1,188 +1,2658 @@
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Camisa 10 Store - Camisas de Time em Humaitá</title>
+  <meta
+    name="description"
+    content="Camisas de futebol nacionais e internacionais com entrega rápida em Humaitá e região. Peça direto pelo WhatsApp na Camisa 10 Store."
+  />
 
-<title>Camisa 10 Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family:'Inter',sans-serif;
-    min-height:100vh;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    padding:20px;
-
-    background:
-    radial-gradient(circle at top, rgba(212,175,55,.08), transparent 35%),
-    linear-gradient(180deg,#050505 0%,#0b0b0b 100%);
-}
-
-.card{
-    width:100%;
-    max-width:700px;
-
-    background:#111;
-
-    border:1px solid rgba(212,175,55,.20);
-
-    border-radius:30px;
-
-    padding:50px 35px;
-
-    text-align:center;
-
-    box-shadow:0 20px 60px rgba(0,0,0,.45);
-}
-
-.logo{
-    font-size:70px;
-    margin-bottom:20px;
-}
-
-.badge{
-    display:inline-block;
-
-    padding:8px 16px;
-
-    border-radius:999px;
-
-    background:rgba(212,175,55,.12);
-
-    color:#f4d76d;
-
-    font-size:14px;
-    font-weight:700;
-
-    margin-bottom:20px;
-}
-
-h1{
-    color:#fff;
-
-    font-size:38px;
-    line-height:1.1;
-
-    margin-bottom:20px;
-}
-
-p{
-    color:#cfcfcf;
-
-    line-height:1.8;
-
-    margin-bottom:15px;
-}
-
-.btn{
-    display:inline-flex;
-
-    align-items:center;
-    justify-content:center;
-
-    margin-top:20px;
-
-    padding:15px 30px;
-
-    border-radius:14px;
-
-    background:linear-gradient(135deg,#e0bd49,#f4d76d);
-
-    color:#111;
-
-    font-weight:800;
-
-    text-decoration:none;
-
-    transition:.2s;
-}
-
-.btn:hover{
-    transform:translateY(-2px);
-}
-
-.footer{
-    margin-top:25px;
-
-    color:#888;
-
-    font-size:14px;
-}
-
-@media(max-width:768px){
-
-    .card{
-        padding:40px 25px;
+  <style>
+    :root {
+      --bg: #050505;
+      --bg-soft: #0c0c0c;
+      --card: #121212;
+      --card-2: #181818;
+      --text: #f5f5f5;
+      --muted: #b9b9b9;
+      --line: rgba(255,255,255,0.08);
+      --line-strong: rgba(212,175,55,0.18);
+      --gold: #d4af37;
+      --gold-2: #f0cf63;
+      --green: #25d366;
+      --shadow: 0 14px 34px rgba(0,0,0,0.28);
+      --shadow-strong: 0 22px 56px rgba(0,0,0,0.38);
+      --container: 1180px;
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
     }
 
-    h1{
-        font-size:28px;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Inter", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(212,175,55,0.07), transparent 26%),
+        linear-gradient(180deg, #050505 0%, #0b0b0b 100%);
     }
 
-    .logo{
-        font-size:60px;
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button, input { font-family: inherit; }
+
+    .container {
+      width: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 18px;
     }
 
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 50px;
+      padding: 0 20px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.22s ease;
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #e0bd49, #f4d76d);
+      color: #101010;
+      box-shadow: 0 14px 30px rgba(212,175,55,0.24);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .btn-primary:hover,
+    .btn-secondary:hover,
+    .category-chip:hover,
+    .drawer-link:hover,
+    .drawer-category-btn:hover,
+    .product-card:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      border-color: rgba(255,255,255,0.10);
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(7,7,7,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-inner {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-logo,
+    .brand-logo-fallback {
+      width: 50px;
+      height: 50px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+
+    .brand-logo {
+      object-fit: cover;
+      border: 1px solid rgba(212,175,55,0.35);
+      background: #111;
+    }
+
+    .brand-logo-fallback {
+      background: linear-gradient(135deg, var(--gold), #9a7a18);
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-subtitle {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      color: #eaeaea;
+      font-size: 0.94rem;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: 0.2s ease;
+    }
+
+    .nav a:hover {
+      background: rgba(255,255,255,0.06);
+    }
+
+    .nav-cta {
+      background: linear-gradient(135deg, #e0bd49, #f4d76d);
+      color: #121212 !important;
+      font-weight: 800 !important;
+      box-shadow: 0 10px 24px rgba(212,175,55,0.20);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .category-rail {
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .category-rail-inner {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 10px 18px;
+    }
+
+    .category-rail-inner::-webkit-scrollbar,
+    .category-chip-row::-webkit-scrollbar,
+    .drawer-categories::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      color: #f3f3f3;
+      font-weight: 700;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .category-chip.active {
+      background: linear-gradient(135deg, #e0bd49, #f4d76d);
+      color: #121212;
+      border-color: transparent;
+      box-shadow: 0 10px 24px rgba(212,175,55,0.16);
+    }
+
+    .mobile-topbar,
+    .mobile-menu-backdrop,
+    .mobile-menu-drawer {
+      display: none;
+    }
+
+    .hero {
+      padding: 18px 0 14px;
+    }
+
+    .hero-shell {
+      position: relative;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line-strong);
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,0.11), transparent 30%),
+        linear-gradient(180deg, #121212 0%, #0a0a0a 100%);
+      box-shadow: var(--shadow-strong);
+      overflow: hidden;
+    }
+
+    .hero-slider {
+      position: relative;
+      min-height: 470px;
+    }
+
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.7s ease;
+    }
+
+    .hero-slide.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .hero-slide-bg {
+      position: absolute;
+      inset: 0;
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      transform: scale(1.02);
+    }
+
+    .hero-slide-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,0.86) 0%, rgba(0,0,0,0.68) 42%, rgba(0,0,0,0.40) 70%, rgba(0,0,0,0.26) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      min-height: 470px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 48px 44px 42px;
+      max-width: 720px;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(212,175,55,0.14);
+      border: 1px solid rgba(212,175,55,0.24);
+      color: var(--gold-2);
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      line-height: 0.92;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      text-transform: uppercase;
+      max-width: 580px;
+      margin-bottom: 16px;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.32);
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      color: #e3e3e3;
+      line-height: 1.8;
+      max-width: 560px;
+    }
+
+    .hero-nav {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .hero-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.34);
+      color: #fff;
+      font-size: 1.25rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: 0.2s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-arrow.prev { left: 14px; }
+    .hero-arrow.next { right: 14px; }
+
+    .hero-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 16px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 4;
+      pointer-events: auto;
+    }
+
+    .hero-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.34);
+      border: none;
+      cursor: pointer;
+      transition: 0.35s ease;
+    }
+
+    .hero-dot.active {
+      background: var(--gold);
+      transform: scale(1.08);
+    }
+
+    .hero-search-wrap {
+      margin-top: 18px;
+    }
+
+    .mobile-catalog-cta-wrap {
+      display: flex;
+      justify-content: center;
+    }
+
+    .mobile-catalog-cta {
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .hero-search-card {
+      background: linear-gradient(180deg, #141414 0%, #101010 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero-search-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .hero-search-copy strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .hero-search-copy span {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 54px;
+      padding: 0 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: #111;
+      color: #fff;
+      outline: none;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+    }
+
+    .search-input:focus {
+      border-color: rgba(212,175,55,0.45);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.08);
+    }
+
+    .category-chip-row {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+
+    .section {
+      padding: 42px 0;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 2.7vw, 2.3rem);
+      font-weight: 900;
+      line-height: 1.08;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 0.98rem;
+      max-width: 760px;
+      line-height: 1.7;
+    }
+
+    .featured-grid,
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+.encomenda-wrap {
+      margin-top: 26px;
+    }
+
+    .products-grid.encomenda-carousel {
+      display: grid;
+      grid-auto-flow: column;
+      grid-template-rows: 1fr;
+      grid-auto-columns: calc((100% - 72px) / 5);
+      gap: 18px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x proximity;
+      padding: 0 22px 10px 0;
+      align-items: stretch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      position: relative;
+      scroll-padding-left: 0;
+    }
+
+    .products-grid.encomenda-carousel::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    .products-grid.encomenda-carousel .product-card {
+      scroll-snap-align: start;
+      height: auto;
+      min-height: 100%;
+    }
+
+    .catalog-full-cta-wrap {
+      margin-top: 18px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .catalog-full-cta {
+      min-width: 260px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    @media (min-width: 861px) {
+      .products-grid.encomenda-carousel {
+        padding-right: 22px;
+      }
+    }
+
+    .product-card {
+      background: linear-gradient(180deg, #141414 0%, #101010 100%);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: 0.22s ease;
+      position: relative;
+    }
+
+    .product-image-link { display: block; }
+
+    .product-image-wrap {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      background: #0f0f0f;
+      overflow: hidden;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.28s ease;
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.04);
+    }
+
+    .product-image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.42);
+      font-weight: 700;
+      background:
+        radial-gradient(circle at center, rgba(212,175,55,0.10), transparent 35%),
+        linear-gradient(180deg, #111, #0b0b0b);
+    }
+    .badge-stack {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .product-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.14);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.08);
+      line-height: 1;
+      white-space: nowrap;
+      background: rgba(12,12,12,0.52);
+    }
+
+    .product-badge::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: currentColor;
+      opacity: 0.92;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.06);
+    }
+
+    .product-badge.destaque {
+      background: rgba(12,12,12,0.52);
+      color: #f0cf63;
+      border-color: rgba(240,207,99,0.18);
+    }
+
+    .product-badge.mais-vendida {
+      background: rgba(12,12,12,0.52);
+      color: #ff9b8a;
+      border-color: rgba(255,155,138,0.18);
+    }
+
+    .product-badge.novo {
+      background: rgba(12,12,12,0.52);
+      color: #59d89a;
+      border-color: rgba(89,216,154,0.18);
+    }
+
+    .sale-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      color: #f4d35e;
+      background: rgba(12,12,12,0.48);
+      border: 1px solid rgba(244,211,94,0.16);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.14);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      white-space: nowrap;
+    }
+
+    .sale-type-badge::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #f4d35e;
+      box-shadow: 0 0 0 4px rgba(244,211,94,0.08);
+    }
+
+    .product-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .product-category {
+      display: inline-flex;
+      width: fit-content;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(212,175,55,0.12);
+      border: 1px solid rgba(212,175,55,0.20);
+      color: #f3d77d;
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .product-title {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #fff;
+      min-height: 44px;
+    }
+
+    .product-price {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--gold-2);
+      margin-top: auto;
+    }
+
+    .state-box {
+      grid-column: 1 / -1;
+      padding: 28px;
+      border-radius: 20px;
+      border: 1px dashed rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.02);
+      text-align: center;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .catalog-shell {
+      background: linear-gradient(180deg, #101010 0%, #0d0d0d 100%);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 28px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .catalog-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .catalog-search-box {
+      min-width: 280px;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .contact-strip {
+      margin-top: 18px;
+      border: 1px solid rgba(212,175,55,0.18);
+      background: linear-gradient(135deg, rgba(212,175,55,0.10), rgba(255,255,255,0.02));
+      border-radius: 24px;
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow);
+    }
+
+    .contact-strip h3 {
+      font-size: 1.26rem;
+      margin-bottom: 8px;
+    }
+
+    .contact-strip p {
+      color: var(--muted);
+      max-width: 700px;
+      line-height: 1.65;
+    }
+
+    .footer {
+      margin-top: 16px;
+      border-top: 1px solid var(--line);
+      background:
+        radial-gradient(circle at top right, rgba(212,175,55,0.08), transparent 28%),
+        rgba(0,0,0,0.18);
+    }
+
+    .footer-grid {
+      padding: 36px 0;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 28px;
+    }
+
+    .footer-brand-title {
+      font-size: 1.12rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .footer-text {
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 420px;
+      padding-right: 12px;
+    }
+
+    .footer-col h4 {
+      font-size: 0.96rem;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      transition: 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--line);
+      padding: 18px 0 28px;
+      color: #8f8f8f;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .mobile-menu-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.25s ease;
+      z-index: 210;
+    }
+
+    .mobile-menu-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: min(86vw, 360px);
+      height: 100vh;
+      background: linear-gradient(180deg, #111 0%, #0b0b0b 100%);
+      border-right: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.40);
+      transform: translateX(-100%);
+      transition: transform 0.26s ease;
+      z-index: 211;
+      padding: 20px 18px 28px;
+      overflow-y: auto;
+    }
+
+    .mobile-menu-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .drawer-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .drawer-brand-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .drawer-close {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .drawer-section-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gold-2);
+      font-weight: 800;
+      margin: 18px 0 12px;
+    }
+
+    .drawer-categories,
+    .drawer-links {
+      display: grid;
+      gap: 10px;
+    }
+
+    .drawer-category-btn,
+    .drawer-link {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-weight: 700;
+      font-size: 0.94rem;
+      cursor: pointer;
+      transition: 0.2s ease;
+      text-align: left;
+    }
+
+    .drawer-category-btn.active {
+      background: linear-gradient(135deg, #e0bd49, #f4d76d);
+      color: #111;
+      border-color: transparent;
+    }
+
+    .drawer-link.drawer-whatsapp {
+      background: linear-gradient(135deg, #1fb85a, #25d366);
+      color: #08140d;
+      border-color: transparent;
+      font-weight: 800;
+    }
+
+    .drawer-link.drawer-instagram {
+      background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);
+      color: #fff;
+      border: none;
+      font-weight: 800;
+      box-shadow: 0 12px 26px rgba(221, 42, 123, 0.22);
+    }
+
+    @media (max-width: 1100px) {
+      .featured-grid,
+      .products-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .hero-slider,
+      .hero-content {
+        min-height: 420px;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .header,
+      .category-rail {
+        display: none;
+      }
+
+      .mobile-topbar,
+      .mobile-menu-backdrop,
+      .mobile-menu-drawer {
+        display: block;
+      }
+
+      .mobile-topbar {
+        position: sticky;
+        top: 0;
+        z-index: 150;
+        background: rgba(7,7,7,0.94);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .mobile-topbar-inner {
+        min-height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .mobile-menu-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.03);
+        color: #fff;
+        font-size: 1.2rem;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      .mobile-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .mobile-brand-title {
+        font-size: 0.98rem;
+        font-weight: 800;
+        color: #fff;
+      }
+
+      .mobile-brand-subtitle {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      .hero {
+        padding-top: 12px;
+      }
+
+      .hero-slider,
+      .hero-content {
+        min-height: 350px;
+      }
+
+      .hero-content {
+        padding: 28px 22px 46px;
+        justify-content: flex-end;
+      }
+
+      .hero-title {
+        font-size: 2.1rem;
+        max-width: 320px;
+      }
+
+      .hero-subtitle {
+        font-size: 0.88rem;
+        line-height: 1.55;
+        max-width: 100%;
+      }
+
+      .hero-arrow {
+        top: auto;
+        bottom: 46px;
+        transform: none;
+        width: 38px;
+        height: 38px;
+      }
+
+      .hero-arrow.prev { left: 10px; }
+      .hero-arrow.next { right: 10px; }
+
+      .hero-dots {
+        bottom: 14px;
+      }
+
+      .hero-search-wrap {
+        margin-top: 12px;
+      }
+
+      .mobile-catalog-cta-wrap {
+        padding: 0 2px;
+      }
+
+      .mobile-catalog-cta {
+        min-height: 52px;
+        border-radius: 16px;
+        font-size: 0.96rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #e0bd49, #f4d76d);
+        color: #111;
+        border: none;
+        box-shadow: 0 12px 26px rgba(212,175,55,0.20);
+      }
+
+      .hero-search-card {
+        border-radius: 18px;
+        padding: 14px;
+      }
+
+      .hero-search-top {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .featured-grid,
+      .products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .products-grid.encomenda-carousel {
+        grid-auto-flow: column;
+        grid-template-rows: 1fr;
+        grid-auto-columns: 44vw;
+        gap: 12px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        align-items: stretch;
+        padding-left: 0;
+        padding-right: 18px;
+      }
+
+      .catalog-shell {
+        padding: 18px;
+      }
+
+      .catalog-top {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .catalog-search-box {
+        min-width: 100%;
+        max-width: none;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+        padding: 28px 0;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .container {
+        padding: 0 16px;
+      }
+
+      .mobile-topbar-inner {
+        min-height: 70px;
+      }
+
+      .brand-logo,
+      .brand-logo-fallback {
+        width: 46px;
+        height: 46px;
+      }
+
+      .hero-shell {
+        border-radius: 22px;
+      }
+
+      .hero-slider,
+      .hero-content {
+        min-height: 270px;
+      }
+
+      .hero-content {
+        display: none;
+      }
+
+      .hero-slide-overlay {
+        display: none;
+      }
+
+      .hero-arrow {
+        bottom: 42px;
+      }
+
+      .hero-dots {
+        bottom: 10px;
+        gap: 8px;
+      }
+
+      .hero-dot {
+        width: 8px;
+        height: 8px;
+      }
+
+      .hero-search-wrap {
+        margin-top: 10px;
+      }
+
+      .mobile-catalog-cta {
+        min-height: 50px;
+        border-radius: 15px;
+        font-size: 0.92rem;
+      }
+
+      .hero-search-card {
+        padding: 12px;
+      }
+
+      .hero-search-copy strong {
+        font-size: 0.94rem;
+      }
+
+      .hero-search-copy span {
+        font-size: 0.85rem;
+      }
+
+      .search-input {
+        height: 50px;
+        border-radius: 14px;
+        font-size: 0.92rem;
+      }
+
+      .section {
+        padding: 32px 0;
+      }
+
+      .section-head {
+        margin-bottom: 16px;
+      }
+
+      .section-title {
+        font-size: 1.35rem;
+        margin-bottom: 6px;
+      }
+
+      .section-subtitle {
+        font-size: 0.88rem;
+        line-height: 1.55;
+      }
+
+      .featured-grid,
+      .products-grid {
+        gap: 12px;
+      }
+
+      .products-grid.encomenda-carousel {
+        grid-auto-flow: column;
+        grid-template-rows: 1fr;
+        grid-auto-columns: 46vw;
+        gap: 10px;
+        padding-left: 0;
+        padding-bottom: 8px;
+        padding-right: 16px;
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+
+      .catalog-full-cta {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .product-card {
+        border-radius: 18px;
+      }
+
+      .product-badge {
+        top: 8px;
+        left: 8px;
+        font-size: 0.64rem;
+        padding: 5px 8px;
+      }
+
+      .product-body {
+        padding: 12px;
+        gap: 8px;
+      }
+
+      .product-category {
+        font-size: 0.65rem;
+        padding: 5px 8px;
+      }
+
+      .product-title {
+        font-size: 0.9rem;
+        min-height: 40px;
+      }
+
+      .product-price {
+        font-size: 1rem;
+      }
+
+      .product-body .btn {
+        min-height: 42px;
+        padding: 0 10px;
+        font-size: 0.84rem;
+      }
+
+      .catalog-shell {
+        padding: 14px;
+        border-radius: 22px;
+      }
+
+      .contact-strip {
+        padding: 18px 16px;
+        border-radius: 18px;
+        gap: 12px;
+      }
+
+      .contact-strip h3 {
+        font-size: 1.02rem;
+        margin-bottom: 5px;
+      }
+
+      .contact-strip p {
+        font-size: 0.88rem;
+        line-height: 1.55;
+      }
+
+      .contact-strip .btn {
+        width: 100%;
+      }
+
+      .footer-grid {
+        padding: 24px 0;
+      }
+
+      .footer-text,
+      .footer-links a,
+      .footer-bottom {
+        font-size: 0.88rem;
+        line-height: 1.6;
+      }
+
+      .footer-col,
+      .footer-grid > div {
+        padding-left: 4px;
+        padding-right: 4px;
+      }
+    }
+     @media (max-width: 768px) {
+    .footer-bottom {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+    }
+
+    .footer-bottom span,
+    .footer-bottom a {
+      width: 100%;
+      text-align: center;
+    }
+  }
+  
+
+      .product-price-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+
+      .product-price-old {
+        color: rgba(255,255,255,0.55);
+        font-size: 0.98rem;
+        font-weight: 700;
+        text-decoration: line-through;
+        text-decoration-thickness: 2px;
+        text-decoration-color: rgba(255,255,255,0.55);
+      }
+    /* Ajuste premium mobile - badge mais compacto */
+@media (max-width: 768px) {
+  .sale-badge {
+    top: 8px;
+    left: 8px;
+
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: 600;
+
+    border-radius: 999px;
+    letter-spacing: 0;
+
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  }
+
+  .sale-badge.encomenda {
+    background: rgba(10, 10, 10, 0.65);
+    border: 1px solid rgba(244, 211, 94, 0.25);
+    color: #f4d35e;
+  }
+
+  .sale-badge.encomenda::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: #f4d35e;
+  }
 }
-</style>
+/* BADGE SOB ENCOMENDA - COMPACTO PREMIUM */
+
+.sale-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  z-index: 5;
+
+  display: inline-flex;
+  align-items: center;
+
+  padding: 2px 6px;
+  font-size: 9px;
+  font-weight: 600;
+
+  border-radius: 999px;
+
+  background: rgba(0, 0, 0, 0.55);
+  color: #f4d35e;
+
+  border: 1px solid rgba(244, 211, 94, 0.25);
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+.sale-badge::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: #f4d35e;
+}
+  </style>
 </head>
-
 <body>
+  <div class="mobile-menu-backdrop" id="mobileMenuBackdrop"></div>
 
-<div class="card">
+  <aside class="mobile-menu-drawer" id="mobileMenuDrawer">
+    <div class="drawer-top">
+      <div class="drawer-brand">
+        <img id="mobileDrawerLogo" class="brand-logo" style="display:none;" alt="Logo Camisa 10 Store" />
+        <div id="mobileDrawerLogoFallback" class="brand-logo-fallback">10</div>
+        <div class="drawer-brand-title" id="mobileDrawerBrandTitle">Camisa 10 Store</div>
+      </div>
 
-    <div class="logo">⚽</div>
-
-    <div class="badge">
-        Atualização em andamento
+      <button class="drawer-close" id="mobileDrawerClose" type="button" aria-label="Fechar menu">✕</button>
     </div>
 
-    <h1>
-        Estamos evoluindo para atender você ainda melhor!
-    </h1>
+    <div class="drawer-section-title">Categorias</div>
+    <div class="drawer-categories" id="drawerCategories"></div>
 
-    <p>
-        Nosso site está passando por atualizações e, por isso,
-        encontra-se temporariamente indisponível.
-    </p>
+    <div class="drawer-section-title">Atalhos</div>
+    <div class="drawer-links">
+  <a href="catalogo.html" class="drawer-link">Catálogo</a>
 
-    <p>
-        Em breve retornaremos com uma nova experiência de compra,
-        mais rápida, organizada e com muitas novidades.
-    </p>
+  <a href="guia-tamanhos.html" class="drawer-link">
+    Guia de tamanhos
+  </a>
 
-    <p>
-        Enquanto isso, você pode falar conosco diretamente pelo
-        WhatsApp para consultar produtos e realizar pedidos.
-    </p>
+  <a
+    href="https://www.instagram.com/usecamisa10hmt"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="drawer-link drawer-instagram"
+  >
+    Instagram
+  </a>
 
-    <a
-        href="https://wa.me/5597981098445"
-        target="_blank"
-        class="btn"
-    >
-        Falar no WhatsApp
-    </a>
-
-    <div class="footer">
-        Obrigado pela confiança 💙
-        <br><br>
-        Camisa 10 Store
-    </div>
-
+  <a
+    id="mobileDrawerWhatsApp"
+    href="#"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="drawer-link drawer-whatsapp"
+  >
+    Pedir no WhatsApp
+  </a>
 </div>
+  </aside>
 
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand">
+        <img id="logoImage" class="brand-logo" style="display:none;" alt="Logo Camisa 10 Store" />
+        <div id="logoFallback" class="brand-logo-fallback">10</div>
+
+        <div class="brand-text">
+          <span class="brand-title" id="brandTitle">Camisa 10 Store</span>
+          <span class="brand-subtitle">Protagonismo começa no Manto</span>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a href="catalogo.html">Catálogo</a>
+        <a href="#destaques">Mais procuradas</a>
+        <a href="guia-tamanhos.html">Guia de tamanhos</a>
+        <a id="headerWhatsApp" class="nav-cta" href="#" target="_blank" rel="noopener noreferrer">Pedir no WhatsApp</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="category-rail">
+    <div class="container category-rail-inner" id="desktopCategoryRail"></div>
+  </section>
+
+  <section class="mobile-topbar">
+    <div class="container mobile-topbar-inner">
+      <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Abrir menu">☰</button>
+
+      <a href="index.html" class="mobile-brand">
+        <img id="mobileLogoImage" class="brand-logo" style="display:none;" alt="Logo Camisa 10 Store" />
+        <div id="mobileLogoFallback" class="brand-logo-fallback">10</div>
+        <div>
+          <div class="mobile-brand-title" id="mobileBrandTitle">Camisa 10 Store</div>
+          <div class="mobile-brand-subtitle">Protagonismo começa no Manto</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-shell">
+          <div class="hero-slider" id="heroSlider">
+            <div class="hero-slide active">
+              <div class="hero-slide-bg"></div>
+              <div class="hero-slide-overlay"></div>
+              <div class="hero-content">
+                <div class="hero-kicker">⚽ A loja mais completa de camisas em Humaitá</div>
+                <h1 class="hero-title">CAMISA 10 STORE</h1>
+                <p class="hero-subtitle">Os mantos mais desejados do momento, com visual forte e entrega rápida em Humaitá.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-nav">
+            <button class="hero-arrow prev" id="heroPrevBtn" aria-label="Slide anterior">‹</button>
+            <button class="hero-arrow next" id="heroNextBtn" aria-label="Próximo slide">›</button>
+            <div class="hero-dots" id="heroDots"></div>
+          </div>
+        </div>
+
+        <div class="hero-search-wrap mobile-catalog-cta-wrap">
+          <a href="catalogo.html" class="btn btn-secondary mobile-catalog-cta">Ver catálogo</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="destaques" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">🔥 Mais procuradas</h2>
+            <p class="section-subtitle">Os modelos que mais chamam atenção na Camisa 10 Store.</p>
+          </div>
+        </div>
+
+        <div class="featured-grid" id="featuredProductsGrid">
+          <div class="state-box">Carregando destaques...</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="catalogo" class="section">
+      <div class="container">
+        <div class="catalog-shell">
+          <div class="catalog-top">
+            <div>
+              <h2 class="section-title" id="catalogTitle">Catálogo completo</h2>
+              <p class="section-subtitle" id="catalogSubtitle">Escolha seu time e encontre sua próxima camisa com mais facilidade.</p>
+            </div>
+
+            <div class="catalog-search-box">
+              <input
+                type="text"
+                id="catalogSearchInput"
+                class="search-input"
+                placeholder="Buscar camisa no catálogo..."
+                autocomplete="off"
+                inputmode="search"
+              />
+            </div>
+          </div>
+
+          <div class="category-chip-row" id="catalogCategoryButtons"></div>
+
+          <div style="margin-top:18px;">
+            <div class="section-head" style="margin-bottom:12px;">
+              <div>
+                <h3 class="section-title" id="pronta-section-title" style="font-size:1.4rem;">🔥 Pronta entrega</h3>
+                <p class="section-subtitle" id="pronta-section-subtitle">Camisas disponíveis para pedido imediato.</p>
+              </div>
+            </div>
+
+            <div class="products-grid" id="grid-pronta">
+              <div class="state-box">Carregando produtos...</div>
+            </div>
+          </div>
+
+          <div class="encomenda-wrap" id="encomenda-wrap">
+            <div class="section-head" style="margin-bottom:12px;">
+              <div>
+                <h3 class="section-title" style="font-size:1.4rem;">🛒 Sob encomenda</h3>
+                <p class="section-subtitle">No desktop e no celular, deslize para o lado para ver mais modelos sem cortar os cards.</p>
+              </div>
+            </div>
+
+            <div class="products-grid encomenda-carousel" id="grid-encomenda">
+              <div class="state-box">Carregando produtos...</div>
+            </div>
+
+            <div class="catalog-full-cta-wrap">
+              <a href="catalogo.html" class="btn btn-primary catalog-full-cta">Ver catálogo completo</a>
+            </div>
+          </div>
+
+          <div class="encomenda-wrap" id="outros-produtos-wrap">
+            <div class="section-head" style="margin-bottom:12px;">
+              <div>
+                <h3 class="section-title" style="font-size:1.4rem;">🧩 Outros produtos</h3>
+                <p class="section-subtitle">Sandálias, kits infantis, bonés e outros itens da loja em uma seção separada.</p>
+              </div>
+            </div>
+
+            <div class="products-grid" id="grid-outros-produtos">
+              <div class="state-box">Carregando outros produtos...</div>
+            </div>
+          </div>
+
+          <div class="contact-strip">
+            <div>
+              <h3>Achou sua camisa?</h3>
+              <p id="contactText">Fale com a Camisa 10 Store no WhatsApp e finalize seu pedido de forma rápida e simples.</p>
+            </div>
+
+            <a id="contactWhatsApp" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+              Fazer pedido agora
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="footer-brand-title" id="footerBrandTitle">Camisa 10 Store</div>
+        <p class="footer-text" id="footerMainText">
+          Camisas de futebol com atendimento rápido, catálogo organizado e pedido direto pelo WhatsApp.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <div class="footer-links">
+          <a href="catalogo.html">Catálogo</a>
+          <a href="#destaques">Mais procuradas</a>
+          <a href="guia-tamanhos.html">Guia de tamanhos</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <div class="footer-links">
+          <a id="footerWhatsApp" href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a href="catalogo.html">Ver produtos</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <span id="footerText">© Camisa 10 Store</span>
+    Desenvolvido por 
+<a href="https://www.instagram.com/deivisonmoraiis/" target="_blank" style="color:#d4af37; text-decoration:none; font-weight:bold;">
+  Deivison Morais
+</a>
+    </div>
+  </footer>
+
+  <script>
+    const SUPABASE_URL = "https://elxwjajwfljwyextmdql.supabase.co";
+const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
+    const SITE_SETTINGS_ID = "61c8c46f-f37f-460f-88a1-8f6b6b36f7d2";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let allProducts = [];
+    let allCategories = [];
+    let activeCategory = "all";
+    let activeCategoryId = "";
+    let searchTerm = "";
+    let siteSettings = null;
+    let heroSlides = [];
+    let currentHeroIndex = 0;
+    let heroInterval = null;
+    let heroTouchStartX = 0;
+    let heroTouchEndX = 0;
+
+    const CACHE_PREFIX = "camisa10_home_cache_v2";
+    const CACHE_TTL = {
+      settings: 10 * 60 * 1000,
+      slides: 10 * 60 * 1000,
+      categories: 10 * 60 * 1000,
+      products: 5 * 60 * 1000
+    };
+
+    function getCacheKey(key) {
+      return `${CACHE_PREFIX}:${key}`;
+    }
+
+    function saveCache(key, value) {
+      try {
+        localStorage.setItem(getCacheKey(key), JSON.stringify({
+          timestamp: Date.now(),
+          value
+        }));
+      } catch (error) {
+        console.warn("Não foi possível salvar cache:", key, error);
+      }
+    }
+
+    function readCache(key, ttl) {
+      try {
+        const raw = localStorage.getItem(getCacheKey(key));
+        if (!raw) return null;
+
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== "object") return null;
+        if (!parsed.timestamp || Date.now() - parsed.timestamp > ttl) return null;
+
+        return parsed.value ?? null;
+      } catch (error) {
+        console.warn("Não foi possível ler cache:", key, error);
+        return null;
+      }
+    }
+
+    function formatPrice(value) {
+      const number = Number(value || 0);
+      return number.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
+    }
+
+    function sanitizePhone(phone) {
+      return String(phone || "").replace(/\D/g, "");
+    }
+
+    function buildWhatsAppLink(message = "") {
+      const rawPhone = siteSettings?.whatsapp_number || "5597981098445";
+      const phone = sanitizePhone(rawPhone);
+      if (!phone) return "#";
+      return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    }
+
+    function setWhatsAppLinks() {
+      const defaultMessage = "Olá! Vim pelo site da Camisa 10 Store e quero fazer um pedido.";
+      const link = buildWhatsAppLink(defaultMessage);
+
+      ["headerWhatsApp", "contactWhatsApp", "footerWhatsApp", "mobileDrawerWhatsApp"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.href = link;
+      });
+    }
+
+    function applySiteSettings() {
+      if (!siteSettings) return;
+
+      const brand = siteSettings.hero_title || "Camisa 10 Store";
+
+      document.getElementById("brandTitle").textContent = brand;
+      document.getElementById("mobileBrandTitle").textContent = brand;
+      document.getElementById("mobileDrawerBrandTitle").textContent = brand;
+
+      document.getElementById("catalogTitle").textContent =
+        siteSettings.catalog_title || "Catálogo completo";
+
+      document.getElementById("catalogSubtitle").textContent =
+        siteSettings.catalog_subtitle || "Escolha seu time e encontre sua próxima camisa com mais facilidade.";
+
+      document.getElementById("contactText").textContent =
+        siteSettings.contact_text || "Fale com a Camisa 10 Store no WhatsApp e finalize seu pedido de forma rápida e simples.";
+
+      document.getElementById("footerText").textContent =
+        siteSettings.footer_text || "© Camisa 10 Store";
+
+      document.getElementById("footerBrandTitle").textContent = brand;
+
+      document.getElementById("footerMainText").textContent =
+        `${siteSettings.delivery_text || "Entrega rápida em Humaitá e região"}. Atendimento direto pelo WhatsApp para pedidos e dúvidas.`;
+
+      const logoImage = document.getElementById("logoImage");
+      const logoFallback = document.getElementById("logoFallback");
+
+      if (siteSettings.logo_url) {
+        logoImage.src = siteSettings.logo_url;
+        logoImage.style.display = "block";
+        logoFallback.style.display = "none";
+      } else {
+        logoImage.style.display = "none";
+        logoFallback.style.display = "flex";
+      }
+
+      syncMobileLogos();
+      setWhatsAppLinks();
+    }
+
+    function syncMobileLogos() {
+      const sourceLogo = document.getElementById("logoImage");
+      const useFallback = !sourceLogo || sourceLogo.style.display === "none";
+
+      [["mobileLogoImage", "mobileLogoFallback"], ["mobileDrawerLogo", "mobileDrawerLogoFallback"]].forEach(([imgId, fbId]) => {
+        const img = document.getElementById(imgId);
+        const fb = document.getElementById(fbId);
+
+        if (img) {
+          if (!useFallback && sourceLogo.src) {
+            img.src = sourceLogo.src;
+            img.style.display = "block";
+          } else {
+            img.style.display = "none";
+          }
+        }
+
+        if (fb) {
+          fb.style.display = useFallback ? "flex" : "none";
+        }
+      });
+    }
+
+    function normalizeCategoryName(product) {
+      if (product.category_name) return product.category_name;
+      if (product.categories?.name) return product.categories.name;
+      if (product.category) return product.category;
+      return "Sem categoria";
+    }
+
+    function normalizeCategorySlug(text) {
+      return String(text || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toLowerCase();
+    }
+
+    function optimizeCloudinaryImage(url, width = 500) {
+      if (!url || !url.includes("res.cloudinary.com")) return url;
+      return url.replace("/upload/", `/upload/f_auto,q_auto,w_${width}/`);
+    }
+
+    function getProductImage(product) {
+      const url = product.image_url || product.photo_url || product.cover_url || product.product_images?.[0]?.image_url || "";
+      return optimizeCloudinaryImage(url, 500);
+    }
+
+    function getProductUrl(product) {
+      if (product.slug) {
+        return `produto.html?slug=${encodeURIComponent(product.slug)}`;
+      }
+      return `produto.html?id=${encodeURIComponent(product.id)}`;
+    }
+
+    function getCategoryButtonHTML(slug, name, categoryId = "", kind = "chip") {
+      const active = slug === activeCategory ? "active" : "";
+      const safeCategoryId = String(categoryId || "").replace(/'/g, "\\'");
+      if (kind === "drawer") {
+        return `<button class="drawer-category-btn ${active}" type="button" onclick="setCategory('${slug}', '${safeCategoryId}')">${name}</button>`;
+      }
+      return `<button class="category-chip ${active}" type="button" onclick="setCategory('${slug}', '${safeCategoryId}')">${name}</button>`;
+    }
+
+    function renderCategoryButtons() {
+      const categories = [
+        { slug: "all", name: "Todas", id: "" },
+        ...allCategories.map(cat => ({
+          slug: normalizeCategorySlug(cat.name),
+          name: cat.name,
+          id: cat.id || ""
+        }))
+      ];
+
+      const desktopRail = document.getElementById("desktopCategoryRail");
+      const heroButtons = document.getElementById("heroCategoryButtons");
+      const catalogButtons = document.getElementById("catalogCategoryButtons");
+      const drawerButtons = document.getElementById("drawerCategories");
+
+      if (desktopRail) {
+        desktopRail.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, cat.id || "")).join("");
+      }
+
+      if (heroButtons) {
+        heroButtons.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, cat.id || "")).join("");
+      }
+
+      if (catalogButtons) {
+        catalogButtons.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, cat.id || "")).join("");
+      }
+
+      if (drawerButtons) {
+        drawerButtons.innerHTML = categories.map(cat => getCategoryButtonHTML(cat.slug, cat.name, cat.id || "", "drawer")).join("");
+      }
+    }
+
+    function getFilteredProducts() {
+      return allProducts.filter(product => {
+        const title = String(product.name || product.title || "").toLowerCase();
+        const categoryName = normalizeCategoryName(product);
+        const categorySlug = normalizeCategorySlug(categoryName);
+        const productCategoryId = String(product.category_id || product.categories?.id || "");
+
+        const categoryMatches = activeCategory === "all"
+          || (activeCategoryId && productCategoryId === String(activeCategoryId))
+          || (!activeCategoryId && categorySlug === activeCategory);
+
+        const searchMatches = !searchTerm || title.includes(searchTerm);
+
+        return categoryMatches && searchMatches;
+      });
+    }
+
+    function isShirtCategoryProduct(product) {
+      const categoryName = normalizeCategoryName(product);
+      const normalizedCategory = normalizeCategorySlug(categoryName);
+      const productName = normalizeCategorySlug(product.name || product.title || "");
+      const combinedText = `${normalizedCategory} ${productName}`;
+
+      const blockedKeywords = [
+        "sandalia",
+        "sandália",
+        "chinelo",
+        "copo",
+        "caneca",
+        "garrafa",
+        "bone",
+        "boné"
+      ];
+
+      if (blockedKeywords.some(keyword => combinedText.includes(normalizeCategorySlug(keyword)))) {
+        return false;
+      }
+
+      const shirtKeywords = [
+        "brasileirao",
+        "brasileirão",
+        "internacional",
+        "internacionais",
+        "selecao",
+        "seleção",
+        "selecoes",
+        "seleções",
+        "retro",
+        "retrô",
+        "feminina",
+        "camisa",
+        "camisas",
+        "times",
+        "infantil",
+        "kit infantil",
+        "conjunto infantil",
+        "juvenil"
+      ];
+
+      return shirtKeywords.some(keyword => combinedText.includes(normalizeCategorySlug(keyword)));
+    }
+
+    function getProductBadge(product, isFeatured = false) {
+      const badgeType = product.badge_type || (isFeatured ? "destaque" : "");
+      if (!badgeType) return "";
+
+      const badgeMap = {
+        "destaque": { label: "Mais procurada", className: "destaque" },
+        "mais-vendida": { label: "Mais vendida", className: "mais-vendida" },
+        "novo": { label: "Novo", className: "novo" }
+      };
+
+      const badge = badgeMap[badgeType];
+      if (!badge) return "";
+
+      return `<span class="product-badge ${badge.className}">${badge.label}</span>`;
+    }
+
+    function getSaleTypeBadge(product) {
+      return (product.sale_type || "pronta_entrega") === "sob_encomenda"
+        ? `<span class="sale-type-badge">Sob encomenda</span>`
+        : "";
+    }
+
+    function getProductPriceHTML(product) {
+      const currentPrice = formatPrice(product.price);
+      const hasOldPrice = Number(product.old_price || 0) > Number(product.price || 0);
+
+      if (!hasOldPrice) {
+        return `<div class="product-price">${currentPrice}</div>`;
+      }
+
+      return `
+        <div class="product-price-stack">
+          <span class="product-price-old">${formatPrice(product.old_price)}</span>
+          <div class="product-price">${currentPrice}</div>
+        </div>
+      `;
+    }
+
+    function buildProductCard(product, isFeatured = false, useLazyImage = true) {
+      const imagem = getProductImage(product) || "https://via.placeholder.com/300x300?text=Camisa";
+      const categoryName = normalizeCategoryName(product);
+      const title = product.name || product.title || "Camisa disponível";
+      const priceHTML = getProductPriceHTML(product);
+      const url = getProductUrl(product);
+      const productBadge = getProductBadge(product, isFeatured);
+      const saleTypeBadge = getSaleTypeBadge(product);
+
+      return `
+        <article class="product-card">
+          <a href="${url}" class="product-image-link">
+            <div class="product-image-wrap">
+              ${(productBadge || saleTypeBadge) ? `<div class="badge-stack">${productBadge}${saleTypeBadge}</div>` : ""}
+              ${
+                imagem
+                  ? (
+                      useLazyImage
+                        ? `<img class="product-image lazy-img" data-src="${imagem}" alt="${title}" />`
+                        : `<img class="product-image" src="${imagem}" alt="${title}" loading="eager" />`
+                    )
+                  : `<div class="product-image-placeholder">Camisa 10 Store</div>`
+              }
+            </div>
+          </a>
+
+          <div class="product-body">
+            <span class="product-category">${categoryName}</span>
+            <h3 class="product-title">${title}</h3>
+            ${priceHTML}
+            <a href="${url}" class="btn btn-primary">Ver produto</a>
+          </div>
+        </article>
+      `;
+    }
+
+    async function renderFeaturedProducts() {
+      const grid = document.getElementById("featuredProductsGrid");
+      if (!grid) return;
+
+      let featured = [];
+
+      try {
+        const { data: featuredData, error: featuredError } = await supabaseClient
+          .from("products")
+          .select(`
+            id,
+            name,
+            slug,
+            price,
+            old_price,
+            image_url,
+            is_featured,
+            badge_type,
+            sale_type,
+            category_id,
+            priority_encomenda,
+            created_at,
+            categories (
+              id,
+              name
+            )
+          `)
+          .eq("is_featured", true)
+          .order("created_at", { ascending: false })
+          .limit(4);
+
+        if (!featuredError && Array.isArray(featuredData) && featuredData.length) {
+          featured = featuredData.map(product => ({
+            ...product,
+            category_name: product.categories?.name || product.category_name || product.category || "Sem categoria"
+          }));
+        }
+      } catch (error) {
+        console.warn("Erro ao buscar Mais procuradas por is_featured:", error);
+      }
+
+      if (!featured.length) {
+        featured = allProducts
+          .filter(product => product.badge_type === "destaque")
+          .sort((a, b) => {
+            const aDate = new Date(a.created_at || 0).getTime();
+            const bDate = new Date(b.created_at || 0).getTime();
+            return bDate - aDate;
+          })
+          .slice(0, 4);
+      }
+
+      if (!featured.length) {
+        featured = allProducts
+          .filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega")
+          .sort((a, b) => {
+            const aDate = new Date(a.created_at || 0).getTime();
+            const bDate = new Date(b.created_at || 0).getTime();
+            return bDate - aDate;
+          })
+          .slice(0, 4);
+      }
+
+      if (!featured.length) {
+        grid.innerHTML = `<div class="state-box">Nenhuma camisa em destaque disponível no momento.</div>`;
+        return;
+      }
+
+      grid.innerHTML = featured.map(product => buildProductCard(product, true, false)).join("");
+      setupLazyLoad();
+    }
+
+    function renderProducts() {
+      const prontaGrid = document.getElementById("grid-pronta");
+      const encomendaGrid = document.getElementById("grid-encomenda");
+      const outrosGrid = document.getElementById("grid-outros-produtos");
+      const outrosWrap = document.getElementById("outros-produtos-wrap");
+      const encomendaWrap = document.getElementById("encomenda-wrap");
+      const prontaTitle = document.getElementById("pronta-section-title");
+      const prontaSubtitle = document.getElementById("pronta-section-subtitle");
+      const filtered = getFilteredProducts();
+
+      const camisas = filtered.filter(product => isShirtCategoryProduct(product));
+      const outrosProdutos = filtered.filter(product => !isShirtCategoryProduct(product));
+
+      const pronta = camisas
+        .filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega")
+        .sort((a, b) => {
+          const aPriority = Number(a.priority_pronta_entrega ?? 9999);
+          const bPriority = Number(b.priority_pronta_entrega ?? 9999);
+          if (aPriority !== bPriority) return aPriority - bPriority;
+
+          const aDate = new Date(a.created_at || 0).getTime();
+          const bDate = new Date(b.created_at || 0).getTime();
+          return bDate - aDate;
+        })
+        .slice(0, 8);
+
+      const encomenda = camisas
+        .filter(product => product.sale_type === "sob_encomenda")
+        .sort((a, b) => {
+          const aPriority = a.priority_encomenda ?? 9999;
+          const bPriority = b.priority_encomenda ?? 9999;
+          if (aPriority !== bPriority) return aPriority - bPriority;
+
+          const aDate = new Date(a.created_at || 0).getTime();
+          const bDate = new Date(b.created_at || 0).getTime();
+          return bDate - aDate;
+        })
+        .slice(0, 10);
+
+      const outrosOrdenados = [...outrosProdutos].sort((a, b) => {
+        const aIsPronta = (a.sale_type || "pronta_entrega") === "pronta_entrega";
+        const bIsPronta = (b.sale_type || "pronta_entrega") === "pronta_entrega";
+
+        if (aIsPronta !== bIsPronta) return aIsPronta ? -1 : 1;
+
+        const aDate = new Date(a.created_at || 0).getTime();
+        const bDate = new Date(b.created_at || 0).getTime();
+        return bDate - aDate;
+      }).slice(0, 12);
+
+      const usingFilterView = activeCategory !== "all" || !!searchTerm;
+
+      if (usingFilterView) {
+        const filteredShirts = [...camisas].sort((a, b) => {
+          const aIsPronta = (a.sale_type || "pronta_entrega") === "pronta_entrega";
+          const bIsPronta = (b.sale_type || "pronta_entrega") === "pronta_entrega";
+
+          if (aIsPronta !== bIsPronta) return aIsPronta ? -1 : 1;
+
+          const aPriority = a.sale_type === "sob_encomenda" ? (a.priority_encomenda ?? 9999) : Number(a.priority_pronta_entrega ?? 9999);
+          const bPriority = b.sale_type === "sob_encomenda" ? (b.priority_encomenda ?? 9999) : Number(b.priority_pronta_entrega ?? 9999);
+          if (aPriority !== bPriority) return aPriority - bPriority;
+
+          const aDate = new Date(a.created_at || 0).getTime();
+          const bDate = new Date(b.created_at || 0).getTime();
+          return bDate - aDate;
+        });
+
+        if (prontaTitle) prontaTitle.textContent = "Catálogo de camisas";
+        if (prontaSubtitle) prontaSubtitle.textContent = "As camisas desta categoria aparecem aqui, separadas dos outros tipos de produto.";
+        if (encomendaWrap) encomendaWrap.style.display = filteredShirts.some(product => product.sale_type === "sob_encomenda") ? "" : "none";
+        if (outrosWrap) outrosWrap.style.display = outrosOrdenados.length ? "" : "none";
+
+        if (prontaGrid) {
+          prontaGrid.innerHTML = filteredShirts.length
+            ? filteredShirts.map(product => buildProductCard(product)).join("")
+            : `<div class="state-box">Nenhuma camisa encontrada com esse filtro.</div>`;
+        }
+
+        if (encomendaGrid) {
+          const filteredEncomenda = filteredShirts.filter(product => product.sale_type === "sob_encomenda").slice(0, 10);
+          encomendaGrid.innerHTML = filteredEncomenda.length
+            ? filteredEncomenda.map(product => buildProductCard(product)).join("")
+            : `<div class="state-box">Nenhuma camisa sob encomenda com esse filtro.</div>`;
+        }
+
+        if (outrosGrid) {
+          outrosGrid.innerHTML = outrosOrdenados.length
+            ? outrosOrdenados.map(product => buildProductCard(product)).join("")
+            : `<div class="state-box">Nenhum outro produto encontrado com esse filtro.</div>`;
+        }
+
+        setupLazyLoad();
+        return;
+      }
+
+      if (prontaTitle) prontaTitle.textContent = "🔥 Pronta entrega";
+      if (prontaSubtitle) prontaSubtitle.textContent = "Camisas disponíveis para pedido imediato.";
+      if (encomendaWrap) encomendaWrap.style.display = "";
+      if (outrosWrap) outrosWrap.style.display = outrosOrdenados.length ? "" : "none";
+
+      if (prontaGrid) {
+        prontaGrid.innerHTML = pronta.length
+          ? pronta.map(product => buildProductCard(product)).join("")
+          : `<div class="state-box">Nenhuma camisa à pronta entrega com esse filtro.</div>`;
+      }
+
+      if (encomendaGrid) {
+        encomendaGrid.innerHTML = encomenda.length
+          ? encomenda.map(product => buildProductCard(product)).join("")
+          : `<div class="state-box">Nenhuma camisa sob encomenda com esse filtro.</div>`;
+      }
+
+      if (outrosGrid) {
+        outrosGrid.innerHTML = outrosOrdenados.length
+          ? outrosOrdenados.map(product => buildProductCard(product)).join("")
+          : `<div class="state-box">Nenhum outro produto disponível no momento.</div>`;
+      }
+
+      setupLazyLoad();
+    }
+
+    function syncSearchInputs(value) {
+      const heroInput = document.getElementById("heroSearchInput");
+      const catalogInput = document.getElementById("catalogSearchInput");
+
+      if (heroInput && heroInput.value !== value) heroInput.value = value;
+      if (catalogInput && catalogInput.value !== value) catalogInput.value = value;
+    }
+
+    function setSearchTerm(value) {
+      searchTerm = String(value || "").trim().toLowerCase();
+      syncSearchInputs(value);
+      renderProducts();
+    }
+
+    function setCategory(slug, categoryId = "") {
+      activeCategory = slug || "all";
+      activeCategoryId = categoryId || "";
+      renderCategoryButtons();
+      renderProducts();
+      closeMobileDrawer();
+      document.getElementById("catalogo")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    window.setCategory = setCategory;
+
+    function setupSearch() {
+      const heroInput = document.getElementById("heroSearchInput");
+      const catalogInput = document.getElementById("catalogSearchInput");
+
+      [heroInput, catalogInput].forEach(input => {
+        if (!input) return;
+        input.addEventListener("input", (event) => {
+          setSearchTerm(event.target.value);
+        });
+      });
+    }
+
+    function openMobileDrawer() {
+      const drawer = document.getElementById("mobileMenuDrawer");
+      const backdrop = document.getElementById("mobileMenuBackdrop");
+      if (!drawer || !backdrop) return;
+
+      drawer.classList.add("open");
+      backdrop.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeMobileDrawer() {
+      const drawer = document.getElementById("mobileMenuDrawer");
+      const backdrop = document.getElementById("mobileMenuBackdrop");
+      if (!drawer || !backdrop) return;
+
+      drawer.classList.remove("open");
+      backdrop.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    function setupMobileDrawer() {
+      document.getElementById("mobileMenuBtn")?.addEventListener("click", openMobileDrawer);
+      document.getElementById("mobileDrawerClose")?.addEventListener("click", closeMobileDrawer);
+      document.getElementById("mobileMenuBackdrop")?.addEventListener("click", closeMobileDrawer);
+    }
+
+    function createHeroSlide(slide, index) {
+      const title = slide.title || "CAMISA 10 STORE";
+      const subtitle = slide.subtitle || "Os modelos mais procurados estão aqui.";
+      const imageUrl = slide.image_url || "";
+
+      return `
+        <div class="hero-slide ${index === 0 ? "active" : ""}" data-index="${index}">
+          <div class="hero-slide-bg" style="background-image:url('${imageUrl}');"></div>
+          <div class="hero-slide-overlay"></div>
+          <div class="hero-content">
+            <div class="hero-kicker">⚽ A loja mais completa de camisas em Humaitá</div>
+            <h1 class="hero-title">${title}</h1>
+            <p class="hero-subtitle">${subtitle}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderHeroDots() {
+      const dotsContainer = document.getElementById("heroDots");
+      if (!dotsContainer) return;
+
+      dotsContainer.innerHTML = heroSlides.map((_, index) => `
+        <button
+          class="hero-dot ${index === currentHeroIndex ? "active" : ""}"
+          aria-label="Ir para slide ${index + 1}"
+          onclick="goToHeroSlide(${index})"
+        ></button>
+      `).join("");
+    }
+
+    function updateHeroSlider() {
+      document.querySelectorAll(".hero-slide").forEach((slide, index) => {
+        slide.classList.toggle("active", index === currentHeroIndex);
+      });
+
+      document.querySelectorAll(".hero-dot").forEach((dot, index) => {
+        dot.classList.toggle("active", index === currentHeroIndex);
+      });
+    }
+
+    function goToHeroSlide(index) {
+      if (!heroSlides.length) return;
+      currentHeroIndex = index;
+      updateHeroSlider();
+      restartHeroAutoplay();
+    }
+    window.goToHeroSlide = goToHeroSlide;
+
+    function nextHeroSlide() {
+      if (!heroSlides.length) return;
+      currentHeroIndex = (currentHeroIndex + 1) % heroSlides.length;
+      updateHeroSlider();
+    }
+
+    function prevHeroSlide() {
+      if (!heroSlides.length) return;
+      currentHeroIndex = (currentHeroIndex - 1 + heroSlides.length) % heroSlides.length;
+      updateHeroSlider();
+    }
+
+    function startHeroAutoplay() {
+      if (heroInterval || heroSlides.length <= 1) return;
+      heroInterval = setInterval(nextHeroSlide, 5000);
+    }
+
+    function restartHeroAutoplay() {
+      if (heroInterval) {
+        clearInterval(heroInterval);
+        heroInterval = null;
+      }
+      startHeroAutoplay();
+    }
+
+    function bindHeroControls() {
+      document.getElementById("heroPrevBtn")?.addEventListener("click", () => {
+        prevHeroSlide();
+        restartHeroAutoplay();
+      });
+
+      document.getElementById("heroNextBtn")?.addEventListener("click", () => {
+        nextHeroSlide();
+        restartHeroAutoplay();
+      });
+    }
+
+    function setupHeroSwipe() {
+      const slider = document.getElementById("heroSlider");
+      if (!slider) return;
+
+      let startX = 0;
+      let currentX = 0;
+      let isDragging = false;
+      let isHorizontalSwipe = false;
+
+      slider.addEventListener("touchstart", (event) => {
+        startX = event.touches[0].clientX;
+        currentX = startX;
+        isDragging = true;
+        isHorizontalSwipe = false;
+      }, { passive: true });
+
+      slider.addEventListener("touchmove", (event) => {
+        if (!isDragging) return;
+
+        currentX = event.touches[0].clientX;
+        const deltaX = currentX - startX;
+
+        if (Math.abs(deltaX) > 8) {
+          isHorizontalSwipe = true;
+        }
+      }, { passive: true });
+
+      slider.addEventListener("touchend", () => {
+        if (!isDragging) return;
+
+        const deltaX = currentX - startX;
+        isDragging = false;
+
+        if (!isHorizontalSwipe) return;
+        if (Math.abs(deltaX) < 55) return;
+
+        if (deltaX < 0) {
+          nextHeroSlide();
+        } else {
+          prevHeroSlide();
+        }
+
+        restartHeroAutoplay();
+      }, { passive: true });
+    }
+
+    function renderHeroSlides() {
+      const slider = document.getElementById("heroSlider");
+      if (!slider) return;
+
+      if (!heroSlides.length) {
+        heroSlides = [{
+          title: siteSettings?.hero_title || "CAMISA 10 STORE",
+          subtitle: siteSettings?.hero_subtitle || "Os mantos mais desejados do momento, com visual forte e entrega rápida em Humaitá.",
+          image_url: siteSettings?.hero_image_url || ""
+        }];
+      }
+
+      slider.innerHTML = heroSlides.map((slide, index) => createHeroSlide(slide, index)).join("");
+      currentHeroIndex = 0;
+      renderHeroDots();
+      updateHeroSlider();
+      bindHeroControls();
+      setupHeroSwipe();
+      restartHeroAutoplay();
+    }
+
+    async function loadHeroSlides() {
+      const cachedSlides = readCache("hero_slides", CACHE_TTL.slides);
+      if (cachedSlides) {
+        heroSlides = cachedSlides;
+        return;
+      }
+
+      const { data, error } = await supabaseClient
+        .from("hero_slides")
+        .select("id, title, subtitle, image_url, sort_order, created_at, is_active")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        console.warn("Erro ao carregar hero_slides:", error);
+        heroSlides = [];
+        return;
+      }
+
+      heroSlides = data || [];
+      saveCache("hero_slides", heroSlides);
+    }
+
+    async function loadSiteSettings() {
+      const cachedSettings = readCache("site_settings", CACHE_TTL.settings);
+      if (cachedSettings) {
+        siteSettings = cachedSettings;
+        applySiteSettings();
+        return;
+      }
+
+      const { data, error } = await supabaseClient
+        .from("site_settings")
+        .select("id, hero_title, hero_subtitle, hero_image_url, logo_url, whatsapp_number, delivery_text, catalog_title, catalog_subtitle, contact_text, footer_text")
+        .eq("id", SITE_SETTINGS_ID)
+        .single();
+
+      if (error) {
+        console.warn("Erro ao carregar site_settings:", error);
+        syncMobileLogos();
+        setWhatsAppLinks();
+        return;
+      }
+
+      if (data) {
+        siteSettings = data;
+        saveCache("site_settings", data);
+        applySiteSettings();
+      }
+    }
+
+    async function loadCategories() {
+      const cachedCategories = readCache("categories", CACHE_TTL.categories);
+      if (cachedCategories) {
+        allCategories = cachedCategories;
+        return;
+      }
+
+      const { data, error } = await supabaseClient
+        .from("categories")
+        .select("id, name")
+        .order("name", { ascending: true });
+
+      if (error) {
+        console.warn("Erro ao carregar categories:", error);
+        allCategories = [];
+        return;
+      }
+
+      allCategories = data || [];
+      saveCache("categories", allCategories);
+    }
+
+    async function loadProducts() {
+      const cachedProducts = readCache("products", CACHE_TTL.products);
+      if (cachedProducts) {
+        allProducts = cachedProducts;
+        return;
+      }
+
+      const { data, error } = await supabaseClient
+        .from("products")
+        .select(`
+          id,
+          name,
+          slug,
+          price,
+          old_price,
+          image_url,
+          is_featured,
+          badge_type,
+          sale_type,
+          category_id,
+          priority_encomenda,
+          created_at,
+          categories (
+            id,
+            name
+          )
+        `)
+        .order("created_at", { ascending: false })
+        .limit(200);
+
+      if (error) {
+        console.error("Erro real do Supabase:", error);
+        allProducts = [];
+        return;
+      }
+
+      allProducts = (data || []).map(product => ({
+        ...product,
+        category_name: product.categories?.name || product.category_name || product.category || "Sem categoria"
+      }));
+
+      saveCache("products", allProducts);
+    }
+
+    function setupLazyLoad() {
+      const images = document.querySelectorAll(".lazy-img");
+      if (!images.length) return;
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.removeAttribute("data-src");
+          img.classList.remove("lazy-img");
+          obs.unobserve(img);
+        });
+      }, { rootMargin: "150px 0px" });
+
+      images.forEach(img => observer.observe(img));
+    }
+
+    async function init() {
+      try {
+        setupSearch();
+        setupMobileDrawer();
+        await loadSiteSettings();
+        await loadHeroSlides();
+        renderHeroSlides();
+
+        await Promise.all([
+          loadCategories(),
+          loadProducts()
+        ]);
+
+        if (!allCategories.length && allProducts.length) {
+          const uniqueCategories = [...new Set(
+            allProducts.map(item => normalizeCategoryName(item)).filter(Boolean)
+          )];
+          allCategories = uniqueCategories.map(name => ({ name }));
+        }
+
+        renderCategoryButtons();
+        await renderFeaturedProducts();
+        renderProducts();
+      } catch (error) {
+        console.error("Erro geral ao iniciar o site:", error);
+
+        document.getElementById("featuredProductsGrid").innerHTML =
+          `<div class="state-box">Ocorreu um erro ao carregar os destaques.</div>`;
+
+        const prontaGrid = document.getElementById("grid-pronta");
+        const encomendaGrid = document.getElementById("grid-encomenda");
+
+        if (prontaGrid) {
+          prontaGrid.innerHTML =
+            `<div class="state-box">Ocorreu um erro ao carregar os produtos à pronta entrega.</div>`;
+        }
+
+        if (encomendaGrid) {
+          encomendaGrid.innerHTML =
+            `<div class="state-box">Ocorreu um erro ao carregar os produtos sob encomenda.</div>`;
+        }
+      }
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        if (heroInterval) {
+          clearInterval(heroInterval);
+          heroInterval = null;
+        }
+      } else {
+        restartHeroAutoplay();
+      }
+    });
+
+    init();
+  </script>
 </body>
 </html>
