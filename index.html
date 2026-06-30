@@ -5,10 +5,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Camisa 10 Store - Camisas de Time em Humaitá</title>
+  <title>Camisa 10 Store - Camisas, Streetwear e Moda Fitness</title>
   <meta
     name="description"
-    content="Camisas de futebol nacionais e internacionais com entrega rápida em Humaitá e região. Peça direto pelo WhatsApp na Camisa 10 Store."
+    content="Camisas de futebol, moda streetwear e roupas de academia com entrega rápida em Humaitá e região. Peça direto pelo WhatsApp na Camisa 10 Store."
   />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -397,6 +397,41 @@
       background: var(--gold);
       transform: scale(1.08);
     }
+
+
+    .hero-quick-actions {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .hero-quick-actions .btn {
+      min-height: 54px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      font-size: 0.88rem;
+    }
+
+    .btn-street { border-color: rgba(117,215,255,0.32); color: #dff6ff; }
+    .btn-fitness { border-color: rgba(255,143,188,0.32); color: #ffe3ee; }
+
+    .conversion-strip {
+      margin-top: 8px;
+      border: 1px solid rgba(212,175,55,0.18);
+      background: linear-gradient(135deg, rgba(212,175,55,0.10), rgba(255,255,255,0.02));
+      border-radius: 24px;
+      padding: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow);
+    }
+
+    .conversion-strip h3 { font-size: 1.18rem; margin-bottom: 8px; }
+    .conversion-strip p { color: var(--muted); max-width: 720px; line-height: 1.65; }
 
     .hero-search-wrap {
       margin-top: 18px;
@@ -963,7 +998,92 @@
       box-shadow: 0 12px 26px rgba(221, 42, 123, 0.22);
     }
 
-    @media (max-width: 1100px) {
+
+    .collection-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .collection-card {
+      min-height: 330px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+      position: relative;
+      background: #111;
+      box-shadow: var(--shadow);
+      isolation: isolate;
+      transition: 0.22s ease;
+    }
+
+    .collection-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(212,175,55,0.24);
+    }
+
+    .collection-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: var(--collection-image);
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.02);
+      transition: transform 0.28s ease;
+      z-index: -2;
+    }
+
+    .collection-card:hover::before {
+      transform: scale(1.07);
+    }
+
+    .collection-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.16), rgba(0,0,0,0.86));
+      z-index: -1;
+    }
+
+    .collection-content {
+      min-height: 330px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .collection-tag {
+      width: fit-content;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: var(--collection-accent);
+      color: #101010;
+      font-size: 0.74rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .collection-title {
+      font-size: 1.45rem;
+      font-weight: 900;
+      line-height: 1.08;
+    }
+
+    .collection-text {
+      color: #e4e4e4;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .collection-link {
+      width: fit-content;
+      margin-top: 4px;
+    }
+@media (max-width: 1100px) {
       .featured-grid,
       .products-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1075,7 +1195,42 @@
         bottom: 14px;
       }
 
-      .hero-search-wrap {
+  
+    .hero-quick-actions {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .hero-quick-actions .btn {
+      min-height: 54px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      font-size: 0.88rem;
+    }
+
+    .btn-street { border-color: rgba(117,215,255,0.32); color: #dff6ff; }
+    .btn-fitness { border-color: rgba(255,143,188,0.32); color: #ffe3ee; }
+
+    .conversion-strip {
+      margin-top: 8px;
+      border: 1px solid rgba(212,175,55,0.18);
+      background: linear-gradient(135deg, rgba(212,175,55,0.10), rgba(255,255,255,0.02));
+      border-radius: 24px;
+      padding: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow);
+    }
+
+    .conversion-strip h3 { font-size: 1.18rem; margin-bottom: 8px; }
+    .conversion-strip p { color: var(--muted); max-width: 720px; line-height: 1.65; }
+
+    .hero-search-wrap {
         margin-top: 12px;
       }
 
@@ -1193,7 +1348,42 @@
         height: 8px;
       }
 
-      .hero-search-wrap {
+  
+    .hero-quick-actions {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .hero-quick-actions .btn {
+      min-height: 54px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      font-size: 0.88rem;
+    }
+
+    .btn-street { border-color: rgba(117,215,255,0.32); color: #dff6ff; }
+    .btn-fitness { border-color: rgba(255,143,188,0.32); color: #ffe3ee; }
+
+    .conversion-strip {
+      margin-top: 8px;
+      border: 1px solid rgba(212,175,55,0.18);
+      background: linear-gradient(135deg, rgba(212,175,55,0.10), rgba(255,255,255,0.02));
+      border-radius: 24px;
+      padding: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow);
+    }
+
+    .conversion-strip h3 { font-size: 1.18rem; margin-bottom: 8px; }
+    .conversion-strip p { color: var(--muted); max-width: 720px; line-height: 1.65; }
+
+    .hero-search-wrap {
         margin-top: 10px;
       }
 
@@ -1458,13 +1648,11 @@
 
       <button class="drawer-close" id="mobileDrawerClose" type="button" aria-label="Fechar menu">✕</button>
     </div>
-
-    <div class="drawer-section-title">Categorias</div>
-    <div class="drawer-categories" id="drawerCategories"></div>
-
-    <div class="drawer-section-title">Atalhos</div>
+<div class="drawer-section-title">Atalhos</div>
     <div class="drawer-links">
   <a href="catalogo.html" class="drawer-link">Catálogo</a>
+  <a href="streetwear.html" class="drawer-link">Streetwear</a>
+  <a href="academia.html" class="drawer-link">Academia</a>
 
   <a href="guia-tamanhos.html" class="drawer-link">
     Guia de tamanhos
@@ -1499,24 +1687,21 @@
 
         <div class="brand-text">
           <span class="brand-title" id="brandTitle">Camisa 10 Store</span>
-          <span class="brand-subtitle">Protagonismo começa no Manto</span>
+          <span class="brand-subtitle">Futebol, streetwear e treino</span>
         </div>
       </a>
 
       <nav class="nav">
         <a href="catalogo.html">Catálogo</a>
+        <a href="streetwear.html">Streetwear</a>
+        <a href="academia.html">Academia</a>
         <a href="#destaques">Mais procuradas</a>
         <a href="guia-tamanhos.html">Guia de tamanhos</a>
         <a id="headerWhatsApp" class="nav-cta" href="#" target="_blank" rel="noopener noreferrer">Pedir no WhatsApp</a>
       </nav>
     </div>
   </header>
-
-  <section class="category-rail">
-    <div class="container category-rail-inner" id="desktopCategoryRail"></div>
-  </section>
-
-  <section class="mobile-topbar">
+<section class="mobile-topbar">
     <div class="container mobile-topbar-inner">
       <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Abrir menu">☰</button>
 
@@ -1525,7 +1710,7 @@
         <div id="mobileLogoFallback" class="brand-logo-fallback">10</div>
         <div>
           <div class="mobile-brand-title" id="mobileBrandTitle">Camisa 10 Store</div>
-          <div class="mobile-brand-subtitle">Protagonismo começa no Manto</div>
+          <div class="mobile-brand-subtitle">Futebol, streetwear e treino</div>
         </div>
       </a>
     </div>
@@ -1540,9 +1725,9 @@
               <div class="hero-slide-bg"></div>
               <div class="hero-slide-overlay"></div>
               <div class="hero-content">
-                <div class="hero-kicker">⚽ A loja mais completa de camisas em Humaitá</div>
+                <div class="hero-kicker">⚽ Camisas, streetwear e treino em Humaitá</div>
                 <h1 class="hero-title">CAMISA 10 STORE</h1>
-                <p class="hero-subtitle">Os mantos mais desejados do momento, com visual forte e entrega rápida em Humaitá.</p>
+                <p class="hero-subtitle">Camisas de time, streetwear e moda fitness em uma loja mais completa, com visual forte e entrega rápida em Humaitá.</p>
               </div>
             </div>
           </div>
@@ -1553,19 +1738,60 @@
             <div class="hero-dots" id="heroDots"></div>
           </div>
         </div>
-
-        <div class="hero-search-wrap mobile-catalog-cta-wrap">
-          <a href="catalogo.html" class="btn btn-secondary mobile-catalog-cta">Ver catálogo</a>
+        <div class="hero-search-wrap hero-quick-actions">
+          <a href="catalogo.html" class="btn btn-primary">Ver catálogo</a>
+          <a href="streetwear.html" class="btn btn-secondary btn-street">Streetwear</a>
+          <a href="academia.html" class="btn btn-secondary btn-fitness">Academia</a>
         </div>
       </div>
     </section>
 
+    <section id="colecoes" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Escolha seu estilo</h2>
+            <p class="section-subtitle">Três entradas rápidas para comprar do jeito certo: futebol, streetwear e treino, cada uma com uma página própria.</p>
+          </div>
+          <a href="catalogo.html" class="btn btn-secondary">Ver catálogo</a>
+        </div>
+
+        <div class="collection-grid">
+          <a class="collection-card" href="catalogo.html" style="--collection-accent:#f4d76d; --collection-image:url('https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=1200&q=80');">
+            <div class="collection-content">
+              <span class="collection-tag">Mantos</span>
+              <h2 class="collection-title">Camisas de Time</h2>
+              <p class="collection-text">Mantos nacionais, internacionais, seleções, retrô, feminina, infantil e lançamentos para torcer com presença.</p>
+              <span class="btn btn-secondary collection-link">Ver camisas</span>
+            </div>
+          </a>
+
+          <a class="collection-card" href="streetwear.html" style="--collection-accent:#75d7ff; --collection-image:url('https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1200&q=80');">
+            <div class="collection-content">
+              <span class="collection-tag">Drop urbano</span>
+              <h2 class="collection-title">Streetwear</h2>
+              <p class="collection-text">Peças urbanas para montar look forte: oversized, bermudas, moletons, cargos, bonés e acessórios.</p>
+              <span class="btn btn-secondary collection-link">Ver streetwear</span>
+            </div>
+          </a>
+
+          <a class="collection-card" href="academia.html" style="--collection-accent:#ff8fbc; --collection-image:url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1200&q=80');">
+            <div class="collection-content">
+              <span class="collection-tag">Performance</span>
+              <h2 class="collection-title">Academia</h2>
+              <p class="collection-text">Peças para treinar com conforto e estilo: dry fit, regatas, shorts, leggings, tops e conjuntos.</p>
+              <span class="btn btn-secondary collection-link">Ver academia</span>
+            </div>
+          </a>
+        </div>
+</div>
+    </section>
     <section id="destaques" class="section">
       <div class="container">
         <div class="section-head">
           <div>
-            <h2 class="section-title">🔥 Mais procuradas</h2>
-            <p class="section-subtitle">Os modelos que mais chamam atenção na Camisa 10 Store.</p>
+            <h2 class="section-title">Mais procuradas agora</h2>
+            <p class="section-subtitle">Produtos com maior procura na loja nesta semana, reunindo futebol, streetwear e moda fitness.</p>
           </div>
         </div>
 
@@ -1575,13 +1801,25 @@
       </div>
     </section>
 
+
+    <section class="section" id="pedido-especial">
+      <div class="container">
+        <div class="conversion-strip">
+          <div>
+            <h3>Não encontrou o que queria?</h3>
+            <p>Chama no WhatsApp. A gente te ajuda a achar tamanho, modelo, produto sob pedido ou uma opção parecida dentro da proposta da Camisa 10 Store.</p>
+          </div>
+          <a id="midWhatsApp" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Chamar no WhatsApp</a>
+        </div>
+      </div>
+    </section>
     <section id="catalogo" class="section">
       <div class="container">
         <div class="catalog-shell">
           <div class="catalog-top">
             <div>
-              <h2 class="section-title" id="catalogTitle">Catálogo completo</h2>
-              <p class="section-subtitle" id="catalogSubtitle">Escolha seu time e encontre sua próxima camisa com mais facilidade.</p>
+              <h2 class="section-title" id="catalogTitle">Vitrine da loja</h2>
+              <p class="section-subtitle" id="catalogSubtitle">Use a busca para encontrar produtos de futebol, streetwear e academia com mais facilidade.</p>
             </div>
 
             <div class="catalog-search-box">
@@ -1589,20 +1827,17 @@
                 type="text"
                 id="catalogSearchInput"
                 class="search-input"
-                placeholder="Buscar camisa no catálogo..."
+                placeholder="Buscar produto na loja..."
                 autocomplete="off"
                 inputmode="search"
               />
             </div>
           </div>
-
-          <div class="category-chip-row" id="catalogCategoryButtons"></div>
-
-          <div style="margin-top:18px;">
+<div style="margin-top:18px;">
             <div class="section-head" style="margin-bottom:12px;">
               <div>
-                <h3 class="section-title" id="pronta-section-title" style="font-size:1.4rem;">🔥 Pronta entrega</h3>
-                <p class="section-subtitle" id="pronta-section-subtitle">Camisas disponíveis para pedido imediato.</p>
+                <h3 class="section-title" id="pronta-section-title" style="font-size:1.4rem;">Produtos da loja</h3>
+                <p class="section-subtitle" id="pronta-section-subtitle">Confira uma seleção de produtos da Camisa 10 Store.</p>
               </div>
             </div>
 
@@ -1610,40 +1845,9 @@
               <div class="state-box">Carregando produtos...</div>
             </div>
           </div>
-
-          <div class="encomenda-wrap" id="encomenda-wrap">
-            <div class="section-head" style="margin-bottom:12px;">
-              <div>
-                <h3 class="section-title" style="font-size:1.4rem;">🛒 Sob encomenda</h3>
-                <p class="section-subtitle">No desktop e no celular, deslize para o lado para ver mais modelos sem cortar os cards.</p>
-              </div>
-            </div>
-
-            <div class="products-grid encomenda-carousel" id="grid-encomenda">
-              <div class="state-box">Carregando produtos...</div>
-            </div>
-
-            <div class="catalog-full-cta-wrap">
-              <a href="catalogo.html" class="btn btn-primary catalog-full-cta">Ver catálogo completo</a>
-            </div>
-          </div>
-
-          <div class="encomenda-wrap" id="outros-produtos-wrap">
-            <div class="section-head" style="margin-bottom:12px;">
-              <div>
-                <h3 class="section-title" style="font-size:1.4rem;">🧩 Outros produtos</h3>
-                <p class="section-subtitle">Sandálias, kits infantis, bonés e outros itens da loja em uma seção separada.</p>
-              </div>
-            </div>
-
-            <div class="products-grid" id="grid-outros-produtos">
-              <div class="state-box">Carregando outros produtos...</div>
-            </div>
-          </div>
-
-          <div class="contact-strip">
+<div class="contact-strip">
             <div>
-              <h3>Achou sua camisa?</h3>
+              <h3>Achou seu produto?</h3>
               <p id="contactText">Fale com a Camisa 10 Store no WhatsApp e finalize seu pedido de forma rápida e simples.</p>
             </div>
 
@@ -1661,7 +1865,7 @@
       <div>
         <div class="footer-brand-title" id="footerBrandTitle">Camisa 10 Store</div>
         <p class="footer-text" id="footerMainText">
-          Camisas de futebol com atendimento rápido, catálogo organizado e pedido direto pelo WhatsApp.
+          Camisas de futebol, streetwear e moda fitness com atendimento rápido, catálogo organizado e pedido direto pelo WhatsApp.
         </p>
       </div>
 
@@ -1772,7 +1976,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       const defaultMessage = "Olá! Vim pelo site da Camisa 10 Store e quero fazer um pedido.";
       const link = buildWhatsAppLink(defaultMessage);
 
-      ["headerWhatsApp", "contactWhatsApp", "footerWhatsApp", "mobileDrawerWhatsApp"].forEach(id => {
+      ["headerWhatsApp", "contactWhatsApp", "footerWhatsApp", "mobileDrawerWhatsApp", "midWhatsApp"].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.href = link;
       });
@@ -1787,14 +1991,14 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       document.getElementById("mobileBrandTitle").textContent = brand;
       document.getElementById("mobileDrawerBrandTitle").textContent = brand;
 
-      document.getElementById("catalogTitle").textContent =
-        siteSettings.catalog_title || "Catálogo completo";
+      const catalogTitle = document.getElementById("catalogTitle");
+      if (catalogTitle) catalogTitle.textContent = siteSettings.catalog_title || "Vitrine da loja";
 
-      document.getElementById("catalogSubtitle").textContent =
-        siteSettings.catalog_subtitle || "Escolha seu time e encontre sua próxima camisa com mais facilidade.";
+      const catalogSubtitle = document.getElementById("catalogSubtitle");
+      if (catalogSubtitle) catalogSubtitle.textContent = siteSettings.catalog_subtitle || "Use a busca para encontrar produtos de futebol, streetwear e academia com mais facilidade.";
 
-      document.getElementById("contactText").textContent =
-        siteSettings.contact_text || "Fale com a Camisa 10 Store no WhatsApp e finalize seu pedido de forma rápida e simples.";
+      const contactText = document.getElementById("contactText");
+      if (contactText) contactText.textContent = siteSettings.contact_text || "Fale com a Camisa 10 Store no WhatsApp e finalize seu pedido de forma rápida e simples.";
 
       document.getElementById("footerText").textContent =
         siteSettings.footer_text || "© Camisa 10 Store";
@@ -1996,7 +2200,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
     function getSaleTypeBadge(product) {
       return (product.sale_type || "pronta_entrega") === "sob_encomenda"
-        ? `<span class="sale-type-badge">Sob encomenda</span>`
+        ? `<span class="sale-type-badge">Pedido especial</span>`
         : "";
     }
 
@@ -2125,122 +2329,35 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     }
 
     function renderProducts() {
-      const prontaGrid = document.getElementById("grid-pronta");
-      const encomendaGrid = document.getElementById("grid-encomenda");
-      const outrosGrid = document.getElementById("grid-outros-produtos");
-      const outrosWrap = document.getElementById("outros-produtos-wrap");
-      const encomendaWrap = document.getElementById("encomenda-wrap");
-      const prontaTitle = document.getElementById("pronta-section-title");
-      const prontaSubtitle = document.getElementById("pronta-section-subtitle");
+      const productsGrid = document.getElementById("grid-pronta");
+      const sectionTitle = document.getElementById("pronta-section-title");
+      const sectionSubtitle = document.getElementById("pronta-section-subtitle");
       const filtered = getFilteredProducts();
+      const usingFilterView = activeCategory !== "all" || !!searchTerm;
 
-      const camisas = filtered.filter(product => isShirtCategoryProduct(product));
-      const outrosProdutos = filtered.filter(product => !isShirtCategoryProduct(product));
-
-      const pronta = camisas
-        .filter(product => (product.sale_type || "pronta_entrega") === "pronta_entrega")
-        .sort((a, b) => {
-          const aPriority = Number(a.priority_pronta_entrega ?? 9999);
-          const bPriority = Number(b.priority_pronta_entrega ?? 9999);
-          if (aPriority !== bPriority) return aPriority - bPriority;
-
-          const aDate = new Date(a.created_at || 0).getTime();
-          const bDate = new Date(b.created_at || 0).getTime();
-          return bDate - aDate;
-        })
-        .slice(0, 8);
-
-      const encomenda = camisas
-        .filter(product => product.sale_type === "sob_encomenda")
-        .sort((a, b) => {
-          const aPriority = a.priority_encomenda ?? 9999;
-          const bPriority = b.priority_encomenda ?? 9999;
-          if (aPriority !== bPriority) return aPriority - bPriority;
-
-          const aDate = new Date(a.created_at || 0).getTime();
-          const bDate = new Date(b.created_at || 0).getTime();
-          return bDate - aDate;
-        })
-        .slice(0, 10);
-
-      const outrosOrdenados = [...outrosProdutos].sort((a, b) => {
-        const aIsPronta = (a.sale_type || "pronta_entrega") === "pronta_entrega";
-        const bIsPronta = (b.sale_type || "pronta_entrega") === "pronta_entrega";
-
-        if (aIsPronta !== bIsPronta) return aIsPronta ? -1 : 1;
+      const orderedProducts = [...filtered].sort((a, b) => {
+        const aSale = a.sale_type || "pronta_entrega";
+        const bSale = b.sale_type || "pronta_entrega";
+        const aPriority = aSale === "sob_encomenda" ? (a.priority_encomenda ?? 9999) : Number(a.priority_pronta_entrega ?? 9999);
+        const bPriority = bSale === "sob_encomenda" ? (b.priority_encomenda ?? 9999) : Number(b.priority_pronta_entrega ?? 9999);
+        if (aPriority !== bPriority) return aPriority - bPriority;
 
         const aDate = new Date(a.created_at || 0).getTime();
         const bDate = new Date(b.created_at || 0).getTime();
         return bDate - aDate;
-      }).slice(0, 12);
+      }).slice(0, usingFilterView ? 24 : 16);
 
-      const usingFilterView = activeCategory !== "all" || !!searchTerm;
-
-      if (usingFilterView) {
-        const filteredShirts = [...camisas].sort((a, b) => {
-          const aIsPronta = (a.sale_type || "pronta_entrega") === "pronta_entrega";
-          const bIsPronta = (b.sale_type || "pronta_entrega") === "pronta_entrega";
-
-          if (aIsPronta !== bIsPronta) return aIsPronta ? -1 : 1;
-
-          const aPriority = a.sale_type === "sob_encomenda" ? (a.priority_encomenda ?? 9999) : Number(a.priority_pronta_entrega ?? 9999);
-          const bPriority = b.sale_type === "sob_encomenda" ? (b.priority_encomenda ?? 9999) : Number(b.priority_pronta_entrega ?? 9999);
-          if (aPriority !== bPriority) return aPriority - bPriority;
-
-          const aDate = new Date(a.created_at || 0).getTime();
-          const bDate = new Date(b.created_at || 0).getTime();
-          return bDate - aDate;
-        });
-
-        if (prontaTitle) prontaTitle.textContent = "Catálogo de camisas";
-        if (prontaSubtitle) prontaSubtitle.textContent = "As camisas desta categoria aparecem aqui, separadas dos outros tipos de produto.";
-        if (encomendaWrap) encomendaWrap.style.display = filteredShirts.some(product => product.sale_type === "sob_encomenda") ? "" : "none";
-        if (outrosWrap) outrosWrap.style.display = outrosOrdenados.length ? "" : "none";
-
-        if (prontaGrid) {
-          prontaGrid.innerHTML = filteredShirts.length
-            ? filteredShirts.map(product => buildProductCard(product)).join("")
-            : `<div class="state-box">Nenhuma camisa encontrada com esse filtro.</div>`;
-        }
-
-        if (encomendaGrid) {
-          const filteredEncomenda = filteredShirts.filter(product => product.sale_type === "sob_encomenda").slice(0, 10);
-          encomendaGrid.innerHTML = filteredEncomenda.length
-            ? filteredEncomenda.map(product => buildProductCard(product)).join("")
-            : `<div class="state-box">Nenhuma camisa sob encomenda com esse filtro.</div>`;
-        }
-
-        if (outrosGrid) {
-          outrosGrid.innerHTML = outrosOrdenados.length
-            ? outrosOrdenados.map(product => buildProductCard(product)).join("")
-            : `<div class="state-box">Nenhum outro produto encontrado com esse filtro.</div>`;
-        }
-
-        setupLazyLoad();
-        return;
+      if (sectionTitle) sectionTitle.textContent = usingFilterView ? "Produtos encontrados" : "Produtos da loja";
+      if (sectionSubtitle) {
+        sectionSubtitle.textContent = usingFilterView
+          ? "Resultado da busca, reunindo os segmentos da Camisa 10 Store."
+          : "Confira uma seleção de produtos da Camisa 10 Store.";
       }
 
-      if (prontaTitle) prontaTitle.textContent = "🔥 Pronta entrega";
-      if (prontaSubtitle) prontaSubtitle.textContent = "Camisas disponíveis para pedido imediato.";
-      if (encomendaWrap) encomendaWrap.style.display = "";
-      if (outrosWrap) outrosWrap.style.display = outrosOrdenados.length ? "" : "none";
-
-      if (prontaGrid) {
-        prontaGrid.innerHTML = pronta.length
-          ? pronta.map(product => buildProductCard(product)).join("")
-          : `<div class="state-box">Nenhuma camisa à pronta entrega com esse filtro.</div>`;
-      }
-
-      if (encomendaGrid) {
-        encomendaGrid.innerHTML = encomenda.length
-          ? encomenda.map(product => buildProductCard(product)).join("")
-          : `<div class="state-box">Nenhuma camisa sob encomenda com esse filtro.</div>`;
-      }
-
-      if (outrosGrid) {
-        outrosGrid.innerHTML = outrosOrdenados.length
-          ? outrosOrdenados.map(product => buildProductCard(product)).join("")
-          : `<div class="state-box">Nenhum outro produto disponível no momento.</div>`;
+      if (productsGrid) {
+        productsGrid.innerHTML = orderedProducts.length
+          ? orderedProducts.map(product => buildProductCard(product)).join("")
+          : `<div class="state-box">Nenhum produto encontrado com esse filtro.</div>`;
       }
 
       setupLazyLoad();
@@ -2318,7 +2435,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
           <div class="hero-slide-bg" style="background-image:url('${imageUrl}');"></div>
           <div class="hero-slide-overlay"></div>
           <div class="hero-content">
-            <div class="hero-kicker">⚽ A loja mais completa de camisas em Humaitá</div>
+            <div class="hero-kicker">⚽ Camisas, streetwear e treino em Humaitá</div>
             <h1 class="hero-title">${title}</h1>
             <p class="hero-subtitle">${subtitle}</p>
           </div>
@@ -2447,7 +2564,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       if (!heroSlides.length) {
         heroSlides = [{
           title: siteSettings?.hero_title || "CAMISA 10 STORE",
-          subtitle: siteSettings?.hero_subtitle || "Os mantos mais desejados do momento, com visual forte e entrega rápida em Humaitá.",
+          subtitle: siteSettings?.hero_subtitle || "Camisas de time, streetwear e moda fitness em uma loja mais completa, com visual forte e entrega rápida em Humaitá.",
           image_url: siteSettings?.hero_image_url || ""
         }];
       }
@@ -2626,17 +2743,11 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         document.getElementById("featuredProductsGrid").innerHTML =
           `<div class="state-box">Ocorreu um erro ao carregar os destaques.</div>`;
 
-        const prontaGrid = document.getElementById("grid-pronta");
-        const encomendaGrid = document.getElementById("grid-encomenda");
+        const productsGrid = document.getElementById("grid-pronta");
 
-        if (prontaGrid) {
-          prontaGrid.innerHTML =
-            `<div class="state-box">Ocorreu um erro ao carregar os produtos à pronta entrega.</div>`;
-        }
-
-        if (encomendaGrid) {
-          encomendaGrid.innerHTML =
-            `<div class="state-box">Ocorreu um erro ao carregar os produtos sob encomenda.</div>`;
+        if (productsGrid) {
+          productsGrid.innerHTML =
+            `<div class="state-box">Ocorreu um erro ao carregar os produtos da loja.</div>`;
         }
       }
     }
