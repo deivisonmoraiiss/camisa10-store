@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Camisa 10 Store - Streetwear</title>
+  <meta name="description" content="Streetwear da Camisa 10 Store: oversized, bermudas, moletons, calças cargo, bonés e acessórios com atendimento direto pelo WhatsApp." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root { --bg:#050505; --card:#121212; --text:#f5f5f5; --muted:#b9b9b9; --line:rgba(255,255,255,.09); --gold:#d4af37; --gold-2:#f0cf63; --accent:#75d7ff; --container:1180px; --shadow:0 18px 44px rgba(0,0,0,.32); }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:Inter,sans-serif; color:var(--text); background:radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 16%, transparent), transparent 30%), linear-gradient(180deg,#050505,#0b0b0b); }
+    a { color:inherit; text-decoration:none; }
+    img { max-width:100%; display:block; }
+    .container { width:100%; max-width:var(--container); margin:0 auto; padding:0 18px; }
+    .header { position:sticky; top:0; z-index:20; background:rgba(7,7,7,.92); border-bottom:1px solid var(--line); backdrop-filter:blur(12px); }
+    .header-inner { min-height:78px; display:flex; align-items:center; justify-content:space-between; gap:18px; }
+    .brand { display:flex; align-items:center; gap:12px; min-width:0; }
+    .brand-mark { width:50px; height:50px; border-radius:999px; display:grid; place-items:center; background:linear-gradient(135deg,var(--gold),var(--gold-2)); color:#111; font-weight:900; flex-shrink:0; }
+    .brand-title { display:block; font-weight:900; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .brand-subtitle { display:block; color:var(--muted); font-size:.82rem; margin-top:2px; }
+    .nav { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+    .nav a { min-height:42px; display:inline-flex; align-items:center; padding:0 14px; border-radius:999px; color:#eaeaea; font-weight:700; font-size:.92rem; }
+    .nav a:hover { background:rgba(255,255,255,.06); }
+    .nav .cta { background:linear-gradient(135deg,var(--gold),var(--gold-2)); color:#111; }
+    .btn { min-height:50px; display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:0 20px; border-radius:14px; border:1px solid var(--line); font-weight:800; transition:.2s ease; cursor:pointer; }
+    .btn:hover, .product-card:hover, .chip:hover { transform:translateY(-1px); }
+    .btn-primary { background:linear-gradient(135deg,var(--gold),var(--gold-2)); color:#101010; border-color:transparent; box-shadow:0 14px 30px rgba(212,175,55,.22); }
+    .btn-secondary { background:rgba(255,255,255,.04); color:#fff; }
+    .hero { padding:18px 0 34px; }
+    .hero-shell { min-height:470px; border-radius:28px; overflow:hidden; border:1px solid color-mix(in srgb, var(--accent) 35%, rgba(255,255,255,.08)); background:linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.62),rgba(0,0,0,.25)), url('https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1800&q=80') center/cover; box-shadow:0 22px 58px rgba(0,0,0,.42); display:flex; align-items:flex-end; padding:46px; }
+    .eyebrow { display:inline-flex; align-items:center; width:fit-content; min-height:34px; padding:0 13px; border-radius:999px; background:color-mix(in srgb, var(--accent) 22%, rgba(0,0,0,.28)); border:1px solid color-mix(in srgb, var(--accent) 42%, transparent); color:#fff; font-size:.8rem; font-weight:900; margin-bottom:16px; }
+    h1 { font-size:clamp(2.6rem,6vw,5.4rem); line-height:.92; font-weight:900; text-transform:uppercase; max-width:760px; margin-bottom:16px; }
+    .hero p { color:#e7e7e7; line-height:1.75; max-width:650px; font-size:1rem; margin-bottom:22px; }
+    .actions { display:flex; flex-wrap:wrap; gap:12px; }
+    .section { padding:42px 0; }
+    .section-head { display:flex; align-items:end; justify-content:space-between; gap:18px; flex-wrap:wrap; margin-bottom:18px; }
+    .section-title { font-size:clamp(1.6rem,3vw,2.25rem); line-height:1.1; font-weight:900; margin-bottom:8px; }
+    .section-subtitle { color:var(--muted); line-height:1.7; max-width:760px; }
+    .toolbar { border:1px solid var(--line); border-radius:24px; background:linear-gradient(180deg,#121212,#0f0f0f); padding:18px; box-shadow:var(--shadow); margin-bottom:20px; display:grid; gap:14px; }
+    .search-input { width:100%; height:54px; border-radius:16px; border:1px solid rgba(255,255,255,.1); background:#0d0d0d; color:#fff; padding:0 16px; outline:none; font-size:.95rem; }
+    .search-input:focus { border-color:color-mix(in srgb, var(--accent) 55%, white); box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent); }
+    .chips { display:flex; gap:10px; flex-wrap:wrap; }
+    .chip-more { display:none; }
+    .more-filters-btn { border-color:color-mix(in srgb, var(--accent) 34%, rgba(255,255,255,.1)); color:#fff; }
+    .chips.show-more .chip-more { display:inline-flex; }
+    .chip { min-height:40px; padding:0 14px; border-radius:999px; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.035); color:#f4f4f4; font-weight:800; cursor:pointer; }
+    .chip.active { background:var(--accent); color:#101010; border-color:transparent; }
+    .products-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; }
+    .product-card { background:linear-gradient(180deg,#141414,#101010); border:1px solid var(--line); border-radius:22px; overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column; transition:.22s ease; }
+    .product-image-wrap { position:relative; aspect-ratio:1/1; background:#101010; overflow:hidden; }
+    .product-image { width:100%; height:100%; object-fit:cover; transition:.28s ease; }
+    .product-card:hover .product-image { transform:scale(1.04); }
+    .product-placeholder { width:100%; height:100%; display:grid; place-items:center; color:rgba(255,255,255,.5); font-weight:800; background:radial-gradient(circle at center, color-mix(in srgb, var(--accent) 16%, transparent), transparent 42%), #0f0f0f; }
+    .badge-stack { position:absolute; top:12px; left:12px; display:flex; flex-direction:column; gap:8px; z-index:2; pointer-events:none; }
+    .badge { width:fit-content; padding:7px 11px; border-radius:999px; background:rgba(0,0,0,.48); border:1px solid color-mix(in srgb, var(--accent) 25%, rgba(255,255,255,.08)); color:#fff; font-size:.72rem; font-weight:900; backdrop-filter:blur(12px); }
+    .product-body { padding:18px; display:flex; flex-direction:column; gap:12px; flex:1; }
+    .product-category { width:fit-content; padding:7px 11px; border-radius:999px; color:#111; background:var(--accent); font-size:.72rem; font-weight:900; text-transform:uppercase; letter-spacing:.04em; }
+    .product-title { min-height:44px; color:#fff; font-size:1rem; line-height:1.4; }
+    .product-price { margin-top:auto; color:var(--gold-2); font-weight:900; font-size:1.15rem; }
+    .state-box { grid-column:1/-1; padding:28px; border-radius:20px; border:1px dashed rgba(255,255,255,.14); background:rgba(255,255,255,.025); color:var(--muted); text-align:center; font-weight:600; }
+    .contact-strip { margin-top:22px; border:1px solid color-mix(in srgb, var(--accent) 30%, rgba(255,255,255,.08)); border-radius:24px; background:linear-gradient(135deg,color-mix(in srgb, var(--accent) 13%, transparent),rgba(255,255,255,.02)); padding:26px; display:flex; justify-content:space-between; align-items:center; gap:18px; flex-wrap:wrap; }
+    .contact-strip h2 { font-size:1.3rem; margin-bottom:8px; }
+    .contact-strip p { color:var(--muted); line-height:1.65; max-width:680px; }
+    .footer { margin-top:24px; border-top:1px solid var(--line); padding:26px 0; color:var(--muted); }
+    .footer-inner { display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; }
+    @media(max-width:980px){ .products-grid{grid-template-columns:repeat(3,minmax(0,1fr));} .nav{display:none;} .hero-shell{padding:34px; min-height:420px;} }
+    @media(max-width:700px){ .products-grid{grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;} .hero-shell{border-radius:22px; min-height:360px; padding:26px 20px;} h1{font-size:2.35rem;} .section{padding:32px 0;} .product-body{padding:12px;} .product-title{font-size:.9rem;} .actions .btn{width:100%;} .toolbar{padding:14px;border-radius:20px;} .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;} .chips::-webkit-scrollbar{display:none;} .chip{white-space:nowrap;flex:0 0 auto;} }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Camisa 10 Store">
+        <div class="brand-mark">10</div>
+        <div><span class="brand-title">Camisa 10 Store</span><span class="brand-subtitle">Futebol, streetwear e treino</span></div>
+      </a>
+      <nav class="nav">
+        <a href="index.html">Início</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="streetwear.html">Streetwear</a>
+        <a href="academia.html">Academia</a>
+        <a class="cta" id="headerWhatsApp" href="#" target="_blank" rel="noopener noreferrer">Pedir no WhatsApp</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-shell">
+          <div>
+            <div class="eyebrow">Coleção streetwear</div>
+            <h1>Streetwear</h1>
+            <p>Peças urbanas para montar looks fortes no dia a dia: oversized, bermudas, moletons, cargos, bonés, conjuntos e acessórios.</p>
+            <div class="actions">
+              <a class="btn btn-primary" href="#produtos">Ver produtos</a>
+              <a class="btn btn-secondary" href="index.html">Voltar para home</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="produtos">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Produtos de Streetwear</h2>
+            <p class="section-subtitle">Use a busca e os atalhos para encontrar os modelos dessa linha.</p>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <input id="searchInput" class="search-input" type="text" placeholder="Buscar oversized, moletom, bermuda..." autocomplete="off" inputmode="search" />
+          <div class="chips" id="chips">
+            <button class="chip active" type="button" data-chip="all">Todos</button>
+            <button class="chip" type="button" data-chip="oversized">Oversized</button>
+            <button class="chip" type="button" data-chip="moletom">Moletons</button>
+            <button class="chip" type="button" data-chip="bermuda">Bermudas</button>
+            <button class="chip more-filters-btn" type="button" id="moreFiltersBtn" data-toggle-more="true">Mais filtros</button>
+            <button class="chip chip-more" type="button" data-chip="cargo">Cargo</button>
+            <button class="chip chip-more" type="button" data-chip="boné">Bonés</button>
+            <button class="chip chip-more" type="button" data-chip="conjunto">Conjuntos</button>
+            <button class="chip chip-more" type="button" data-chip="casual">Casual</button>
+            <button class="chip chip-more" type="button" data-chip="acessório">Acessórios</button>
+          </div>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+          <div class="state-box">Carregando produtos...</div>
+        </div>
+
+        <div class="contact-strip">
+          <div>
+            <h2>Quer confirmar tamanho, disponibilidade ou prazo?</h2>
+            <p>Fale com a Camisa 10 Store no WhatsApp e receba atendimento direto para finalizar seu pedido.</p>
+          </div>
+          <a class="btn btn-primary" id="contactWhatsApp" href="#" target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© Camisa 10 Store</span>
+      <span>Streetwear com atendimento direto pelo WhatsApp.</span>
+    </div>
+  </footer>
+
+  <script>
+    const SUPABASE_URL = "https://elxwjajwfljwyextmdql.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const BASE_KEYWORDS = ["streetwear", "oversized", "moletom", "moletons", "bermuda", "bermudas", "cargo", "boné", "bone", "conjunto", "casual", "acessório", "acessorio"];
+    const KIND = "streetwear";
+    let allProducts = [];
+    let currentChip = "all";
+    let searchTerm = "";
+
+    function normalize(text) { return String(text || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim(); }
+    function formatPrice(value) { return Number(value || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" }); }
+    function sanitizePhone(phone) { return String(phone || "").replace(/\D/g, ""); }
+    function setWhatsAppLinks() {
+      const phone = sanitizePhone("5597981098445");
+      const message = `Olá! Vim pela página de ${KIND} da Camisa 10 Store e quero fazer um pedido.`;
+      const link = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+      ["headerWhatsApp", "contactWhatsApp"].forEach(id => { const el = document.getElementById(id); if (el) el.href = link; });
+    }
+    function normalizeCategoryName(product) { return product.categories?.name || product.category_name || product.category || "Sem categoria"; }
+    function getProductText(product) { return normalize([product.name, product.title, normalizeCategoryName(product), product.short_description, product.description].filter(Boolean).join(" ")); }
+    function matchesSegment(product) { const text = getProductText(product); return BASE_KEYWORDS.some(keyword => text.includes(normalize(keyword))); }
+    function getProductImage(product) { const url = product.image_url || product.photo_url || product.cover_url || product.product_images?.[0]?.image_url || ""; return url && url.includes("res.cloudinary.com") ? url.replace("/upload/", "/upload/f_auto,q_auto,w_520/") : url; }
+    function getProductUrl(product) { return product.slug ? `produto.html?slug=${encodeURIComponent(product.slug)}` : `produto.html?id=${encodeURIComponent(product.id)}`; }
+    function getBadge(product) {
+      if (product.badge_type === "novo") return `<span class="badge">Novo</span>`;
+      if (product.badge_type === "mais-vendida") return `<span class="badge">Mais vendida</span>`;
+      if (product.is_featured || product.badge_type === "destaque") return `<span class="badge">Mais procurada</span>`;
+      if (product.sale_type === "sob_encomenda") return `<span class="badge">Pedido especial</span>`;
+      return "";
+    }
+    function buildProductCard(product) {
+      const image = getProductImage(product);
+      const category = normalizeCategoryName(product);
+      const title = product.name || product.title || "Produto Camisa 10";
+      const url = getProductUrl(product);
+      const badge = getBadge(product);
+      return `
+        <article class="product-card">
+          <a href="${url}"><div class="product-image-wrap">${badge ? `<div class="badge-stack">${badge}</div>` : ""}${image ? `<img class="product-image" src="${image}" alt="${title}" loading="lazy" />` : `<div class="product-placeholder">Camisa 10 Store</div>`}</div></a>
+          <div class="product-body"><span class="product-category">${category}</span><h3 class="product-title">${title}</h3><div class="product-price">${formatPrice(product.price)}</div><a class="btn btn-primary" href="${url}">Ver produto</a></div>
+        </article>`;
+    }
+    function getFilteredProducts() {
+      const term = normalize(searchTerm);
+      const chip = normalize(currentChip);
+      return allProducts.filter(product => {
+        if (!matchesSegment(product)) return false;
+        const text = getProductText(product);
+        return (currentChip === "all" || text.includes(chip)) && (!term || text.includes(term));
+      }).sort((a, b) => {
+        const aFeatured = Number(!!a.is_featured || a.badge_type === "destaque");
+        const bFeatured = Number(!!b.is_featured || b.badge_type === "destaque");
+        if (aFeatured !== bFeatured) return bFeatured - aFeatured;
+        return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
+      });
+    }
+    function renderProducts() {
+      const grid = document.getElementById("productsGrid");
+      const products = getFilteredProducts();
+      grid.innerHTML = products.length ? products.map(buildProductCard).join("") : `<div class="state-box">Nenhum produto encontrado nessa coleção. Cadastre produtos com essa categoria ou palavras-chave no painel.</div>`;
+    }
+    async function loadProducts() {
+      const { data, error } = await supabaseClient.from("products").select(`id, name, slug, price, old_price, image_url, is_featured, badge_type, sale_type, category_id, created_at, short_description, description, categories (id, name)`).order("created_at", { ascending: false }).limit(240);
+      if (error) { console.error("Erro ao carregar produtos:", error); document.getElementById("productsGrid").innerHTML = `<div class="state-box">Não foi possível carregar os produtos agora.</div>`; return; }
+      allProducts = data || [];
+      renderProducts();
+    }
+    function setupFilters() {
+      document.getElementById("searchInput")?.addEventListener("input", event => { searchTerm = event.target.value; renderProducts(); });
+      document.querySelectorAll(".chip").forEach(button => {
+        button.addEventListener("click", () => {
+          if (button.dataset.toggleMore) {
+            const chips = document.getElementById("chips");
+            chips?.classList.toggle("show-more");
+            button.textContent = chips?.classList.contains("show-more") ? "Menos filtros" : "Mais filtros";
+            return;
+          }
+
+          currentChip = button.dataset.chip || "all";
+          document.querySelectorAll(".chip:not([data-toggle-more])").forEach(item => item.classList.toggle("active", item === button));
+          renderProducts();
+        });
+      });
+    }
+    setWhatsAppLinks(); setupFilters(); loadProducts();
+  </script>
+</body>
+</html>
