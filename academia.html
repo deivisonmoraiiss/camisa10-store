@@ -89,7 +89,7 @@
   <main>
     <section class="hero">
       <div class="container">
-        <div class="hero-shell">
+        <div class="hero-shell" id="segmentHeroShell">
           <div>
             <div class="eyebrow">Coleção academia</div>
             <h1>Academia</h1>
@@ -160,6 +160,8 @@
     const SUPABASE_URL = "https://elxwjajwfljwyextmdql.supabase.co";
     const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const SITE_SETTINGS_ID = "61c8c46f-f37f-460f-88a1-8f6b6b36f7d2";
+    let siteSettings = {};
     const BASE_KEYWORDS = ["academia", "fitness", "dry fit", "regata", "regatas", "shorts", "shorts fitness", "legging", "leggings", "top", "compressão", "compressao", "treino", "gym", "conjunto fitness"];
     const KIND = "academia";
     let allProducts = [];
@@ -169,8 +171,25 @@
     function normalize(text) { return String(text || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim(); }
     function formatPrice(value) { return Number(value || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" }); }
     function sanitizePhone(phone) { return String(phone || "").replace(/\D/g, ""); }
-    function setWhatsAppLinks() {
-      const phone = sanitizePhone("5597981098445");
+    function parseVisualAssets(raw = "") {
+      try { if (!raw || !String(raw).trim().startsWith("{")) return {}; return JSON.parse(raw) || {}; } catch (error) { return {}; }
+    }
+    function applySegmentSettings() {
+      const assets = parseVisualAssets(siteSettings.hero_left_image_url);
+      const imageUrl = assets.academia_hero_image || "";
+      const shell = document.getElementById("segmentHeroShell");
+      if (shell && imageUrl) shell.style.backgroundImage = "linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.62),rgba(0,0,0,.25)), url('" + imageUrl + "')";
+      document.querySelectorAll('.brand-title').forEach(el => el.textContent = siteSettings.hero_title || 'Camisa 10 Store');
+    }
+    async function loadSiteSettings() {
+      try {
+        const { data, error } = await supabaseClient.from("site_settings").select("id, hero_title, hero_left_image_url, whatsapp_number").eq("id", SITE_SETTINGS_ID).single();
+        if (!error && data) siteSettings = data;
+      } catch (error) { console.warn("Erro ao carregar configuracoes:", error); }
+      applySegmentSettings();
+      setWhatsAppLinks();
+    }    function setWhatsAppLinks() {
+      const phone = sanitizePhone(siteSettings.whatsapp_number || "5597981098445");
       const message = `Olá! Vim pela página de ${KIND} da Camisa 10 Store e quero fazer um pedido.`;
       const link = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
       ["headerWhatsApp", "contactWhatsApp"].forEach(id => { const el = document.getElementById(id); if (el) el.href = link; });
@@ -230,7 +249,7 @@
         button.addEventListener("click", () => { currentChip = button.dataset.chip || "all"; document.querySelectorAll(".chip").forEach(item => item.classList.toggle("active", item === button)); renderProducts(); });
       });
     }
-    setWhatsAppLinks(); setupFilters(); loadProducts();
+    loadSiteSettings(); setupFilters(); loadProducts();
   </script>
 </body>
 </html>
