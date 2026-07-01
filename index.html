@@ -1633,6 +1633,35 @@
   border-radius: 50%;
   background: #f4d35e;
 }
+  
+    @media (max-width: 700px) {
+      .collection-grid {
+        grid-template-columns: 1fr !important;
+        gap: 14px;
+      }
+
+      .collection-card,
+      .collection-content {
+        min-height: 260px;
+      }
+
+      .collection-content {
+        padding: 20px;
+      }
+
+      .collection-title {
+        font-size: 1.32rem;
+      }
+
+      .collection-text {
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      .collection-link {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1757,7 +1786,7 @@
         </div>
 
         <div class="collection-grid">
-          <a class="collection-card" href="catalogo.html" style="--collection-accent:#f4d76d; --collection-image:url('https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=1200&q=80');">
+          <a id="collectionCardCamisas" class="collection-card" href="catalogo.html" style="--collection-accent:#f4d76d; --collection-image:url('https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=1200&q=80');">
             <div class="collection-content">
               <span class="collection-tag">Mantos</span>
               <h2 class="collection-title">Camisas de Time</h2>
@@ -1766,7 +1795,7 @@
             </div>
           </a>
 
-          <a class="collection-card" href="streetwear.html" style="--collection-accent:#75d7ff; --collection-image:url('https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1200&q=80');">
+          <a id="collectionCardStreetwear" class="collection-card" href="streetwear.html" style="--collection-accent:#75d7ff; --collection-image:url('https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1200&q=80');">
             <div class="collection-content">
               <span class="collection-tag">Drop urbano</span>
               <h2 class="collection-title">Streetwear</h2>
@@ -1775,7 +1804,7 @@
             </div>
           </a>
 
-          <a class="collection-card" href="academia.html" style="--collection-accent:#ff8fbc; --collection-image:url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1200&q=80');">
+          <a id="collectionCardAcademia" class="collection-card" href="academia.html" style="--collection-accent:#ff8fbc; --collection-image:url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1200&q=80');">
             <div class="collection-content">
               <span class="collection-tag">Performance</span>
               <h2 class="collection-title">Academia</h2>
@@ -1982,6 +2011,17 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
       });
     }
 
+    function parseVisualAssets(raw = "") {
+      try {
+        if (!raw || !String(raw).trim().startsWith("{")) return {};
+        return JSON.parse(raw) || {};
+      } catch (error) { return {}; }
+    }
+
+    function applyDynamicImage(elementId, imageUrl) {
+      const el = document.getElementById(elementId);
+      if (el && imageUrl) el.style.setProperty("--collection-image", `url('${imageUrl}')`);
+    }
     function applySiteSettings() {
       if (!siteSettings) return;
 
@@ -2020,6 +2060,10 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         logoFallback.style.display = "flex";
       }
 
+      const visualAssets = parseVisualAssets(siteSettings.hero_left_image_url);
+      applyDynamicImage("collectionCardCamisas", visualAssets.card_camisas_image);
+      applyDynamicImage("collectionCardStreetwear", visualAssets.card_streetwear_image);
+      applyDynamicImage("collectionCardAcademia", visualAssets.card_academia_image);
       syncMobileLogos();
       setWhatsAppLinks();
     }
@@ -2612,7 +2656,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
       const { data, error } = await supabaseClient
         .from("site_settings")
-        .select("id, hero_title, hero_subtitle, hero_image_url, logo_url, whatsapp_number, delivery_text, catalog_title, catalog_subtitle, contact_text, footer_text")
+        .select("id, hero_title, hero_subtitle, hero_image_url, hero_left_image_url, logo_url, whatsapp_number, delivery_text, catalog_title, catalog_subtitle, contact_text, footer_text")
         .eq("id", SITE_SETTINGS_ID)
         .single();
 
