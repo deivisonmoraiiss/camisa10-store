@@ -939,35 +939,6 @@
   }
 
 
-
-  .product-template-bar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0 16px}
-  .template-btn{padding:13px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:#111;color:#f5f5f5;text-align:left;font-weight:900;cursor:pointer;transition:.18s ease}
-  .template-btn span{display:block;color:var(--muted);font-size:.76rem;font-weight:700;margin-top:4px;line-height:1.35}
-  .template-btn:hover{border-color:rgba(212,175,55,.38);transform:translateY(-1px)}
-  .product-live-panel{display:grid;grid-template-columns:minmax(210px,.8fr) minmax(0,1.2fr);gap:14px;margin:0 0 16px;align-items:stretch}
-  .product-live-card{border-radius:18px;border:1px solid rgba(255,255,255,.08);background:#101010;overflow:hidden;display:grid;grid-template-rows:180px auto;min-height:330px}
-  .product-live-media{background:#070707;display:grid;place-items:center;position:relative;overflow:hidden}
-  .product-live-media img{width:100%;height:100%;object-fit:cover;display:block}
-  .product-live-badge{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#111;font-size:.72rem;font-weight:950;padding:7px 9px;border-radius:999px}
-  .product-live-info{padding:14px;display:grid;gap:8px;align-content:start}
-  .product-live-kind{color:var(--gold-2);font-size:.76rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
-  .product-live-name{color:#fff;font-size:1rem;font-weight:950;line-height:1.25;min-height:40px}
-  .product-live-price{color:#fff;font-size:1.16rem;font-weight:950}
-  .product-live-meta{display:flex;gap:8px;flex-wrap:wrap}
-  .product-live-meta span{border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:6px 8px;color:#d8d8d8;font-size:.74rem;font-weight:800;background:#151515}
-  .product-smart-panel{border:1px solid rgba(255,255,255,.08);background:#101010;border-radius:18px;padding:14px;display:grid;gap:12px;align-content:start}
-  .product-smart-title{display:flex;justify-content:space-between;gap:12px;align-items:center;color:#fff;font-weight:950}
-  .product-smart-score{color:#111;background:linear-gradient(135deg,var(--gold),var(--gold-2));border-radius:999px;padding:7px 10px;font-size:.76rem;font-weight:950}
-  .smart-alert-list{display:grid;gap:8px}
-  .smart-alert{border:1px solid rgba(255,255,255,.08);background:#151515;border-radius:12px;padding:10px 11px;color:#e8e8e8;font-size:.84rem;line-height:1.4}
-  .smart-alert.ok{border-color:rgba(89,216,154,.28);color:#c7f5dc;background:rgba(89,216,154,.08)}
-  .storefront-controls{border:1px solid rgba(255,255,255,.08);background:#101010;border-radius:16px;padding:14px;display:grid;gap:12px;margin-bottom:14px}
-  .storefront-controls-title{display:flex;justify-content:space-between;gap:12px;align-items:center;color:#fff;font-weight:950}
-  .storefront-checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-  .storefront-check{border:1px solid rgba(255,255,255,.08);background:#151515;border-radius:13px;padding:12px;display:flex;gap:10px;align-items:flex-start;color:#f1f1f1;font-weight:850;cursor:pointer}
-  .storefront-check input{margin-top:3px;accent-color:#d4af37}
-  .storefront-check small{display:block;color:var(--muted);font-size:.76rem;font-weight:650;margin-top:3px;line-height:1.35}
-  @media (max-width:900px){.product-template-bar,.product-live-panel,.storefront-checks{grid-template-columns:1fr}.product-live-card{grid-template-rows:220px auto}}
   /* limpeza visual */
   .subtitle,
   .selector-copy,
@@ -976,6 +947,7 @@
   .loja-page-head p,
   .collapsible-intro,
   .form-collapsed-hint,
+  .product-flow-strip,
   .helper-box,
   .type-manager-help,
   .size-profile-note,
@@ -1528,24 +1500,18 @@
             <div class="collapsible-body">
 
             <div class="stepper-nav" id="product-stepper-nav">
-              <button type="button" class="step-chip active" data-step-target="1">1. Produto</button>
-              <button type="button" class="step-chip" data-step-target="2">2. Preco e vitrine</button>
-              <button type="button" class="step-chip" data-step-target="3">3. Fotos</button>
-              <button type="button" class="step-chip" data-step-target="4">4. Estoque e salvar</button>
+              <button type="button" class="step-chip active" data-step-target="1">1. Básico</button>
+              <button type="button" class="step-chip" data-step-target="2">2. Preço e venda</button>
+              <button type="button" class="step-chip" data-step-target="3">3. Imagens</button>
+              <button type="button" class="step-chip" data-step-target="4">4. Tamanhos e salvar</button>
             </div>
 
             <div class="product-flow-strip">
-              <div class="product-flow-pill"><strong>Produto</strong><span>Nome, segmento e modelo pronto</span></div>
-              <div class="product-flow-pill"><strong>Vitrine</strong><span>Preco, destaque e onde aparece</span></div>
-              <div class="product-flow-pill"><strong>Conferencia</strong><span>Preview e avisos antes de salvar</span></div>
+              <div class="product-flow-pill"><strong>Cadastro rápido</strong><span>Nome, categoria e tipo primeiro</span></div>
+              <div class="product-flow-pill"><strong>Menos erro</strong><span>Preço e imagens separados por etapa</span></div>
+              <div class="product-flow-pill"><strong>Mobile melhor</strong><span>Campos agrupados e mais limpos</span></div>
             </div>
 
-            <div class="product-template-bar" aria-label="Modelos prontos de cadastro">
-              <button class="template-btn" type="button" onclick="applyProductTemplate('camisa')">Camisa de Time<span>Grade adulto, vitrine principal</span></button>
-              <button class="template-btn" type="button" onclick="applyProductTemplate('streetwear')">Streetwear<span>Oversized, moletom, cargo</span></button>
-              <button class="template-btn" type="button" onclick="applyProductTemplate('academia')">Academia<span>Dry fit, regata, legging</span></button>
-              <button class="template-btn" type="button" onclick="applyProductTemplate('acessorio')">Acessorio<span>Bone, copo, item unico</span></button>
-            </div>
             <div class="product-step active" data-step="1">
               <div class="grid-2-equal">
                 <div class="field">
@@ -1565,7 +1531,7 @@
                     <option value="">Carregando categorias...</option>
                   </select>
                 </div>
-                <div class="field hidden">
+                <div class="field">
                   <label for="product-sale-type">Tipo de venda</label>
                   <select id="product-sale-type">
                     <option value="pronta_entrega">Pronta entrega</option>
@@ -1607,17 +1573,27 @@
                   <div class="size-profile-note" id="product-size-profile-note">A grade muda automaticamente conforme o segmento: Camisas, Streetwear, Academia ou Acessorios.</div>
                 </div>
               </div>
-              <div class="helper-box helper-box-visible">Cadastre o produto pensando como uma loja grande: nome claro, segmento correto, subcategoria no tipo do item e visibilidade marcada quando ele puder aparecer no site.</div>
+
+              <div class="field" style="margin-top:14px;">
+                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                  <input type="checkbox" id="product-visible" style="width:auto; accent-color:#d4af37;" checked />
+                  <span>Produto visível no site</span>
+                </label>
+              </div>
+
+              <div class="helper-box helper-box-visible">
+                Digite o nome da camisa e o sistema já prepara o slug. Isso evita erro na hora de editar ou publicar.
+              </div>
             </div>
 
             <div class="product-step" data-step="2">
               <div class="grid-2-equal">
                 <div class="field">
-                  <label for="product-price">Preco atual</label>
+                  <label for="product-price">Preço atual</label>
                   <input type="number" id="product-price" step="0.01" placeholder="Ex: 129.90" />
                 </div>
                 <div class="field">
-                  <label for="product-old-price">Preco antigo (opcional)</label>
+                  <label for="product-old-price">Preço antigo (opcional)</label>
                   <input type="number" id="product-old-price" step="0.01" placeholder="Ex: 179.90" />
                 </div>
               </div>
@@ -1627,51 +1603,34 @@
                   <label for="product-badge-type">Selo do produto</label>
                   <select id="product-badge-type">
                     <option value="">Sem selo</option>
-                    <option value="destaque">Destaque</option>
-                    <option value="mais-vendida">Mais vendida</option>
-                    <option value="novo">Novo</option>
+                    <option value="destaque">⭐ Destaque</option>
+                    <option value="mais-vendida">🔥 Mais vendida</option>
+                    <option value="novo">🚀 Novo</option>
                   </select>
                 </div>
                 <div class="field">
-                  <label for="product-sale-type-visual">Status comercial</label>
-                  <select id="product-sale-type-visual" onchange="syncSaleTypeVisual(this.value)">
-                    <option value="pronta_entrega">Pronta entrega</option>
-                    <option value="sob_encomenda">Pedido especial</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="storefront-controls">
-                <div class="storefront-controls-title">
-                  <span>Organizacao da vitrine</span>
-                  <small class="small-muted">Marque onde esse produto deve aparecer</small>
-                </div>
-                <div class="storefront-checks">
-                  <label class="storefront-check">
-                    <input type="checkbox" id="product-visible" checked onchange="updateDraftSummary()" />
-                    <span>Produto ativo no site<small>Desmarque para deixar como rascunho oculto.</small></span>
+                  <label style="display:flex; align-items:center; gap:10px; cursor:pointer; min-height:52px; margin-top:28px;">
+                    <input type="checkbox" id="product-featured" style="width:auto; accent-color:#d4af37;" />
+                    <span>Mostrar na seção Mais procuradas</span>
                   </label>
-                  <label class="storefront-check">
-                    <input type="checkbox" id="product-featured" onchange="updateDraftSummary()" />
-                    <span>Mais procuradas<small>Aparece no bloco de destaque da home.</small></span>
-                  </label>
-                </div>
-              </div>
-
-              <div class="grid-2-equal">
-                <div class="field">
-                  <label for="priority_pronta_entrega">Ordem na vitrine da loja</label>
-                  <input type="number" id="priority_pronta_entrega" min="1" step="1" placeholder="Ex: 1, 2, 3..." />
-                </div>
-                <div class="field">
-                  <label for="priority_encomenda">Ordem em pedido especial</label>
-                  <input type="number" id="priority_encomenda" min="1" step="1" placeholder="Ex: 1, 2, 3..." />
                 </div>
               </div>
 
               <div class="field">
-                <label for="product-description">Descricao</label>
-                <textarea id="product-description" placeholder="Descricao do produto"></textarea>
+                <label for="priority_encomenda">Ordem em pedido especial</label>
+                <input type="number" id="priority_encomenda" min="1" step="1" placeholder="Ex: 1, 2, 3..." />
+                <div class="small-muted">Use quando quiser ordenar produtos feitos por pedido ou colecoes especiais. Numero menor aparece antes.</div>
+              </div>
+
+              <div class="field">
+                <label for="priority_pronta_entrega">Ordem na vitrine da loja</label>
+                <input type="number" id="priority_pronta_entrega" min="1" step="1" placeholder="Ex: 1, 2, 3..." />
+                <div class="small-muted">Numero menor aparece antes na vitrine principal. Deixe vazio para seguir a ordem normal.</div>
+              </div>
+
+              <div class="field">
+                <label for="product-description">Descrição</label>
+                <textarea id="product-description" placeholder="Descrição do produto"></textarea>
               </div>
             </div>
 
@@ -1688,7 +1647,7 @@
               </div>
 
               <div class="preview-box">
-                <div class="small-muted" style="margin-bottom:8px;">Preview da imagem principal</div>
+                <div class="small-muted" style="margin-bottom:8px;">Pré-visualização da imagem principal</div>
                 <img id="main-image-preview" class="main-preview" src="https://via.placeholder.com/400x400?text=Sem+Imagem" alt="Preview principal">
               </div>
 
@@ -1698,8 +1657,12 @@
               </div>
 
               <div class="preview-box">
-                <div class="small-muted" style="margin-bottom:8px;">Preview das fotos adicionais</div>
+                <div class="small-muted" style="margin-bottom:8px;">Pré-visualização das fotos adicionais</div>
                 <div id="images-preview" class="multi-preview-grid"></div>
+              </div>
+
+              <div class="helper-box helper-box-visible">
+                O upload é automático quando você salvar o produto. Não precisa subir imagem manualmente antes.
               </div>
 
               <div id="current-gallery-box" class="preview-box hidden" style="margin-top:16px;">
@@ -1772,30 +1735,6 @@
               </div>
             </div>
 
-            <div class="product-live-panel">
-              <div class="product-live-card" aria-label="Preview do produto no site">
-                <div class="product-live-media">
-                  <img id="live-preview-image" src="https://via.placeholder.com/600x600?text=Produto" alt="Preview do produto">
-                  <span class="product-live-badge" id="live-preview-badge">Preview</span>
-                </div>
-                <div class="product-live-info">
-                  <div class="product-live-kind" id="live-preview-kind">Camisa de Time</div>
-                  <div class="product-live-name" id="live-preview-name">Nome do produto</div>
-                  <div class="product-live-price" id="live-preview-price">R$ 0,00</div>
-                  <div class="product-live-meta">
-                    <span id="live-preview-status">Ativo no site</span>
-                    <span id="live-preview-featured">Vitrine normal</span>
-                  </div>
-                </div>
-              </div>
-              <div class="product-smart-panel">
-                <div class="product-smart-title">
-                  <span>Avisos inteligentes</span>
-                  <span class="product-smart-score" id="product-smart-score">0/4 pronto</span>
-                </div>
-                <div class="smart-alert-list" id="product-smart-alerts"></div>
-              </div>
-            </div>
             <div class="step-actions">
               <button class="btn btn-secondary hidden" id="prev-step-btn" type="button" onclick="goToPreviousProductStep()">Voltar etapa</button>
               <button class="btn btn-secondary" id="next-step-btn" type="button" onclick="goToNextProductStep()">Próxima etapa</button>
@@ -2029,6 +1968,32 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="field"><label for="setting-logo-url">URL da logo</label><input type="text" id="setting-logo-url" placeholder="A URL será preenchida após o upload" /></div>
                 <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadLogoImage()">Fazer upload da logo</button></div>
                 <img id="logo-preview" class="banner-preview" src="https://via.placeholder.com/400x200?text=Logo" alt="Preview logo" />
+              </div>
+              <div class="mini-card">
+                <h4>Imagens dos cards e colecoes</h4>
+                <div class="field"><label for="asset-card-camisas-file">Imagem do card Camisas</label><input type="file" id="asset-card-camisas-file" accept="image/*" onchange="previewBannerImage(event, 'asset-card-camisas-preview')" /></div>
+                <div class="field"><label for="asset-card-camisas-url">URL do card Camisas</label><input type="text" id="asset-card-camisas-url" placeholder="Cole uma URL ou faca upload" oninput="syncVisualAssetPreview('asset-card-camisas-url','asset-card-camisas-preview')" /></div>
+                <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadVisualAsset('asset-card-camisas-file','asset-card-camisas-url','asset-card-camisas-preview','camisas')">Upload card Camisas</button></div>
+                <img id="asset-card-camisas-preview" class="banner-preview" src="https://via.placeholder.com/600x360?text=Card+Camisas" alt="Preview card camisas" />
+                <div class="field"><label for="asset-card-streetwear-file">Imagem do card Streetwear</label><input type="file" id="asset-card-streetwear-file" accept="image/*" onchange="previewBannerImage(event, 'asset-card-streetwear-preview')" /></div>
+                <div class="field"><label for="asset-card-streetwear-url">URL do card Streetwear</label><input type="text" id="asset-card-streetwear-url" placeholder="Cole uma URL ou faca upload" oninput="syncVisualAssetPreview('asset-card-streetwear-url','asset-card-streetwear-preview')" /></div>
+                <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadVisualAsset('asset-card-streetwear-file','asset-card-streetwear-url','asset-card-streetwear-preview','streetwear-card')">Upload card Streetwear</button></div>
+                <img id="asset-card-streetwear-preview" class="banner-preview" src="https://via.placeholder.com/600x360?text=Card+Streetwear" alt="Preview card streetwear" />
+                <div class="field"><label for="asset-card-academia-file">Imagem do card Academia</label><input type="file" id="asset-card-academia-file" accept="image/*" onchange="previewBannerImage(event, 'asset-card-academia-preview')" /></div>
+                <div class="field"><label for="asset-card-academia-url">URL do card Academia</label><input type="text" id="asset-card-academia-url" placeholder="Cole uma URL ou faca upload" oninput="syncVisualAssetPreview('asset-card-academia-url','asset-card-academia-preview')" /></div>
+                <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadVisualAsset('asset-card-academia-file','asset-card-academia-url','asset-card-academia-preview','academia-card')">Upload card Academia</button></div>
+                <img id="asset-card-academia-preview" class="banner-preview" src="https://via.placeholder.com/600x360?text=Card+Academia" alt="Preview card academia" />
+              </div>
+              <div class="mini-card">
+                <h4>Banners das paginas novas</h4>
+                <div class="field"><label for="asset-hero-streetwear-file">Banner da pagina Streetwear</label><input type="file" id="asset-hero-streetwear-file" accept="image/*" onchange="previewBannerImage(event, 'asset-hero-streetwear-preview')" /></div>
+                <div class="field"><label for="asset-hero-streetwear-url">URL do banner Streetwear</label><input type="text" id="asset-hero-streetwear-url" placeholder="Cole uma URL ou faca upload" oninput="syncVisualAssetPreview('asset-hero-streetwear-url','asset-hero-streetwear-preview')" /></div>
+                <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadVisualAsset('asset-hero-streetwear-file','asset-hero-streetwear-url','asset-hero-streetwear-preview','streetwear-hero')">Upload banner Streetwear</button></div>
+                <img id="asset-hero-streetwear-preview" class="banner-preview" src="https://via.placeholder.com/1000x500?text=Banner+Streetwear" alt="Preview banner streetwear" />
+                <div class="field"><label for="asset-hero-academia-file">Banner da pagina Academia</label><input type="file" id="asset-hero-academia-file" accept="image/*" onchange="previewBannerImage(event, 'asset-hero-academia-preview')" /></div>
+                <div class="field"><label for="asset-hero-academia-url">URL do banner Academia</label><input type="text" id="asset-hero-academia-url" placeholder="Cole uma URL ou faca upload" oninput="syncVisualAssetPreview('asset-hero-academia-url','asset-hero-academia-preview')" /></div>
+                <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadVisualAsset('asset-hero-academia-file','asset-hero-academia-url','asset-hero-academia-preview','academia-hero')">Upload banner Academia</button></div>
+                <img id="asset-hero-academia-preview" class="banner-preview" src="https://via.placeholder.com/1000x500?text=Banner+Academia" alt="Preview banner academia" />
               </div>
               <div class="mini-card">
                 <h4>Textos do site</h4>
@@ -3035,21 +3000,17 @@ Camisa Real Madrid 24/25"></textarea>
 
       const defaultTypes = ["Camisa de Time", "Streetwear", "Academia", "Oversized", "Dry Fit", "Moletom", "Regata", "Legging", "Bermuda", "Acessorios"];
       const mergedTypes = [...new Set([...defaultTypes, ...productTypeOptions.map(item => String(item || "").trim()).filter(Boolean)])];
-      const icons = {
+      const labels = {
         "Camisa de Time": "Camisa",
         Streetwear: "Street",
         Academia: "Treino",
         Oversized: "Over",
         "Dry Fit": "Dry",
-        Moletom: "Moletom",
-        Regata: "Regata",
-        Legging: "Legging",
-        Bermuda: "Bermuda",
         Acessorios: "Acess."
       };
 
       container.innerHTML = mergedTypes.map(type => `
-        <button class="type-chip" type="button" onclick="applySuggestedProductKind('${escapeHtml(type)}')">${icons[type] || "Novo"} ${escapeHtml(type)}</button>
+        <button class="type-chip" type="button" onclick="applySuggestedProductKind('${escapeHtml(type)}')">${labels[type] || "Novo"} ${escapeHtml(type)}</button>
       `).join("");
     }
 
@@ -3471,34 +3432,27 @@ Camisa Real Madrid 24/25"></textarea>
       const categoryConfig = getCategorySizeConfigById(categorySelect?.value || "");
       let suggestedProfile = profileSelect.value || "adulto";
       let customSizeOptions = [];
-      const hasCategorySizeConfig = !force && categoryConfig;
 
-      if (hasCategorySizeConfig) {
+      if (!force && categoryConfig) {
         suggestedProfile = categoryConfig.profile || "custom";
         customSizeOptions = categoryConfig.sizes || [];
       }
       const textToClassify = `${value} ${categoryValue}`;
-      if (!hasCategorySizeConfig && (
-        textToClassify.includes("infantil") || textToClassify.includes("kids") || textToClassify.includes("kit")
-      )) {
+      const hasCategorySizeConfig = !force && categoryConfig;
+      if (hasCategorySizeConfig) {
+        suggestedProfile = categoryConfig.profile || "custom";
+        customSizeOptions = categoryConfig.sizes || [];
+      } else if (textToClassify.includes("infantil") || textToClassify.includes("kids") || textToClassify.includes("kit")) {
         suggestedProfile = "infantil";
-      } else if (!hasCategorySizeConfig && (
-        textToClassify.includes("street") || textToClassify.includes("oversized") || textToClassify.includes("over")
-        || textToClassify.includes("moletom") || textToClassify.includes("cargo") || textToClassify.includes("casual")
-        || textToClassify.includes("bermuda") || textToClassify.includes("bone") || textToClassify.includes("boné")
-      )) {
+      } else if (textToClassify.includes("street") || textToClassify.includes("oversized") || textToClassify.includes("over") || textToClassify.includes("moletom") || textToClassify.includes("cargo") || textToClassify.includes("casual") || textToClassify.includes("bermuda") || textToClassify.includes("bone") || textToClassify.includes("boné")) {
         suggestedProfile = "streetwear";
-      } else if (!hasCategorySizeConfig && (
-        textToClassify.includes("academia") || textToClassify.includes("fitness") || textToClassify.includes("dry")
-        || textToClassify.includes("treino") || textToClassify.includes("regata") || textToClassify.includes("legging")
-        || textToClassify.includes("top") || textToClassify.includes("compress")
-      )) {
+      } else if (textToClassify.includes("academia") || textToClassify.includes("fitness") || textToClassify.includes("dry") || textToClassify.includes("treino") || textToClassify.includes("regata") || textToClassify.includes("legging") || textToClassify.includes("top") || textToClassify.includes("compress")) {
         suggestedProfile = "fitness";
-      } else if (!hasCategorySizeConfig && (textToClassify.includes("sand") || textToClassify.includes("chinelo") || textToClassify.includes("slide"))) {
+      } else if (textToClassify.includes("sand") || textToClassify.includes("chinelo") || textToClassify.includes("slide")) {
         suggestedProfile = "sandalia";
-      } else if (!hasCategorySizeConfig && (textToClassify.includes("copo") || textToClassify.includes("caneca") || textToClassify.includes("garrafa") || textToClassify.includes("acessor"))) {
+      } else if (textToClassify.includes("copo") || textToClassify.includes("caneca") || textToClassify.includes("garrafa") || textToClassify.includes("acessor")) {
         suggestedProfile = "unico";
-      } else if (!hasCategorySizeConfig && (textToClassify.includes("camisa") || textToClassify.includes("manto") || textToClassify.includes("time") || textToClassify.includes("torcedor"))) {
+      } else if (textToClassify.includes("camisa") || textToClassify.includes("manto") || textToClassify.includes("time") || textToClassify.includes("torcedor")) {
         suggestedProfile = "adulto";
       }
 
@@ -3652,94 +3606,6 @@ Camisa Real Madrid 24/25"></textarea>
     }
 
 
-    function setFieldValue(id, value) {
-      const field = document.getElementById(id);
-      if (field) field.value = value;
-    }
-
-    function applyProductTemplate(template) {
-      const presets = {
-        camisa: { kind: "Camisa de Time", profile: "adulto", saleType: "pronta_entrega", featured: true, badge: "destaque" },
-        streetwear: { kind: "Streetwear", profile: "streetwear", saleType: "pronta_entrega", featured: true, badge: "novo" },
-        academia: { kind: "Academia", profile: "fitness", saleType: "pronta_entrega", featured: true, badge: "novo" },
-        acessorio: { kind: "Acessorios", profile: "unico", saleType: "pronta_entrega", featured: false, badge: "" }
-      };
-      const preset = presets[template] || presets.camisa;
-      setFieldValue("product-kind", preset.kind);
-      setFieldValue("product-size-profile", preset.profile);
-      setFieldValue("product-sale-type", preset.saleType);
-      setFieldValue("product-sale-type-visual", preset.saleType);
-      setFieldValue("product-badge-type", preset.badge);
-      const visible = document.getElementById("product-visible");
-      if (visible) visible.checked = true;
-      const featured = document.getElementById("product-featured");
-      if (featured) featured.checked = !!preset.featured;
-      renderProductSizes(preset.profile, []);
-      syncProductTypeFromKind(true);
-      updateDraftSummary();
-    }
-
-    function syncSaleTypeVisual(value) {
-      const saleType = document.getElementById("product-sale-type");
-      if (saleType) saleType.value = value || "pronta_entrega";
-      updateDraftSummary();
-    }
-
-    function getMainPreviewSource() {
-      const preview = document.getElementById("main-image-preview")?.src || "";
-      const url = document.getElementById("product-image")?.value?.trim() || "";
-      if (preview && !preview.includes("Sem+Imagem")) return preview;
-      return url || "https://via.placeholder.com/600x600?text=Produto";
-    }
-
-    function updateProductLivePreview() {
-      const name = document.getElementById("product-name")?.value?.trim() || "Nome do produto";
-      const price = document.getElementById("product-price")?.value || "";
-      const kind = normalizeProductKind(document.getElementById("product-kind")?.value || "") || "Camisa de Time";
-      const badgeSelect = document.getElementById("product-badge-type");
-      const badge = badgeSelect?.selectedOptions?.[0]?.textContent?.trim() || "Preview";
-      const visible = document.getElementById("product-visible")?.checked !== false;
-      const featured = !!document.getElementById("product-featured")?.checked;
-
-      const image = document.getElementById("live-preview-image");
-      if (image) image.src = getMainPreviewSource();
-      const liveName = document.getElementById("live-preview-name");
-      if (liveName) liveName.textContent = name;
-      const liveKind = document.getElementById("live-preview-kind");
-      if (liveKind) liveKind.textContent = kind;
-      const livePrice = document.getElementById("live-preview-price");
-      if (livePrice) livePrice.textContent = price ? formatPrice(price) : "R$ 0,00";
-      const liveBadge = document.getElementById("live-preview-badge");
-      if (liveBadge) liveBadge.textContent = badge && badge !== "Sem selo" ? badge : "Preview";
-      const liveStatus = document.getElementById("live-preview-status");
-      if (liveStatus) liveStatus.textContent = visible ? "Ativo no site" : "Oculto";
-      const liveFeatured = document.getElementById("live-preview-featured");
-      if (liveFeatured) liveFeatured.textContent = featured ? "Mais procuradas" : "Vitrine normal";
-    }
-
-    function updateProductSmartAlerts() {
-      const alerts = [];
-      const name = document.getElementById("product-name")?.value?.trim();
-      const price = document.getElementById("product-price")?.value?.trim();
-      const imageUrl = document.getElementById("product-image")?.value?.trim();
-      const file = document.getElementById("product-file")?.files?.[0];
-      const sizes = getSelectedSizes();
-      const visible = document.getElementById("product-visible")?.checked !== false;
-      let score = 0;
-
-      if (name) { score++; alerts.push({ ok: true, text: "Nome preenchido." }); } else alerts.push({ ok: false, text: "Falta preencher o nome do produto." });
-      if (price) { score++; alerts.push({ ok: true, text: "Preco informado." }); } else alerts.push({ ok: false, text: "Falta informar o preco atual." });
-      if (file || imageUrl) { score++; alerts.push({ ok: true, text: "Imagem principal pronta." }); } else alerts.push({ ok: false, text: "Falta imagem principal ou URL da imagem." });
-      if (sizes.length) { score++; alerts.push({ ok: true, text: "Grade de tamanhos selecionada." }); } else alerts.push({ ok: false, text: "Nenhum tamanho marcado para estoque." });
-      if (!visible) alerts.push({ ok: false, text: "Produto esta oculto no site." });
-
-      const scoreEl = document.getElementById("product-smart-score");
-      if (scoreEl) scoreEl.textContent = `${score}/4 pronto`;
-      const list = document.getElementById("product-smart-alerts");
-      if (list) {
-        list.innerHTML = alerts.map(item => `<div class="smart-alert ${item.ok ? "ok" : ""}">${item.text}</div>`).join("");
-      }
-    }
     function syncSlugPreview() {
       const name = document.getElementById("product-name")?.value?.trim() || "";
       const slugField = document.getElementById("product-slug-preview");
@@ -3765,8 +3631,6 @@ Camisa Real Madrid 24/25"></textarea>
       const summaryVariations = document.getElementById("summary-variations");
       if (summaryVariations) summaryVariations.textContent = hasProductVariationsEnabled() ? `${productVariationsDraft.filter(item => (item.name || '').trim()).length} variação(ões)` : 'Sem variações';
       document.getElementById("summary-sizes").textContent = selectedSizes.length ? selectedSizes.join(", ") : "—";
-      updateProductLivePreview();
-      updateProductSmartAlerts();
     }
 
     function setProductStep(step) {
@@ -3840,7 +3704,6 @@ Camisa Real Madrid 24/25"></textarea>
 
     function resetMainPreview() {
       document.getElementById("main-image-preview").src = "https://via.placeholder.com/400x400?text=Sem+Imagem";
-      updateDraftSummary();
     }
 
     function resetMultiPreview() {
@@ -3862,7 +3725,6 @@ Camisa Real Madrid 24/25"></textarea>
       const reader = new FileReader();
       reader.onload = function(e) {
         document.getElementById("main-image-preview").src = e.target.result;
-        updateDraftSummary();
       };
       reader.readAsDataURL(file);
     }
@@ -3914,7 +3776,6 @@ Camisa Real Madrid 24/25"></textarea>
       if (visibleCheck) visibleCheck.checked = true;
       document.getElementById("product-badge-type").value = "";
       document.getElementById("product-sale-type").value = "pronta_entrega";
-      setFieldValue("product-sale-type-visual", "pronta_entrega");
       const productKindField = document.getElementById("product-kind");
       if (productKindField) productKindField.value = "Camisa de Time";
       const productSizeProfileField = document.getElementById("product-size-profile");
@@ -4567,7 +4428,6 @@ async function uploadMultipleProductImages(productId) {
       const name = String(product.name || "").toLowerCase();
       const profile = String(product.size_profile || productMetaCache[String(product.id)]?.sizeProfile || "").toLowerCase();
       const text = `${kind} ${categoryText} ${name} ${profile}`;
-
       if (profile === "streetwear" || text.includes("street") || text.includes("oversized") || text.includes("moletom") || text.includes("cargo") || text.includes("casual")) return "Streetwear";
       if (profile === "fitness" || text.includes("academia") || text.includes("fitness") || text.includes("dry") || text.includes("treino") || text.includes("regata") || text.includes("legging") || text.includes("compress")) return "Academia";
       if (text.includes("camisa") || text.includes("manto") || text.includes("time") || text.includes("torcedor") || text.includes("infantil") || text.includes("kit")) return "Camisa";
@@ -5854,7 +5714,6 @@ async function uploadMultipleProductImages(productId) {
       if (document.getElementById("product-visible")) document.getElementById("product-visible").checked = data.is_visible !== false;
       document.getElementById("product-badge-type").value = data.badge_type || "";
       document.getElementById("product-sale-type").value = data.sale_type || "pronta_entrega";
-      setFieldValue("product-sale-type-visual", data.sale_type || "pronta_entrega");
       const resolvedKind = inferProductKind(data);
       const resolvedSizeProfile = inferSizeProfile(data);
       document.getElementById("product-kind").value = resolvedKind;
@@ -6078,6 +5937,65 @@ async function uploadMultipleProductImages(productId) {
     }
 
     
+    function parseVisualAssets(raw = "") {
+      try {
+        if (!raw || !String(raw).trim().startsWith("{")) return {};
+        return JSON.parse(raw) || {};
+      } catch (error) {
+        console.warn("Nao foi possivel ler imagens visuais:", error);
+        return {};
+      }
+    }
+
+    function getVisualAssetsPayload() {
+      return {
+        card_camisas_image: document.getElementById("asset-card-camisas-url")?.value.trim() || "",
+        card_streetwear_image: document.getElementById("asset-card-streetwear-url")?.value.trim() || "",
+        card_academia_image: document.getElementById("asset-card-academia-url")?.value.trim() || "",
+        streetwear_hero_image: document.getElementById("asset-hero-streetwear-url")?.value.trim() || "",
+        academia_hero_image: document.getElementById("asset-hero-academia-url")?.value.trim() || ""
+      };
+    }
+
+    function setVisualAssetField(inputId, previewId, value) {
+      const input = document.getElementById(inputId);
+      const preview = document.getElementById(previewId);
+      if (input) input.value = value || "";
+      if (preview && value) preview.src = value;
+    }
+
+    function setVisualAssetFields(assets = {}) {
+      setVisualAssetField("asset-card-camisas-url", "asset-card-camisas-preview", assets.card_camisas_image);
+      setVisualAssetField("asset-card-streetwear-url", "asset-card-streetwear-preview", assets.card_streetwear_image);
+      setVisualAssetField("asset-card-academia-url", "asset-card-academia-preview", assets.card_academia_image);
+      setVisualAssetField("asset-hero-streetwear-url", "asset-hero-streetwear-preview", assets.streetwear_hero_image);
+      setVisualAssetField("asset-hero-academia-url", "asset-hero-academia-preview", assets.academia_hero_image);
+    }
+
+    function syncVisualAssetPreview(inputId, previewId) {
+      const url = document.getElementById(inputId)?.value.trim();
+      const preview = document.getElementById(previewId);
+      if (preview && url) preview.src = url;
+    }
+
+    async function uploadVisualAsset(fileId, inputId, previewId, folderName) {
+      clearMessage("settings-message");
+      const file = document.getElementById(fileId)?.files?.[0];
+      if (!file) {
+        showMessage("settings-message", "Selecione uma imagem antes de fazer upload.", "error");
+        return;
+      }
+      try {
+        const compressedFile = await compressImageToTarget(file, { maxWidth: 1600, maxHeight: 1000, targetSizeKB: 650 });
+        const imageUrl = await uploadToCloudinary(compressedFile, `camisa10-store/site-assets/${folderName}`);
+        setVisualAssetField(inputId, previewId, imageUrl);
+        await saveSiteSettings();
+        showMessage("settings-message", `Imagem enviada e salva (${Math.round(compressedFile.size / 1024)} KB).`, "success");
+      } catch (error) {
+        console.error("Erro no upload da imagem visual:", error);
+        showMessage("settings-message", `Erro ao enviar imagem: ${error.message || "sem detalhe"}`, "error");
+      }
+    }
 async function uploadHeroBannerImage() {
       clearMessage("settings-message");
 
@@ -6500,7 +6418,9 @@ async function uploadHeroSlideImage() {
         document.getElementById("hero-banner-preview").src = data.hero_image_url;
       }
 
-      if (data.hero_left_image_url) {
+      const visualAssets = parseVisualAssets(data.hero_left_image_url);
+      setVisualAssetFields(visualAssets);
+      if (data.hero_left_image_url && !String(data.hero_left_image_url).trim().startsWith("{")) {
         document.getElementById("hero-left-banner-preview").src = data.hero_left_image_url;
       }
 
@@ -6516,7 +6436,7 @@ async function uploadHeroSlideImage() {
         hero_title: document.getElementById("setting-hero-title").value.trim(),
         hero_subtitle: document.getElementById("setting-hero-subtitle").value.trim(),
         hero_image_url: document.getElementById("setting-hero-image-url").value.trim(),
-        hero_left_image_url: document.getElementById("setting-hero-left-image-url").value.trim(),
+        hero_left_image_url: JSON.stringify(getVisualAssetsPayload()),
         delivery_text: document.getElementById("setting-delivery-text").value.trim(),
         catalog_title: document.getElementById("setting-catalog-title").value.trim(),
         catalog_subtitle: document.getElementById("setting-catalog-subtitle").value.trim(),
@@ -6538,7 +6458,8 @@ async function uploadHeroSlideImage() {
         return;
       }
 
-      showMessage("settings-message", "Configurações do site salvas com sucesso.", "success");
+      clearAdminCache("camisa10_admin_site_settings_v1");
+      showMessage("settings-message", "Configuracoes do site salvas com sucesso.", "success");
     }
 
 
@@ -9151,12 +9072,6 @@ async function saveGestaoSale() {
       loadProductTypeOptions();
       document.getElementById("product-name")?.addEventListener("input", syncSlugPreview);
       document.getElementById("product-price")?.addEventListener("input", updateDraftSummary);
-      document.getElementById("product-old-price")?.addEventListener("input", updateDraftSummary);
-      document.getElementById("product-image")?.addEventListener("input", updateDraftSummary);
-      document.getElementById("product-badge-type")?.addEventListener("change", updateDraftSummary);
-      document.getElementById("product-visible")?.addEventListener("change", updateDraftSummary);
-      document.getElementById("product-featured")?.addEventListener("change", updateDraftSummary);
-      document.getElementById("product-sale-type")?.addEventListener("change", () => { setFieldValue("product-sale-type-visual", document.getElementById("product-sale-type")?.value || "pronta_entrega"); updateDraftSummary(); });
       document.getElementById("product-category")?.addEventListener("change", () => {
         syncProductTypeFromKind();
         updateDraftSummary();
