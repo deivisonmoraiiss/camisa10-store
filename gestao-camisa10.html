@@ -1319,20 +1319,20 @@
             <div class="product-type-bar" id="product-kind-filter-bar">
               <button class="type-filter-btn active" type="button" data-kind-filter="" onclick="setProductKindFilter('')">Todos</button>
               <button class="type-filter-btn" type="button" data-kind-filter="Camisa" onclick="setProductKindFilter('Camisa')">Camisas</button>
-              <button class="type-filter-btn" type="button" data-kind-filter="Streetwear" onclick="setProductKindFilter('Streetwear')">Streetwear</button>
-              <button class="type-filter-btn" type="button" data-kind-filter="Academia" onclick="setProductKindFilter('Academia')">Academia</button>
-              <button class="type-filter-btn" type="button" data-kind-filter="Acessorios" onclick="setProductKindFilter('Acessorios')">Acessorios</button>
+              <button class="type-filter-btn" type="button" data-kind-filter="Sandália" onclick="setProductKindFilter('Sandália')">Sandálias</button>
+              <button class="type-filter-btn" type="button" data-kind-filter="Kit Infantil" onclick="setProductKindFilter('Kit Infantil')">Kit infantil</button>
+              <button class="type-filter-btn" type="button" data-kind-filter="Copo" onclick="setProductKindFilter('Copo')">Copos</button>
               <button class="type-filter-btn" type="button" data-kind-filter="Outros" onclick="setProductKindFilter('Outros')">Outros</button>
             </div>
 
             <div class="products-toolbar products-toolbar-advanced">
               <input type="text" id="search-input" placeholder="Buscar por nome do produto..." oninput="filterProducts()" />
               <select id="product-filter-kind" onchange="filterProducts()">
-                <option value="">Todos os segmentos</option>
-                <option value="Camisa">Camisas de time</option>
-                <option value="Streetwear">Streetwear</option>
-                <option value="Academia">Academia</option>
-                <option value="Acessorios">Acessorios</option>
+                <option value="">Todos os tipos</option>
+                <option value="Camisa">Camisas</option>
+                <option value="Sandália">Sandálias</option>
+                <option value="Kit Infantil">Kit infantil</option>
+                <option value="Copo">Copos</option>
                 <option value="Outros">Outros</option>
               </select>
               <select id="product-filter-category" onchange="filterProducts()">
@@ -1542,35 +1542,37 @@
 
               <div class="product-meta-grid">
                 <div class="field">
-                  <label for="product-kind">Segmento / tipo do item</label>
-                  <input type="text" id="product-kind" placeholder="Ex: Camisa de Time, Streetwear, Academia, Oversized, Dry Fit" />
-                  <div class="type-suggestions" id="product-type-suggestions">
-                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Camisa de Time')">Camisa de Time</button>
-                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Streetwear')">Streetwear</button>
-                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Academia')">Academia</button>
-                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Oversized')">Oversized</button>
-                    <button class="type-chip" type="button" onclick="applySuggestedProductKind('Dry Fit')">Dry Fit</button>
-                  </div>
+                  <label for="product-segment">Tipo do item</label>
+                  <select id="product-segment" onchange="handleProductSegmentChange(this.value)">
+                    <option value="futebol">Futebol</option>
+                    <option value="casual">Casual</option>
+                    <option value="fitness">Fitness</option>
+                  </select>
+                  <div class="type-suggestions" id="product-type-suggestions"></div>
                   <div class="type-manager">
                     <div class="type-manager-row">
-                      <input type="text" id="new-product-kind" placeholder="Adicionar novo tipo rapido. Ex: Regata, Moletom, Cargo" />
+                      <input type="text" id="new-product-kind" placeholder="Adicionar nova opcao. Ex: Cropped, Short, Moletom" />
                       <button class="btn btn-secondary" type="button" onclick="addCustomProductKind()">Adicionar tipo</button>
                     </div>
-                    <div class="type-manager-help">Use o segmento principal para organizar a loja e o tipo do item para subcategorias como Oversized, Regata, Moletom, Cargo, Top ou Legging.</div>
+                    <div class="type-manager-help">Primeiro escolha Futebol, Casual ou Fitness. Depois selecione a peca certa no campo abaixo.</div>
                   </div>
+                </div>
+                <div class="field">
+                  <label for="product-kind">Modelo / peca</label>
+                  <select id="product-kind"></select>
                 </div>
                 <div class="field">
                   <label for="product-size-profile">Grade / variação</label>
                   <select id="product-size-profile">
-                    <option value="adulto">Camisas / adulto (P, M, G, GG, EG)</option>
-                    <option value="streetwear">Streetwear (PP, P, M, G, GG, XG, XGG)</option>
-                    <option value="fitness">Academia / fitness (PP, P, M, G, GG, XG)</option>
+                    <option value="adulto">Camisa / adulto (P, M, G, GG, EG)</option>
+                    <option value="streetwear">Streetwear / Oversized (PP, P, M, G, GG, XG, XGG)</option>
+                    <option value="fitness">Academia / Top / Legging (PP, P, M, G, GG, XG)</option>
                     <option value="infantil">Infantil (2, 4, 6, 8, 10, 12, 14)</option>
-                    <option value="sandalia">Calcados / sandalia (25 a 43)</option>
+                    <option value="sandalia">Sandalia (25 a 43)</option>
                     <option value="unico">Tamanho unico / sem grade</option>
                     <option value="custom">Personalizado</option>
                   </select>
-                  <div class="size-profile-note" id="product-size-profile-note">A grade muda automaticamente conforme o segmento: Camisas, Streetwear, Academia ou Acessorios.</div>
+                  <div class="size-profile-note" id="product-size-profile-note">A grade muda automaticamente: Oversized usa Streetwear; Top, Regata, Legging e Dry Fit usam Academia.</div>
                 </div>
               </div>
 
@@ -1617,15 +1619,15 @@
               </div>
 
               <div class="field">
-                <label for="priority_encomenda">Ordem em pedido especial</label>
+                <label for="priority_encomenda">Ordem no “Sob encomenda”</label>
                 <input type="number" id="priority_encomenda" min="1" step="1" placeholder="Ex: 1, 2, 3..." />
-                <div class="small-muted">Use quando quiser ordenar produtos feitos por pedido ou colecoes especiais. Numero menor aparece antes.</div>
+                <div class="small-muted">Use só para escolher quais camisas sob encomenda aparecem primeiro naquela parte final da Home. Número menor aparece antes.</div>
               </div>
 
               <div class="field">
-                <label for="priority_pronta_entrega">Ordem na vitrine da loja</label>
+                <label for="priority_pronta_entrega">Ordem na “Pronta entrega”</label>
                 <input type="number" id="priority_pronta_entrega" min="1" step="1" placeholder="Ex: 1, 2, 3..." />
-                <div class="small-muted">Numero menor aparece antes na vitrine principal. Deixe vazio para seguir a ordem normal.</div>
+                <div class="small-muted">Número menor aparece antes na vitrine de pronta entrega. Deixe vazio para seguir a ordem normal.</div>
               </div>
 
               <div class="field">
@@ -1968,32 +1970,6 @@ Camisa Real Madrid 24/25"></textarea>
                 <div class="field"><label for="setting-logo-url">URL da logo</label><input type="text" id="setting-logo-url" placeholder="A URL será preenchida após o upload" /></div>
                 <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadLogoImage()">Fazer upload da logo</button></div>
                 <img id="logo-preview" class="banner-preview" src="https://via.placeholder.com/400x200?text=Logo" alt="Preview logo" />
-              </div>
-              <div class="mini-card">
-                <h4>Imagens dos cards e colecoes</h4>
-                <div class="field"><label for="asset-card-camisas-file">Imagem do card Camisas</label><input type="file" id="asset-card-camisas-file" accept="image/*" onchange="previewBannerImage(event, 'asset-card-camisas-preview')" /></div>
-                <div class="field"><label for="asset-card-camisas-url">URL do card Camisas</label><input type="text" id="asset-card-camisas-url" placeholder="Cole uma URL ou faca upload" oninput="syncVisualAssetPreview('asset-card-camisas-url','asset-card-camisas-preview')" /></div>
-                <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadVisualAsset('asset-card-camisas-file','asset-card-camisas-url','asset-card-camisas-preview','camisas')">Upload card Camisas</button></div>
-                <img id="asset-card-camisas-preview" class="banner-preview" src="https://via.placeholder.com/600x360?text=Card+Camisas" alt="Preview card camisas" />
-                <div class="field"><label for="asset-card-streetwear-file">Imagem do card Streetwear</label><input type="file" id="asset-card-streetwear-file" accept="image/*" onchange="previewBannerImage(event, 'asset-card-streetwear-preview')" /></div>
-                <div class="field"><label for="asset-card-streetwear-url">URL do card Streetwear</label><input type="text" id="asset-card-streetwear-url" placeholder="Cole uma URL ou faca upload" oninput="syncVisualAssetPreview('asset-card-streetwear-url','asset-card-streetwear-preview')" /></div>
-                <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadVisualAsset('asset-card-streetwear-file','asset-card-streetwear-url','asset-card-streetwear-preview','streetwear-card')">Upload card Streetwear</button></div>
-                <img id="asset-card-streetwear-preview" class="banner-preview" src="https://via.placeholder.com/600x360?text=Card+Streetwear" alt="Preview card streetwear" />
-                <div class="field"><label for="asset-card-academia-file">Imagem do card Academia</label><input type="file" id="asset-card-academia-file" accept="image/*" onchange="previewBannerImage(event, 'asset-card-academia-preview')" /></div>
-                <div class="field"><label for="asset-card-academia-url">URL do card Academia</label><input type="text" id="asset-card-academia-url" placeholder="Cole uma URL ou faca upload" oninput="syncVisualAssetPreview('asset-card-academia-url','asset-card-academia-preview')" /></div>
-                <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadVisualAsset('asset-card-academia-file','asset-card-academia-url','asset-card-academia-preview','academia-card')">Upload card Academia</button></div>
-                <img id="asset-card-academia-preview" class="banner-preview" src="https://via.placeholder.com/600x360?text=Card+Academia" alt="Preview card academia" />
-              </div>
-              <div class="mini-card">
-                <h4>Banners das paginas novas</h4>
-                <div class="field"><label for="asset-hero-streetwear-file">Banner da pagina Streetwear</label><input type="file" id="asset-hero-streetwear-file" accept="image/*" onchange="previewBannerImage(event, 'asset-hero-streetwear-preview')" /></div>
-                <div class="field"><label for="asset-hero-streetwear-url">URL do banner Streetwear</label><input type="text" id="asset-hero-streetwear-url" placeholder="Cole uma URL ou faca upload" oninput="syncVisualAssetPreview('asset-hero-streetwear-url','asset-hero-streetwear-preview')" /></div>
-                <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadVisualAsset('asset-hero-streetwear-file','asset-hero-streetwear-url','asset-hero-streetwear-preview','streetwear-hero')">Upload banner Streetwear</button></div>
-                <img id="asset-hero-streetwear-preview" class="banner-preview" src="https://via.placeholder.com/1000x500?text=Banner+Streetwear" alt="Preview banner streetwear" />
-                <div class="field"><label for="asset-hero-academia-file">Banner da pagina Academia</label><input type="file" id="asset-hero-academia-file" accept="image/*" onchange="previewBannerImage(event, 'asset-hero-academia-preview')" /></div>
-                <div class="field"><label for="asset-hero-academia-url">URL do banner Academia</label><input type="text" id="asset-hero-academia-url" placeholder="Cole uma URL ou faca upload" oninput="syncVisualAssetPreview('asset-hero-academia-url','asset-hero-academia-preview')" /></div>
-                <div class="actions-row"><button class="btn btn-secondary" type="button" onclick="uploadVisualAsset('asset-hero-academia-file','asset-hero-academia-url','asset-hero-academia-preview','academia-hero')">Upload banner Academia</button></div>
-                <img id="asset-hero-academia-preview" class="banner-preview" src="https://via.placeholder.com/1000x500?text=Banner+Academia" alt="Preview banner academia" />
               </div>
               <div class="mini-card">
                 <h4>Textos do site</h4>
@@ -2980,6 +2956,47 @@ Camisa Real Madrid 24/25"></textarea>
       localStorage.setItem(PRODUCT_VARIATIONS_STORAGE_KEY, JSON.stringify(productVariationsCache));
     }
 
+    const PRODUCT_SEGMENT_OPTIONS = {
+      futebol: ["Camisa", "Manto", "Retrô", "Seleção", "Kit Infantil"],
+      casual: ["Oversized", "Streetwear", "Moletom", "Cropped", "Bermuda", "Calça Cargo", "Boné", "Acessório"],
+      fitness: ["Top", "Regata", "Legging", "Dry Fit", "Short", "Conjunto Fitness", "Compressão", "Academia"]
+    };
+
+    function inferProductSegment(kind = "") {
+      const text = String(kind || "").toLowerCase();
+      if (text.includes("top") || text.includes("regata") || text.includes("legging") || text.includes("dry") || text.includes("fitness") || text.includes("academia") || text.includes("treino") || text.includes("compress") || text.includes("short")) return "fitness";
+      if (text.includes("oversized") || text.includes("street") || text.includes("moletom") || text.includes("cropped") || text.includes("cargo") || text.includes("bermuda") || text.includes("bon") || text.includes("acess")) return "casual";
+      return "futebol";
+    }
+
+    function normalizeProductSegment(segment = "") {
+      const value = String(segment || "").trim().toLowerCase();
+      return PRODUCT_SEGMENT_OPTIONS[value] ? value : inferProductSegment(value);
+    }
+
+    function getProductKindOptions(segment = "futebol") {
+      const base = PRODUCT_SEGMENT_OPTIONS[segment] || PRODUCT_SEGMENT_OPTIONS.futebol;
+      const extras = productTypeOptions.map(item => String(item || "").trim()).filter(Boolean);
+      return [...new Set([...base, ...extras])];
+    }
+
+    function renderProductKindOptions(segment = "futebol", selected = "") {
+      const select = document.getElementById("product-kind");
+      if (!select) return;
+      const options = getProductKindOptions(segment);
+      const value = selected || options[0] || "Camisa";
+      select.innerHTML = options.map(type => `<option value="${escapeHtml(type)}">${escapeHtml(type)}</option>`).join("");
+      if (!options.includes(value)) {
+        select.insertAdjacentHTML("beforeend", `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`);
+      }
+      select.value = value;
+    }
+
+    function handleProductSegmentChange(segment) {
+      renderProductKindOptions(segment);
+      syncProductTypeFromKind(true);
+      updateDraftSummary();
+    }
     function loadProductTypeOptions() {
       try {
         productTypeOptions = JSON.parse(localStorage.getItem(PRODUCT_TYPE_OPTIONS_KEY) || "[]") || [];
@@ -2997,21 +3014,19 @@ Camisa Real Madrid 24/25"></textarea>
     function renderProductTypeSuggestions() {
       const container = document.getElementById("product-type-suggestions");
       if (!container) return;
+      container.innerHTML = `
+        <button class="type-chip" type="button" onclick="setProductSegmentAndKind('futebol')">Futebol</button>
+        <button class="type-chip" type="button" onclick="setProductSegmentAndKind('casual')">Casual</button>
+        <button class="type-chip" type="button" onclick="setProductSegmentAndKind('fitness')">Fitness</button>
+      `;
+    }
 
-      const defaultTypes = ["Camisa de Time", "Streetwear", "Academia", "Oversized", "Dry Fit", "Moletom", "Regata", "Legging", "Bermuda", "Acessorios"];
-      const mergedTypes = [...new Set([...defaultTypes, ...productTypeOptions.map(item => String(item || "").trim()).filter(Boolean)])];
-      const labels = {
-        "Camisa de Time": "Camisa",
-        Streetwear: "Street",
-        Academia: "Treino",
-        Oversized: "Over",
-        "Dry Fit": "Dry",
-        Acessorios: "Acess."
-      };
-
-      container.innerHTML = mergedTypes.map(type => `
-        <button class="type-chip" type="button" onclick="applySuggestedProductKind('${escapeHtml(type)}')">${labels[type] || "Novo"} ${escapeHtml(type)}</button>
-      `).join("");
+    function setProductSegmentAndKind(segment, kind = "") {
+      const segmentSelect = document.getElementById("product-segment");
+      if (segmentSelect) segmentSelect.value = segment;
+      renderProductKindOptions(segment, kind);
+      syncProductTypeFromKind(true);
+      updateDraftSummary();
     }
 
     function addCustomProductKind() {
@@ -3025,6 +3040,8 @@ Camisa Real Madrid 24/25"></textarea>
         persistProductTypeOptions();
       }
       input.value = "";
+      const segment = document.getElementById("product-segment")?.value || inferProductSegment(value);
+      renderProductKindOptions(segment, value);
       applySuggestedProductKind(value);
     }
 
@@ -3385,12 +3402,12 @@ Camisa Real Madrid 24/25"></textarea>
     function getSizeProfileLabel(profile) {
       const normalized = String(profile || "adulto").toLowerCase();
       if (normalized === "infantil") return "Infantil";
-      if (normalized === "sandalia") return "Calcados / sandalia";
-      if (normalized === "streetwear") return "Streetwear";
-      if (normalized === "fitness") return "Academia / fitness";
+      if (normalized === "sandalia") return "Sandalia";
+      if (normalized === "streetwear") return "Streetwear / Oversized";
+      if (normalized === "fitness") return "Academia / Fitness";
       if (normalized === "unico") return "Unico / sem grade";
       if (normalized === "custom") return "Personalizado";
-      return "Camisas / adulto";
+      return "Camisa / adulto";
     }
 
     function renderProductSizes(profile = "adulto", selectedSizes = [], customOptions = []) {
@@ -3438,21 +3455,17 @@ Camisa Real Madrid 24/25"></textarea>
         customSizeOptions = categoryConfig.sizes || [];
       }
       const textToClassify = `${value} ${categoryValue}`;
-      const hasCategorySizeConfig = !force && categoryConfig;
-      if (hasCategorySizeConfig) {
-        suggestedProfile = categoryConfig.profile || "custom";
-        customSizeOptions = categoryConfig.sizes || [];
-      } else if (textToClassify.includes("infantil") || textToClassify.includes("kids") || textToClassify.includes("kit")) {
+      if (!categoryConfig && (textToClassify.includes("infantil") || textToClassify.includes("kids") || textToClassify.includes("kit"))) {
         suggestedProfile = "infantil";
-      } else if (textToClassify.includes("street") || textToClassify.includes("oversized") || textToClassify.includes("over") || textToClassify.includes("moletom") || textToClassify.includes("cargo") || textToClassify.includes("casual") || textToClassify.includes("bermuda") || textToClassify.includes("bone") || textToClassify.includes("boné")) {
+      } else if (!categoryConfig && (textToClassify.includes("oversized") || textToClassify.includes("street") || textToClassify.includes("moletom") || textToClassify.includes("cargo") || textToClassify.includes("casual") || textToClassify.includes("cropped"))) {
         suggestedProfile = "streetwear";
-      } else if (textToClassify.includes("academia") || textToClassify.includes("fitness") || textToClassify.includes("dry") || textToClassify.includes("treino") || textToClassify.includes("regata") || textToClassify.includes("legging") || textToClassify.includes("top") || textToClassify.includes("compress")) {
+      } else if (!categoryConfig && (textToClassify.includes("top") || textToClassify.includes("regata") || textToClassify.includes("legging") || textToClassify.includes("dry") || textToClassify.includes("academia") || textToClassify.includes("fitness") || textToClassify.includes("treino") || textToClassify.includes("short"))) {
         suggestedProfile = "fitness";
-      } else if (textToClassify.includes("sand") || textToClassify.includes("chinelo") || textToClassify.includes("slide")) {
+      } else if (!categoryConfig && (textToClassify.includes("sand") || textToClassify.includes("chinelo") || textToClassify.includes("slide"))) {
         suggestedProfile = "sandalia";
-      } else if (textToClassify.includes("copo") || textToClassify.includes("caneca") || textToClassify.includes("garrafa") || textToClassify.includes("acessor")) {
+      } else if (!categoryConfig && (textToClassify.includes("copo") || textToClassify.includes("caneca") || textToClassify.includes("garrafa") || textToClassify.includes("acessor"))) {
         suggestedProfile = "unico";
-      } else if (textToClassify.includes("camisa") || textToClassify.includes("manto") || textToClassify.includes("time") || textToClassify.includes("torcedor")) {
+      } else if (!categoryConfig && textToClassify.includes("camisa")) {
         suggestedProfile = "adulto";
       }
 
@@ -3471,9 +3484,10 @@ Camisa Real Madrid 24/25"></textarea>
     }
 
     function applySuggestedProductKind(kind) {
-      const input = document.getElementById("product-kind");
-      if (!input) return;
-      input.value = kind;
+      const segment = inferProductSegment(kind);
+      const segmentSelect = document.getElementById("product-segment");
+      if (segmentSelect) segmentSelect.value = segment;
+      renderProductKindOptions(segment, kind);
       syncProductTypeFromKind(true);
       updateDraftSummary();
     }
@@ -3481,6 +3495,7 @@ Camisa Real Madrid 24/25"></textarea>
     function persistProductMeta(productId, meta = {}) {
       if (!productId) return;
       productMetaCache[String(productId)] = {
+        segment: normalizeProductSegment(meta.segment || ""),
         kind: normalizeProductKind(meta.kind || ""),
         sizeProfile: String(meta.sizeProfile || "adulto").toLowerCase()
       };
@@ -3490,6 +3505,7 @@ Camisa Real Madrid 24/25"></textarea>
     function shouldRetryWithoutMetaColumns(error) {
       const message = String(error?.message || "").toLowerCase();
       return error?.code === "42703"
+        || message.includes("product_segment")
         || message.includes("product_kind")
         || message.includes("size_profile")
         || message.includes("column")
@@ -3513,6 +3529,7 @@ Camisa Real Madrid 24/25"></textarea>
           sale_type,
           category_id,
           created_at,
+          product_segment,
           product_kind,
           size_profile,
           priority_pronta_entrega,
@@ -3573,6 +3590,7 @@ Camisa Real Madrid 24/25"></textarea>
         .from("products")
         .select(`
           *,
+          product_segment,
           product_kind,
           size_profile,
           sale_type,
@@ -3624,7 +3642,7 @@ Camisa Real Madrid 24/25"></textarea>
       document.getElementById("summary-name").textContent = document.getElementById("product-name").value.trim() || "—";
       document.getElementById("summary-category").textContent = categorySelect?.selectedOptions?.[0]?.textContent && categorySelect.value ? categorySelect.selectedOptions[0].textContent : "—";
       const summaryKind = document.getElementById("summary-kind");
-      if (summaryKind) summaryKind.textContent = normalizeProductKind(kindInput?.value || "") || "Camisa de Time";
+      if (summaryKind) summaryKind.textContent = normalizeProductKind(kindInput?.value || "") || "Camisa";
       document.getElementById("summary-price").textContent = document.getElementById("product-price").value ? formatPrice(document.getElementById("product-price").value) : "—";
       const summarySizeProfile = document.getElementById("summary-size-profile");
       if (summarySizeProfile) summarySizeProfile.textContent = getSizeProfileLabel(sizeProfile?.value || "adulto");
@@ -3777,7 +3795,8 @@ Camisa Real Madrid 24/25"></textarea>
       document.getElementById("product-badge-type").value = "";
       document.getElementById("product-sale-type").value = "pronta_entrega";
       const productKindField = document.getElementById("product-kind");
-      if (productKindField) productKindField.value = "Camisa de Time";
+      if (document.getElementById("product-segment")) document.getElementById("product-segment").value = "futebol";
+      renderProductKindOptions("futebol", "Camisa");
       const productSizeProfileField = document.getElementById("product-size-profile");
       if (productSizeProfileField) productSizeProfileField.value = "adulto";
       const variationToggle = document.getElementById("product-has-variations");
@@ -4421,20 +4440,6 @@ async function uploadMultipleProductImages(productId) {
       return inferred || "Outros";
     }
 
-    function classifyProductSegment(product = {}) {
-      const kind = String(getDisplayProductKind(product) || "").toLowerCase();
-      const category = categories.find(item => String(item.id) === String(product.category_id));
-      const categoryText = String(category?.name || product.category_name || "").toLowerCase();
-      const name = String(product.name || "").toLowerCase();
-      const profile = String(product.size_profile || productMetaCache[String(product.id)]?.sizeProfile || "").toLowerCase();
-      const text = `${kind} ${categoryText} ${name} ${profile}`;
-      if (profile === "streetwear" || text.includes("street") || text.includes("oversized") || text.includes("moletom") || text.includes("cargo") || text.includes("casual")) return "Streetwear";
-      if (profile === "fitness" || text.includes("academia") || text.includes("fitness") || text.includes("dry") || text.includes("treino") || text.includes("regata") || text.includes("legging") || text.includes("compress")) return "Academia";
-      if (text.includes("camisa") || text.includes("manto") || text.includes("time") || text.includes("torcedor") || text.includes("infantil") || text.includes("kit")) return "Camisa";
-      if (text.includes("sand") || text.includes("chinelo") || text.includes("slide") || text.includes("copo") || text.includes("caneca") || text.includes("garrafa") || text.includes("acessor")) return "Acessorios";
-      return "Outros";
-    }
-
     function getFilteredProducts() {
       const term = document.getElementById("search-input").value.trim().toLowerCase();
       const categoryFilter = document.getElementById("product-filter-category")?.value || "";
@@ -4449,8 +4454,13 @@ async function uploadMultipleProductImages(productId) {
           const matchSaleType = !saleTypeFilter || (product.sale_type || "pronta_entrega") === saleTypeFilter;
           const isVisible = product.is_visible !== false;
           const productKind = getDisplayProductKind(product);
-          const normalizedKind = classifyProductSegment(product);
-          const matchKind = !kindFilter || normalizedKind === kindFilter;
+          const normalizedKind = productKind === "Camisa" || productKind === "Kit Infantil"
+            ? "Camisa"
+            : (productKind === "Sandália" || productKind === "Copo" ? productKind : "Outros");
+          const matchKind = !kindFilter
+            || (kindFilter === "Camisa" && normalizedKind === "Camisa")
+            || (kindFilter === "Kit Infantil" && productKind === "Kit Infantil")
+            || (kindFilter !== "Camisa" && kindFilter !== "Kit Infantil" && normalizedKind === kindFilter);
           const matchVisibility = !visibilityFilter
             || (visibilityFilter === "visible" && isVisible)
             || (visibilityFilter === "hidden" && !isVisible);
@@ -4758,6 +4768,7 @@ async function uploadMultipleProductImages(productId) {
 
       allProducts = (data || []).map(product => ({
         ...product,
+        product_segment: normalizeProductSegment(product.product_segment || productMetaCache?.[String(product.id)]?.segment || product.product_kind || ""),
         product_kind: normalizeProductKind(product.product_kind || productMetaCache?.[String(product.id)]?.kind || ""),
         size_profile: String(product.size_profile || productMetaCache?.[String(product.id)]?.sizeProfile || "").toLowerCase(),
         priority_pronta_entrega: product.priority_pronta_entrega ?? getStoredProntaPriority(product.id) ?? null
@@ -5551,7 +5562,8 @@ async function uploadMultipleProductImages(productId) {
       const is_visible = document.getElementById("product-visible") ? document.getElementById("product-visible").checked : true;
       const badge_type = document.getElementById("product-badge-type").value;
       const sale_type = document.getElementById("product-sale-type").value || "pronta_entrega";
-      const product_kind = normalizeProductKind(document.getElementById("product-kind")?.value || "") || "Camisa de Time";
+      const product_segment = normalizeProductSegment(document.getElementById("product-segment")?.value || "");
+      const product_kind = normalizeProductKind(document.getElementById("product-kind")?.value || "") || "Camisa";
       const size_profile = String(document.getElementById("product-size-profile")?.value || "adulto").toLowerCase();
       const sizes = getSelectedSizes();
 
@@ -5587,6 +5599,7 @@ async function uploadMultipleProductImages(productId) {
         is_visible,
         badge_type: badge_type || null,
         sale_type,
+        product_segment,
         product_kind,
         size_profile
       };
@@ -5603,6 +5616,7 @@ async function uploadMultipleProductImages(productId) {
 
         if (response.error && shouldRetryWithoutMetaColumns(response.error)) {
           const fallbackPayload = { ...payload };
+          delete fallbackPayload.product_segment;
           delete fallbackPayload.product_kind;
           delete fallbackPayload.size_profile;
           response = await supabaseClient
@@ -5621,6 +5635,7 @@ async function uploadMultipleProductImages(productId) {
 
         if (response.error && shouldRetryWithoutMetaColumns(response.error)) {
           const fallbackPayload = { ...payload };
+          delete fallbackPayload.product_segment;
           delete fallbackPayload.product_kind;
           delete fallbackPayload.size_profile;
           response = await supabaseClient
@@ -5647,7 +5662,7 @@ async function uploadMultipleProductImages(productId) {
         return;
       }
 
-      persistProductMeta(savedProduct.id, { kind: product_kind, sizeProfile: size_profile });
+      persistProductMeta(savedProduct.id, { segment: product_segment, kind: product_kind, sizeProfile: size_profile });
       persistStoredProntaPriority(savedProduct.id, priority_pronta_entrega_raw ? Number(priority_pronta_entrega_raw) : "");
 
       const sizeResult = await saveProductSizes(savedProduct.id, sizes);
@@ -5716,7 +5731,9 @@ async function uploadMultipleProductImages(productId) {
       document.getElementById("product-sale-type").value = data.sale_type || "pronta_entrega";
       const resolvedKind = inferProductKind(data);
       const resolvedSizeProfile = inferSizeProfile(data);
-      document.getElementById("product-kind").value = resolvedKind;
+      const resolvedSegment = normalizeProductSegment(data.product_segment || productMetaCache?.[String(data.id)]?.segment || resolvedKind);
+      if (document.getElementById("product-segment")) document.getElementById("product-segment").value = resolvedSegment;
+      renderProductKindOptions(resolvedSegment, resolvedKind);
       document.getElementById("product-size-profile").value = resolvedSizeProfile;
 
       if (data.image_url) {
@@ -5736,7 +5753,7 @@ async function uploadMultipleProductImages(productId) {
         : [];
 
       renderProductSizes(resolvedSizeProfile, availableSizes);
-      persistProductMeta(productId, { kind: resolvedKind, sizeProfile: resolvedSizeProfile });
+      persistProductMeta(productId, { segment: resolvedSegment, kind: resolvedKind, sizeProfile: resolvedSizeProfile });
 
       const storedVariations = getStoredProductVariations(productId).map(item => createVariationDraft(item));
       productVariationsDraft = storedVariations;
@@ -5829,6 +5846,9 @@ async function uploadMultipleProductImages(productId) {
         is_visible: product.is_visible !== false,
         badge_type: product.badge_type,
         sale_type: product.sale_type,
+        product_segment: normalizeProductSegment(product.product_segment || inferProductKind(product)),
+        product_kind: inferProductKind(product),
+        size_profile: inferSizeProfile(product),
         category_id: product.category_id
       };
 
@@ -5877,6 +5897,7 @@ async function uploadMultipleProductImages(productId) {
       }
 
       persistProductMeta(inserted.id, {
+        segment: normalizeProductSegment(product.product_segment || inferProductKind(product)),
         kind: inferProductKind(product),
         sizeProfile: inferSizeProfile(product)
       });
@@ -5937,65 +5958,6 @@ async function uploadMultipleProductImages(productId) {
     }
 
     
-    function parseVisualAssets(raw = "") {
-      try {
-        if (!raw || !String(raw).trim().startsWith("{")) return {};
-        return JSON.parse(raw) || {};
-      } catch (error) {
-        console.warn("Nao foi possivel ler imagens visuais:", error);
-        return {};
-      }
-    }
-
-    function getVisualAssetsPayload() {
-      return {
-        card_camisas_image: document.getElementById("asset-card-camisas-url")?.value.trim() || "",
-        card_streetwear_image: document.getElementById("asset-card-streetwear-url")?.value.trim() || "",
-        card_academia_image: document.getElementById("asset-card-academia-url")?.value.trim() || "",
-        streetwear_hero_image: document.getElementById("asset-hero-streetwear-url")?.value.trim() || "",
-        academia_hero_image: document.getElementById("asset-hero-academia-url")?.value.trim() || ""
-      };
-    }
-
-    function setVisualAssetField(inputId, previewId, value) {
-      const input = document.getElementById(inputId);
-      const preview = document.getElementById(previewId);
-      if (input) input.value = value || "";
-      if (preview && value) preview.src = value;
-    }
-
-    function setVisualAssetFields(assets = {}) {
-      setVisualAssetField("asset-card-camisas-url", "asset-card-camisas-preview", assets.card_camisas_image);
-      setVisualAssetField("asset-card-streetwear-url", "asset-card-streetwear-preview", assets.card_streetwear_image);
-      setVisualAssetField("asset-card-academia-url", "asset-card-academia-preview", assets.card_academia_image);
-      setVisualAssetField("asset-hero-streetwear-url", "asset-hero-streetwear-preview", assets.streetwear_hero_image);
-      setVisualAssetField("asset-hero-academia-url", "asset-hero-academia-preview", assets.academia_hero_image);
-    }
-
-    function syncVisualAssetPreview(inputId, previewId) {
-      const url = document.getElementById(inputId)?.value.trim();
-      const preview = document.getElementById(previewId);
-      if (preview && url) preview.src = url;
-    }
-
-    async function uploadVisualAsset(fileId, inputId, previewId, folderName) {
-      clearMessage("settings-message");
-      const file = document.getElementById(fileId)?.files?.[0];
-      if (!file) {
-        showMessage("settings-message", "Selecione uma imagem antes de fazer upload.", "error");
-        return;
-      }
-      try {
-        const compressedFile = await compressImageToTarget(file, { maxWidth: 1600, maxHeight: 1000, targetSizeKB: 650 });
-        const imageUrl = await uploadToCloudinary(compressedFile, `camisa10-store/site-assets/${folderName}`);
-        setVisualAssetField(inputId, previewId, imageUrl);
-        await saveSiteSettings();
-        showMessage("settings-message", `Imagem enviada e salva (${Math.round(compressedFile.size / 1024)} KB).`, "success");
-      } catch (error) {
-        console.error("Erro no upload da imagem visual:", error);
-        showMessage("settings-message", `Erro ao enviar imagem: ${error.message || "sem detalhe"}`, "error");
-      }
-    }
 async function uploadHeroBannerImage() {
       clearMessage("settings-message");
 
@@ -6418,9 +6380,7 @@ async function uploadHeroSlideImage() {
         document.getElementById("hero-banner-preview").src = data.hero_image_url;
       }
 
-      const visualAssets = parseVisualAssets(data.hero_left_image_url);
-      setVisualAssetFields(visualAssets);
-      if (data.hero_left_image_url && !String(data.hero_left_image_url).trim().startsWith("{")) {
+      if (data.hero_left_image_url) {
         document.getElementById("hero-left-banner-preview").src = data.hero_left_image_url;
       }
 
@@ -6436,7 +6396,7 @@ async function uploadHeroSlideImage() {
         hero_title: document.getElementById("setting-hero-title").value.trim(),
         hero_subtitle: document.getElementById("setting-hero-subtitle").value.trim(),
         hero_image_url: document.getElementById("setting-hero-image-url").value.trim(),
-        hero_left_image_url: JSON.stringify(getVisualAssetsPayload()),
+        hero_left_image_url: document.getElementById("setting-hero-left-image-url").value.trim(),
         delivery_text: document.getElementById("setting-delivery-text").value.trim(),
         catalog_title: document.getElementById("setting-catalog-title").value.trim(),
         catalog_subtitle: document.getElementById("setting-catalog-subtitle").value.trim(),
@@ -6458,8 +6418,7 @@ async function uploadHeroSlideImage() {
         return;
       }
 
-      clearAdminCache("camisa10_admin_site_settings_v1");
-      showMessage("settings-message", "Configuracoes do site salvas com sucesso.", "success");
+      showMessage("settings-message", "Configurações do site salvas com sucesso.", "success");
     }
 
 
@@ -6995,6 +6954,7 @@ async function uploadAdditionalImagesForBatchProduct(productId, item) {
             is_visible: isVisible,
             badge_type: null,
             sale_type: batchSaleType,
+            product_segment: "futebol",
             size_profile: batchSizeProfile,
             product_kind: batchSizeProfile === "infantil" ? "Kit Infantil" : "Camisa",
             category_id: categoryId
@@ -9070,13 +9030,16 @@ async function saveGestaoSale() {
       loadCategorySizeOptionsCache();
       loadProductVariationsCache();
       loadProductTypeOptions();
+      if (document.getElementById("product-segment")) document.getElementById("product-segment").value = "futebol";
+      renderProductKindOptions("futebol", "Camisa");
       document.getElementById("product-name")?.addEventListener("input", syncSlugPreview);
       document.getElementById("product-price")?.addEventListener("input", updateDraftSummary);
       document.getElementById("product-category")?.addEventListener("change", () => {
         syncProductTypeFromKind();
         updateDraftSummary();
       });
-      document.getElementById("product-kind")?.addEventListener("input", () => {
+      document.getElementById("product-segment")?.addEventListener("change", (event) => handleProductSegmentChange(event.target.value));
+      document.getElementById("product-kind")?.addEventListener("change", () => {
         syncProductTypeFromKind();
         updateDraftSummary();
       });
@@ -9113,7 +9076,8 @@ async function saveGestaoSale() {
       });
       setProductStep(1);
       renderProductSizes("adulto", []);
-      document.getElementById("product-kind").value = "Camisa de Time";
+      if (document.getElementById("product-segment")) document.getElementById("product-segment").value = "futebol";
+      renderProductKindOptions("futebol", "Camisa");
       document.getElementById("product-size-profile").value = "adulto";
       document.getElementById("product-has-variations").checked = false;
       productVariationsDraft = [];
