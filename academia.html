@@ -195,8 +195,8 @@
       ["headerWhatsApp", "contactWhatsApp"].forEach(id => { const el = document.getElementById(id); if (el) el.href = link; });
     }
     function normalizeCategoryName(product) { return product.categories?.name || product.category_name || product.category || "Sem categoria"; }
-    function getProductText(product) { return normalize([product.name, product.title, normalizeCategoryName(product), product.short_description, product.description].filter(Boolean).join(" ")); }
-    function matchesSegment(product) { const text = getProductText(product); return BASE_KEYWORDS.some(keyword => text.includes(normalize(keyword))); }
+    function getProductText(product) { return normalize([product.name, product.title, product.product_segment, product.product_kind, normalizeCategoryName(product), product.short_description, product.description].filter(Boolean).join(" ")); }
+    function matchesSegment(product) { if (normalize(product.product_segment) === "fitness") return true; const text = getProductText(product); return BASE_KEYWORDS.some(keyword => text.includes(normalize(keyword))); }
     function getProductImage(product) { const url = product.image_url || product.photo_url || product.cover_url || product.product_images?.[0]?.image_url || ""; return url && url.includes("res.cloudinary.com") ? url.replace("/upload/", "/upload/f_auto,q_auto,w_520/") : url; }
     function getProductUrl(product) { return product.slug ? `produto.html?slug=${encodeURIComponent(product.slug)}` : `produto.html?id=${encodeURIComponent(product.id)}`; }
     function getBadge(product) {
@@ -238,7 +238,7 @@
       grid.innerHTML = products.length ? products.map(buildProductCard).join("") : `<div class="state-box">Nenhum produto encontrado nessa coleção. Cadastre produtos com essa categoria ou palavras-chave no painel.</div>`;
     }
     async function loadProducts() {
-      const { data, error } = await supabaseClient.from("products").select(`id, name, slug, price, old_price, image_url, is_featured, badge_type, sale_type, category_id, created_at, short_description, description, categories (id, name)`).order("created_at", { ascending: false }).limit(240);
+      const { data, error } = await supabaseClient.from("products").select(`id, name, slug, price, old_price, image_url, is_featured, badge_type, sale_type, product_segment, product_kind, category_id, created_at, short_description, description, categories (id, name)`).order("created_at", { ascending: false }).limit(240);
       if (error) { console.error("Erro ao carregar produtos:", error); document.getElementById("productsGrid").innerHTML = `<div class="state-box">Não foi possível carregar os produtos agora.</div>`; return; }
       allProducts = data || [];
       renderProducts();
