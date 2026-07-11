@@ -196,13 +196,13 @@
     }
     function normalizeCategoryName(product) { return product.categories?.name || product.category_name || product.category || "Sem categoria"; }
     function getProductText(product) { return normalize([product.name, product.title, product.product_segment, product.product_kind, normalizeCategoryName(product), product.short_description, product.description].filter(Boolean).join(" ")); }
-    function matchesSegment(product) { if (normalize(product.product_segment) === "fitness") return true; const text = getProductText(product); return BASE_KEYWORDS.some(keyword => text.includes(normalize(keyword))); }
+    function matchesSegment(product) { const text = getProductText(product); const segment = normalize(product.product_segment); const kind = normalize(product.product_kind); const category = normalizeCategoryName(product); const categoryText = normalize(category); const directSegments = ["fitness", "academia", "treino", "moda fitness"]; if (directSegments.some(item => segment.includes(item) || kind.includes(item) || categoryText.includes(item))) return true; return BASE_KEYWORDS.some(keyword => text.includes(normalize(keyword))); }
     function getProductImage(product) { const url = product.image_url || product.photo_url || product.cover_url || product.product_images?.[0]?.image_url || ""; return url && url.includes("res.cloudinary.com") ? url.replace("/upload/", "/upload/f_auto,q_auto,w_520/") : url; }
     function getProductUrl(product) { return product.slug ? `produto.html?slug=${encodeURIComponent(product.slug)}` : `produto.html?id=${encodeURIComponent(product.id)}`; }
     function getBadge(product) {
       if (product.badge_type === "novo") return `<span class="badge">Novo</span>`;
       if (product.badge_type === "mais-vendida") return `<span class="badge">Mais vendida</span>`;
-      if (product.is_featured || product.badge_type === "destaque") return `<span class="badge">Mais procurada</span>`;
+      if (product.is_featured || product.featured || product.badge_type === "destaque") return `<span class="badge">Mais procurada</span>`;
       if (product.sale_type === "sob_encomenda") return `<span class="badge">Pedido especial</span>`;
       return "";
     }
@@ -226,8 +226,8 @@
         const text = getProductText(product);
         return (currentChip === "all" || text.includes(chip)) && (!term || text.includes(term));
       }).sort((a, b) => {
-        const aFeatured = Number(!!a.is_featured || a.badge_type === "destaque");
-        const bFeatured = Number(!!b.is_featured || b.badge_type === "destaque");
+        const aFeatured = Number(!!a.is_featured || !!a.featured || a.badge_type === "destaque");
+        const bFeatured = Number(!!b.is_featured || !!b.featured || b.badge_type === "destaque");
         if (aFeatured !== bFeatured) return bFeatured - aFeatured;
         return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
       });
@@ -237,13 +237,36 @@
       const products = getFilteredProducts();
       grid.innerHTML = products.length ? products.map(buildProductCard).join("") : `<div class="state-box">Nenhum produto encontrado nessa coleção. Cadastre produtos com essa categoria ou palavras-chave no painel.</div>`;
     }
-    async function loadProducts() {
-      const { data, error } = await supabaseClient.from("products").select(`id, name, slug, price, old_price, image_url, is_featured, badge_type, sale_type, product_segment, product_kind, category_id, created_at, short_description, description, categories (id, name)`).order("created_at", { ascending: false }).limit(240);
-      if (error) { console.error("Erro ao carregar produtos:", error); document.getElementById("productsGrid").innerHTML = `<div class="state-box">Não foi possível carregar os produtos agora.</div>`; return; }
-      allProducts = data || [];
-      renderProducts();
+    async function fetchProductsForSegmentPage() {
+      const fullSelect = `id, name, slug, price, old_price, image_url, is_featured, featured, badge_type, sale_type, product_segment, product_kind, category_id, created_at, short_description, description, is_visible, visible, categories (id, name)`;
+      const currentSelect = `id, name, slug, price, old_price, image_url, is_featured, badge_type, sale_type, product_segment, product_kind, category_id, created_at, short_description, description, is_visible, categories (id, name)`;
+      const legacySelect = `id, name, slug, price, old_price, image_url, featured, badge_type, sale_type, category_id, created_at, short_description, description, visible, categories (id, name)`;
+      const selects = [fullSelect, currentSelect, legacySelect];
+      let lastError = null;
+
+      for (const selectFields of selects) {
+        const response = await supabaseClient
+          .from("products")
+          .select(selectFields)
+          .order("created_at", { ascending: false })
+          .limit(240);
+
+        if (!response.error) return response;
+        lastError = response.error;
+        const message = String(response.error.message || "").toLowerCase();
+        const canRetry = response.error.code === "42703" || message.includes("schema cache") || message.includes("column");
+        if (!canRetry) break;
+      }
+
+      return { data: null, error: lastError };
     }
-    function setupFilters() {
+
+    async function loadProducts() {
+      const { data, error } = await fetchProductsForSegmentPage();
+      if (error) { console.error("Erro ao carregar produtos:", error); document.getElementById("productsGrid").innerHTML = `<div class="state-box">NÃ£o foi possÃ­vel carregar os produtos agora.</div>`; return; }
+      allProducts = (data || []).filter(product => product.is_visible !== false && product.visible !== false);
+      renderProducts();
+    }    function setupFilters() {
       document.getElementById("searchInput")?.addEventListener("input", event => { searchTerm = event.target.value; renderProducts(); });
       document.querySelectorAll(".chip").forEach(button => {
         button.addEventListener("click", () => { currentChip = button.dataset.chip || "all"; document.querySelectorAll(".chip").forEach(item => item.classList.toggle("active", item === button)); renderProducts(); });
