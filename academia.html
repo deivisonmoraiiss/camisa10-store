@@ -238,10 +238,10 @@
       grid.innerHTML = products.length ? products.map(buildProductCard).join("") : `<div class="state-box">Nenhum produto encontrado nessa coleção. Cadastre produtos com essa categoria ou palavras-chave no painel.</div>`;
     }
     async function fetchProductsForSegmentPage() {
-      const fullSelect = `id, name, slug, price, old_price, image_url, is_featured, featured, badge_type, sale_type, product_segment, product_kind, category_id, created_at, short_description, description, is_visible, visible, categories (id, name)`;
-      const currentSelect = `id, name, slug, price, old_price, image_url, is_featured, badge_type, sale_type, product_segment, product_kind, category_id, created_at, short_description, description, is_visible, categories (id, name)`;
-      const legacySelect = `id, name, slug, price, old_price, image_url, featured, badge_type, sale_type, category_id, created_at, short_description, description, visible, categories (id, name)`;
-      const selects = [fullSelect, currentSelect, legacySelect];
+      const currentSelect = `id, name, slug, price, old_price, image_url, is_featured, badge_type, sale_type, product_segment, product_kind, category_id, created_at, short_description, is_visible, categories (id, name)`;
+      const metaSelect = `id, name, slug, price, old_price, image_url, badge_type, sale_type, product_segment, product_kind, category_id, created_at, short_description, categories (id, name)`;
+      const legacySelect = `id, name, slug, price, old_price, image_url, badge_type, sale_type, category_id, created_at, categories (id, name)`;
+      const selects = [currentSelect, metaSelect, legacySelect];
       let lastError = null;
 
       for (const selectFields of selects) {
@@ -263,10 +263,11 @@
 
     async function loadProducts() {
       const { data, error } = await fetchProductsForSegmentPage();
-      if (error) { console.error("Erro ao carregar produtos:", error); document.getElementById("productsGrid").innerHTML = `<div class="state-box">NÃ£o foi possÃ­vel carregar os produtos agora.</div>`; return; }
-      allProducts = (data || []).filter(product => product.is_visible !== false && product.visible !== false);
+      if (error) { console.error("Erro ao carregar produtos:", error); document.getElementById("productsGrid").innerHTML = `<div class="state-box">Não foi possível carregar os produtos agora.</div>`; return; }
+      allProducts = (data || []).filter(product => product.is_visible !== false);
       renderProducts();
-    }    function setupFilters() {
+    }
+    function setupFilters() {
       document.getElementById("searchInput")?.addEventListener("input", event => { searchTerm = event.target.value; renderProducts(); });
       document.querySelectorAll(".chip").forEach(button => {
         button.addEventListener("click", () => { currentChip = button.dataset.chip || "all"; document.querySelectorAll(".chip").forEach(item => item.classList.toggle("active", item === button)); renderProducts(); });
