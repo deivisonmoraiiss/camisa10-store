@@ -162,7 +162,7 @@
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     const SITE_SETTINGS_ID = "61c8c46f-f37f-460f-88a1-8f6b6b36f7d2";
     let siteSettings = {};
-    const BASE_KEYWORDS = ["academia", "fitness", "dry fit", "regata", "regatas", "shorts", "shorts fitness", "legging", "leggings", "top", "compressão", "compressao", "treino", "gym", "conjunto fitness"];
+    const BASE_KEYWORDS = ["academia", "fitness", "dry fit", "regata", "regatas", "shorts", "shorts fitness", "legging", "leggings", "top", "compressão", "compressao", "gym", "conjunto fitness"];
     const KIND = "academia";
     let allProducts = [];
     let currentChip = "all";
@@ -196,7 +196,7 @@
     }
     function normalizeCategoryName(product) { return product.categories?.name || product.category_name || product.category || "Sem categoria"; }
     function getProductText(product) { return normalize([product.name, product.title, product.product_segment, product.product_kind, normalizeCategoryName(product), product.short_description, product.description].filter(Boolean).join(" ")); }
-    function matchesSegment(product) { const text = getProductText(product); const segment = normalize(product.product_segment); const kind = normalize(product.product_kind); const category = normalizeCategoryName(product); const categoryText = normalize(category); const directSegments = ["fitness", "academia", "treino", "moda fitness"]; if (directSegments.some(item => segment.includes(item) || kind.includes(item) || categoryText.includes(item))) return true; return BASE_KEYWORDS.some(keyword => text.includes(normalize(keyword))); }
+    function matchesSegment(product) { const text = getProductText(product); const segment = normalize(product.product_segment); const kind = normalize(product.product_kind); const category = normalizeCategoryName(product); const categoryText = normalize(category); const directSegments = ["fitness", "academia", "moda fitness"]; if (directSegments.some(item => segment.includes(item) || kind.includes(item) || categoryText.includes(item))) return true; const footballSignals = ["futebol", "brasileirao", "brasileirão", "retro", "retrô", "selecao", "seleção", "camisa de time"]; if (segment === "futebol" || footballSignals.some(item => categoryText.includes(normalize(item)))) return false; return BASE_KEYWORDS.some(keyword => text.includes(normalize(keyword))); }
     function getProductImage(product) { const url = product.image_url || product.photo_url || product.cover_url || product.product_images?.[0]?.image_url || ""; return url && url.includes("res.cloudinary.com") ? url.replace("/upload/", "/upload/f_auto,q_auto,w_520/") : url; }
     function getProductUrl(product) { return product.slug ? `produto.html?slug=${encodeURIComponent(product.slug)}` : `produto.html?id=${encodeURIComponent(product.id)}`; }
     function getBadge(product) {
