@@ -193,7 +193,7 @@
     }
     function normalizeCategoryName(product) { return product.categories?.name || product.category_name || product.category || "Sem categoria"; }
     function getProductText(product) { return normalize([product.name, product.title, product.product_segment, product.product_kind, normalizeCategoryName(product), product.short_description, product.description].filter(Boolean).join(" ")); }
-    function matchesSegment(product) { if (normalize(product.product_segment) === "casual") return true; const text = getProductText(product); return BASE_KEYWORDS.some(keyword => text.includes(normalize(keyword))); }
+    function matchesSegment(product) { const text = getProductText(product); const segment = normalize(product.product_segment); const kind = normalize(product.product_kind); const category = normalizeCategoryName(product); const categoryText = normalize(category); const directSegments = ["casual", "streetwear", "street", "moda casual", "moda streetwear"]; if (directSegments.some(item => segment.includes(item) || kind.includes(item) || categoryText.includes(item))) return true; return BASE_KEYWORDS.some(keyword => text.includes(normalize(keyword))); }
     function getProductImage(product) { const url = product.image_url || product.photo_url || product.cover_url || product.product_images?.[0]?.image_url || ""; return url && url.includes("res.cloudinary.com") ? url.replace("/upload/", "/upload/f_auto,q_auto,w_520/") : url; }
     function getProductUrl(product) { return product.slug ? `produto.html?slug=${encodeURIComponent(product.slug)}` : `produto.html?id=${encodeURIComponent(product.id)}`; }
     function getBadge(product) {
