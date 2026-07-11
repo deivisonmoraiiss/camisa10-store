@@ -1527,7 +1527,7 @@
 
               <div class="grid-2-equal">
                 <div class="field">
-                  <label for="product-category">Categoria</label>
+                  <label for="product-category">Categoria da vitrine</label>
                   <select id="product-category">
                     <option value="">Carregando categorias...</option>
                   </select>
@@ -1543,7 +1543,7 @@
 
               <div class="product-meta-grid">
                 <div class="field">
-                  <label for="product-segment">Tipo do item</label>
+                  <label for="product-segment">Linha do produto</label>
                   <select id="product-segment" onchange="handleProductSegmentChange(this.value)">
                     <option value="futebol">Futebol</option>
                     <option value="casual">Casual</option>
@@ -1552,14 +1552,14 @@
                   <div class="type-suggestions" id="product-type-suggestions"></div>
                   <div class="type-manager">
                     <div class="type-manager-row">
-                      <input type="text" id="new-product-kind" placeholder="Adicionar nova opcao. Ex: Cropped, Short, Moletom" />
-                      <button class="btn btn-secondary" type="button" onclick="addCustomProductKind()">Adicionar tipo</button>
+                      <input type="text" id="new-product-kind" placeholder="Adicionar nova peÃ§a. Ex: Cropped, Short, Moletom" />
+                      <button class="btn btn-secondary" type="button" onclick="addCustomProductKind()">Adicionar peÃ§a</button>
                     </div>
-                    <div class="type-manager-help">Primeiro escolha Futebol, Casual ou Fitness. Depois selecione a peca certa no campo abaixo.</div>
+                    <div class="type-manager-help">Escolha a linha uma vez. A categoria da vitrine tenta acompanhar automaticamente.</div>
                   </div>
                 </div>
                 <div class="field">
-                  <label for="product-kind">Modelo / peca</label>
+                  <label for="product-kind">PeÃ§a / modelo</label>
                   <select id="product-kind"></select>
                 </div>
                 <div class="field">
@@ -2993,8 +2993,29 @@ Camisa Real Madrid 24/25"></textarea>
       select.value = value;
     }
 
+    function getPreferredCategoryNamesForSegment(segment = "") {
+      const normalized = normalizeProductSegment(segment);
+      if (normalized === "fitness") return ["Academia", "Fitness", "Roupas de academia"];
+      if (normalized === "casual") return ["Streetwear", "Casual", "Oversized"];
+      return ["Futebol", "Camisas", "BrasileirÃ£o"];
+    }
+
+    function findCategoryIdByNames(names = []) {
+      const normalizedNames = names.map(name => normalizeText(name));
+      const match = allCategories.find(category => normalizedNames.includes(normalizeText(category.name || "")));
+      return match?.id || "";
+    }
+
+    function autoSelectCategoryForSegment(segment = "") {
+      const categorySelect = document.getElementById("product-category");
+      if (!categorySelect || categorySelect.value) return;
+      const categoryId = findCategoryIdByNames(getPreferredCategoryNamesForSegment(segment));
+      if (categoryId) categorySelect.value = categoryId;
+    }
+
     function handleProductSegmentChange(segment) {
       renderProductKindOptions(segment);
+      autoSelectCategoryForSegment(segment);
       syncProductTypeFromKind(true);
       updateDraftSummary();
     }
@@ -5555,7 +5576,7 @@ async function uploadMultipleProductImages(productId) {
       const price = document.getElementById("product-price").value.trim();
       const old_price = document.getElementById("product-old-price").value.trim();
       let image_url = document.getElementById("product-image").value.trim();
-      const category_id = document.getElementById("product-category").value;
+      let category_id = document.getElementById("product-category").value;
       const description = document.getElementById("product-description").value.trim();
       const priority_encomenda_raw = document.getElementById("priority_encomenda").value.trim();
       const priority_pronta_entrega_raw = document.getElementById("priority_pronta_entrega")?.value.trim() || "";
