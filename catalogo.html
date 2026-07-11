@@ -737,8 +737,8 @@
         <div class="hero-card">
           <div class="hero-row">
             <div class="hero-copy">
-              <h1>Catálogo completo</h1>
-              <p>Explore todos os produtos da loja com busca por nome, categoria, segmento e tipo de peça.</p>
+              <h1>Camisas de time</h1>
+              <p>Catálogo separado para camisas de time. Produtos casual e moda fitness ficam nas páginas próprias.</p>
             </div>
             <div id="product-count" class="hero-count">Carregando produtos...</div>
           </div>
@@ -747,9 +747,9 @@
         <div class="search-card" id="top-search-card">
           <div class="search-icon">⌕</div>
           <div class="search-content">
-            <label class="search-label" for="search-input">Buscar produto, categoria ou tipo</label>
-            <input type="text" id="search-input" class="search-input" placeholder="Ex: oversized, moletom, top, legging, Flamengo..." />
-            <div class="search-help">A busca entende nome, categoria, segmento, tipo de peça e ignora acentos.</div>
+            <label class="search-label" for="search-input">Buscar time, seleção ou categoria</label>
+            <input type="text" id="search-input" class="search-input" placeholder="Ex: Flamengo, Brasil, Real Madrid, retrô..." />
+            <div class="search-help">A busca entende nome do time, categoria e ignora acentos.</div>
           </div>
         </div>
 
@@ -772,7 +772,7 @@
       <div>
         <div class="footer-brand-title">Camisa 10 Store</div>
         <p class="footer-text">
-          Loja com catálogo dinâmico de futebol, streetwear e moda fitness,
+          Loja com catálogo dinâmico de camisas de time,
           páginas individuais de produto e atendimento direto pelo WhatsApp.
         </p>
       </div>
@@ -820,7 +820,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const PRODUCTS_PER_LOAD = 12;
-    const PRODUCTS_CACHE_KEY = "camisa10_catalog_products_v3";
+    const PRODUCTS_CACHE_KEY = "camisa10_catalog_products_v4";
     const PRODUCTS_CACHE_TTL = 1000 * 60 * 8;
 
     let allProducts = [];
@@ -888,6 +888,42 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         normalized_category: normalizedCategory,
         searchable_text: searchableText
       };
+    }
+
+    function isFootballCatalogProduct(product) {
+      const segment = normalizeText(product.product_segment || "");
+      if (segment === "casual" || segment === "fitness") return false;
+
+      const text = [
+        product.name,
+        product.category_name,
+        product.product_kind,
+        product.searchable_text
+      ].map(normalizeText).join(" ");
+
+      const nonFootballKeywords = [
+        "streetwear",
+        "street",
+        "casual",
+        "oversized",
+        "moletom",
+        "cropped",
+        "cargo",
+        "bermuda",
+        "bone",
+        "boné",
+        "acessorio",
+        "acessório",
+        "fitness",
+        "academia",
+        "legging",
+        "top",
+        "regata",
+        "dry fit",
+        "treino"
+      ];
+
+      return !nonFootballKeywords.some(keyword => text.includes(normalizeText(keyword)));
     }
 
     function createProductCard(product) {
@@ -1155,7 +1191,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
 
       const cachedProducts = getCachedProducts();
       if (cachedProducts?.length) {
-        allProducts = cachedProducts.map(normalizeProduct);
+        allProducts = cachedProducts.map(normalizeProduct).filter(isFootballCatalogProduct);
         filteredProducts = [...allProducts];
         visibleProducts = PRODUCTS_PER_LOAD;
         buildCategoryButtons(allProducts);
@@ -1180,7 +1216,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
         return;
       }
 
-      const normalized = (data || []).map(normalizeProduct);
+      const normalized = (data || []).map(normalizeProduct).filter(isFootballCatalogProduct);
       allProducts = normalized;
       filteredProducts = [...allProducts];
       visibleProducts = PRODUCTS_PER_LOAD;
