@@ -1376,6 +1376,7 @@
                 <div class="batch-selection-actions">
                   <button class="btn btn-ghost" type="button" onclick="selectFilteredProducts()">Marcar filtrados</button>
                   <button class="btn btn-ghost" type="button" onclick="clearSelectedProducts()">Limpar seleção</button>
+                  <button class="btn btn-danger" type="button" onclick="deleteSelectedProducts()">Excluir marcados</button>
                 </div>
               </div>
 
@@ -5912,14 +5913,14 @@ async function uploadMultipleProductImages(productId) {
     }
 
 
-    async function deleteProduct(productId) {
-      const confirmDelete = confirm("Tem certeza que deseja excluir este produto?");
-      if (!confirmDelete) return;
+    async function deleteProductRecords(productIds = []) {
+      const ids = [...new Set(productIds.map(id => String(id)).filter(Boolean))];
+      if (!ids.length) return { success: true, count: 0 };
 
       const { error: sizesError } = await supabaseClient
         .from("product_sizes")
         .delete()
-        .eq("product_id", productId);
+        .in("product_id", ids);
 
       if (sizesError) {
         console.error("Erro ao excluir tamanhos do produto:", sizesError);
@@ -5928,7 +5929,7 @@ async function uploadMultipleProductImages(productId) {
       const { error: imagesError } = await supabaseClient
         .from("product_images")
         .delete()
-        .eq("product_id", productId);
+        .in("product_id", ids);
 
       if (imagesError) {
         console.error("Erro ao excluir imagens do produto:", imagesError);
@@ -5937,27 +5938,63 @@ async function uploadMultipleProductImages(productId) {
       const { error } = await supabaseClient
         .from("products")
         .delete()
-        .eq("id", productId);
+        .in("id", ids);
 
       if (error) {
         console.error("Erro ao excluir produto:", error);
-        showMessage("list-message", `Erro ao excluir produto: ${error.message}`, "error");
+        return { success: false, message: error.message || "sem detalhe" };
+      }
+
+      ids.forEach(productId => {
+        delete productVariationsCache[String(productId)];
+        delete productPriorityCache[String(productId)];
+        selectedProductIds.delete(String(productId));
+      });
+      persistProductVariationsCache();
+      persistProductPriorityCache();
+
+      if (editingProductId && ids.includes(String(editingProductId))) {
+        resetForm();
+      }
+
+      return { success: true, count: ids.length };
+    }
+
+    async function deleteProduct(productId) {
+      const confirmDelete = confirm("Tem certeza que deseja excluir este produto?");
+      if (!confirmDelete) return;
+
+      const result = await deleteProductRecords([productId]);
+      if (!result.success) {
+        showMessage("list-message", `Erro ao excluir produto: ${result.message}`, "error");
         return;
       }
 
-      delete productVariationsCache[String(productId)];
-      persistProductVariationsCache();
-      delete productPriorityCache[String(productId)];
-      persistProductPriorityCache();
-      showMessage("list-message", "Produto excluído com sucesso.", "success");
+      showMessage("list-message", "Produto excluÃ­do com sucesso.", "success");
       await loadProductsKeepingScroll();
-
-      if (editingProductId && String(editingProductId) === String(productId)) {
-        resetForm();
-      }
     }
 
-    
+    async function deleteSelectedProducts() {
+      clearMessage("list-message");
+      const ids = [...selectedProductIds].filter(id => allProducts.some(product => String(product.id) === String(id)));
+
+      if (!ids.length) {
+        showMessage("list-message", "Marque pelo menos um produto para excluir.", "error");
+        return;
+      }
+
+      const confirmDelete = confirm(`Tem certeza que deseja excluir ${ids.length} produto(s) marcado(s)? Essa aÃ§Ã£o nÃ£o pode ser desfeita.`);
+      if (!confirmDelete) return;
+
+      const result = await deleteProductRecords(ids);
+      if (!result.success) {
+        showMessage("list-message", `Erro ao excluir produtos: ${result.message}`, "error");
+        return;
+      }
+
+      showMessage("list-message", `${result.count} produto(s) excluÃ­do(s) com sucesso.`, "success");
+      await loadProductsKeepingScroll();
+    }
 async function uploadHeroBannerImage() {
       clearMessage("settings-message");
 
@@ -9072,6 +9109,16 @@ async function saveGestaoSale() {
         if (savePressed && !document.getElementById("admin-panel").classList.contains("hidden")) {
           event.preventDefault();
           saveProduct();
+          return;
+        }
+
+        if (event.key === "Delete" && !document.getElementById("admin-panel").classList.contains("hidden")) {
+          const activeTag = String(document.activeElement?.tagName || "").toLowerCase();
+          const isTyping = ["input", "textarea", "select"].includes(activeTag) || document.activeElement?.isContentEditable;
+          if (!isTyping && selectedProductIds.size > 0) {
+            event.preventDefault();
+            deleteSelectedProducts();
+          }
         }
       });
       setProductStep(1);
