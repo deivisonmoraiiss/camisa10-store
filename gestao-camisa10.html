@@ -1461,6 +1461,32 @@
                     <button class="btn btn-warning" type="button" onclick="applyBatchSaleType()">Aplicar tipo de venda</button>
                   </div>
                 </div>
+
+                <div class="batch-panel">
+                  <div>
+                    <strong>Linha do produto em lote</strong>
+                    <div class="batch-help">Corrija produtos que ficaram no lugar errado: camisas de time, casual ou moda fitness.</div>
+                  </div>
+
+                  <div class="batch-action-row">
+                    <select id="batch-segment-target" onchange="updateBatchPreview()">
+                      <option value="selected">Aplicar aos marcados</option>
+                      <option value="filtered">Aplicar a todos os filtrados</option>
+                    </select>
+                    <select id="batch-segment-value" onchange="updateBatchPreview()">
+                      <option value="">NÃ£o alterar</option>
+                      <option value="futebol">Camisas de time</option>
+                      <option value="casual">Casual / Streetwear</option>
+                      <option value="fitness">Moda fitness</option>
+                    </select>
+                  </div>
+
+                  <div id="batch-segment-preview" class="batch-summary">Nenhuma alteraÃ§Ã£o de linha configurada.</div>
+
+                  <div class="batch-quick-actions">
+                    <button class="btn btn-warning" type="button" onclick="applyBatchSegment()">Aplicar linha</button>
+                  </div>
+                </div>
               </div>
               </div>
             </details>
@@ -4604,6 +4630,18 @@ async function uploadMultipleProductImages(productId) {
       return `${products.length} produto(s) serão alterados para ${label}.`;
     }
 
+    function getProductSegmentLabel(segmentValue = "") {
+      const segment = normalizeProductSegment(segmentValue);
+      if (segment === "casual") return "Casual / Streetwear";
+      if (segment === "fitness") return "Moda fitness";
+      return "Camisas de time";
+    }
+
+    function buildBatchSegmentPreview(products, rawSegmentValue) {
+      if (!products.length) return "Nenhum produto encontrado para esta ação.";
+      if (!rawSegmentValue) return "Selecione a linha que deseja aplicar.";
+      return `${products.length} produto(s) serão movidos para ${getProductSegmentLabel(rawSegmentValue)}.`;
+    }
     function updateBatchPreview() {
       const priceTarget = document.getElementById("batch-price-target")?.value || "selected";
       const priceMode = document.getElementById("batch-price-mode")?.value || "set";
@@ -4613,10 +4651,13 @@ async function uploadMultipleProductImages(productId) {
       const descriptionValue = document.getElementById("batch-description-value")?.value || "";
       const saleTypeTarget = document.getElementById("batch-sale-type-target")?.value || "selected";
       const saleTypeValue = document.getElementById("batch-sale-type-value")?.value || "";
+      const segmentTarget = document.getElementById("batch-segment-target")?.value || "selected";
+      const segmentValue = document.getElementById("batch-segment-value")?.value || "";
 
       const pricePreview = document.getElementById("batch-price-preview");
       const descriptionPreview = document.getElementById("batch-description-preview");
       const saleTypePreview = document.getElementById("batch-sale-type-preview");
+      const segmentPreview = document.getElementById("batch-segment-preview");
 
       if (pricePreview) {
         pricePreview.textContent = buildBatchPricePreview(getTargetProducts(priceTarget), priceMode, priceValue);
@@ -4630,9 +4671,12 @@ async function uploadMultipleProductImages(productId) {
         saleTypePreview.textContent = buildBatchSaleTypePreview(getTargetProducts(saleTypeTarget), saleTypeValue);
       }
 
+      if (segmentPreview) {
+        segmentPreview.textContent = buildBatchSegmentPreview(getTargetProducts(segmentTarget), segmentValue);
+      }
+
       updateBatchCounters();
     }
-
     async function applyBatchPrice() {
       clearMessage("list-message");
       const mode = document.getElementById("batch-price-mode")?.value || "set";
@@ -4774,6 +4818,61 @@ async function uploadMultipleProductImages(productId) {
       await loadProductsKeepingScroll();
     }
 
+
+    async function applyBatchSegment() {
+      clearMessage("list-message");
+      const target = document.getElementById("batch-segment-target")?.value || "selected";
+      const rawSegment = document.getElementById("batch-segment-value")?.value || "";
+      const segment = normalizeProductSegment(rawSegment);
+      const targetProducts = getTargetProducts(target);
+
+      if (!targetProducts.length) {
+        showMessage("list-message", "Selecione produtos ou use a opção de aplicar aos filtrados.", "error");
+        return;
+      }
+
+      if (!rawSegment) {
+        showMessage("list-message", "Selecione a linha do produto que deseja aplicar.", "error");
+        return;
+      }
+
+      const confirmAction = confirm(`Deseja mover ${targetProducts.length} produto(s) para ${getProductSegmentLabel(segment)}?`);
+      if (!confirmAction) return;
+
+      for (const product of targetProducts) {
+        const fallbackKind = normalizeProductKind(product.product_kind || productMetaCache?.[String(product.id)]?.kind || inferProductKind(product));
+
+        const { error } = await supabaseClient
+          .from("products")
+          .update({ product_segment: segment })
+          .eq("id", product.id);
+
+        if (error && shouldRetryWithoutMetaColumns(error)) {
+          persistProductMeta(product.id, {
+            segment,
+            kind: fallbackKind,
+            sizeProfile: product.size_profile || inferSizeProfile(product)
+          });
+          continue;
+        }
+
+        if (error) {
+          console.error("Erro ao atualizar linha do produto em lote:", error);
+          showMessage("list-message", `Erro ao atualizar ${product.name}: ${error.message}`, "error");
+          return;
+        }
+
+        persistProductMeta(product.id, {
+          segment,
+          kind: fallbackKind,
+          sizeProfile: product.size_profile || inferSizeProfile(product)
+        });
+      }
+
+      document.getElementById("batch-segment-value").value = "";
+      showMessage("list-message", `${targetProducts.length} produto(s) foram movidos para ${getProductSegmentLabel(segment)}.`, "success");
+      await loadProductsKeepingScroll();
+    }
     async function loadProducts() {
       const tbody = document.getElementById("products-table-body");
       tbody.innerHTML = `<div class="empty-state">Carregando produtos...</div>`;
@@ -5149,6 +5248,7 @@ async function uploadMultipleProductImages(productId) {
 
         const categoryName = product.categories?.name || "Sem categoria";
         const productKind = getDisplayProductKind(product);
+        const segmentBadge = `<span class="badge">${getProductSegmentLabel(product.product_segment || productMetaCache?.[String(product.id)]?.segment || productKind)}</span>`;
         const saleType = product.sale_type === "sob_encomenda" ? "Sob encomenda" : "Pronta entrega";
         const visibleBadge = product.is_visible
           ? '<span class="badge">Visível</span>'
@@ -5214,6 +5314,7 @@ async function uploadMultipleProductImages(productId) {
                   ${description}
 
                   <div class="product-admin-meta">
+                    ${segmentBadge}
                     <span class="badge">${productKind}</span>
                     <span class="badge">${categoryName}</span>
                     <span class="badge">${saleType}</span>
