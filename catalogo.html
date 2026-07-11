@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Catálogo | Camisa 10 Store</title>
-  <meta name="description" content="Confira o catálogo completo da Camisa 10 Store e encontre sua camisa pelo nome do time." />
+  <meta name="description" content="Confira o catálogo completo da Camisa 10 Store: futebol, streetwear e moda fitness." />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
@@ -703,7 +703,7 @@
         <div id="logoFallbackDesktop" class="brand-logo-fallback" style="display:none;">10</div>
         <div class="brand-text">
           <span class="brand-title">Camisa 10 Store</span>
-          <span class="brand-subtitle">Protagonismo começa no Manto</span>
+          <span class="brand-subtitle">Futebol, streetwear e treino</span>
         </div>
       </a>
 
@@ -725,7 +725,7 @@
         <div id="logoFallbackMobile" class="brand-logo-fallback" style="display:none;">10</div>
         <div class="brand-text">
           <div class="mobile-brand-title">Catálogo Camisa 10 Store</div>
-          <div class="mobile-brand-subtitle">Encontre seu time</div>
+          <div class="mobile-brand-subtitle">Futebol, streetwear e treino</div>
         </div>
       </a>
     </div>
@@ -738,7 +738,7 @@
           <div class="hero-row">
             <div class="hero-copy">
               <h1>Catálogo completo</h1>
-              <p>Explore todas as camisas com filtro real por categoria.</p>
+              <p>Explore todos os produtos da loja com busca por nome, categoria, segmento e tipo de peça.</p>
             </div>
             <div id="product-count" class="hero-count">Carregando produtos...</div>
           </div>
@@ -747,9 +747,9 @@
         <div class="search-card" id="top-search-card">
           <div class="search-icon">⌕</div>
           <div class="search-content">
-            <label class="search-label" for="search-input">Buscar por time ou categoria</label>
-            <input type="text" id="search-input" class="search-input" placeholder="Ex: Flamengo, Real Madrid, Brasil, Seleções..." />
-            <div class="search-help">A busca entende nome do time, categoria e ignora acentos.</div>
+            <label class="search-label" for="search-input">Buscar produto, categoria ou tipo</label>
+            <input type="text" id="search-input" class="search-input" placeholder="Ex: oversized, moletom, top, legging, Flamengo..." />
+            <div class="search-help">A busca entende nome, categoria, segmento, tipo de peça e ignora acentos.</div>
           </div>
         </div>
 
@@ -772,7 +772,7 @@
       <div>
         <div class="footer-brand-title">Camisa 10 Store</div>
         <p class="footer-text">
-          Loja especializada em camisas de time, com catálogo dinâmico,
+          Loja com catálogo dinâmico de futebol, streetwear e moda fitness,
           páginas individuais de produto e atendimento direto pelo WhatsApp.
         </p>
       </div>
@@ -820,7 +820,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const PRODUCTS_PER_LOAD = 12;
-    const PRODUCTS_CACHE_KEY = "camisa10_catalog_products_v2";
+    const PRODUCTS_CACHE_KEY = "camisa10_catalog_products_v3";
     const PRODUCTS_CACHE_TTL = 1000 * 60 * 8;
 
     let allProducts = [];
@@ -863,16 +863,27 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     }
 
     function normalizeProduct(product) {
-      const categoryName = product.categories?.name || "";
+      const categoryName = product.categories?.name || product.category_name || "";
+      const productSegment = product.product_segment || "";
+      const productKind = product.product_kind || "";
       const normalizedName = normalizeText(product.name || "");
       const normalizedCategory = normalizeText(categoryName);
-      const searchableText = `${normalizedName} ${normalizedCategory}`.trim();
+      const searchableText = [
+        product.name,
+        categoryName,
+        productSegment,
+        productKind,
+        product.short_description,
+        product.description
+      ].map(normalizeText).filter(Boolean).join(" ");
 
       return {
         ...product,
         numeric_price: Number(product.price || 0),
         sale_type: product.sale_type || "pronta_entrega",
         category_name: categoryName,
+        product_segment: productSegment,
+        product_kind: productKind,
         normalized_name: normalizedName,
         normalized_category: normalizedCategory,
         searchable_text: searchableText
@@ -906,7 +917,7 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
               ${showSaleTypeBadge ? `<span class="sale-type-badge encomenda">${getSaleTypeLabel(product.sale_type)}</span>` : ""}
             </div>
 
-            <div class="product-category">${product.category_name || "Camisa de time"}</div>
+            <div class="product-category">${product.category_name || product.product_kind || "Produto Camisa 10"}</div>
 
             <h3>${product.name || "Produto sem nome"}</h3>
 
@@ -1081,30 +1092,35 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
     }
 
     async function fetchProductsFromSupabase() {
-      const { data, error } = await supabaseClient
-        .from("products")
-        .select(`
+      const baseSelect = `
           id,
           name,
           slug,
           price,
           old_price,
           image_url,
-          featured,
+          is_featured,
           badge_type,
           sale_type,
+          product_segment,
+          product_kind,
           category_id,
           created_at,
+          short_description,
+          is_visible,
           categories (
             id,
             name
           )
-        `)
-        .eq("visible", true)
+        `;
+
+      let response = await supabaseClient
+        .from("products")
+        .select(baseSelect)
         .order("created_at", { ascending: false });
 
-      if (error && error.code === "42703") {
-        const fallback = await supabaseClient
+      if (response.error && (response.error.code === "42703" || String(response.error.message || "").toLowerCase().includes("schema cache"))) {
+        response = await supabaseClient
           .from("products")
           .select(`
             id,
@@ -1113,21 +1129,24 @@ const SUPABASE_KEY = "sb_publishable_-iyfgsleybzMfyyxieLNeQ_AP_YBdZa";
             price,
             old_price,
             image_url,
-            featured,
             badge_type,
             sale_type,
             category_id,
             created_at,
+            short_description,
             categories (
               id,
               name
             )
           `)
           .order("created_at", { ascending: false });
-        return fallback;
       }
 
-      return { data, error };
+      if (!response.error && Array.isArray(response.data)) {
+        response.data = response.data.filter(product => product.is_visible !== false);
+      }
+
+      return response;
     }
 
     async function loadProducts() {
